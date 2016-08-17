@@ -1,0 +1,65 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>jnru</groupId>
+  <name>softaudit</name>
+  <artifactId>softaudit</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>sonar-plugin</packaging>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    
+    <java.version>1.8</java.version>
+    <sonarqube.version>5.1</sonarqube.version>
+    <junit.version>4.12</junit.version>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.3</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.sonar</groupId>
+        <artifactId>sonar-packaging-maven-plugin</artifactId>
+        <version>1.13</version>
+        <extensions>true</extensions>
+        <configuration>
+          <pluginKey>softaudit</pluginKey>
+          <pluginClass>jnru.softaudit.SoftAuditPlugin</pluginClass>
+          <pluginName>SoftAudit for SonarQube Plugin</pluginName>
+          <pluginDescription>Offers the SoftAudit-Tools-Metrics as SonarQube plugin.</pluginDescription>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.codehaus.sonar</groupId>
+      <artifactId>sonar-testing-harness</artifactId>
+      <version>${sonarqube.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.sonar</groupId>
+      <artifactId>sonar-plugin-api</artifactId>
+      <version>${sonarqube.version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+</project>
