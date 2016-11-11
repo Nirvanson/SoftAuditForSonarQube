@@ -62,6 +62,7 @@
           <target>${jdk.min.version}</target>
         </configuration>
       </plugin>
+      <!-- TODO: Needed? 
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>native2ascii-maven-plugin</artifactId>
@@ -73,7 +74,7 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
+      </plugin> -->
     </plugins>
   </build>
 
