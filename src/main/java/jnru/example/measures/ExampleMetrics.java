@@ -1,4 +1,4 @@
-package jnru.measures;
+package jnru.example.measures;
 
 import static java.util.Arrays.asList;
 

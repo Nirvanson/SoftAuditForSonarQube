@@ -1,6 +1,6 @@
-package jnru.measures;
+package jnru.example.measures;
 
-import static jnru.measures.ExampleMetrics.FILENAME_SIZE;
+import static jnru.example.measures.ExampleMetrics.FILENAME_SIZE;
 
 import org.sonar.api.ce.measure.Component;
 import org.sonar.api.ce.measure.Measure;

@@ -1,10 +1,10 @@
 package jnru;
 
 import org.sonar.api.Plugin;
-import jnru.measures.ComputeSizeAverage;
-import jnru.measures.ComputeSizeRating;
-import jnru.measures.ExampleMetrics;
-import jnru.measures.SetSizeOnFilesSensor;
+import jnru.example.measures.ComputeSizeAverage;
+import jnru.example.measures.ComputeSizeRating;
+import jnru.example.measures.ExampleMetrics;
+import jnru.example.measures.SetSizeOnFilesSensor;
 import jnru.rules.CreateIssuesOnJavaFilesSensor;
 import jnru.rules.JavaRulesDefinition;
 import jnru.settings.ExampleProperties;

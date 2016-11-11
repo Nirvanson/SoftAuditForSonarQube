@@ -1,6 +1,6 @@
 package jnru.measures;
 
-import static jnru.measures.ExampleMetrics.FILENAME_SIZE;
+import static jnru.measures.SoftAuditMetrics.PREDICATE_COUNT;
 
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -12,22 +12,21 @@ import org.sonar.api.batch.sensor.SensorDescriptor;
  * Scanner feeds raw measures on files but must not aggregate values to directories and project.
  * This class emulates loading of file measures from a 3rd-party analyser.
  */
-public class SetSizeOnFilesSensor implements Sensor {
+public class SoftAuditSensor implements Sensor {
   @Override
   public void describe(SensorDescriptor descriptor) {
-    descriptor.name("Compute size of file names");
+    descriptor.name("Measure needed values for SoftAudit Metrics.");
   }
 
   @Override
   public void execute(SensorContext context) {
     FileSystem fs = context.fileSystem();
-    // only "main" files, but not "tests"
     Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasType(InputFile.Type.MAIN));
     for (InputFile file : files) {
       context.<Integer>newMeasure()
-        .forMetric(FILENAME_SIZE)
+        .forMetric(PREDICATE_COUNT)
         .on(file)
-        .withValue(file.file().getName().length())
+        .withValue(null) //TODO: Magic
         .save();
     }
   }
