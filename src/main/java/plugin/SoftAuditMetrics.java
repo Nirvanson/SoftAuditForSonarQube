@@ -1,16 +1,194 @@
-package jnru.measures;
+package plugin;
 
-import static java.util.Arrays.asList;
-
+import java.util.Arrays;
 import java.util.List;
 
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.measures.Metrics;
 
-public class SoftAuditMeasures implements Metrics {
+/**
+ * IDE Metadata plugin metrics definition.
+ *
+ * @author jorge.hidalgo
+ * @version 1.0
+ */
+public class SoftAuditMetrics implements Metrics {
 
-	public static final Metric<Integer> PREDICATE_COUNT = new Metric.Builder("predicate_count", "Predicate Count", Metric.ValueType.INT)
+	// Metrics of sample plugin TODO: remove as soon as own metrics are measured
+	
+    /**
+     * The project name (as configured in the IDE).
+     */
+    public static final Metric IDE_PRJ_NAME =
+        new Metric.Builder(
+            "ide_prj_name",
+            "Project name in IDE",
+            Metric.ValueType.STRING)
+            .setDescription("The project name (as configured in the IDE)")
+            .setQualitative(false)
+            .setDomain(CoreMetrics.DOMAIN_GENERAL)
+            .create();
+
+    /**
+     * Whether the project is configured as Java in the IDE.
+     */
+    public static final Metric IDE_IS_JAVA =
+        new Metric.Builder(
+            "ide_is_java",
+            "Java project",
+            Metric.ValueType.BOOL)
+            .setDescription("Whether the project is configured as Java in the IDE")
+            .setQualitative(false)
+            .setDomain(CoreMetrics.DOMAIN_GENERAL)
+            .create();
+
+    /**
+     * Whether the project is configured as EAR in the IDE.
+     */
+    public static final Metric IDE_IS_EAR =
+        new Metric.Builder(
+            "ide_is_ear",
+            "Enterprise Application project",
+            Metric.ValueType.BOOL)
+            .setDescription("Whether the project is configured as EAR in the IDE")
+            .setQualitative(false)
+            .setDomain(CoreMetrics.DOMAIN_GENERAL)
+            .create();
+
+    /**
+     * Whether the project is configured as EJB in the IDE.
+     */
+    public static final Metric IDE_IS_EJB =
+        new Metric.Builder(
+            "ide_is_ejb",
+            "Enterprise JavaBeans project",
+            Metric.ValueType.BOOL)
+            .setDescription("Whether the project is configured as EJB in the IDE")
+            .setQualitative(false)
+            .setDomain(CoreMetrics.DOMAIN_GENERAL)
+            .create();
+
+    /**
+     * Whether the project is configured as Web in the IDE.
+     */
+    public static final Metric IDE_IS_WEB =
+        new Metric.Builder(
+            "ide_is_web",
+            "Web Application project",
+            Metric.ValueType.BOOL)
+            .setDescription("Whether the project is configured as Web in the IDE")
+            .setQualitative(false)
+            .setDomain(CoreMetrics.DOMAIN_GENERAL)
+            .create();
+
+    /**
+     * Whether the project is configured as GWT in the IDE.
+     */
+    public static final Metric IDE_IS_GWT =
+        new Metric.Builder(
+            "ide_is_gwt",
+            "Google Web Toolkit project",
+            Metric.ValueType.BOOL)
+            .setDescription("Whether the project is configured as GWT in the IDE")
+            .setQualitative(false)
+            .setDomain(CoreMetrics.DOMAIN_GENERAL)
+            .create();
+
+    /**
+     * Whether the project is configured as GAE in the IDE.
+     */
+    public static final Metric IDE_IS_GAE =
+        new Metric.Builder(
+            "ide_is_gae",
+            "Google App Engine project",
+            Metric.ValueType.BOOL)
+            .setDescription("Whether the project is configured as GAE in the IDE")
+            .setQualitative(false)
+            .setDomain(CoreMetrics.DOMAIN_GENERAL)
+            .create();
+
+    /**
+     * Whether the project is configured as Groovy in the IDE.
+     */
+    public static final Metric IDE_IS_GROOVY =
+        new Metric.Builder(
+            "ide_is_groovy",
+            "Groovy project",
+            Metric.ValueType.BOOL)
+            .setDescription("Whether the project is configured as Groovy in the IDE")
+            .setQualitative(false)
+            .setDomain(CoreMetrics.DOMAIN_GENERAL)
+            .create();
+
+    /**
+     * Whether the project is configured as Grails in the IDE.
+     */
+    public static final Metric IDE_IS_GRAILS =
+        new Metric.Builder(
+            "ide_is_grails",
+            "Grails project",
+            Metric.ValueType.BOOL)
+            .setDescription("Whether the project is configured as Grails in the IDE")
+            .setQualitative(false)
+            .setDomain(CoreMetrics.DOMAIN_GENERAL)
+            .create();
+
+    /**
+     * Whether the project is configured as PDE in the IDE.
+     */
+    public static final Metric IDE_IS_PDE =
+        new Metric.Builder(
+            "ide_is_pde",
+            "Eclipse Plugin Development project",
+            Metric.ValueType.BOOL)
+            .setDescription("Whether the project is configured as PDE in the IDE")
+            .setQualitative(false)
+            .setDomain(CoreMetrics.DOMAIN_GENERAL)
+            .create();
+
+    /**
+     * Whether the project is configured as JET in the IDE.
+     */
+    public static final Metric IDE_IS_JET =
+        new Metric.Builder(
+            "ide_is_jet",
+            "Java Emitter Templates project",
+            Metric.ValueType.BOOL)
+            .setDescription("Whether the project is configured as JET in the IDE")
+            .setQualitative(false)
+            .setDomain(CoreMetrics.DOMAIN_GENERAL)
+            .create();
+
+    /**
+     * The list of declared dependencies for the project.
+     */
+    public static final Metric IDE_DEPENDENCIES =
+        new Metric.Builder(
+            "ide_dependencies",
+            "List of declared dependencies",
+            Metric.ValueType.STRING)
+            .setDescription("The list of declared dependencies for the project")
+            .setQualitative(false)
+            .setDomain(CoreMetrics.DOMAIN_GENERAL)
+            .create();
+
+    /**
+     * The list of configured classpath entries for the project.
+     */
+    public static final Metric IDE_CLASSPATH =
+        new Metric.Builder(
+            "ide_classpath",
+            "List of configured classpath entries",
+            Metric.ValueType.STRING)
+            .setDescription("The list of configured classpath entries for the project")
+            .setQualitative(false)
+            .setDomain(CoreMetrics.DOMAIN_GENERAL)
+            .create();
+
+    //SoftAudit Measures TODO: Add computed metrics
+
+    public static final Metric<Integer> PREDICATE_COUNT = new Metric.Builder("predicate_count", "Predicate Count", Metric.ValueType.INT)
 			.setDescription("Number of predicates.")
 			.setDirection(Metric.DIRECTION_NONE)
 			.setQualitative(false)
@@ -280,16 +458,33 @@ public class SoftAuditMeasures implements Metrics {
 			.setQualitative(false)
 			.setDomain(CoreMetrics.DOMAIN_GENERAL)
 			.create();
-
-	@SuppressWarnings("rawtypes")
-	@Override
+    
+	/**
+     * Default constructor.
+     */
+    public SoftAuditMetrics() {
+        super();
+    }
+	
+    /**
+     * Defines the plugin metrics.
+     *
+     * @return the list of this plugin metrics
+     */
+    @SuppressWarnings("rawtypes")
 	public List<Metric> getMetrics() {
-		return asList(PREDICATE_COUNT, RESULT_COUNT, ARGUMENT_COUNT, PARAMETER_COUNT, STATEMENT_COUNT, REFERENCE_COUNT, VARIABLE_COUNT,
-				FILE_COUNT, DATABASE_COUNT, FILE_ACCESS_COUNT, DATABASE_ACCESS_COUNT, FOREIGN_FUNCTION_CALL_COUNT, FUNCTION_CALL_COUNT,
-				BRANCH_COUNT, IF_COUNT, SWITCH_COUNT, LOOP_COUNT, RETURN_COUNT, GOTO_COUNT, EXCEPTION_COUNT, CONSTANT_COUNT, 
-				DEFINE_COUNT, STATEMENT_TYPE_COUNT, DATA_TYPE_COUNT, OPERAND_COUNT, CLASS_COUNT, METHOD_COUNT, PROCEDURE_COUNT, 
-				INCLUDE_COUNT, MODULE_COUNT, MACRO_REFERENCE_COUNT, INPUT_COUNT, OUTPUT_COUNT, REPORT_COUNT, PANEL_COUNT, 
-				REUSE_PROCEDURE_AND_METHOD_COUNT, COMMENT_LINE_COUNT, LINE_COUNT, CONVERTABLE_STATEMENTS_COUNT, CONVERTABLE_DATA_COUNT, 
-				LITERAL_COUNT, MAJOR_DEFICIENCY_COUNT, MEDIUM_DEFICIENCY_COUNT, MINOR_DEFICIENCY_COUNT, MAX_MODULE_SIZE);
-	}
+        return Arrays.asList(
+        	// Metrics from sample plugin IDE-Metadata TODO: remove as soon as own metrics are measured
+            IDE_PRJ_NAME, IDE_IS_JAVA, IDE_IS_EAR, IDE_IS_EJB, IDE_IS_WEB,
+            IDE_IS_GWT, IDE_IS_GAE, IDE_IS_GROOVY, IDE_IS_GRAILS,
+            IDE_IS_PDE, IDE_IS_JET, IDE_DEPENDENCIES, IDE_CLASSPATH,
+            // softaudit measures
+            PREDICATE_COUNT, RESULT_COUNT, ARGUMENT_COUNT, PARAMETER_COUNT, STATEMENT_COUNT, REFERENCE_COUNT, VARIABLE_COUNT,
+			FILE_COUNT, DATABASE_COUNT, FILE_ACCESS_COUNT, DATABASE_ACCESS_COUNT, FOREIGN_FUNCTION_CALL_COUNT, FUNCTION_CALL_COUNT,
+			BRANCH_COUNT, IF_COUNT, SWITCH_COUNT, LOOP_COUNT, RETURN_COUNT, GOTO_COUNT, EXCEPTION_COUNT, CONSTANT_COUNT, 
+			DEFINE_COUNT, STATEMENT_TYPE_COUNT, DATA_TYPE_COUNT, OPERAND_COUNT, CLASS_COUNT, METHOD_COUNT, PROCEDURE_COUNT, 
+			INCLUDE_COUNT, MODULE_COUNT, MACRO_REFERENCE_COUNT, INPUT_COUNT, OUTPUT_COUNT, REPORT_COUNT, PANEL_COUNT, 
+			REUSE_PROCEDURE_AND_METHOD_COUNT, COMMENT_LINE_COUNT, LINE_COUNT, CONVERTABLE_STATEMENTS_COUNT, CONVERTABLE_DATA_COUNT, 
+			LITERAL_COUNT, MAJOR_DEFICIENCY_COUNT, MEDIUM_DEFICIENCY_COUNT, MINOR_DEFICIENCY_COUNT, MAX_MODULE_SIZE);
+    }
 }
