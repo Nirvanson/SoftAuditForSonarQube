@@ -6,16 +6,14 @@ import org.sonar.api.web.RubyRailsWidget;
 import org.sonar.api.web.UserRole;
 
 /**
- * IDE Metadata plugin widget definition.
+ * SoftAudit plugin widget definition.
  *
- * @author jorge.hidalgo
- * @version 1.0
+ * @author Jan Rucks
+ * @version 0.1
  */
 @UserRole(UserRole.USER)
-@Description("Shows IDE metadata configuration for the project, including project type, language support and configured frameworks")
-public class SoftAuditWidget
-    extends AbstractRubyTemplate
-    implements RubyRailsWidget {
+@Description("Shows Quality and Complexity Metrics from SoftAudit for Java-projects.")
+public class SoftAuditWidget extends AbstractRubyTemplate implements RubyRailsWidget {
 
     /**
      * Default constructor.
@@ -30,7 +28,7 @@ public class SoftAuditWidget
      * @return the widget id
      */
     public String getId() {
-        return "idemetadata";
+        return "softaudit";
     }
 
     /**
@@ -39,7 +37,7 @@ public class SoftAuditWidget
      * @return the widget title
      */
     public String getTitle() {
-        return "IDE Metadata";
+        return "SoftAudit for SonarQube";
     }
 
     /**
@@ -49,9 +47,7 @@ public class SoftAuditWidget
      */
     @Override
     protected String getTemplatePath() {
-        String templatePath = "/deors/plugins/sonarqube/idemetadata/idemetadata_widget.html.erb";
-        // uncomment next line to enable change reloading during development
-        //templatePath = "c:/projects/deors.plugins/deors.plugins.sonarqube.idemetadata/src/main/resources" + templatePath;
+        String templatePath = "/plugin/softaudit_widget.html.erb";
         return templatePath;
     }
 }

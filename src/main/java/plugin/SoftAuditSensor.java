@@ -15,22 +15,16 @@ import plugin.analyser.EclipseAnalyzer;
 import plugin.model.ProjectInfo;
 
 /**
- * IDE Metadata plugin sensor. It analyses project directory in search for
- * IDE metadata configuration files and extracts relevant information.
+ * Analyses project-files in search for relevant information.
  *
- * @author jorge.hidalgo
- * @version 1.0
+ * @author Jan Rucks
+ * @version 0.1
  */
 public class SoftAuditSensor implements Sensor {
 
-    /**
-     * The file system object for the project being analysed.
-     */
+    /** The file system object for the project being analysed. */
     private final FileSystem fileSystem;
-
-    /**
-     * The logger object for the sensor.
-     */
+    /** The logger object for the sensor. */
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     /**
@@ -50,19 +44,18 @@ public class SoftAuditSensor implements Sensor {
      * @return always true
      */
     public boolean shouldExecuteOnProject(Project project) {
-        // this sensor is executed on any type of project
+        // TODO: only java projects
         return true;
     }
 
     /**
-     * Analyses project directory in search for IDE metadata configuration files
-     * and extracts relevant information.
+     * Do analysation.
      *
      * @param project       the project being analysed
      * @param sensorContext the sensor context
      */
     public void analyse(Project project, SensorContext sensorContext) {
-
+    	//TODO: switch to SoftAudit analyzer
         File rootDir = fileSystem.baseDir();
 
         log.info("Analysing project root in search for IDE Metadata files: " + rootDir.getAbsolutePath());
@@ -71,14 +64,13 @@ public class SoftAuditSensor implements Sensor {
         ProjectInfo projectInfo;
 
         try {
+        	
             projectInfo = analyzer.analyze();
 
             log.info("Analysis done");
             log.debug("this is what we've found: " + projectInfo);
 
-            saveMainInfo(sensorContext, projectInfo);
-            saveDependencies(sensorContext, projectInfo);
-            saveClasspath(sensorContext, projectInfo);
+            saveMeasures(sensorContext, projectInfo);
 
         } catch (AnalyzerException ae) {
             log.error("Error while running EclipseAnalyzer", ae);
@@ -91,78 +83,13 @@ public class SoftAuditSensor implements Sensor {
      * @param sensorContext the sensor context
      * @param projectInfo   the project information bean
      */
-    private void saveMainInfo(SensorContext sensorContext, ProjectInfo projectInfo) {
-
-        log.debug("saving measures for main project information");
-
-        Measure measure;
-
-        measure = new Measure(SoftAuditMetrics.IDE_PRJ_NAME, projectInfo.getProjectName());
+    private void saveMeasures(SensorContext sensorContext, ProjectInfo projectInfo) {
+    	//TODO: switch to SoftAudit Measures
+        log.debug("Start saving measures.");
+        Measure<String> measure = new Measure<String>(SoftAuditMetrics.IDE_PRO_NAME, projectInfo.getProjectName());
         sensorContext.saveMeasure(measure);
 
-        measure = new Measure(SoftAuditMetrics.IDE_IS_JAVA, projectInfo.isJavaProject() ? 1d : 0d);
-        sensorContext.saveMeasure(measure);
-
-        measure = new Measure(SoftAuditMetrics.IDE_IS_EAR, projectInfo.isEarProject() ? 1d : 0d);
-        sensorContext.saveMeasure(measure);
-
-        measure = new Measure(SoftAuditMetrics.IDE_IS_EJB, projectInfo.isEjbProject() ? 1d : 0d);
-        sensorContext.saveMeasure(measure);
-
-        measure = new Measure(SoftAuditMetrics.IDE_IS_WEB, projectInfo.isWebProject() ? 1d : 0d);
-        sensorContext.saveMeasure(measure);
-
-        measure = new Measure(SoftAuditMetrics.IDE_IS_GWT, projectInfo.isGwtProject() ? 1d : 0d);
-        sensorContext.saveMeasure(measure);
-
-        measure = new Measure(SoftAuditMetrics.IDE_IS_GAE, projectInfo.isGaeProject() ? 1d : 0d);
-        sensorContext.saveMeasure(measure);
-
-        measure = new Measure(SoftAuditMetrics.IDE_IS_GROOVY, projectInfo.isGroovyProject() ? 1d : 0d);
-        sensorContext.saveMeasure(measure);
-
-        measure = new Measure(SoftAuditMetrics.IDE_IS_GRAILS, projectInfo.isGrailsProject() ? 1d : 0d);
-        sensorContext.saveMeasure(measure);
-
-        measure = new Measure(SoftAuditMetrics.IDE_IS_PDE, projectInfo.isPdeProject() ? 1d : 0d);
-        sensorContext.saveMeasure(measure);
-
-        measure = new Measure(SoftAuditMetrics.IDE_IS_JET, projectInfo.isJetProject() ? 1d : 0d);
-        sensorContext.saveMeasure(measure);
-
-        log.debug("measures saved");
-    }
-
-    /**
-     * Saves measures corresponding to project dependencies information.
-     *
-     * @param sensorContext the sensor context
-     * @param projectInfo   the project information bean
-     */
-    private void saveDependencies(SensorContext sensorContext, ProjectInfo projectInfo) {
-
-        log.debug("saving measure for project dependencies");
-
-        sensorContext.saveMeasure(new Measure(
-        		SoftAuditMetrics.IDE_DEPENDENCIES, projectInfo.getProjectDependencies().toString()));
-
-        log.debug("measure saved");
-    }
-
-    /**
-     * Saves measures corresponding to project classpath information.
-     *
-     * @param sensorContext the sensor context
-     * @param projectInfo   the project information bean
-     */
-    private void saveClasspath(SensorContext sensorContext, ProjectInfo projectInfo) {
-
-        log.debug("saving measure for project classpath");
-
-        sensorContext.saveMeasure(new Measure(
-        		SoftAuditMetrics.IDE_CLASSPATH, projectInfo.getProjectClasspath().toString()));
-
-        log.debug("measure saved");
+        log.debug("Finished saving measures.");
     }
 
     /**
@@ -171,6 +98,6 @@ public class SoftAuditSensor implements Sensor {
      * @return the name of the sensor
      */
     public String toString() {
-        return "IDEMetadataSensor";
+        return "SoftAuditSensor";
     }
 }

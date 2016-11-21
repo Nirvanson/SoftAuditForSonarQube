@@ -7,10 +7,10 @@ import org.sonar.api.Extension;
 import org.sonar.api.SonarPlugin;
 
 /**
- * IDE Metadata plugin definition.
+ * SoftAudit plugin definition
  *
- * @author jorge.hidalgo
- * @version 1.0
+ * @author Jan Rucks
+ * @version 0.1
  */
 public class SoftAuditPlugin extends SonarPlugin {
 

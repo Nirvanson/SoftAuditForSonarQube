@@ -92,8 +92,8 @@
                 <version>1.13</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <pluginKey>sonar-softaudit-plugin</pluginKey>
-                    <pluginClass>plugin.IDEMetadataPlugin</pluginClass>
+                    <pluginKey>softaudit</pluginKey>
+                    <pluginClass>plugin.SoftAuditPlugin</pluginClass>
                     <pluginName>SoftAudit Plugin for SonarQube</pluginName>
                     <pluginDescription>Offers the SoftAudit Metrics as SonarQube-Plugin</pluginDescription>
                 </configuration>

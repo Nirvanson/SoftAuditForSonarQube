@@ -1,0 +1,53 @@
+<%
+    def check_image(metric_or_measure)
+        html = ''
+
+        if metric_or_measure.is_a? ProjectMeasure
+            m = metric_or_measure
+        elsif @snapshot
+            m = @snapshot.measure(metric_or_measure)
+        end
+
+        if m.nil?
+            return ''
+        end
+
+        if m && m.metric
+            if m.value == 1
+                html = image_tag(url_for_static(:plugin => 'idemetadata', :path => 'check-round-yes-small.png'), :size => '16x16', :style => 'vertical-align:middle')
+            elsif
+                html = image_tag(url_for_static(:plugin => 'idemetadata', :path => 'check-round-no-small.png'), :size => '16x16', :style => 'vertical-align:middle')
+            end
+        end
+
+        html
+    end
+
+    def remove_brackets(metric_or_measure)
+        out = ''
+
+        if metric_or_measure.is_a? ProjectMeasure
+            m = metric_or_measure
+        elsif @snapshot
+            m = @snapshot.measure(metric_or_measure)
+        end
+
+        if m.nil?
+            return ''
+        end
+
+        if m && m.metric
+            out = m.data[1..-2]
+        end
+
+        out
+    end
+%>
+<div class="dashbox">
+    <h3>Project name (as configured in the IDE):</h3>
+    <p>
+        <span class="big">
+            <%= format_measure('ide_prj_name') %>
+        </span>
+    </p>
+</div>
