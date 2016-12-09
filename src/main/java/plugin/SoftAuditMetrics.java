@@ -15,6 +15,8 @@ import org.sonar.api.measures.Metrics;
  */
 public class SoftAuditMetrics implements Metrics {
 
+	private static final Integer level = 0;
+	
 	// Sample Metric TODO: remove as soon as own metrics are measured
 	
     /**
@@ -472,7 +474,7 @@ public class SoftAuditMetrics implements Metrics {
 	 * Conditional Complexity (Based on McClure) = (IFS + SWI + CAS + LOP + 1) / (MET * 4)
 	 */
 	public static final Metric<Integer> COC = new Metric.Builder("complexity_coc", "Conditional Complexity", Metric.ValueType.FLOAT)
-			.setDescription("Computed control flow complexity (McCabe).")
+			.setDescription("Computed conditional complexity (McClure).")
 			.setDirection(Metric.DIRECTION_WORST)
 			.setQualitative(false)
 			.setDomain(CoreMetrics.DOMAIN_GENERAL)
@@ -534,10 +536,163 @@ public class SoftAuditMetrics implements Metrics {
 	
 	// Level 2 Metrics
 	
-	
-		
-	
+	/**
+	 * Interface Complexity (Based on Henry) = FFC / FUC
+	 */
+	public static final Metric<Integer> ICO = new Metric.Builder("complexity_ico", "Interface Complexity", Metric.ValueType.FLOAT)
+			.setDescription("Computed interface complexity (Henry).")
+			.setDirection(Metric.DIRECTION_WORST)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();
+	/**
+	 * Branching Complexity (Based on Sneed) = ((FFC * 2) + (RET * 2) + FUC) / STM
+	 */
+	public static final Metric<Integer> BRC = new Metric.Builder("complexity_brc", "Branching Complexity", Metric.ValueType.FLOAT)
+			.setDescription("Computed branching complexity (Sneed).")
+			.setDirection(Metric.DIRECTION_WORST)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();
+	/**
+	 * Language Complexity Medium Level (Based on Halstead) = ((STY / STM) + (DTY / (VAR + CON))) / 2
+	 */
+	public static final Metric<Integer> LCM = new Metric.Builder("complexity_lcm", "Language Complexity", Metric.ValueType.FLOAT)
+			.setDescription("Computed language complexity (Halstead).")
+			.setDirection(Metric.DIRECTION_WORST)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();	
+	/**
+	 * Average Complexity Medium Level = (DCO + DFC + CFC + COC + ICO + BRC + LCM) / 7
+	 */
+	public static final Metric<Integer> ACM = new Metric.Builder("complexity_acm", "Average Complexity", Metric.ValueType.FLOAT)
+			.setDescription("Computed average complexity.")
+			.setDirection(Metric.DIRECTION_WORST)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();
+	/**
+	 * Modularity = ((((CLA * 4) + (MET * 2)) / ((IMP * 4) + VAR)) + (1 – (FFC / (FUC + MET))) + ((STM / SRC) / OMS)) / 3
+	 */
+	public static final Metric<Integer> MOD = new Metric.Builder("quality_mod", "Modularity", Metric.ValueType.FLOAT)
+			.setDescription("Computed modularity.")
+			.setDirection(Metric.DIRECTION_BETTER)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();
+	/**
+	 * Reusability = RUM / MET
+	 */
+	public static final Metric<Integer> REU = new Metric.Builder("quality_reu", "Reuseability", Metric.ValueType.FLOAT)
+			.setDescription("Computed reusability.")
+			.setDirection(Metric.DIRECTION_BETTER)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();
+	/**
+	 * Security = (SST / 1,2) / STM
+	 */
+	public static final Metric<Integer> SEC = new Metric.Builder("quality_sec", "Security", Metric.ValueType.FLOAT)
+			.setDescription("Computed security.")
+			.setDirection(Metric.DIRECTION_BETTER)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();
+	/**
+	 * Maintainability Medium Level = ((1 – ACM) + ((MOD + TST + REU + SEC + FLE + (COF / 2)) / 6)) / 2
+	 */
+	public static final Metric<Integer> MAM = new Metric.Builder("quality_mam", "Maintainability", Metric.ValueType.FLOAT)
+			.setDescription("Computed maintainability.")
+			.setDirection(Metric.DIRECTION_BETTER)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();
+	/**
+	 * Average Quality Medium Level = (MOD + TST + REU + SEC + FLE + COF + MAB) / 7
+	 */
+	public static final Metric<Integer> AQM = new Metric.Builder("quality_aqm", "Average Quality", Metric.ValueType.FLOAT)
+			.setDescription("Computed average quality.")
+			.setDirection(Metric.DIRECTION_BETTER)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();
     
+	// Level 3 Metrics
+	
+	/**
+	 * Data Points = VAR + (VIE * 4) + (REP * 4) + (PAN * 4) + (FIL * 4) + (DBS * 4)
+	 */
+	public static final Metric<Integer> DAP = new Metric.Builder("size_dap", "Data Points", Metric.ValueType.INT)
+			.setDescription("Computed data points.")
+			.setDirection(Metric.DIRECTION_NONE)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();
+	/**
+	 * Function Points = (DBS * x) + (FIL * y) + (PAN * z) + (REP * z)
+	 */
+	public static final Metric<Integer> FUP = new Metric.Builder("size_fup", "Function Points", Metric.ValueType.INT)
+			.setDescription("Computed function points.")
+			.setDirection(Metric.DIRECTION_NONE)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();
+	/**
+	 * Data Access Complexity (Based on Card) = 1 – (FIL + DBS) / (FIL + DBS + FIA + DBA)
+	 */
+	public static final Metric<Integer> DAC = new Metric.Builder("complexity_dac", "Data Access Complexity", Metric.ValueType.FLOAT)
+			.setDescription("Computed data access complexity (Card).")
+			.setDirection(Metric.DIRECTION_WORST)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();	
+	/**
+	 * Language Complexity Full Level (Based on Halstead) = ((STY / STM) + (DTY / (VAR + CON + DEF))) / 2
+	 */
+	public static final Metric<Integer> LCF = new Metric.Builder("complexity_lcf", "Language Complexity", Metric.ValueType.FLOAT)
+			.setDescription("Computed language complexity (Halstead).")
+			.setDirection(Metric.DIRECTION_WORST)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();
+	/**
+	 * Average Complexity Full Level = (DCO + DFC + CFC + COC + ICO + BRC + LCM + DAC) / 8
+	 */
+	public static final Metric<Integer> ACF = new Metric.Builder("complexity_acf", "Average Complexity", Metric.ValueType.FLOAT)
+			.setDescription("Computed average complexity.")
+			.setDirection(Metric.DIRECTION_WORST)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();
+	/**
+	 * Portability = 1 – (((UFM * 2) + (INP * 4) + (OUT * 4) + (FIA * 4) + (DBA * 4) + (FIL * 8) + (REP * 8) + (PAN * 8) + (DBS * 8)) / STM)
+	 */
+	public static final Metric<Integer> POR = new Metric.Builder("quality_por", "Portability", Metric.ValueType.FLOAT)
+			.setDescription("Computed portability.")
+			.setDirection(Metric.DIRECTION_BETTER)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();
+	/**
+	 * Maintainability Full Level = ((1 – ACF) + ((MOD + TST + REU + SEC + FLE + POR + (COF / 2)) / 7)) / 2
+	 */
+	public static final Metric<Integer> MAF = new Metric.Builder("quality_maf", "Maintainability", Metric.ValueType.FLOAT)
+			.setDescription("Computed maintainability.")
+			.setDirection(Metric.DIRECTION_BETTER)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();
+	/**
+	 * Average Quality Full Level = (MOD + TST + REU + SEC + FLE + COF + MAB + POR) / 8
+	 */
+	public static final Metric<Integer> AQF = new Metric.Builder("quality_aqf", "Average Quality", Metric.ValueType.FLOAT)
+			.setDescription("Computed average quality.")
+			.setDirection(Metric.DIRECTION_BETTER)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();
+	
 	/**
      * Default constructor.
      */
@@ -552,16 +707,28 @@ public class SoftAuditMetrics implements Metrics {
      */
     @SuppressWarnings("rawtypes")
 	public List<Metric> getMetrics() {
-        return Arrays.asList(
-        	// Sample Metrics from IDE-Metadata TODO: remove as soon as own metrics are measured
-            IDE_PRO_NAME, 
-            // softaudit measures
-            PREDICATE_COUNT, RESULT_COUNT, ARGUMENT_COUNT, PARAMETER_COUNT, STATEMENT_COUNT, REFERENCE_COUNT, VARIABLE_COUNT,
-			FILE_COUNT, DATABASE_COUNT, FILE_ACCESS_COUNT, DATABASE_ACCESS_COUNT, FOREIGN_FUNCTION_CALL_COUNT, FUNCTION_CALL_COUNT,
-			BRANCH_COUNT, IF_COUNT, SWITCH_COUNT, LOOP_COUNT, RETURN_COUNT, GOTO_COUNT, EXCEPTION_COUNT, CONSTANT_COUNT, 
-			DEFINE_COUNT, STATEMENT_TYPE_COUNT, DATA_TYPE_COUNT, OPERAND_COUNT, CLASS_COUNT, METHOD_COUNT, PROCEDURE_COUNT, 
-			INCLUDE_COUNT, MODULE_COUNT, MACRO_REFERENCE_COUNT, INPUT_COUNT, OUTPUT_COUNT, REPORT_COUNT, PANEL_COUNT, 
-			REUSE_PROCEDURE_AND_METHOD_COUNT, COMMENT_LINE_COUNT, LINE_COUNT, CONVERTABLE_STATEMENTS_COUNT, CONVERTABLE_DATA_COUNT, 
-			LITERAL_COUNT, MAJOR_DEFICIENCY_COUNT, MEDIUM_DEFICIENCY_COUNT, MINOR_DEFICIENCY_COUNT, MAX_MODULE_SIZE);
+    	switch(level) {
+    	case 1:
+    		// Metrics-List with base level metrics
+    		return Arrays.asList(
+        			ARG, BRA, CAS, CLA, CON, IFS, INT, LIT, LOP, MAD, MED, MET, MID, PAR, PRE, REF, RES,
+        			RET, SED, STM, SWI, VAR, OBP, DCO, DFC, CFC, COC, ACB, TST, FLE, COF, MAB, AQB);
+    	case 2:
+    		// Metrics-list with medium level metrics
+    		return Arrays.asList(
+        			ARG, BRA, CAS, CLA, CON, IFS, INT, LIT, LOP, MAD, MED, MET, MID, PAR, PRE, REF, RES,
+        			RET, SED, STM, SWI, VAR, DTY, FFC, FUC, IMP, RUM, SRC, SST, STY, OMS, OBP, DCO, DFC,
+        			CFC, COC, ICO, BRC, LCM, ACM, TST, FLE, COF, MOD, REU, SEC, MAM, AQM);
+    	case 3:
+    		// Metrics-list with full level metrics
+    		return Arrays.asList(
+        			ARG, BRA, CAS, CLA, CON, IFS, INT, LIT, LOP, MAD, MED, MET, MID, PAR, PRE, REF, RES,
+        			RET, SED, STM, SWI, VAR, DTY, FFC, FUC, IMP, RUM, SRC, SST, STY, OMS, DBA, DBS, DEF,
+        			FIA, FIL, INP, OUT, PAN, REP, UFM, VIE, OBP, DAP, FUP, DCO, DFC, CFC, COC, ICO, BRC,
+        			LCF, ACF, TST, FLE, COF, MOD, REU, SEC, MAF, AQF);
+    	default:
+    		// Metrics-list with sample metric
+    		return Arrays.asList(IDE_PRO_NAME);
+    	}
     }
 }
