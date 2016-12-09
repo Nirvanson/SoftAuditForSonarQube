@@ -725,7 +725,7 @@ public class SoftAuditMetrics implements Metrics {
         			ARG, BRA, CAS, CLA, CON, IFS, INT, LIT, LOP, MAD, MED, MET, MID, PAR, PRE, REF, RES,
         			RET, SED, STM, SWI, VAR, DTY, FFC, FUC, IMP, RUM, SRC, SST, STY, OMS, DBA, DBS, DEF,
         			FIA, FIL, INP, OUT, PAN, REP, UFM, VIE, OBP, DAP, FUP, DCO, DFC, CFC, COC, ICO, BRC,
-        			LCF, ACF, TST, FLE, COF, MOD, REU, SEC, MAF, AQF);
+        			DAC, LCF, ACF, TST, FLE, COF, MOD, REU, SEC, POR, MAF, AQF);
     	default:
     		// Metrics-list with sample metric
     		return Arrays.asList(IDE_PRO_NAME);
