@@ -20,7 +20,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
      * Example Metric. Doubles the number of variables..
      */
-    public static final Metric<String> EXA = new Metric.Builder("size_exa", "Example", Metric.ValueType.INT)
+    public static final Metric<Integer> EXA = new Metric.Builder("size_exa", "Example", Metric.ValueType.INT)
             .setDescription("Doubled Number of Return Statements.")
             .setDirection(Metric.DIRECTION_NONE)
             .setQualitative(false)
