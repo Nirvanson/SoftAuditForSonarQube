@@ -44,10 +44,16 @@
     end
 %>
 <div class="dashbox">
-    <h3>Project name (as configured in the IDE):</h3>
+    <h3>Number of returns:</h3>
     <p>
         <span class="big">
-            <%= format_measure('ide_prj_name') %>
+            <%= format_measure('base_ret') %>
+        </span>
+    </p>
+    <h3>Doubled Number of returns:</h3>
+    <p>
+        <span class="big">
+            <%= format_measure('size_exa') %>
         </span>
     </p>
 </div>

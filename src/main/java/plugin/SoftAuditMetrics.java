@@ -17,17 +17,12 @@ public class SoftAuditMetrics implements Metrics {
 
 	private static final Integer level = 0;
 	
-	// Sample Metric TODO: remove as soon as own metrics are measured
-	
-    /**
-     * The project name (as configured in the IDE).
+	/**
+     * Example Metric. Doubles the number of variables..
      */
-    public static final Metric<String> IDE_PRO_NAME =
-        new Metric.Builder(
-            "ide_pro_name",
-            "Project name in IDE",
-            Metric.ValueType.STRING)
-            .setDescription("The project name (as configured in the IDE)")
+    public static final Metric<String> EXA = new Metric.Builder("size_exa", "Example", Metric.ValueType.INT)
+            .setDescription("Doubled Number of Return Statements.")
+            .setDirection(Metric.DIRECTION_NONE)
             .setQualitative(false)
             .setDomain(CoreMetrics.DOMAIN_GENERAL)
             .create();
@@ -727,8 +722,8 @@ public class SoftAuditMetrics implements Metrics {
         			FIA, FIL, INP, OUT, PAN, REP, UFM, VIE, OBP, DAP, FUP, DCO, DFC, CFC, COC, ICO, BRC,
         			DAC, LCF, ACF, TST, FLE, COF, MOD, REU, SEC, POR, MAF, AQF);
     	default:
-    		// Metrics-list with sample metric
-    		return Arrays.asList(IDE_PRO_NAME);
+    		// Metrics-list with sample measure + metric
+    		return Arrays.asList(RET, EXA);
     	}
     }
 }
