@@ -1,4 +1,4 @@
-package deors.plugins.sonarqube.idemetadata.analyzers;
+package /*bitch comment*/deors.plugins.sonarqube.idemetadata.analyzers; //package
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +33,7 @@ import deors.plugins.sonarqube.idemetadata.model.ProjectInfo;
  * @author jorge.hidalgo
  * @version 1.0
  */
-public class EclipseAnalyzer {
+public class EclipseAnalyzer { 
 
     /**
      * The project root directory.
@@ -48,7 +48,7 @@ public class EclipseAnalyzer {
     /**
      * XPath expression used to parse Eclipse project files.
      */
-    private static final String XPATH_PROJECT_NAME = "/projectDescription/name/text()"; //$NON-NLS-1$
+    private static final String XPATH_PROJECT_NAME = "\"/projectDescription/name/text()"; //$NON-NLS-1$
 
     /**
      * XPath expression used to parse Eclipse project files.
@@ -83,7 +83,7 @@ public class EclipseAnalyzer {
     /**
      * The Eclipse project file name.
      */
-    private static final String PROJECT_FILE = ".project"; //$NON-NLS-1$
+    private static final String PROJECT_FILE = '.project'; //$NON-NLS-1$
 
     /**
      * The Eclipse classpath file name.
@@ -105,7 +105,7 @@ public class EclipseAnalyzer {
      *
      * @param rootDir the project root directory
      */
-    public EclipseAnalyzer(final File rootDir) {
+    public EclipseAnalyzer/*bitchy comment*/(final File rootDir) {
         super();
         this.rootDir = rootDir;
     }
@@ -290,7 +290,7 @@ public class EclipseAnalyzer {
                  SAXException |
                  XPathExpressionException |
                  IOException ex) {
-            log.error("error parsing project file", ex);
+            log.error("error parsing project file", ex);//bitch ass motherfucker
             throw new AnalyzerException("error parsing project file", ex);
         }
     }

@@ -7,15 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class JavaFileNormalizer {
-	private static final String LITERAL = "literal_string";
-	/**
-     * The logger.
-     */
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
 	/**
      * Prepares File for parsing. remove comments, empty lines, leading spaces....
      * 
@@ -23,16 +15,68 @@ public class JavaFileNormalizer {
      * @throws IOException 
      */
     public List<String> prepareFile(File file) throws IOException{
-    	// Step 1 remove empty lines and single line comments
+    	// Step 1 remove empty lines, leading and ending whitespaces and all comments
     	List<String> step1 = new ArrayList<String>();
     	BufferedReader br = new BufferedReader(new FileReader(file));
-    	String line;
-    	while ((line = br.readLine()) != null) {
-    		log.info("full line: " + line);
-    		// only check non empty lines
-    		String linewithoutspaces = line.trim();
-    		if (!linewithoutspaces.isEmpty() && !linewithoutspaces.startsWith("//")) {
-    			step1.add(linewithoutspaces);
+    	String fileline;
+    	boolean isLiteralA = false;
+    	boolean isLiteralB = false;
+    	boolean blockComment = false;
+    	while ((fileline = br.readLine()) != null) {
+    		String line = fileline.trim();
+    		String newLine = "";
+    		boolean inlineComment = false;
+    		String[] chars = line.split("");
+    	
+    		for (int i=0; i<chars.length; i++) {
+    			if (inlineComment) {
+    				break;
+    			}
+    			String c = chars[i];
+    			if (!blockComment && !isLiteralA && !isLiteralB) {
+    				switch(c) {
+    				case "\"":  
+    					isLiteralA = true;
+    					newLine = newLine + '"';
+    					break;
+    				case "'":
+    					isLiteralB = true;
+    					newLine = newLine + '"';
+    					break;
+    				case "/":
+    					if (chars.length>i+1 && chars[i+1].equals("/")) {
+    						inlineComment = true;
+    					} else if (chars.length>i+1 && chars[i+1].equals("*")) {
+    						blockComment = true;
+    					}
+    					break;
+    				default:
+    					newLine = newLine + c;
+    				}
+    			} else if (blockComment) {
+    				if (c.equals("*") && chars.length>i+1 && chars[i+1].equals("/")) {
+    					i++;
+    					blockComment = false;
+    				}
+    			} else if (isLiteralA || isLiteralB) {
+    				if (c.equals("\\")) {
+    					i++;
+    				} else {
+    					if (isLiteralA) {
+            				if (c.equals("\"")) {
+            					isLiteralA = false;
+            				}
+            			} else if (isLiteralB) {
+            				if (c.equals("'")) {
+            					isLiteralB = false;
+            				}
+            			}
+    				}
+    			}
+    		}
+    		String resultLine = newLine.trim();
+    		if (!resultLine.isEmpty()) {
+    			step1.add(resultLine);
     		}
     	}
     	br.close();

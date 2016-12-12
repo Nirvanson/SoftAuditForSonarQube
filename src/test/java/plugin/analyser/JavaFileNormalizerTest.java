@@ -1,7 +1,5 @@
 package plugin.analyser;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -16,7 +14,7 @@ public class JavaFileNormalizerTest {
 
     @Test
     public void testFileNormalization() {
-    	File input = new File("/../../main/resources/testdata/TestClass.java");
+    	File input = new File(getClass().getResource("/testdata/TestClass.txt").getPath());
     	JavaFileNormalizer normalizer = new JavaFileNormalizer();
     	try {
 			List<String> result = normalizer.prepareFile(input);

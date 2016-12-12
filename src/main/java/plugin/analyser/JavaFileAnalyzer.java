@@ -85,7 +85,14 @@ public class JavaFileAnalyzer {
     	double returncount = 0;
     	for (String line: file) {
     	   // process the line.
-    	   if (line.contains("return")) {
+    	   if (line.startsWith("return;") ||
+    			   line.startsWith("return ") ||
+    			   line.contains(" return ") ||
+    			   line.contains(" return;") ||
+    			   line.contains(";return ") ||
+    			   line.contains(";return;") ||
+    			   line.endsWith(" return") ||
+    			   line.equals("return")) {
     		   returncount++;
     	   }
     	}
