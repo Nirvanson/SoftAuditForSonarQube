@@ -88,10 +88,10 @@ public class JavaFileAnalyzer {
     private Map<Metric<Integer>, Double> analyzeProjectFile(List<String> words) {
     	Map<Metric<Integer>, Double> partialResult = new HashMap<Metric<Integer>, Double>();
     	// count cases in switches
-    	partialResult.put(SoftAuditMetrics.CAS, (double) Collections.frequency(words, "case"));
+    	partialResult.put(SoftAuditMetrics.CAS, (double) (Collections.frequency(words, "case") + Collections.frequency(words, "default")));
     	// count classes
     	partialResult.put(SoftAuditMetrics.CLA, (double) Collections.frequency(words, "class"));
-    	// count if statements
+    	// count if statements //TODO add short version
     	partialResult.put(SoftAuditMetrics.IFS, (double) Collections.frequency(words, "if"));
     	// count imports
     	partialResult.put(SoftAuditMetrics.IMP, (double) Collections.frequency(words, "import"));
