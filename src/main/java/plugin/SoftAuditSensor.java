@@ -63,24 +63,17 @@ public class SoftAuditSensor implements Sensor {
         Iterable<File> files = fileSystem.files(fileSystem.predicates().hasLanguage("java"));
         // initalise analyzer 
         JavaFileAnalyzer analyzer = new JavaFileAnalyzer(files);
-        // analyse
+        // measure
         Map<Metric<Integer>, Double> measures = new HashMap<Metric<Integer>, Double>();
         measures = analyzer.analyze();
-        // save
-        saveMeasures(sensorContext, measures); 
+        // save measures
+        for (Metric<Integer> metric: measures.keySet()) {
+    		sensorContext.saveMeasure(new Measure<Integer>(metric, measures.get(metric)));
+    	}
+        // compute and save metrics
+        sensorContext.saveMeasure(new Measure<Float>(SoftAuditMetrics.EXA, measures.get(SoftAuditMetrics.IFS) + 
+        		measures.get(SoftAuditMetrics.LOP) + measures.get(SoftAuditMetrics.SWI) + measures.get(SoftAuditMetrics.RET)));
         log.info("Analysation Done!");
-    }
-
-    /**
-     * Saves measures corresponding to main project information.
-     *
-     * @param sensorContext - the sensor context
-     * @param measures      - measured values as HashMap
-     */
-    private void saveMeasures(SensorContext sensorContext,  Map<Metric<Integer>, Double> measures) {
-    	// save measures
-        sensorContext.saveMeasure(new Measure<Integer>(SoftAuditMetrics.RET, measures.get(SoftAuditMetrics.RET)));
-        sensorContext.saveMeasure(new Measure<Float>(SoftAuditMetrics.EXA, measures.get(SoftAuditMetrics.RET)*2));
     }
 
     /**

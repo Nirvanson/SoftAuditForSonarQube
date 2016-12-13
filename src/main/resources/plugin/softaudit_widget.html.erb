@@ -44,13 +44,18 @@
     end
 %>
 <div class="dashbox">
-    <h3>Number of returns:</h3>
-    <p>
-        <span class="big">
-            <%= format_measure('base_ret') %>
-        </span>
-    </p>
-    <h3>Doubled Number of returns:</h3>
+    <h2>Number of cases: <%= format_measure('base_cas') %></h2>
+    <h2>Number of classes: <%= format_measure('base_cla') %></h2>
+    <h2>Number of if-statements: <%= format_measure('base_ifs') %></h2>
+    <h2>Number of imports: <%= format_measure('base_imp') %></h2>
+    <h2>Number of interfaces: <%= format_measure('base_int') %></h2>
+    <h2>Number of literals: <%= format_measure('base_lit') %></h2>
+    <h2>Number of loop-statements: <%= format_measure('base_lop') %></h2>
+    <h2>Number of returns: <%= format_measure('base_ret') %></h2>
+    <h2>Number of switch-statements: <%= format_measure('base_swi') %></h2>
+    <h2>Number of source files: <%= format_measure('base_src') %></h2>
+    <h2>Optimal module size: <%= format_measure('base_oms') %></h2>
+    <h3>Number of Control-Flow-Statements (Ifs, Switches, Loops, Returns):</h3>
     <p>
         <span class="big">
             <%= format_measure('size_exa') %>

@@ -17,7 +17,7 @@ public class JavaFileNormalizerTest {
     	File input = new File(getClass().getResource("/testdata/TestClass.txt").getPath());
     	JavaFileNormalizer normalizer = new JavaFileNormalizer();
     	try {
-			List<String> result = normalizer.prepareFile(input);
+			List<String> result = normalizer.splitToWords(normalizer.prepareFile(input));
 			for (String line: result) {
 				System.out.println(line);
 			}

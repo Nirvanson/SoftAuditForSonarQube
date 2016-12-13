@@ -2,6 +2,7 @@ package plugin.analyser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,18 +60,22 @@ public class JavaFileAnalyzer {
     		}
     	}
     	// start analyzing each relevant file
+    	double sourceFiles = 0;
     	for(File file : files) {
-    		List<String> normalizedFile = null;
+    		List<String> normalizedLines = null;
     		try {
-    			normalizedFile = normalizer.prepareFile(file);
+    			normalizedLines = normalizer.prepareFile(file);
     		} catch (IOException e) {
 				log.error("File " + file.getName() + " caused IO-Error.", e);
 			}
-			Map<Metric<Integer>, Double> partialResult = analyzeProjectFile(normalizedFile);
+			Map<Metric<Integer>, Double> partialResult = analyzeProjectFile(normalizer.splitToWords(normalizedLines));
 			for (Metric<Integer> measure : partialResult.keySet()) {
 	    		result.put(measure, result.get(measure) + partialResult.get(measure));
 	    	}
+			sourceFiles++;
     	}
+    	result.put(SoftAuditMetrics.SRC, sourceFiles);
+    	result.put(SoftAuditMetrics.OMS, 200d);
         return result;
     }
 
@@ -80,23 +85,26 @@ public class JavaFileAnalyzer {
      * @param file - the file to analyze
      * @throws IOException 
      */
-    private Map<Metric<Integer>, Double> analyzeProjectFile(List<String> file) {
+    private Map<Metric<Integer>, Double> analyzeProjectFile(List<String> words) {
     	Map<Metric<Integer>, Double> partialResult = new HashMap<Metric<Integer>, Double>();
-    	double returncount = 0;
-    	for (String line: file) {
-    	   // process the line.
-    	   if (line.startsWith("return;") ||
-    			   line.startsWith("return ") ||
-    			   line.contains(" return ") ||
-    			   line.contains(" return;") ||
-    			   line.contains(";return ") ||
-    			   line.contains(";return;") ||
-    			   line.endsWith(" return") ||
-    			   line.equals("return")) {
-    		   returncount++;
-    	   }
-    	}
-    	partialResult.put(SoftAuditMetrics.RET, returncount);
+    	// count cases in switches
+    	partialResult.put(SoftAuditMetrics.CAS, (double) Collections.frequency(words, "case"));
+    	// count classes
+    	partialResult.put(SoftAuditMetrics.CLA, (double) Collections.frequency(words, "class"));
+    	// count if statements
+    	partialResult.put(SoftAuditMetrics.IFS, (double) Collections.frequency(words, "if"));
+    	// count imports
+    	partialResult.put(SoftAuditMetrics.IMP, (double) Collections.frequency(words, "import"));
+    	// count interfaces
+    	partialResult.put(SoftAuditMetrics.INT, (double) Collections.frequency(words, "inteface"));
+    	// count Literals
+    	partialResult.put(SoftAuditMetrics.LIT, (double) (Collections.frequency(words, "\"") + Collections.frequency(words, "'")));
+    	// count Loop statements
+    	partialResult.put(SoftAuditMetrics.LOP, (double) (Collections.frequency(words, "for") + Collections.frequency(words, "while")));
+    	// count return statements
+    	partialResult.put(SoftAuditMetrics.RET, (double) Collections.frequency(words, "return"));
+    	// count switch statements
+    	partialResult.put(SoftAuditMetrics.SWI, (double) Collections.frequency(words, "switch"));
     	return partialResult;
     }
     
