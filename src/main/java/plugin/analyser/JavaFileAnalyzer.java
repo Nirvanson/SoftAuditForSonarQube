@@ -91,13 +91,13 @@ public class JavaFileAnalyzer {
     	partialResult.put(SoftAuditMetrics.CAS, (double) (Collections.frequency(words, "case") + Collections.frequency(words, "default")));
     	// count classes
     	partialResult.put(SoftAuditMetrics.CLA, (double) Collections.frequency(words, "class"));
-    	// count if statements //TODO add short version
+    	// count if statements //TODO: add short version
     	partialResult.put(SoftAuditMetrics.IFS, (double) Collections.frequency(words, "if"));
-    	// count imports
+    	// count imports //TODO: same as includes? then different
     	partialResult.put(SoftAuditMetrics.IMP, (double) Collections.frequency(words, "import"));
-    	// count interfaces
+    	// count interfaces //TODO: check
     	partialResult.put(SoftAuditMetrics.INT, (double) Collections.frequency(words, "inteface"));
-    	// count Literals
+    	// count Literals //TODO: different to SoftAudit
     	partialResult.put(SoftAuditMetrics.LIT, (double) (Collections.frequency(words, "\"") + Collections.frequency(words, "'")));
     	// count Loop statements
     	partialResult.put(SoftAuditMetrics.LOP, (double) (Collections.frequency(words, "for") + Collections.frequency(words, "while")));
