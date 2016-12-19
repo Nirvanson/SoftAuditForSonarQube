@@ -13,6 +13,7 @@ public class JavaFileNormalizer {
      * Prepares File for parsing. remove comments, empty lines, leading spaces....
      * 
      * @param file - the file to analyze
+     * @returns List of relevant lines
      * @throws IOException 
      */
     public List<String> prepareFile(File file) throws IOException {
@@ -35,14 +36,24 @@ public class JavaFileNormalizer {
     			if (!blockComment && !isLiteralA && !isLiteralB) {
     				switch(c) {
     				case "\"":
-    					// beginning of a "literal", add " as placeholder to new line
-    					isLiteralA = true;
-    					newLine += '"';
+    					if (chars.length>i+1 && chars[i+1].equals("\"")) {
+    						//empty literal - ignore
+    						i++;
+    					} else {
+    						// beginning of a "literal", add " as placeholder to new line
+    						isLiteralA = true;
+    						newLine += '"';
+    					}
     					break;
     				case "'":
-    					// beginning of a 'literal', add ' as placeholder to new line
-    					isLiteralB = true;
-    					newLine += "'";
+    					if (chars.length>i+1 && chars[i+1].equals("'")) {
+    						//empty literal - ignore
+    						i++;
+    					} else {
+    						// beginning of a 'literal', add ' as placeholder to new line
+    						isLiteralB = true;
+    						newLine += "'";
+    					}
     					break;
     				case "/":
     					if (chars.length>i+1 && chars[i+1].equals("/")) {
@@ -101,6 +112,12 @@ public class JavaFileNormalizer {
     	return result;
     }
     
+    /**
+     * Splits file into words, removes operators, brackets, line-endings, ...
+     * 
+     * @param lines - List of relevant Lines
+     * @returns word-list
+     */
     public List<String> splitToWords(List<String> lines) {
     	List<String> breaks = Arrays.asList(" ", "(", ")", "{", "}", "[", "]", "+", "-", "*", "/", "%", "<", ">", "=", 
     			"!", "~", "&", "|", "^", "?", ":", ",", ";");
@@ -120,5 +137,38 @@ public class JavaFileNormalizer {
     		}
     	}
     	return result;
+    }
+    
+    /**
+     * Converts relevant lines to single normalized code String for pattern recognition 
+     * 
+     * @param lines - List of relevant Lines
+     * @returns normalized Code-String
+     */
+    public String convertToSingleString(List<String> lines) {
+    	String fullCode = "";
+    	for (String line: lines) {
+    		if (line.startsWith("import")) {
+    			continue;
+    		} 
+    	    // add normalized line with space before new line
+    		fullCode += (line + " ");
+    	}
+    	// remove spaces before and after brackets
+		String normalizedCode = "";
+		List<String> brackets = Arrays.asList("(", ")", "{", "}", "[", "]");
+		String[] chars = fullCode.split("");
+		for (int i=0; i<chars.length; i++) {
+			if (chars[i].equals(" ") && chars.length>i+1 && brackets.contains(chars[i+1])) {
+				// skip space before bracket
+				continue;
+			} 
+			normalizedCode += chars[i];
+			if (brackets.contains(chars[i]) && chars.length>i+1 && chars[i+1].equals(" ")) {
+				// skip space after bracket
+				i++;
+			} 
+		}
+    	return normalizedCode;
     }
 }

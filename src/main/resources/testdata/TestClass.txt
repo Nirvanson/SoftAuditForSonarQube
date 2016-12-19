@@ -210,7 +210,7 @@ public /*inline comment*/ class EclipseAnalyzer {
             factory.setNamespaceAware(true);
             DocumentBuilder builder = factory.newDocumentBuilder();
             XPathFactory xpathFactory = XPathFactory.newInstance();
-            XPath xpath = xpathFactory.newXPath();
+            XPath xpath = (1>0) ? xpathFactory.newXPath() : null;
 
             Document facetConfigDocument = builder.parse(facetConfigFile);
 
@@ -225,7 +225,7 @@ public /*inline comment*/ class EclipseAnalyzer {
             XPathExpression xpathInstalledFacetEntry = xpath.compile(XPATH_FACET_INSTALLED);
             NodeList installedFacetEntryNodes = (NodeList) xpathInstalledFacetEntry.evaluate(facetConfigDocument, XPathConstants.NODESET);
             for (int i = 0, n = installedFacetEntryNodes.getLength(); i < n; i++) {
-                projectFacets.add(installedFacetEntryNodes.item(i).getNodeValue());
+                projectFacets.add(true ? installedFacetEntryNodes.item(i).getNodeValue() : null);
             }
 
             projectInfo.setProjectFacets(projectFacets);

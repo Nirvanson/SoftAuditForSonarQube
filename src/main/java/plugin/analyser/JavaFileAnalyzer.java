@@ -6,7 +6,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,9 +69,13 @@ public class JavaFileAnalyzer {
     		} catch (IOException e) {
 				log.error("File " + file.getName() + " caused IO-Error.", e);
 			}
-			Map<Metric<Integer>, Double> partialResult = analyzeProjectFile(normalizer.splitToWords(normalizedLines));
-			for (Metric<Integer> measure : partialResult.keySet()) {
-	    		result.put(measure, result.get(measure) + partialResult.get(measure));
+			Map<Metric<Integer>, Double> keyWordMeasures = countKeyWords(normalizer.splitToWords(normalizedLines));
+			for (Metric<Integer> measure : keyWordMeasures.keySet()) {
+	    		result.put(measure, result.get(measure) + keyWordMeasures.get(measure));
+	    	}
+			Map<Metric<Integer>, Double> patternMeasures = searchForPatterns(normalizer.convertToSingleString(normalizedLines));
+			for (Metric<Integer> measure : patternMeasures.keySet()) {
+	    		result.put(measure, result.get(measure) + patternMeasures.get(measure));
 	    	}
 			sourceFiles++;
     	}
@@ -80,25 +85,25 @@ public class JavaFileAnalyzer {
     }
 
     /**
-     * Analyzes single file.
+     * Do keyword-count-analysis for file.
      * 
-     * @param file - the file to analyze
-     * @throws IOException 
+     * @param words - the words of the file to analyze
+     * @returns result-map
      */
-    private Map<Metric<Integer>, Double> analyzeProjectFile(List<String> words) {
+    private Map<Metric<Integer>, Double> countKeyWords(List<String> words) {
     	Map<Metric<Integer>, Double> partialResult = new HashMap<Metric<Integer>, Double>();
     	// count cases in switches
     	partialResult.put(SoftAuditMetrics.CAS, (double) (Collections.frequency(words, "case") + Collections.frequency(words, "default")));
     	// count classes
     	partialResult.put(SoftAuditMetrics.CLA, (double) Collections.frequency(words, "class"));
     	// count if statements //TODO: add short version
-    	partialResult.put(SoftAuditMetrics.IFS, (double) Collections.frequency(words, "if"));
+    	partialResult.put(SoftAuditMetrics.IFS, (double) (Collections.frequency(words, "if") + Collections.frequency(words, "try")));
     	// count imports //TODO: same as includes? then different
     	partialResult.put(SoftAuditMetrics.IMP, (double) Collections.frequency(words, "import"));
     	// count interfaces //TODO: check
     	partialResult.put(SoftAuditMetrics.INT, (double) Collections.frequency(words, "inteface"));
-    	// count Literals //TODO: different to SoftAudit
-    	partialResult.put(SoftAuditMetrics.LIT, (double) (Collections.frequency(words, "\"") + Collections.frequency(words, "'")));
+    	// count Literals
+    	partialResult.put(SoftAuditMetrics.LIT, (double) Collections.frequency(words, "\""));
     	// count Loop statements
     	partialResult.put(SoftAuditMetrics.LOP, (double) (Collections.frequency(words, "for") + Collections.frequency(words, "while")));
     	// count return statements
@@ -108,5 +113,34 @@ public class JavaFileAnalyzer {
     	return partialResult;
     }
     
-    
+    /**
+     * Do pattern-search-analysis for file.
+     * 
+     * @param normalizedCode - Code of file as normalized single string.
+     * @returns result-map
+     */
+    private Map<Metric<Integer>, Double> searchForPatterns(String normalizedCode) {
+    	Map<Metric<Integer>, Double> partialResult = new HashMap<Metric<Integer>, Double>();
+    	// count short version of if statement (condition ? trueoption : falseoption)
+        Matcher shortIfMatcher = Pattern.compile(".*?\\?.*?:.*?(;|\\))").matcher(normalizedCode);
+        double shortIfCount = 0;
+        while (shortIfMatcher.find())
+        	shortIfCount++;
+        partialResult.put(SoftAuditMetrics.IFS, shortIfCount);
+        // count methods (name(parameter)optional additional stuff{body} excluding ifs, fors, whiles, catches)
+        Matcher methodMatcher = Pattern.compile("(?<![;\\}\\)\\(\\{]for|[;\\}\\)\\(\\{]catch|[;\\}\\)\\(\\{]while|[;\\}\\)\\(\\{]if)\\([^\\(^\\)^;]*?\\)[^\\(^\\)^;]*?\\{").matcher(normalizedCode);
+        double methodCount = 0;
+        while (methodMatcher.find()) {
+        	methodCount++;
+        }
+        partialResult.put(SoftAuditMetrics.MET, methodCount);
+        // count statements (all line endings { and ;) 
+        Matcher statementMatcher = Pattern.compile("[;\\{]").matcher(normalizedCode);
+        double statementCount = 0;
+        while (statementMatcher.find()) {
+        	statementCount++;
+        }
+        partialResult.put(SoftAuditMetrics.STM, statementCount);
+    	return partialResult;
+    }
 }

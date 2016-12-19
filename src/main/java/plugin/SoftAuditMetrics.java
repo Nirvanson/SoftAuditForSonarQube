@@ -723,7 +723,7 @@ public class SoftAuditMetrics implements Metrics {
         			DAC, LCF, ACF, TST, FLE, COF, MOD, REU, SEC, POR, MAF, AQF);
     	default:
     		// Metrics-list with sample measures + metric
-    		return Arrays.asList(CAS, CLA, IFS, IMP, INT, LIT, LOP, RET, SWI, SRC, OMS, EXA);
+    		return Arrays.asList(CAS, CLA, IFS, IMP, INT, LIT, LOP, MET, RET, STM, SWI, SRC, OMS, EXA);
     	}
     }
 }
