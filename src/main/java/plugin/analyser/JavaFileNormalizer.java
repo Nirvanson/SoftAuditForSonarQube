@@ -147,10 +147,7 @@ public class JavaFileNormalizer {
      */
     public String convertToSingleString(List<String> lines) {
     	String fullCode = "";
-    	for (String line: lines) {
-    		if (line.startsWith("import")) {
-    			continue;
-    		} 
+    	for (String line: lines) { 
     	    // add normalized line with space before new line
     		fullCode += (line + " ");
     	}
