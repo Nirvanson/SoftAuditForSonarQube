@@ -26,6 +26,5 @@ public class JavaFileAnalyzerTest {
     	Map<Metric<Integer>, Double> result = analyzer.analyze();
     	assertEquals("Wrong if count", 8d, result.get(SoftAuditMetrics.IFS), 0.1);
     	assertEquals("Wrong method count", 5d, result.get(SoftAuditMetrics.MET), 0.1);
-    	System.out.println(result.get(SoftAuditMetrics.STM));
     }
 }

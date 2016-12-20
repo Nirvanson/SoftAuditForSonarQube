@@ -51,14 +51,16 @@
     <h2>Number of interfaces: <%= format_measure('base_int') %></h2>
     <h2>Number of literals: <%= format_measure('base_lit') %></h2>
     <h2>Number of loop-statements: <%= format_measure('base_lop') %></h2>
+    <h2>Number of methods: <%= format_measure('base_met') %></h2>
     <h2>Number of returns: <%= format_measure('base_ret') %></h2>
+    <h2>Number of statements: <%= format_measure('base_stm') %></h2>
     <h2>Number of switch-statements: <%= format_measure('base_swi') %></h2>
     <h2>Number of source files: <%= format_measure('base_src') %></h2>
     <h2>Optimal module size: <%= format_measure('base_oms') %></h2>
-    <h3>Number of Control-Flow-Statements (Ifs, Switches, Loops, Returns):</h3>
+    <h3>Conditional Complexity (based on McClure):</h3>
     <p>
         <span class="big">
-            <%= format_measure('size_exa') %>
+            <%= format_measure('complexity_coc') %>
         </span>
     </p>
 </div>

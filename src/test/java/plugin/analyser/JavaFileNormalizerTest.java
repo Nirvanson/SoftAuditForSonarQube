@@ -28,23 +28,15 @@ public class JavaFileNormalizerTest {
 			e.printStackTrace();
 		}
     	assertTrue("no lines recieved by preparation", !lines.isEmpty());
-    	for (String line: lines) {
-			System.out.println(line);
-		}
     	
     	// split to words
     	List<String> words = new ArrayList<String>();
 		words = normalizer.splitToWords(lines);
 		assertTrue("no words recieved by splitting", !words.isEmpty());
-		System.out.println("Wordlist:");
-		for (String word: words) {
-			System.out.println(word);
-		}
 		
 		// normalized code
 		String normalizedCode = null;
 		normalizedCode = normalizer.convertToSingleString(lines);
 		assertTrue("no normalized code recieved", !(normalizedCode.equals(null) || normalizedCode.isEmpty()));
-		System.out.println(normalizedCode);
     }
 }

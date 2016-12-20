@@ -71,9 +71,8 @@ public class SoftAuditSensor implements Sensor {
     		sensorContext.saveMeasure(new Measure<Integer>(metric, measures.get(metric)));
     	}
         // compute and save metrics
-        sensorContext.saveMeasure(new Measure<Float>(SoftAuditMetrics.EXA, measures.get(SoftAuditMetrics.IFS) + 
-        		measures.get(SoftAuditMetrics.LOP) + measures.get(SoftAuditMetrics.SWI) + measures.get(SoftAuditMetrics.RET)));
-        log.info("Analysation Done!");
+        sensorContext.saveMeasure(new Measure<Float>(SoftAuditMetrics.COC, (measures.get(SoftAuditMetrics.IFS) + 
+        		measures.get(SoftAuditMetrics.LOP) + measures.get(SoftAuditMetrics.SWI) + measures.get(SoftAuditMetrics.CAS)) / (measures.get(SoftAuditMetrics.MET) * 4)));
     }
 
     /**

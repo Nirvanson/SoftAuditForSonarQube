@@ -96,12 +96,12 @@ public class JavaFileAnalyzer {
     	partialResult.put(SoftAuditMetrics.CAS, (double) (Collections.frequency(words, "case") + Collections.frequency(words, "default")));
     	// count classes
     	partialResult.put(SoftAuditMetrics.CLA, (double) Collections.frequency(words, "class"));
-    	// count if statements //TODO: add short version
+    	// count if statements 
     	partialResult.put(SoftAuditMetrics.IFS, (double) (Collections.frequency(words, "if") + Collections.frequency(words, "try")));
     	// count imports //TODO: same as includes? then different
     	partialResult.put(SoftAuditMetrics.IMP, (double) Collections.frequency(words, "import"));
     	// count interfaces //TODO: check
-    	partialResult.put(SoftAuditMetrics.INT, (double) Collections.frequency(words, "inteface"));
+    	partialResult.put(SoftAuditMetrics.INT, (double) Collections.frequency(words, "interface"));
     	// count Literals
     	partialResult.put(SoftAuditMetrics.LIT, (double) Collections.frequency(words, "\""));
     	// count Loop statements
@@ -121,20 +121,20 @@ public class JavaFileAnalyzer {
      */
     private Map<Metric<Integer>, Double> searchForPatterns(String normalizedCode) {
     	Map<Metric<Integer>, Double> partialResult = new HashMap<Metric<Integer>, Double>();
-    	// count short version of if statement (condition ? trueoption : falseoption)
+    	// count short version of if statement "condition ? trueoption : falseoption"
         Matcher shortIfMatcher = Pattern.compile(".*?\\?.*?:.*?(;|\\))").matcher(normalizedCode);
         double shortIfCount = 0;
         while (shortIfMatcher.find())
         	shortIfCount++;
         partialResult.put(SoftAuditMetrics.IFS, shortIfCount);
-        // count methods (name(parameter)optional additional stuff{body} excluding ifs, fors, whiles, catches)
+        // count methods "(name(parameter)optional additional stuff{" excluding if, for, while, catch as name)
         Matcher methodMatcher = Pattern.compile("(?<![;\\}\\)\\(\\{]for|[;\\}\\)\\(\\{]catch|[;\\}\\)\\(\\{]while|[;\\}\\)\\(\\{]if)\\([^\\(^\\)^;]*?\\)[^\\(^\\)^;]*?\\{").matcher(normalizedCode);
         double methodCount = 0;
         while (methodMatcher.find()) {
         	methodCount++;
         }
         partialResult.put(SoftAuditMetrics.MET, methodCount);
-        // count statements (all line endings { and ;) 
+        // count statements (all { and ;) 
         Matcher statementMatcher = Pattern.compile("[;\\{]").matcher(normalizedCode);
         double statementCount = 0;
         while (statementMatcher.find()) {
