@@ -28,11 +28,6 @@ public class JavaFileNormalizerTest {
 			e.printStackTrace();
 		}
     	assertTrue("no lines recieved by preparation", !lines.isEmpty());
-    	
-    	// split to words
-    	List<String> words = new ArrayList<String>();
-		words = normalizer.splitToWords(lines);
-		assertTrue("no words recieved by splitting", !words.isEmpty());
 		
 		// normalized code
 		String normalizedCode = null;
