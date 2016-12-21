@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import plugin.model.JavaWord;
+
 public class JavaFileNormalizer {
 	/**
      * Prepares File for parsing. remove comments, empty lines, leading spaces....
@@ -153,19 +155,66 @@ public class JavaFileNormalizer {
     	}
     	// remove spaces before and after brackets
 		String normalizedCode = "";
-		List<String> brackets = Arrays.asList("(", ")", "{", "}", "[", "]");
+		List<String> breaks = Arrays.asList("\"", "'", "(", ")", "{", "}", "[", "]", "+", "-", "*", "/", "%", "<", ">", "=", 
+    			"!", "~", "&", "|", "^", "?", ":", ",", ";");
 		String[] chars = fullCode.split("");
 		for (int i=0; i<chars.length; i++) {
-			if (chars[i].equals(" ") && chars.length>i+1 && brackets.contains(chars[i+1])) {
-				// skip space before bracket
+			if (chars[i].equals(" ") && chars.length>i+1 && breaks.contains(chars[i+1])) {
+				// skip space before break-characters
 				continue;
 			} 
 			normalizedCode += chars[i];
-			if (brackets.contains(chars[i]) && chars.length>i+1 && chars[i+1].equals(" ")) {
-				// skip space after bracket
+			if (breaks.contains(chars[i]) && chars.length>i+1 && chars[i+1].equals(" ")) {
+				// skip space after break-characters
 				i++;
 			} 
 		}
     	return normalizedCode;
+    }
+    
+    public List<JavaWord> createJavaWordList(String normalizedCode) {
+    	List<String> breaks = Arrays.asList("\"", "'", "(", ")", "{", "}", "[", "]", "?", ":", ",", ";", "@", ".");
+    	List<String> operators = Arrays.asList("+", "-", "*", "/", "%", "<", ">", "=", "!", "~", "&", "|", "^");
+    	List<JavaWord> result = new ArrayList<JavaWord>();
+    	String[] chars = normalizedCode.split("");
+		String word = "";
+		boolean operator = false;
+		
+		for (int i=0; i<chars.length; i++) {
+			if (operator) {
+				if (operators.contains(chars[i])) {
+					word += chars[i];
+				} else {
+					result.add(JavaWord.findKeyword(word));
+					operator = false;
+					
+					if (breaks.contains(chars[i])) {
+						result.add(JavaWord.findKeyword(chars[i]));
+						word = "";
+					} else {
+						word = chars[i];
+					}
+				}
+			} else if (operators.contains(chars[i])) {
+				if (!word.isEmpty()) {
+					result.add(JavaWord.findKeyword(word));
+				}
+				operator = true;
+				word = chars[i];
+			} else if (breaks.contains(chars[i])) {
+				if (!word.isEmpty()) {
+					result.add(JavaWord.findKeyword(word));
+					word = "";
+				}
+				result.add(JavaWord.findKeyword(chars[i]));
+			} else if (chars[i].equals(" ")){
+				result.add(JavaWord.findKeyword(word));
+				word = "";
+			} else {
+				word += chars[i];
+			}
+		}
+		System.out.println(result);
+    	return result;
     }
 }

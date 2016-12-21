@@ -38,5 +38,7 @@ public class JavaFileNormalizerTest {
 		String normalizedCode = null;
 		normalizedCode = normalizer.convertToSingleString(lines);
 		assertTrue("no normalized code recieved", !(normalizedCode.equals(null) || normalizedCode.isEmpty()));
+		
+		normalizer.createJavaWordList(normalizedCode);
     }
 }
