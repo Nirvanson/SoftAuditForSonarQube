@@ -114,7 +114,7 @@ public /*inline comment*/ class EclipseAnalyzer {
      * @throws AnalyzerException any error occurred while analyzing the metadata
      *                           files, typically a parsing error in XML files
      */
-    public ProjectInfo analyze()
+    public ProjectInfo analyze(HashMap<List<String>, int[]> fieseMap, String... points, int[] array)
         throws AnalyzerException  {
 
         projectInfo = new ProjectInfo();

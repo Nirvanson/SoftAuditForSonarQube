@@ -8,8 +8,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import plugin.model.JavaClassContent;
+import plugin.model.JavaMethod;
 import plugin.model.JavaWord;
 import plugin.model.KeyWord;
+import plugin.model.WordType;
 
 public class JavaFileNormalizer {
 	/**
@@ -130,7 +133,7 @@ public class JavaFileNormalizer {
     	// remove spaces before and after brackets
 		String normalizedCode = "";
 		List<String> breaks = Arrays.asList("\"", "'", "(", ")", "{", "}", "[", "]", "+", "-", "*", "/", "%", "<", ">", "=", 
-    			"!", "~", "&", "|", "^", "?", ":", ",", ";");
+    			"!", "~", "&", "|", "^", "?", ":", ",", ";", ".");
 		String[] chars = fullCode.split("");
 		for (int i=0; i<chars.length; i++) {
 			if (chars[i].equals(" ") && chars.length>i+1 && breaks.contains(chars[i+1])) {
@@ -236,8 +239,14 @@ public class JavaFileNormalizer {
     				importStatement = false;
     			}
     		} else if (annotation==1) {
-    			// annotation started by @ followed by free word
-    			annotation++;
+    			if (word.equals(KeyWord.INTERFACE)) {
+    				// annotation declaration. keep it!
+    				annotation = 0;
+    				reducedList.add(word);
+    			} else {
+    				// annotation started by @ followed by free word
+    				annotation++;
+    			}
     		} else if (annotation==2) {
     			if (word.equals(KeyWord.OPENPARANTHESE)) {
     				// annotation has parentheses behind name
@@ -277,4 +286,283 @@ public class JavaFileNormalizer {
     	}
     	return reducedList;
     }
+    
+    /**
+     * Splits reduced word list to methods (and Word-Lists for other stuff)
+     * 
+     * @param wordlist - reduced Word-List
+     * @returns list of java class contents (Methods or WordLists)
+     */
+    public List<JavaClassContent> splitToMethods(List<JavaWord> wordlist) {
+    	List<JavaClassContent> result = new ArrayList<JavaClassContent>();
+    	int openBraces = 0;
+    	int methodDetectionState = 0;
+    	int position = 0;
+    	String maybeMethodName = null;
+    	List<JavaWord> content = new ArrayList<JavaWord>();
+    	List<JavaWord> temporary = new ArrayList<JavaWord>();
+    	List<String> parameter = new ArrayList<String>();
+    	JavaMethod method = null;
+    	for(int i=0; i<wordlist.size(); i++) {
+    		JavaWord word = wordlist.get(i);
+    		System.out.println("word: " + word + " Position: " + position + " MethodStatus: " + methodDetectionState);
+    			switch (methodDetectionState){
+    				case 0:
+    					// Nothing or only modifiers detected
+    					if (word.getKey().getType().equals(WordType.MODIFIER) || word.getKey().equals(KeyWord.SYNCHRONIZED)) {
+    						//add modifier to potential header
+    						temporary.add(word);
+    					} else if (word.getKey().equals(KeyWord.WORD) || word.getKey().getType().equals(WordType.DATATYPE)) {
+    						// add potential returntype to potential header
+    						temporary.add(word);
+    						maybeMethodName = word.getWord();
+    						methodDetectionState++;
+    					} else {
+    						// mo method header! reset
+    						content.addAll(temporary);
+    						content.add(word);
+    						temporary.clear();
+    					}
+    					break;
+    				case 1:
+    					// modifiers and returntype or constructor detected
+    					if (word.getKey().equals(KeyWord.OPENPARANTHESE)) {
+    						// potential constructor
+    						temporary.add(word);
+    						methodDetectionState++;
+    					} else if (word.getKey().equals(KeyWord.WORD) && wordlist.get(i+1).getKey().equals(KeyWord.OPENPARANTHESE)) {
+    						// add potential methodname and open parentheses to potential header
+    						temporary.add(word);
+    						temporary.add(wordlist.get(i+1));
+    						maybeMethodName = word.getWord();
+    						methodDetectionState++;
+    						i++;
+    					} else {
+    						// no method header! reset and check word again
+    						i--;
+    						maybeMethodName = null;
+    						methodDetectionState = 0;
+    						content.addAll(temporary);
+    						temporary.clear();
+    					}
+    					break;
+    				case 2:
+    					// modifiers, returntype, methodname and open paranthese detected
+    					JavaWord param = isParameter(wordlist.subList(i, wordlist.size()-1), false);
+    					if (param!=null) {
+    						// add potential parameter to potential methodheader
+    						while (!wordlist.get(i).equals(param)) {
+    							temporary.add(wordlist.get(i));
+    							i++;
+    						}
+    						temporary.add(wordlist.get(i));
+    						parameter.add(param.getWord());
+    						methodDetectionState++;
+    					} else if (word.getKey().equals(KeyWord.CLOSPARANTHESE)) {
+    						// end of parameter list, add to potential header
+    						temporary.add(word);
+    						methodDetectionState++;
+    						methodDetectionState++;
+    					} else {
+    						// no method header! reset and check word again
+    						i--;
+    						methodDetectionState = 0;
+    						maybeMethodName = null;
+    						content.addAll(temporary);
+    						temporary.clear();
+    					}
+    					break;
+    				case 3:
+    					// modifiers, returntype, methodname, open paranthese and at least one parameter detected
+    					JavaWord secondaryparam = isParameter(wordlist.subList(i, wordlist.size()-1), true);
+    					if (secondaryparam!=null) {
+    						// add potential parameter to potential methodheader
+    						while (!wordlist.get(i).equals(secondaryparam)) {
+    							temporary.add(wordlist.get(i));
+    							i++;
+    						}
+    						temporary.add(wordlist.get(i));
+    						parameter.add(secondaryparam.getWord());
+    					} else if (word.getKey().equals(KeyWord.CLOSPARANTHESE)) {
+    						// end of parameter list, add to potential header
+    						temporary.add(word);
+    						methodDetectionState++;
+    					} else {
+    						// no method header! reset  and check word again
+    						i--;
+    						methodDetectionState = 0;
+    						maybeMethodName = null;
+    						parameter.clear();
+    						content.addAll(temporary);
+    						temporary.clear();
+    					}
+    					break;
+    				case 4:
+    					// modifiers, returntype, methodname, and parameter list detected
+    					if (word.getKey().getType().equals(WordType.SPECIFIER) || word.getKey().equals(KeyWord.WORD)) {
+    						// speciefing stuff like extends / throws / implements detected
+    						temporary.add(word);
+    					} else if (word.getKey().equals(KeyWord.OPENBRACE)) {
+    						// valid method header. add all before as ClassContent to result.
+    						if (!content.isEmpty()) {
+    							List<JavaWord> somecontent = new ArrayList<JavaWord>();
+    							somecontent.addAll(content);
+    							result.add(new JavaClassContent(position, somecontent));
+    							content.clear();
+    							position++;
+    						}
+    						// reset temporary values
+    						openBraces++;
+    						methodDetectionState++;
+    						temporary.clear();
+    						List<String> params = new ArrayList<String>();
+    						params.addAll(parameter);
+    						method = new JavaMethod(position, maybeMethodName, params, null);
+    						position++;
+    						maybeMethodName = null;
+    						parameter.clear();
+    					} else {
+    						// no method header! reset  and check word again
+    						i--;
+    						methodDetectionState = 0;
+    						maybeMethodName = null;
+    						parameter.clear();
+    						content.addAll(temporary);
+    						temporary.clear();
+    					}
+    					break;
+    				case 5:
+    					// valid method header detected, collect words in body
+    					if (word.getKey().equals(KeyWord.CLOSEBRACE)) {
+    						openBraces--;
+    						if (openBraces==0) {
+    							// end of method body, add to method and result
+    							methodDetectionState = 0;
+    							List<JavaWord> classcontent = new ArrayList<JavaWord>();
+    							classcontent.addAll(content);
+    							method.setContent(classcontent);
+    							result.add(method);
+    							method = null;
+    							content.clear();
+    						} else {
+    							content.add(word);
+    						}
+    					} else {
+    						// add word to method-body
+    						if (word.getKey().equals(KeyWord.OPENBRACE)) {
+    							openBraces++;
+    						}
+    						content.add(word);
+    					}
+    					break;
+    			}
+    	}
+    	if (!content.isEmpty()) {
+    		result.add(new JavaClassContent(position, content));
+    	}
+    	return result;
+    }
+    
+    private JavaWord isParameter(List<JavaWord> words, boolean withSeparator) {
+    	int position = 0;
+    	if (withSeparator) {
+    		if (!words.get(position).getKey().equals(KeyWord.COMMA)) {
+    			// separator "," is missing
+    			return null;
+    		} else {
+    			// correct separator ","
+    			position++;
+    		}
+    	}
+    	if (words.get(position).getKey().equals(KeyWord.FINAL)) {
+    		// optional modifier final for parameter
+    		position++;
+    	}
+    	if (!(words.get(position).getKey().equals(KeyWord.WORD) || words.get(position).getKey().getType().equals(WordType.DATATYPE))) {
+    		// no valid parameter type
+    		return null;
+    	} else {
+    		// valid parameter type beginning
+    		position++;
+    	}
+    	if (words.get(position).getKey().equals(KeyWord.OPENBRACKET) && words.get(position+1).getKey().equals(KeyWord.CLOSEBRACKET)) {
+    		// parameter type array "String[]"
+    		position++;
+    		position++;
+    	} else if (words.get(position).getKey().equals(KeyWord.DOT) && words.get(position+1).getKey().equals(KeyWord.DOT) && words.get(position+2).getKey().equals(KeyWord.DOT)) {
+    		// variable array of parameters "String..."
+    		position++;
+    		position++;
+    		position++;
+    	} else if (words.get(position).getKey().equals(KeyWord.LESS)) {
+    		// parse generic datatypes like Hashmap<A,B>
+    		position++;
+    		position = parseGeneric(words, position);
+    		if (position==0) {
+    			return null;
+    		}
+    	}
+    	if (words.get(position).getKey().equals(KeyWord.WORD)) {
+    		// correct parameter identifier
+    		return words.get(position);
+    	}
+    	// no correct identifier
+    	return null;
+    }
+
+	private int parseGeneric(List<JavaWord> words, int position) {
+		if (words.get(position).getKey().equals(KeyWord.WORD) || words.get(position).getKey().getType().equals(WordType.DATATYPE)) {
+    		position++;
+    	} else {
+    		return 0;
+    	}
+    	if (words.get(position).getKey().equals(KeyWord.OPENBRACKET) && words.get(position+1).getKey().equals(KeyWord.CLOSEBRACKET)) {
+    		// parameter type array "String[]"
+    		position++;
+    		position++;
+    	} else if (words.get(position).getKey().equals(KeyWord.LESS)) {
+    		//recursive generic parsing...
+    		position++;
+    		position = parseGeneric(words, position);
+    		if (position==0) {
+    			return 0;
+    		}
+    	}
+    	if (words.get(position).getKey().equals(KeyWord.COMMA)) {
+    		boolean comma = true;
+    		position++;
+    		while (comma) {
+    			if (words.get(position).getKey().equals(KeyWord.WORD) || words.get(position).getKey().getType().equals(WordType.DATATYPE)) {
+    	    		position++;
+    	    	} else {
+    	    		return 0;
+    	    	}
+    	    	if (words.get(position).getKey().equals(KeyWord.OPENBRACKET) && words.get(position+1).getKey().equals(KeyWord.CLOSEBRACKET)) {
+    	    		// parameter type array "String[]"
+    	    		position++;
+    	    		position++;
+    	    	} else if (words.get(position).getKey().equals(KeyWord.LESS)) {
+    	    		//recursive generic parsing...
+    	    		position++;
+    	    		position = parseGeneric(words, position);
+    	    		if (position==0) {
+    	    			return 0;
+    	    		}
+    	    	}
+    	    	if (!words.get(position).getKey().equals(KeyWord.COMMA)) {
+    	    		// another generic type behind a comma
+    	    		comma = false;
+    	    	} else {
+    	    		position++;
+    	    	}
+    		}
+    	}
+    	if (words.get(position).getKey().equals(KeyWord.GREATER)) {
+    		// close this generic
+    		position++;
+    		return position;
+    	}
+    	// invalid generic
+		return 0;
+	}
 }

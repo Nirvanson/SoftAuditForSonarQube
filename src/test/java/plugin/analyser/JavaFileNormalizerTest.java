@@ -9,6 +9,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import plugin.model.JavaClassContent;
+import plugin.model.JavaWord;
+
 public class JavaFileNormalizerTest {
 
     public JavaFileNormalizerTest() {
@@ -28,12 +31,26 @@ public class JavaFileNormalizerTest {
 			e.printStackTrace();
 		}
     	assertTrue("no lines recieved by preparation", !lines.isEmpty());
+    	System.out.println("List of lines with length: " + lines.size());
 		
 		// normalized code
 		String normalizedCode = null;
 		normalizedCode = normalizer.convertToSingleString(lines);
 		assertTrue("no normalized code recieved", !(normalizedCode.equals(null) || normalizedCode.isEmpty()));
+		System.out.println("Code as single string with length: " + normalizedCode.length());
 		
-		normalizer.createJavaWordList(normalizedCode);
+		// JavaWords
+		List<JavaWord> words = normalizer.createJavaWordList(normalizedCode);
+		assertTrue("no words recieved by wordlist creation", !words.isEmpty());
+		System.out.println("List of words with length: " + words.size());
+		
+		// Reduced JavaWords
+		List<JavaWord> reducedwords = normalizer.reduceWordList(words);
+		assertTrue("no words recieved by wordlist reduction", !reducedwords.isEmpty());
+		System.out.println("Reduced list of words with length: " + reducedwords.size());
+		
+		// Method extraction
+		List<JavaClassContent> contents = normalizer.splitToMethods(reducedwords);
+		assertTrue("no contents recieved by method extraction", !contents.isEmpty());
     }
 }

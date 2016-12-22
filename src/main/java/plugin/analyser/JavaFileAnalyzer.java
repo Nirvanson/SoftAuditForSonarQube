@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.measures.Metric;
 
 import plugin.SoftAuditMetrics;
+import plugin.model.JavaClassContent;
+import plugin.model.JavaMethod;
 import plugin.model.JavaWord;
 import plugin.model.KeyWord;
 
@@ -76,7 +78,7 @@ public class JavaFileAnalyzer {
     			BufferedReader br = new BufferedReader(new FileReader(file));
     	    	String fileline;
     	    	while ((fileline = br.readLine()) != null) {
-    	    		writer.println(fileline);
+    	    		//writer.println(fileline);
     	    	}
     	    	br.close();
     		} catch (IOException e) {
@@ -90,15 +92,15 @@ public class JavaFileAnalyzer {
 			}
     		writer.println("*** Step 1 - normalized Lines:");
     		for (String line : normalizedLines) {
-    			writer.println(line);
+    			//writer.println(line);
     		}
     		writer.println("*** Step 2 - Code as single string:");
 			String singleCodeString = normalizer.convertToSingleString(normalizedLines);
-			writer.println(singleCodeString);
+			//writer.println(singleCodeString);
 			writer.println("*** Step 3 - Java Words");
 			List<JavaWord> wordList = normalizer.createJavaWordList(singleCodeString);
 			for (JavaWord word : wordList) {
-    			writer.println(word);
+    			//writer.println(word);
     		}
 			writer.println("*** Step 4 - Count key words");
 			Map<Metric<Integer>, Double> keyWordMeasures = countKeyWords(wordList);
@@ -107,10 +109,22 @@ public class JavaFileAnalyzer {
 	    		result.put(measure, result.get(measure) + keyWordMeasures.get(measure));
 	    	}
 			writer.println("*** Step 5 - Reduce word list");
-			List<JavaWord> reducedWortList = normalizer.reduceWordList(wordList);
-			for (JavaWord word : reducedWortList) {
-    			writer.println(word);
+			List<JavaWord> reducedWordList = normalizer.reduceWordList(wordList);
+			for (JavaWord word : reducedWordList) {
+    			//writer.println(word);
     		}
+			writer.println("*** Step 6 - Extract Methods");
+			List<JavaClassContent> contents = normalizer.splitToMethods(reducedWordList);
+			for (JavaClassContent content : contents) {
+				if (content instanceof JavaMethod) {
+					writer.println("Method with name: " + ((JavaMethod) content).getName() + " and Parameters: " + ((JavaMethod) content).getParameters());
+				} else {
+					writer.println("Wordlist with length: " + content.getContent().size());
+				}
+				writer.println(content.getContent());
+			}
+			writer.println("*** Step 7 - Count methods and parameters");
+			//TODO
 			sourceFiles++;
     	}
     	writer.close();
@@ -147,7 +161,6 @@ public class JavaFileAnalyzer {
     	partialResult.put(SoftAuditMetrics.SWI, countKey(words, KeyWord.SWITCH));
     	// count statements
     	partialResult.put(SoftAuditMetrics.STM, countKey(words, KeyWord.OPENBRACE) + countKey(words, KeyWord.SEMICOLON));
-    	
     	return partialResult;
     }
     
