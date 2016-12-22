@@ -52,5 +52,6 @@ public class JavaFileNormalizerTest {
 		// Method extraction
 		List<JavaClassContent> contents = normalizer.splitToMethods(reducedwords);
 		assertTrue("no contents recieved by method extraction", !contents.isEmpty());
+		System.out.println("Splittet to Contentparts (methods and Wordlists outside of Methods): " + contents.size());
     }
 }

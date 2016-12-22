@@ -100,7 +100,7 @@ public class JavaFileAnalyzer {
 			writer.println("*** Step 3 - Java Words");
 			List<JavaWord> wordList = normalizer.createJavaWordList(singleCodeString);
 			for (JavaWord word : wordList) {
-    			//writer.println(word);
+    			writer.println(word);
     		}
 			writer.println("*** Step 4 - Count key words");
 			Map<Metric<Integer>, Double> keyWordMeasures = countKeyWords(wordList);
@@ -111,7 +111,7 @@ public class JavaFileAnalyzer {
 			writer.println("*** Step 5 - Reduce word list");
 			List<JavaWord> reducedWordList = normalizer.reduceWordList(wordList);
 			for (JavaWord word : reducedWordList) {
-    			//writer.println(word);
+    			writer.println(word);
     		}
 			writer.println("*** Step 6 - Extract Methods");
 			List<JavaClassContent> contents = normalizer.splitToMethods(reducedWordList);
@@ -124,7 +124,11 @@ public class JavaFileAnalyzer {
 				writer.println(content.getContent());
 			}
 			writer.println("*** Step 7 - Count methods and parameters");
-			//TODO
+			Map<Metric<Integer>, Double> methodMeasures = countMethods(contents);
+			for (Metric<Integer> measure : methodMeasures.keySet()) {
+				writer.println(measure.getName() + ": " + methodMeasures.get(measure));
+	    		result.put(measure, result.get(measure) + methodMeasures.get(measure));
+	    	}
 			sourceFiles++;
     	}
     	writer.close();
@@ -134,6 +138,27 @@ public class JavaFileAnalyzer {
     }
 
     /**
+     * Count methods and their parameters
+     * 
+     * @param contents - the JavaClassContents of the file
+     * @returns result-map
+     */
+    private Map<Metric<Integer>, Double> countMethods(List<JavaClassContent> contents) {
+    	Map<Metric<Integer>, Double> partialResult = new HashMap<Metric<Integer>, Double>();
+    	double methods = 0;
+    	double params = 0;
+    	for (JavaClassContent content : contents) {
+			if (content instanceof JavaMethod) {
+				methods++;
+				params += ((JavaMethod) content).getParameters().size();
+			} 
+		}
+    	partialResult.put(SoftAuditMetrics.MET, methods);
+    	partialResult.put(SoftAuditMetrics.PAR, params);
+		return partialResult;
+	}
+
+	/**
      * Do keyword-count-analysis for file.
      * 
      * @param words - the words of the file to analyze

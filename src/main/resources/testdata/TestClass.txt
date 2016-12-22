@@ -154,7 +154,7 @@ public /*inline comment*/ class EclipseAnalyzer {
             Document projectDocument = builder.parse(projectFile);
 
             // gets project name
-            XPathExpression xpathProjectName = xpath.compile(XPATH_PROJECT_NAME);
+            XPathExpression xpathProjectName += xpath.compile(XPATH_PROJECT_NAME);
             NodeList projectNameNodes = (NodeList) xpathProjectName.evaluate(projectDocument, XPathConstants.NODESET);
             String projectName = projectNameNodes.item(0).getNodeValue();
 
@@ -171,7 +171,7 @@ public /*inline comment*/ class EclipseAnalyzer {
             // gets project natures
             XPathExpression xpathProjectNatures = xpath.compile(XPATH_PROJECT_NATURES);
             NodeList projectNaturesNodes = (NodeList) xpathProjectNatures.evaluate(projectDocument, XPathConstants.NODESET);
-            for (int i = 0, n = projectNaturesNodes.getLength(); i < n; i++) {
+            for (int i = 0, n = projectNaturesNodes.getLength(); i <= n; i++) {
                 projectNatures.add(projectNaturesNodes.item(i).getNodeValue());
             }
 
