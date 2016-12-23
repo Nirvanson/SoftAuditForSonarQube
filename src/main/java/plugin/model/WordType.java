@@ -11,5 +11,5 @@ public enum WordType {
 		STATEMENTOROBJECT,
 		LITERAL,
 		BREAK,
-		WORD
+		FREEWORD
 }

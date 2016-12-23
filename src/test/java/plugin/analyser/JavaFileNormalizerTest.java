@@ -9,8 +9,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import plugin.model.JavaClassContent;
-import plugin.model.JavaWord;
+import plugin.model.JavaClass;
+import plugin.model.JavaFileContent;
+import plugin.model.WordInFile;
 
 public class JavaFileNormalizerTest {
 
@@ -18,7 +19,7 @@ public class JavaFileNormalizerTest {
         super();
     }
 
-    @Test
+    @Test @SuppressWarnings("unchecked")
     public void testFileNormalization() {
     	File input = new File(getClass().getResource("/testdata/TestClass.txt").getPath());
     	JavaFileNormalizer normalizer = new JavaFileNormalizer();
@@ -40,17 +41,21 @@ public class JavaFileNormalizerTest {
 		System.out.println("Code as single string with length: " + normalizedCode.length());
 		
 		// JavaWords
-		List<JavaWord> words = normalizer.createJavaWordList(normalizedCode);
+		List<WordInFile> words = normalizer.createJavaWordList(normalizedCode);
 		assertTrue("no words recieved by wordlist creation", !words.isEmpty());
 		System.out.println("List of words with length: " + words.size());
 		
-		// Reduced JavaWords
-		List<JavaWord> reducedwords = normalizer.reduceWordList(words);
-		assertTrue("no words recieved by wordlist reduction", !reducedwords.isEmpty());
-		System.out.println("Reduced list of words with length: " + reducedwords.size());
+		// basic structure extraction
+		List<JavaFileContent> contents = normalizer.parseClassStructure(words);
+		assertTrue("no contents recieved by method extraction", !contents.isEmpty());
+		System.out.println("Splittet to Contentparts (basic structure): " + contents.size());
 		
-		// Method extraction
-		List<JavaClassContent> contents = normalizer.splitToMethods(reducedwords);
+		// method extraction
+		for (JavaFileContent content : contents) {
+			if (content instanceof JavaClass) {
+				content.setContent(normalizer.parseMethods((List<WordInFile>) content.getContent()));
+			}
+		}
 		assertTrue("no contents recieved by method extraction", !contents.isEmpty());
 		System.out.println("Splittet to Contentparts (methods and Wordlists outside of Methods): " + contents.size());
     }

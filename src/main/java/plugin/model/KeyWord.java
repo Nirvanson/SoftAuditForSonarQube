@@ -57,36 +57,14 @@ public enum KeyWord {
 	MULT("*", WordType.OPERATOR),
 	DIV("/", WordType.OPERATOR),
 	MOD("%", WordType.OPERATOR),
-	INC("++", WordType.OPERATOR),
-	DEC("--", WordType.OPERATOR),
 	COMP("!", WordType.OPERATOR),
-	EQUAL("==", WordType.OPERATOR),
-	NOTEQUAL("!=", WordType.OPERATOR),
 	GREATER(">", WordType.OPERATOR),
-	GREATEREQUAL(">=", WordType.OPERATOR),
 	LESS("<", WordType.OPERATOR),
-	LESSEQUAL("<=", WordType.OPERATOR),
-	AND("&&", WordType.OPERATOR),
-	OR("||", WordType.OPERATOR),
+	AND("&", WordType.OPERATOR),
+	OR("|", WordType.OPERATOR),
 	BITCOMP("~", WordType.OPERATOR),
-	SIGNEDLEFTSHIFT("<<", WordType.OPERATOR),
-	SIGNEDRIGHTSHIFT(">>", WordType.OPERATOR),
-	UNSIGNEDRIGHTSHIFT(">>>", WordType.OPERATOR),
-	BITAND("&", WordType.OPERATOR),
-	BITEXCLUSIVEOR("^", WordType.OPERATOR),
-	BITINCLUSIVEOR("|", WordType.OPERATOR),
+	BITXEOR("^", WordType.OPERATOR),
 	ASSIGN("=", WordType.OPERATOR),
-	ASSIGNADD("+=", WordType.OPERATOR),
-	ASSIGNSUB("-=", WordType.OPERATOR),
-	ASSIGNMULT("*=", WordType.OPERATOR),
-	ASSIGNDIV("/=", WordType.OPERATOR),
-	ASSIGNMOD("%=", WordType.OPERATOR),
-	ASSIGNAND("&=", WordType.OPERATOR),
-	ASSIGNXOR("^", WordType.OPERATOR),
-	ASSIGNOR("|=", WordType.OPERATOR),
-	ASSIGNLEFTSHIFT("<<=", WordType.OPERATOR),
-	ASSIGNRIGHTSHIFT(">>=", WordType.OPERATOR),
-	ASSIGNUNSIGNEDRIGHTSHIFT(">>>=", WordType.OPERATOR),
 	STRINGLITERAL("\"", WordType.LITERAL),
 	CHARLITERAL("'", WordType.LITERAL),
 	OPENPARANTHESE("(", WordType.BREAK),
@@ -101,7 +79,7 @@ public enum KeyWord {
 	ANNOTATION("@", WordType.BREAK),
 	QUESTIONMARK("?", WordType.BREAK),
 	DOUBLEDOT(":", WordType.BREAK),
-	WORD("", WordType.WORD);
+	WORD("", WordType.FREEWORD);
 	
 	private final String word;
 	private final WordType type;
@@ -116,13 +94,13 @@ public enum KeyWord {
 		return this.word;
 	}
 	
-	public static JavaWord findKeyword(String word) {
+	public static WordInFile findKeyword(String word) {
 		for (KeyWord key : KeyWord.values()) {
 			if (key.word.equals(word)) {
-				return new JavaWord(null, key);
+				return new WordInFile(null, key);
 			}
 		}
-		return new JavaWord(word, KeyWord.WORD);
+		return new WordInFile(word, KeyWord.WORD);
 	}
 
 	public WordType getType() {

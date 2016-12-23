@@ -15,9 +15,11 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.measures.Metric;
 
 import plugin.SoftAuditMetrics;
-import plugin.model.JavaClassContent;
+import plugin.model.JavaClass;
+import plugin.model.JavaFileContent;
 import plugin.model.JavaMethod;
-import plugin.model.JavaWord;
+import plugin.model.JavaStatement;
+import plugin.model.WordInFile;
 import plugin.model.KeyWord;
 
 /**
@@ -78,7 +80,7 @@ public class JavaFileAnalyzer {
     			BufferedReader br = new BufferedReader(new FileReader(file));
     	    	String fileline;
     	    	while ((fileline = br.readLine()) != null) {
-    	    		//writer.println(fileline);
+    	    		writer.println(fileline);
     	    	}
     	    	br.close();
     		} catch (IOException e) {
@@ -92,14 +94,14 @@ public class JavaFileAnalyzer {
 			}
     		writer.println("*** Step 1 - normalized Lines:");
     		for (String line : normalizedLines) {
-    			//writer.println(line);
+    			writer.println(line);
     		}
     		writer.println("*** Step 2 - Code as single string:");
 			String singleCodeString = normalizer.convertToSingleString(normalizedLines);
-			//writer.println(singleCodeString);
+			writer.println(singleCodeString);
 			writer.println("*** Step 3 - Java Words");
-			List<JavaWord> wordList = normalizer.createJavaWordList(singleCodeString);
-			for (JavaWord word : wordList) {
+			List<WordInFile> wordList = normalizer.createJavaWordList(singleCodeString);
+			for (WordInFile word : wordList) {
     			writer.println(word);
     		}
 			writer.println("*** Step 4 - Count key words");
@@ -108,27 +110,44 @@ public class JavaFileAnalyzer {
 				writer.println(measure.getName() + ": " + keyWordMeasures.get(measure));
 	    		result.put(measure, result.get(measure) + keyWordMeasures.get(measure));
 	    	}
-			writer.println("*** Step 5 - Reduce word list");
-			List<JavaWord> reducedWordList = normalizer.reduceWordList(wordList);
-			for (JavaWord word : reducedWordList) {
-    			writer.println(word);
-    		}
-			writer.println("*** Step 6 - Extract Methods");
-			List<JavaClassContent> contents = normalizer.splitToMethods(reducedWordList);
-			for (JavaClassContent content : contents) {
-				if (content instanceof JavaMethod) {
-					writer.println("Method with name: " + ((JavaMethod) content).getName() + " and Parameters: " + ((JavaMethod) content).getParameters());
+			writer.println("*** Step 5 - Build basic model of the file");
+			List<JavaFileContent> contents = normalizer.parseClassStructure(wordList);
+			for (JavaFileContent content : contents) {
+				if (content instanceof JavaClass) {
+					content.setContent(normalizer.parseMethods((List<WordInFile>) content.getContent()));
+				}
+			}
+			for (JavaFileContent content : contents) {
+				if (content instanceof JavaClass) {
+					writer.println("Class with name: " + ((JavaClass) content).getName() + " and Body:");
+					for (JavaFileContent innercontent : (List<JavaFileContent>) content.getContent()) {
+						if (innercontent instanceof JavaMethod) {
+							writer.println("	Method with name: " + ((JavaMethod) innercontent).getName() + " and Parameters: " + ((JavaMethod) innercontent).getParameters());
+							writer.println("	" + innercontent.getContent());
+						} else if (innercontent instanceof JavaStatement) {
+							writer.println("	Statement of type: " + ((JavaStatement) innercontent).getType());
+						} else {
+							writer.println("	Wordlist with length: " + innercontent.getContent().size());
+							writer.println("	" + innercontent.getContent());
+						}
+					}
+				} else if (content instanceof JavaStatement) {
+					writer.println("Statement of type: " + ((JavaStatement) content).getType());
 				} else {
 					writer.println("Wordlist with length: " + content.getContent().size());
-				}
-				writer.println(content.getContent());
+					writer.println(content.getContent());
+				} 
 			}
-			writer.println("*** Step 7 - Count methods and parameters");
-			Map<Metric<Integer>, Double> methodMeasures = countMethods(contents);
-			for (Metric<Integer> measure : methodMeasures.keySet()) {
-				writer.println(measure.getName() + ": " + methodMeasures.get(measure));
-	    		result.put(measure, result.get(measure) + methodMeasures.get(measure));
-	    	}
+			writer.println("*** Step 6 - Count methods and parameters");
+			for (JavaFileContent content : contents) {
+				if (content instanceof JavaClass) {
+					Map<Metric<Integer>, Double> methodMeasures = countMethods((List<JavaFileContent>) content.getContent());
+					for (Metric<Integer> measure : methodMeasures.keySet()) {
+						writer.println(measure.getName() + ": " + methodMeasures.get(measure));
+						result.put(measure, result.get(measure) + methodMeasures.get(measure));
+					}
+				}
+			}
 			sourceFiles++;
     	}
     	writer.close();
@@ -143,11 +162,11 @@ public class JavaFileAnalyzer {
      * @param contents - the JavaClassContents of the file
      * @returns result-map
      */
-    private Map<Metric<Integer>, Double> countMethods(List<JavaClassContent> contents) {
+    private Map<Metric<Integer>, Double> countMethods(List<JavaFileContent> contents) {
     	Map<Metric<Integer>, Double> partialResult = new HashMap<Metric<Integer>, Double>();
     	double methods = 0;
     	double params = 0;
-    	for (JavaClassContent content : contents) {
+    	for (JavaFileContent content : contents) {
 			if (content instanceof JavaMethod) {
 				methods++;
 				params += ((JavaMethod) content).getParameters().size();
@@ -164,16 +183,16 @@ public class JavaFileAnalyzer {
      * @param words - the words of the file to analyze
      * @returns result-map
      */
-    private Map<Metric<Integer>, Double> countKeyWords(List<JavaWord> words) {
+    private Map<Metric<Integer>, Double> countKeyWords(List<WordInFile> words) {
     	Map<Metric<Integer>, Double> partialResult = new HashMap<Metric<Integer>, Double>();
     	// count cases in switches
     	partialResult.put(SoftAuditMetrics.CAS, countKey(words, KeyWord.CASE) + countKey(words, KeyWord.DEFAULT));
     	// count classes
     	partialResult.put(SoftAuditMetrics.CLA, countKey(words, KeyWord.CLASS));
-    	// count if statements 
+    	// count if and try statements 
     	partialResult.put(SoftAuditMetrics.IFS, countKey(words, KeyWord.IF) + countKey(words, KeyWord.TRY));
-    	// count imports 
-    	partialResult.put(SoftAuditMetrics.IMP, countKey(words, KeyWord.IMPORT));
+    	// count includes as imports and package statements 
+    	partialResult.put(SoftAuditMetrics.IMP, countKey(words, KeyWord.IMPORT) + countKey(words, KeyWord.PACKAGE));
     	// count interfaces 
     	partialResult.put(SoftAuditMetrics.INT, countKey(words, KeyWord.INTERFACE));
     	// count Literals
@@ -184,12 +203,12 @@ public class JavaFileAnalyzer {
     	partialResult.put(SoftAuditMetrics.RET, countKey(words, KeyWord.RETURN));
     	// count switch statements
     	partialResult.put(SoftAuditMetrics.SWI, countKey(words, KeyWord.SWITCH));
-    	// count statements
-    	partialResult.put(SoftAuditMetrics.STM, countKey(words, KeyWord.OPENBRACE) + countKey(words, KeyWord.SEMICOLON));
+    	// count statement-identifiers. has to be cleaned by removing ";" in for conditions and adding "else if" as 2 statements and if without braces 
+    	partialResult.put(SoftAuditMetrics.STM, countKey(words, KeyWord.OPENBRACE) + countKey(words, KeyWord.SEMICOLON) + countKey(words, KeyWord.CLOSEBRACE));
     	return partialResult;
     }
     
-    private double countKey(List<JavaWord> words, KeyWord key) {
-    	return (double) Collections.frequency(words, new JavaWord(null, key));
+    private double countKey(List<WordInFile> words, KeyWord key) {
+    	return (double) Collections.frequency(words, new WordInFile(null, key));
     }
 }

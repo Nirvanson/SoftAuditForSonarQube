@@ -62,7 +62,7 @@ public class ProductImageController {
 	 */
 	@RequestMapping(value = "productimage/{pid}", headers = "Accept=image/*")
 	@ResponseBody
-	public List<List<String>> getProductImage(@PathVariable("pid") String productIdStr) {
+	public List<List<String>> methodProductImage(@PathVariable("pid") String productIdStr) {
 
 		createUploadDirectoryIfNeeded();
 
@@ -115,7 +115,7 @@ public class ProductImageController {
 	 * @param filename filename of the default image with extension (e.g. .png)
 	 * @return bytes of the static resource
 	 */
-	private byte[] getDefaultProductImage(String filename) {
+	private byte[] methodDefaultProductImage(String filename) {
 
 		final String path = defaultProductImagesPath + filename;
 

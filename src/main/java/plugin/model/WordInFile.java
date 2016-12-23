@@ -1,10 +1,10 @@
 package plugin.model;
 
-public class JavaWord {
+public class WordInFile {
 	private final String word;
 	private final KeyWord key;
 	
-	public JavaWord(String word, KeyWord key) {
+	public WordInFile(String word, KeyWord key) {
 		this.word = word;
 		this.key = key;
 	}
@@ -19,8 +19,8 @@ public class JavaWord {
 	
 	@Override
 	public boolean equals(Object o) {
-		if ( o instanceof JavaWord) {
-			JavaWord test = (JavaWord) o;
+		if ( o instanceof WordInFile) {
+			WordInFile test = (WordInFile) o;
 			if ((test.getWord()==null && test.getKey().equals(this.key)) 
 					|| (test.getWord()!=null && test.getWord().equals(this.word) && test.getKey().equals(this.key))) {
 				return true;

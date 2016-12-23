@@ -8,10 +8,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import plugin.model.JavaClassContent;
+import plugin.model.JavaClass;
+import plugin.model.JavaFileContent;
 import plugin.model.JavaMethod;
-import plugin.model.JavaWord;
+import plugin.model.JavaStatement;
+import plugin.model.WordInFile;
 import plugin.model.KeyWord;
+import plugin.model.StatementType;
 import plugin.model.WordType;
 
 public class JavaFileNormalizer {
@@ -128,7 +131,8 @@ public class JavaFileNormalizer {
 	 * Converts relevant lines to single normalized code String for pattern
 	 * recognition
 	 * 
-	 * @param lines - List of relevant Lines
+	 * @param lines
+	 *            - List of relevant Lines
 	 * @returns normalized Code-String
 	 */
 	public String convertToSingleString(List<String> lines) {
@@ -164,31 +168,84 @@ public class JavaFileNormalizer {
 	 *            - Code as single normalized Line
 	 * @returns word-list
 	 */
-	public List<JavaWord> createJavaWordList(String normalizedCode) {
-		// characters between words breaks are always a single word, operators
-		// not
-		List<String> breaks = Arrays.asList("\"", "'", "(", ")", "{", "}", "[", "]", "?", ":", ",", ";", "@", ".");
-		List<String> operators = Arrays.asList("+", "-", "*", "/", "%", "<", ">", "=", "!", "~", "&", "|", "^");
-		List<JavaWord> result = new ArrayList<JavaWord>();
+	public List<WordInFile> createJavaWordList(String normalizedCode) {
+		// characters in breaks and operators between words are always a single
+		// word
+		List<String> breaks = Arrays.asList("\"", "'", "(", ")", "{", "}", "[", "]", "?", ":", ",", ";", "@", ".", "+",
+				"-", "*", "/", "%", "<", ">", "=", "!", "~", "&", "|", "^");
+		List<WordInFile> step1 = new ArrayList<WordInFile>();
 		String[] chars = normalizedCode.split("");
 		String word = "";
 		for (int i = 0; i < chars.length; i++) {
 			// if previous char was an operator
-			if (operators.contains(chars[i]) || breaks.contains(chars[i])) {
+			if (breaks.contains(chars[i])) {
 				if (!word.isEmpty()) {
 					// add previous word to list if not empty
-					result.add(KeyWord.findKeyword(word));
+					step1.add(KeyWord.findKeyword(word));
 					word = "";
 				}
-				result.add(KeyWord.findKeyword(chars[i]));
+				step1.add(KeyWord.findKeyword(chars[i]));
 				// if char is break
 			} else if (chars[i].equals(" ")) {
 				// add previous word to list and reset
-				result.add(KeyWord.findKeyword(word));
+				step1.add(KeyWord.findKeyword(word));
 				word = "";
 			} else {
 				// add char to current word
 				word += chars[i];
+			}
+		}
+		List<WordInFile> result = new ArrayList<WordInFile>();
+		int annotation = 0;
+		int openParentheses = 0;
+		for (int i = 0; i < step1.size(); i++) {
+			WordInFile wordInStep1 = step1.get(i);
+			switch (annotation) {
+			case 0:
+				if (wordInStep1.equals(KeyWord.ANNOTATION)) {
+					// start of annotation. keep "@" as placeholder
+					result.add(wordInStep1);
+					annotation++;
+				} else if ((wordInStep1.equals(KeyWord.WORD) && !wordInStep1.getWord().isEmpty())
+						|| !wordInStep1.equals(KeyWord.WORD)) {
+					// otherwise add word to list (if not empty)
+					result.add(wordInStep1);
+				}
+				break;
+			case 1:
+				if (wordInStep1.equals(KeyWord.INTERFACE)) {
+					// annotation declaration. keep it!
+					annotation = 0;
+					result.add(wordInStep1);
+				} else {
+					// annotation started by @ followed by free word
+					annotation++;
+				}
+				break;
+			case 2:
+				if (wordInStep1.equals(KeyWord.OPENPARANTHESE)) {
+					// annotation has parentheses behind name
+					annotation++;
+					openParentheses++;
+				} else {
+					// otherwise it ended, check word again
+					annotation = 0;
+					i--;
+				}
+				break;
+			case 3:
+				if (wordInStep1.equals(KeyWord.OPENPARANTHESE)) {
+					// Parentheses in Parentheses
+					openParentheses++;
+				} else if (wordInStep1.equals(KeyWord.CLOSPARANTHESE)) {
+					// Parentheses closed
+					openParentheses--;
+					if (openParentheses == 0) {
+						// if first parentheses closed it ended
+						annotation = 0;
+					}
+				}
+				break;
 			}
 		}
 		return result;
@@ -202,72 +259,175 @@ public class JavaFileNormalizer {
 	 *            - Full Code as word list
 	 * @returns reduced-word-list
 	 */
-	public List<JavaWord> reduceWordList(List<JavaWord> fullList) {
-		List<JavaWord> reducedList = new ArrayList<JavaWord>();
+	public List<JavaFileContent> parseClassStructure(List<WordInFile> wordList) {
+		List<JavaFileContent> fileModel = new ArrayList<JavaFileContent>();
 		boolean packageStatement = false;
 		boolean importStatement = false;
-		int annotation = 0;
-		int openParentheses = 0;
-		for (int i = 0; i < fullList.size(); i++) {
-			JavaWord word = fullList.get(i);
+		int classDefinitionState = 0;
+		int openBraces = 0;
+		JavaClass foundClass = null;
+		List<WordInFile> content = new ArrayList<WordInFile>();
+		List<WordInFile> temporary = new ArrayList<WordInFile>();
+
+		for (int i = 0; i < wordList.size(); i++) {
+			WordInFile word = wordList.get(i);
 			if (packageStatement) {
 				// in a package statement check if ending by ;
 				if (word.equals(KeyWord.SEMICOLON)) {
 					packageStatement = false;
+					content.add(word);
+					List<WordInFile> statement = new ArrayList<WordInFile>();
+					statement.addAll(content);
+					fileModel.add(new JavaStatement(statement, StatementType.PACKAGE));
+					content.clear();
+				} else {
+					content.add(word);
 				}
 			} else if (importStatement) {
 				// in a import statement check if ending by ;
 				if (word.equals(KeyWord.SEMICOLON)) {
 					importStatement = false;
-				}
-			} else if (annotation == 1) {
-				if (word.equals(KeyWord.INTERFACE)) {
-					// annotation declaration. keep it!
-					annotation = 0;
-					reducedList.add(word);
+					content.add(word);
+					List<WordInFile> statement = new ArrayList<WordInFile>();
+					statement.addAll(content);
+					fileModel.add(new JavaStatement(statement, StatementType.IMPORT));
+					content.clear();
 				} else {
-					// annotation started by @ followed by free word
-					annotation++;
-				}
-			} else if (annotation == 2) {
-				if (word.equals(KeyWord.OPENPARANTHESE)) {
-					// annotation has parentheses behind name
-					annotation++;
-					openParentheses++;
-				} else {
-					// otherwise it ended, check word again
-					annotation = 0;
-					i--;
-				}
-			} else if (annotation == 3) {
-				if (word.equals(KeyWord.OPENPARANTHESE)) {
-					// Parentheses in Parentheses
-					openParentheses++;
-				} else if (word.equals(KeyWord.CLOSPARANTHESE)) {
-					// Parentheses closed
-					openParentheses--;
-					if (openParentheses == 0) {
-						// if first parentheses closed it ended
-						annotation = 0;
-					}
+					content.add(word);
 				}
 			} else {
-				if (word.equals(KeyWord.ANNOTATION)) {
-					// start annotation
-					annotation++;
-				} else if (word.equals(KeyWord.IMPORT)) {
-					// start import
-					importStatement = true;
-				} else if (word.equals(KeyWord.PACKAGE)) {
-					// start package
-					packageStatement = true;
-				} else if ((word.equals(KeyWord.WORD) && !word.getWord().isEmpty()) || !word.equals(KeyWord.WORD)) {
-					// otherwise add word to list (if not empty)
-					reducedList.add(word);
+				switch (classDefinitionState) {
+				// only modifiers or nothing from class definition found
+				case 0:
+					if (word.equals(KeyWord.ANNOTATION)) {
+						// Annotation placeholder outside of class definition
+						// found. Add as Statement
+						fileModel.add(new JavaStatement(Arrays.asList(word), StatementType.ANNOTATION));
+					} else if (word.equals(KeyWord.IMPORT)) {
+						// start import
+						importStatement = true;
+						content.addAll(temporary);
+						temporary.clear();
+						if (!content.isEmpty()) {
+							List<WordInFile> someContent = new ArrayList<WordInFile>();
+							someContent.addAll(content);
+							fileModel.add(new JavaFileContent(someContent));
+							content.clear();
+						}
+						content.add(word);
+					} else if (word.equals(KeyWord.PACKAGE)) {
+						// start package
+						packageStatement = true;
+						content.addAll(temporary);
+						temporary.clear();
+						if (!content.isEmpty()) {
+							List<WordInFile> someContent = new ArrayList<WordInFile>();
+							someContent.addAll(content);
+							fileModel.add(new JavaFileContent(someContent));
+							content.clear();
+						}
+						content.add(word);
+					} else if (word.getKey().getType().equals(WordType.MODIFIER)
+							|| word.getKey().equals(KeyWord.SYNCHRONIZED)) {
+						// potentially class definition modifier
+						temporary.add(word);
+					} else if (word.equals(KeyWord.CLASS) || word.equals(KeyWord.INTERFACE)
+							|| word.equals(KeyWord.ENUM)) {
+						// class/enum/interface declaration detected. parse it
+						// to JavaClassModel - all the same
+						classDefinitionState++;
+						if (!content.isEmpty()) {
+							List<WordInFile> someContent = new ArrayList<WordInFile>();
+							someContent.addAll(content);
+							fileModel.add(new JavaFileContent(someContent));
+							content.clear();
+						}
+						if (!temporary.isEmpty()) {
+							List<WordInFile> modifiers = new ArrayList<WordInFile>();
+							modifiers.addAll(temporary);
+							temporary.clear();
+							foundClass = new JavaClass(wordList.get(i + 1).getWord(), null, word.getKey(), modifiers,
+									new ArrayList<String>(), new ArrayList<String>());
+						} else {
+							foundClass = new JavaClass(wordList.get(i + 1).getWord(), null, word.getKey(),
+									new ArrayList<WordInFile>(), new ArrayList<String>(), new ArrayList<String>());
+						}
+						i++;
+					} else if ((word.equals(KeyWord.WORD) && !word.getWord().isEmpty()) || !word.equals(KeyWord.WORD)) {
+						// otherwise add word to list (if not empty)
+						content.addAll(temporary);
+						temporary.clear();
+						content.add(word);
+					}
+					break;
+				// class/enum/interface keyword detected
+				case 1:
+					if (word.getKey().equals(KeyWord.OPENBRACE)) {
+						// class definition done
+						classDefinitionState = 4;
+						openBraces++;
+					} else if (word.getKey().equals(KeyWord.EXTENDS)) {
+						classDefinitionState++;
+					} else if (word.getKey().equals(KeyWord.IMPLEMENTS)) {
+						classDefinitionState++;
+						classDefinitionState++;
+					}
+					break;
+				// in extends list
+				case 2:
+					if (word.getKey().equals(KeyWord.IMPLEMENTS)) {
+						classDefinitionState++;
+					} else if (word.getKey().equals(KeyWord.WORD)) {
+						foundClass.getExtending().add(word.getWord());
+					} else if (word.getKey().equals(KeyWord.OPENBRACE)) {
+						// class definition done
+						classDefinitionState = 4;
+						openBraces++;
+					}
+					break;
+				// in implements list
+				case 3:
+					if (word.getKey().equals(KeyWord.EXTENDS)) {
+						classDefinitionState--;
+					} else if (word.getKey().equals(KeyWord.WORD)) {
+						foundClass.getImplementing().add(word.getWord());
+					} else if (word.getKey().equals(KeyWord.OPENBRACE)) {
+						// class definition done
+						classDefinitionState++;
+						openBraces++;
+					}
+					break;
+				// in class body
+				case 4:
+					if (word.getKey().equals(KeyWord.CLOSEBRACE)) {
+						openBraces--;
+						if (openBraces == 0) {
+							// end of class body, add to class and result
+							classDefinitionState = 0;
+							List<WordInFile> classcontent = new ArrayList<WordInFile>();
+							classcontent.addAll(content);
+							foundClass.setContent(classcontent);
+							fileModel.add(foundClass);
+							foundClass = null;
+							content.clear();
+						} else {
+							content.add(word);
+						}
+					} else {
+						// add word to class-body
+						if (word.getKey().equals(KeyWord.OPENBRACE)) {
+							openBraces++;
+						}
+						content.add(word);
+					}
+					break;
 				}
 			}
 		}
-		return reducedList;
+		if (!content.isEmpty()) {
+			fileModel.add(new JavaFileContent(content));
+		}
+		return fileModel;
 	}
 
 	/**
@@ -277,22 +437,25 @@ public class JavaFileNormalizer {
 	 *            - reduced Word-List
 	 * @returns list of java class contents (Methods or WordLists)
 	 */
-	public List<JavaClassContent> splitToMethods(List<JavaWord> wordlist) {
-		List<JavaClassContent> result = new ArrayList<JavaClassContent>();
+	public List<JavaFileContent> parseMethods(List<WordInFile> wordlist) {
+		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
 		int openBraces = 0;
 		int methodDetectionState = 0;
-		int position = 0;
 		String maybeMethodName = null;
-		List<JavaWord> content = new ArrayList<JavaWord>();
-		List<JavaWord> temporary = new ArrayList<JavaWord>();
+		List<WordInFile> content = new ArrayList<WordInFile>();
+		List<WordInFile> temporary = new ArrayList<WordInFile>();
 		List<String> parameter = new ArrayList<String>();
 		JavaMethod method = null;
 		for (int i = 0; i < wordlist.size(); i++) {
-			JavaWord word = wordlist.get(i);
+			WordInFile word = wordlist.get(i);
 			switch (methodDetectionState) {
 			case 0:
 				// Nothing or only modifiers detected
-				if (word.getKey().getType().equals(WordType.MODIFIER) || word.getKey().equals(KeyWord.SYNCHRONIZED)) {
+				if (word.equals(KeyWord.ANNOTATION)) {
+					// Annotation placeholder outside of method definition
+					// found. Add as Statement
+					result.add(new JavaStatement(Arrays.asList(word), StatementType.ANNOTATION));
+				} else if (word.getKey().getType().equals(WordType.MODIFIER) || word.getKey().equals(KeyWord.SYNCHRONIZED)) {
 					// add modifier to potential header
 					temporary.add(word);
 				} else if (word.getKey().equals(KeyWord.WORD) || word.getKey().getType().equals(WordType.DATATYPE)) {
@@ -326,25 +489,26 @@ public class JavaFileNormalizer {
 					methodDetectionState++;
 					methodDetectionState++;
 					i++;
-				} else if(word.getKey().equals(KeyWord.OPENBRACKET)
+				} else if (word.getKey().equals(KeyWord.OPENBRACKET)
 						&& wordlist.get(i + 1).getKey().equals(KeyWord.CLOSEBRACKET)) {
 					// returntype is an array
 					temporary.add(word);
 					temporary.add(wordlist.get(i + 1));
 					methodDetectionState++;
 					i++;
-				} else if(word.getKey().equals(KeyWord.LESS)) {
+				} else if (word.getKey().equals(KeyWord.LESS)) {
 					// returntype is some generic stuff like List<String>
-					int endOfGeneric = parseGeneric(wordlist, i+1);
-					if (endOfGeneric==0) {
-						// no valid generic returnType --> no method header! reset and check word again
+					int endOfGeneric = parseGeneric(wordlist, i + 1);
+					if (endOfGeneric == 0) {
+						// no valid generic returnType --> no method header!
+						// reset and check word again
 						i--;
 						maybeMethodName = null;
 						methodDetectionState = 0;
 						content.addAll(temporary);
 						temporary.clear();
 					} else {
-						while (i<endOfGeneric-1) {
+						while (i < endOfGeneric - 1) {
 							temporary.add(wordlist.get(i));
 							i++;
 						}
@@ -361,8 +525,7 @@ public class JavaFileNormalizer {
 				break;
 			case 2:
 				// modifiers and extended returntype detected ([] / <>)
-				if (word.getKey().equals(KeyWord.WORD)
-						&& wordlist.get(i + 1).getKey().equals(KeyWord.OPENPARANTHESE)) {
+				if (word.getKey().equals(KeyWord.WORD) && wordlist.get(i + 1).getKey().equals(KeyWord.OPENPARANTHESE)) {
 					// add potential methodname and open parentheses to
 					// potential header
 					temporary.add(word);
@@ -382,7 +545,7 @@ public class JavaFileNormalizer {
 			case 3:
 				// modifiers, returntype, methodname and open paranthese
 				// detected
-				JavaWord param = isParameter(wordlist.subList(i, wordlist.size() - 1), false);
+				WordInFile param = isParameter(wordlist.subList(i, wordlist.size() - 1), false);
 				if (param != null) {
 					// add potential parameter to potential methodheader
 					while (!wordlist.get(i).equals(param)) {
@@ -409,7 +572,7 @@ public class JavaFileNormalizer {
 			case 4:
 				// modifiers, returntype, methodname, open paranthese and at
 				// least one parameter detected
-				JavaWord secondaryparam = isParameter(wordlist.subList(i, wordlist.size() - 1), true);
+				WordInFile secondaryparam = isParameter(wordlist.subList(i, wordlist.size() - 1), true);
 				if (secondaryparam != null) {
 					// add potential parameter to potential methodheader
 					while (!wordlist.get(i).equals(secondaryparam)) {
@@ -435,7 +598,8 @@ public class JavaFileNormalizer {
 			case 5:
 				// modifiers, returntype, methodname, and parameter list
 				// detected
-				if (word.getKey().getType().equals(WordType.SPECIFIER) || word.getKey().equals(KeyWord.WORD)) {
+				if (word.getKey().equals(KeyWord.THROWS) || word.getKey().equals(KeyWord.WORD)
+						|| word.getKey().equals(KeyWord.COMMA)) {
 					// speciefing stuff like extends / throws / implements
 					// detected
 					temporary.add(word);
@@ -443,11 +607,10 @@ public class JavaFileNormalizer {
 					// valid method header. add all before as ClassContent to
 					// result.
 					if (!content.isEmpty()) {
-						List<JavaWord> somecontent = new ArrayList<JavaWord>();
+						List<WordInFile> somecontent = new ArrayList<WordInFile>();
 						somecontent.addAll(content);
-						result.add(new JavaClassContent(position, somecontent));
+						result.add(new JavaFileContent(somecontent));
 						content.clear();
-						position++;
 					}
 					// reset temporary values
 					openBraces++;
@@ -455,8 +618,7 @@ public class JavaFileNormalizer {
 					temporary.clear();
 					List<String> params = new ArrayList<String>();
 					params.addAll(parameter);
-					method = new JavaMethod(position, maybeMethodName, params, null);
-					position++;
+					method = new JavaMethod(maybeMethodName, params, null);
 					maybeMethodName = null;
 					parameter.clear();
 				} else {
@@ -476,7 +638,7 @@ public class JavaFileNormalizer {
 					if (openBraces == 0) {
 						// end of method body, add to method and result
 						methodDetectionState = 0;
-						List<JavaWord> classcontent = new ArrayList<JavaWord>();
+						List<WordInFile> classcontent = new ArrayList<WordInFile>();
 						classcontent.addAll(content);
 						method.setContent(classcontent);
 						result.add(method);
@@ -496,7 +658,7 @@ public class JavaFileNormalizer {
 			}
 		}
 		if (!content.isEmpty()) {
-			result.add(new JavaClassContent(position, content));
+			result.add(new JavaFileContent(content));
 		}
 		return result;
 	}
@@ -504,11 +666,14 @@ public class JavaFileNormalizer {
 	/**
 	 * checks if following words are valid parameter declaration
 	 * 
-	 * @param words - wordlist beginning from first word after "(" or another parameter
-	 * @param withSeparator - search for "," before parameter declaration
+	 * @param words
+	 *            - wordlist beginning from first word after "(" or another
+	 *            parameter
+	 * @param withSeparator
+	 *            - search for "," before parameter declaration
 	 * @return the parameter identifier word
 	 */
-	private JavaWord isParameter(List<JavaWord> words, boolean withSeparator) {
+	private WordInFile isParameter(List<WordInFile> words, boolean withSeparator) {
 		int position = 0;
 		if (withSeparator) {
 			if (!words.get(position).getKey().equals(KeyWord.COMMA)) {
@@ -518,6 +683,10 @@ public class JavaFileNormalizer {
 				// correct separator ","
 				position++;
 			}
+		}
+		if (words.get(position).getKey().equals(KeyWord.ANNOTATION)) {
+			// annotation on parameter
+			position++;
 		}
 		if (words.get(position).getKey().equals(KeyWord.FINAL)) {
 			// optional modifier final for parameter
@@ -560,13 +729,16 @@ public class JavaFileNormalizer {
 	}
 
 	/**
-	 * parse recursive through generic type elements in Parameter declaration like HashMap<String, Integer>
+	 * parse recursive through generic type elements in Parameter declaration
+	 * like HashMap<String, Integer>
 	 * 
-	 * @param words - wordlist beginning from first word after "<"
-	 * @param position - the current position in isParameter method
+	 * @param words
+	 *            - wordlist beginning from first word after "<"
+	 * @param position
+	 *            - the current position in isParameter method
 	 * @return position after ">" or 0 if invalid
 	 */
-	private int parseGeneric(List<JavaWord> words, int position) {
+	private int parseGeneric(List<WordInFile> words, int position) {
 		if (words.get(position).getKey().equals(KeyWord.WORD)
 				|| words.get(position).getKey().getType().equals(WordType.DATATYPE)) {
 			position++;
