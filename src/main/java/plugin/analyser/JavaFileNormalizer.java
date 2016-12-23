@@ -268,7 +268,7 @@ public class JavaFileNormalizer {
 		JavaClass foundClass = null;
 		List<WordInFile> content = new ArrayList<WordInFile>();
 		List<WordInFile> temporary = new ArrayList<WordInFile>();
-
+		String typeString = "";
 		for (int i = 0; i < wordList.size(); i++) {
 			WordInFile word = wordList.get(i);
 			if (packageStatement) {
@@ -376,11 +376,34 @@ public class JavaFileNormalizer {
 				// in extends list
 				case 2:
 					if (word.getKey().equals(KeyWord.IMPLEMENTS)) {
+						if (!typeString.isEmpty()) {
+							foundClass.getExtending().add(typeString);
+							typeString = "";
+						}
 						classDefinitionState++;
 					} else if (word.getKey().equals(KeyWord.WORD)) {
-						foundClass.getExtending().add(word.getWord());
+						typeString += word.getWord();
+						if (wordList.get(i+1).getKey().equals(KeyWord.LESS)) {
+							// extended type is some generic stuff like List<String>
+							i++;
+							int endOfGeneric = parseGeneric(wordList, i + 1);
+							while (i < endOfGeneric) {
+								i++;
+							}
+						}
+					} else if (word.getKey().equals(KeyWord.DOT)) {
+						typeString += ".";
+					} else if (word.getKey().equals(KeyWord.COMMA)) {
+						if (!typeString.isEmpty()) {
+							foundClass.getExtending().add(typeString);
+							typeString = "";
+						}
 					} else if (word.getKey().equals(KeyWord.OPENBRACE)) {
 						// class definition done
+						if (!typeString.isEmpty()) {
+							foundClass.getExtending().add(typeString);
+							typeString = "";
+						}
 						classDefinitionState = 4;
 						openBraces++;
 					}
@@ -388,11 +411,34 @@ public class JavaFileNormalizer {
 				// in implements list
 				case 3:
 					if (word.getKey().equals(KeyWord.EXTENDS)) {
+						if (!typeString.isEmpty()) {
+							foundClass.getImplementing().add(typeString);
+							typeString = "";
+						}
 						classDefinitionState--;
 					} else if (word.getKey().equals(KeyWord.WORD)) {
-						foundClass.getImplementing().add(word.getWord());
+						typeString += word.getWord();
+						if (wordList.get(i+1).getKey().equals(KeyWord.LESS)) {
+							// implemented type is some generic stuff like List<String>
+							i++;
+							int endOfGeneric = parseGeneric(wordList, i + 1);
+							while (i < endOfGeneric) {
+								i++;
+							}
+						}
+					} else if (word.getKey().equals(KeyWord.DOT)) {
+						typeString += ".";
+					} else if (word.getKey().equals(KeyWord.COMMA)) {
+						if (!typeString.isEmpty()) {
+							foundClass.getImplementing().add(typeString);
+							typeString = "";
+						}
 					} else if (word.getKey().equals(KeyWord.OPENBRACE)) {
 						// class definition done
+						if (!typeString.isEmpty()) {
+							foundClass.getImplementing().add(typeString);
+							typeString = "";
+						}
 						classDefinitionState++;
 						openBraces++;
 					}
@@ -454,6 +500,14 @@ public class JavaFileNormalizer {
 				if (word.equals(KeyWord.ANNOTATION)) {
 					// Annotation placeholder outside of method definition
 					// found. Add as Statement
+					content.addAll(temporary);
+					temporary.clear();
+					if (!content.isEmpty()) {
+						List<WordInFile> somecontent = new ArrayList<WordInFile>();
+						somecontent.addAll(content);
+						result.add(new JavaFileContent(somecontent));
+						content.clear();
+					}
 					result.add(new JavaStatement(Arrays.asList(word), StatementType.ANNOTATION));
 				} else if (word.getKey().getType().equals(WordType.MODIFIER) || word.getKey().equals(KeyWord.SYNCHRONIZED)) {
 					// add modifier to potential header
@@ -479,6 +533,11 @@ public class JavaFileNormalizer {
 					temporary.add(word);
 					methodDetectionState++;
 					methodDetectionState++;
+				} else if (word.getKey().equals(KeyWord.DOT) && wordlist.get(i + 1).getKey().equals(KeyWord.WORD)) {
+					// potentially dot in returntype
+					temporary.add(word);
+					temporary.add(wordlist.get(i + 1));
+					i++;
 				} else if (word.getKey().equals(KeyWord.WORD)
 						&& wordlist.get(i + 1).getKey().equals(KeyWord.OPENPARANTHESE)) {
 					// add potential methodname and open parentheses to
@@ -508,10 +567,11 @@ public class JavaFileNormalizer {
 						content.addAll(temporary);
 						temporary.clear();
 					} else {
-						while (i < endOfGeneric - 1) {
+						while (i < endOfGeneric) {
 							temporary.add(wordlist.get(i));
 							i++;
 						}
+						i--;
 						methodDetectionState++;
 					}
 				} else {
@@ -700,6 +760,17 @@ public class JavaFileNormalizer {
 			// valid parameter type beginning
 			position++;
 		}
+		while (words.get(position).getKey().equals(KeyWord.DOT)) {
+			position++;
+			if (!(words.get(position).getKey().equals(KeyWord.WORD)
+					|| words.get(position).getKey().getType().equals(WordType.DATATYPE))) {
+				// no valid parameter type
+				return null;
+			} else {
+				// valid parameter type x.y
+				position++;
+			}
+		}
 		if (words.get(position).getKey().equals(KeyWord.OPENBRACKET)
 				&& words.get(position + 1).getKey().equals(KeyWord.CLOSEBRACKET)) {
 			// parameter type array "String[]"
@@ -745,6 +816,17 @@ public class JavaFileNormalizer {
 		} else {
 			return 0;
 		}
+		while (words.get(position).getKey().equals(KeyWord.DOT)) {
+			position++;
+			if (!(words.get(position).getKey().equals(KeyWord.WORD)
+					|| words.get(position).getKey().getType().equals(WordType.DATATYPE))) {
+				// no valid parameter type
+				return 0;
+			} else {
+				// valid parameter type x.y
+				position++;
+			}
+		}
 		if (words.get(position).getKey().equals(KeyWord.OPENBRACKET)
 				&& words.get(position + 1).getKey().equals(KeyWord.CLOSEBRACKET)) {
 			// parameter type array "String[]"
@@ -767,6 +849,17 @@ public class JavaFileNormalizer {
 					position++;
 				} else {
 					return 0;
+				}
+				while (words.get(position).getKey().equals(KeyWord.DOT)) {
+					position++;
+					if (!(words.get(position).getKey().equals(KeyWord.WORD)
+							|| words.get(position).getKey().getType().equals(WordType.DATATYPE))) {
+						// no valid parameter type
+						return 0;
+					} else {
+						// valid parameter type x.y
+						position++;
+					}
 				}
 				if (words.get(position).getKey().equals(KeyWord.OPENBRACKET)
 						&& words.get(position + 1).getKey().equals(KeyWord.CLOSEBRACKET)) {

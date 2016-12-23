@@ -19,7 +19,7 @@ import traumtaenzer.models.Product;
 import traumtaenzer.models.ProductList;
 
 @Controller
-public class ProductImageController {
+public class ProductImageController implements java.List<?>, String extends Shit{
 
 	@Autowired
 	private ProductList<Product> products;
@@ -62,7 +62,7 @@ public class ProductImageController {
 	 */
 	@RequestMapping(value = "productimage/{pid}", headers = "Accept=image/*")
 	@ResponseBody
-	public List<List<String>> methodProductImage(@PathVariable("pid") String productIdStr) {
+	public java.List<List<String.Arsch>> methodProductImage(@PathVariable("pid") java.String productIdStr) {
 
 		createUploadDirectoryIfNeeded();
 

@@ -19,7 +19,7 @@ public class JavaFileAnalyzerTest {
 
     @Test
     public void testFileNormalization() {
-    	File input = new File(getClass().getResource("/testdata/CourseManagementController.java").getPath());
+    	File input = new File(getClass().getResource("/testdata/ProductImageController.java").getPath());
     	JavaFileAnalyzer analyzer = new JavaFileAnalyzer(Arrays.asList(input));
     	
     	// do analyze
