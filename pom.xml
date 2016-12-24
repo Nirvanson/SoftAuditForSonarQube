@@ -9,7 +9,7 @@
     <name>sonar-softaudit-plugin</name>
     <groupId>plugin</groupId>
     <artifactId>sonar-softaudit-plugin</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
     <packaging>sonar-plugin</packaging>
 
     <properties>
@@ -17,10 +17,6 @@
 
         <java.version>1.8</java.version>
         <sonarqube.version>5.1</sonarqube.version>
-        <json.version>1.0</json.version>
-        <slf4j.version>1.7.5</slf4j.version>
-        <log4j.version>1.2.16</log4j.version>
-        <xstream.version>1.4.3</xstream.version>
 
         <junit.version>4.12</junit.version>
 
@@ -108,37 +104,7 @@
             <version>${sonarqube.version}</version>
             <scope>provided</scope>
         </dependency>
-
-        <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>javax.json</artifactId>
-            <version>${json.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <!-- <dependency>
-            <groupId>com.thoughtworks.xstream</groupId>
-            <artifactId>xstream</artifactId>
-            <version>${xstream.version}</version>
-            <scope>runtime</scope>
-        </dependency> -->
-
-        <dependency>
+		<dependency>
             <groupId>org.codehaus.sonar</groupId>
             <artifactId>sonar-testing-harness</artifactId>
             <version>${sonarqube.version}</version>

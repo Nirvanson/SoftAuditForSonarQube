@@ -108,6 +108,10 @@ public class ProductImageController implements java.List<?>, String extends java
 				return new byte[0];
 			}
 		}
+		
+		private class MIST{
+			int z = 0;
+		}
 	}
 	
 	public class ShittyClass {
@@ -118,6 +122,10 @@ public class ProductImageController implements java.List<?>, String extends java
 		public static void createUploadDirectoryIfNeeded() {
 			if (!PRODUCT_IMAGES_DIR.exists())
 				PRODUCT_IMAGES_DIR.mkdirs();
+			
+			private class doppelmist {
+				int z = 9;
+			}
 		};
 	}
 

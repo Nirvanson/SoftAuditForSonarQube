@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.FileSystem;
@@ -25,8 +23,6 @@ public class SoftAuditSensor implements Sensor {
 
     /** The file system object for the project being analysed. */
     private final FileSystem fileSystem;
-    /** The logger object for the sensor. */
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Constructor that sets the file system object for the
@@ -46,7 +42,6 @@ public class SoftAuditSensor implements Sensor {
      */
     public boolean shouldExecuteOnProject(Project project) {
         if (fileSystem.languages().contains("java")) {
-        	log.info("Java as language detected. Do analysation!");
         	return true;
         }
         return false;

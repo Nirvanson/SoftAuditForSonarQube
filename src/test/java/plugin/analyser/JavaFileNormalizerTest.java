@@ -20,7 +20,7 @@ public class JavaFileNormalizerTest {
         super();
     }
 
-    @Test @SuppressWarnings("unchecked")
+    @Test
     public void testFileNormalization() {
     	File input = new File(getClass().getResource("/testdata/TestClass.txt").getPath());
     	JavaFileNormalizer normalizer = new JavaFileNormalizer();
@@ -54,7 +54,7 @@ public class JavaFileNormalizerTest {
 		// method extraction
 		for (JavaFileContent content : contents) {
 			if (content instanceof JavaClass) {
-				content.setContent(normalizer.parseMethods(((WordList) content.getContent().get(0)).getWordlist()));
+				content.setContent(normalizer.parseMethodsAndClasses(((WordList) content.getContent().get(0)).getWordlist()));
 			}
 		}
 		assertTrue("no contents recieved by method extraction", !contents.isEmpty());

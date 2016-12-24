@@ -106,12 +106,12 @@ public class JavaFileAnalyzer {
 		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
 		for (JavaFileContent content : contentlist) {
 			if (content instanceof WordList) {
-				for (JavaFileContent innercontent : normalizer.parseInnerClasses(((WordList) content).getWordlist())) {
-					if (innercontent instanceof JavaClass) {
-						innercontent.setContent(parseClassContent(innercontent.getContent()));
-						result.add(innercontent);
+				for (JavaFileContent classcontent : normalizer.parseMethodsAndClasses(((WordList) content).getWordlist())) {
+					if (classcontent instanceof JavaClass || classcontent instanceof JavaMethod) {
+						classcontent.setContent(parseClassContent(classcontent.getContent()));
+						result.add(classcontent);
 					} else {
-						result.addAll(normalizer.parseMethods(((WordList) innercontent).getWordlist()));
+						result.add(classcontent);
 					}
 				}
 			}

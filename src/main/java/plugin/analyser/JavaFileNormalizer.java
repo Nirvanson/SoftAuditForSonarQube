@@ -202,7 +202,8 @@ public class JavaFileNormalizer {
 		for (int i = 0; i < step1.size(); i++) {
 			WordInFile wordInStep1 = step1.get(i);
 			// skip ; after } or ;
-			if (!(i > 0 && (step1.get(i - 1).equals(KeyWord.CLOSEBRACE) || step1.get(i - 1).equals(KeyWord.SEMICOLON)) && wordInStep1.equals(KeyWord.SEMICOLON))) {
+			if (!(i > 0 && (step1.get(i - 1).equals(KeyWord.CLOSEBRACE) || step1.get(i - 1).equals(KeyWord.SEMICOLON))
+					&& wordInStep1.equals(KeyWord.SEMICOLON))) {
 				switch (annotationState) {
 				case 0:
 					if (wordInStep1.equals(KeyWord.ANNOTATION)) {
@@ -256,12 +257,11 @@ public class JavaFileNormalizer {
 	}
 
 	/**
-	 * Reduces word list by unused stuff like annotations, package and import
-	 * statements
+	 * Parsing the basic structure of a java class/interface/enum to model.
+	 * package, imports, classdefinition, Annotations outside class definition
 	 * 
-	 * @param fullList
-	 *            - Full Code as word list
-	 * @returns reduced-word-list
+	 * @param wordList - Java File as Words
+	 * @returns basic model of the file
 	 */
 	public List<JavaFileContent> parseClassStructure(List<WordInFile> wordList) {
 		List<JavaFileContent> fileModel = new ArrayList<JavaFileContent>();
@@ -482,189 +482,21 @@ public class JavaFileNormalizer {
 		return fileModel;
 	}
 
-	/**
-	 * Splits reduced word list to methods (and Word-Lists for other stuff)
-	 * 
-	 * @param wordlist
-	 *            - wordlists in classbody
-	 * @returns list of java class contents (Methods or WordLists)
-	 */
-	public List<JavaFileContent> parseInnerClasses(List<WordInFile> wordList) {
-		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
-		int classDefinitionState = 0;
-		int openBraces = 0;
-		JavaClass foundClass = null;
-		List<WordInFile> content = new ArrayList<WordInFile>();
-		List<WordInFile> temporary = new ArrayList<WordInFile>();
-		String typeString = "";
-		for (int i = 0; i < wordList.size(); i++) {
-			WordInFile word = wordList.get(i);
-			switch (classDefinitionState) {
-			// only modifiers or nothing from class definition found
-			case 0:
-				if (word.getKey().getType().equals(WordType.MODIFIER)
-						|| word.getKey().equals(KeyWord.SYNCHRONIZED)) {
-					// potentially class definition modifier
-					temporary.add(word);
-				} else if (word.equals(KeyWord.CLASS) || word.equals(KeyWord.INTERFACE) || word.equals(KeyWord.ENUM)) {
-					// class/enum/interface declaration detected. parse it
-					// to JavaClassModel - all the same
-					classDefinitionState++;
-					if (!content.isEmpty()) {
-						List<WordInFile> someContent = new ArrayList<WordInFile>();
-						someContent.addAll(content);
-						result.add(new WordList(someContent));
-						content.clear();
-					}
-					if (!temporary.isEmpty()) {
-						List<WordInFile> modifiers = new ArrayList<WordInFile>();
-						modifiers.addAll(temporary);
-						temporary.clear();
-						foundClass = new JavaClass(wordList.get(i + 1).getWord(), null, word.getKey(), modifiers,
-								new ArrayList<String>(), new ArrayList<String>());
-					} else {
-						foundClass = new JavaClass(wordList.get(i + 1).getWord(), null, word.getKey(),
-								new ArrayList<WordInFile>(), new ArrayList<String>(), new ArrayList<String>());
-					}
-					i++;
-				} else {
-					// otherwise add word to list
-					content.addAll(temporary);
-					temporary.clear();
-					content.add(word);
-				}
-				break;
-			// class/enum/interface keyword detected
-			case 1:
-				if (word.getKey().equals(KeyWord.OPENBRACE)) {
-					// class definition done
-					classDefinitionState = 4;
-					openBraces++;
-				} else if (word.getKey().equals(KeyWord.EXTENDS)) {
-					classDefinitionState++;
-				} else if (word.getKey().equals(KeyWord.IMPLEMENTS)) {
-					classDefinitionState++;
-					classDefinitionState++;
-				}
-				break;
-			// in extends list
-			case 2:
-				if (word.getKey().equals(KeyWord.IMPLEMENTS)) {
-					if (!typeString.isEmpty()) {
-						foundClass.getExtending().add(typeString);
-						typeString = "";
-					}
-					classDefinitionState++;
-				} else if (word.getKey().equals(KeyWord.WORD)) {
-					typeString += word.getWord();
-					if (wordList.get(i + 1).getKey().equals(KeyWord.LESS)) {
-						// extended type is some generic stuff like
-						// List<String>
-						i++;
-						int endOfGeneric = parseGeneric(wordList, i + 1);
-						while (i < endOfGeneric) {
-							i++;
-						}
-					}
-				} else if (word.getKey().equals(KeyWord.DOT)) {
-					typeString += ".";
-				} else if (word.getKey().equals(KeyWord.COMMA)) {
-					if (!typeString.isEmpty()) {
-						foundClass.getExtending().add(typeString);
-						typeString = "";
-					}
-				} else if (word.getKey().equals(KeyWord.OPENBRACE)) {
-					// class definition done
-					if (!typeString.isEmpty()) {
-						foundClass.getExtending().add(typeString);
-						typeString = "";
-					}
-					classDefinitionState = 4;
-					openBraces++;
-				}
-				break;
-			// in implements list
-			case 3:
-				if (word.getKey().equals(KeyWord.EXTENDS)) {
-					if (!typeString.isEmpty()) {
-						foundClass.getImplementing().add(typeString);
-						typeString = "";
-					}
-					classDefinitionState--;
-				} else if (word.getKey().equals(KeyWord.WORD)) {
-					typeString += word.getWord();
-					if (wordList.get(i + 1).getKey().equals(KeyWord.LESS)) {
-						// implemented type is some generic stuff like
-						// List<String>
-						i++;
-						int endOfGeneric = parseGeneric(wordList, i + 1);
-						while (i < endOfGeneric) {
-							i++;
-						}
-					}
-				} else if (word.getKey().equals(KeyWord.DOT)) {
-					typeString += ".";
-				} else if (word.getKey().equals(KeyWord.COMMA)) {
-					if (!typeString.isEmpty()) {
-						foundClass.getImplementing().add(typeString);
-						typeString = "";
-					}
-				} else if (word.getKey().equals(KeyWord.OPENBRACE)) {
-					// class definition done
-					if (!typeString.isEmpty()) {
-						foundClass.getImplementing().add(typeString);
-						typeString = "";
-					}
-					classDefinitionState++;
-					openBraces++;
-				}
-				break;
-			// in class body
-			case 4:
-				if (word.getKey().equals(KeyWord.CLOSEBRACE)) {
-					openBraces--;
-					if (openBraces == 0) {
-						// end of class body, add to class and result
-						classDefinitionState = 0;
-						List<WordInFile> classcontent = new ArrayList<WordInFile>();
-						classcontent.addAll(content);
-						foundClass.setContent(Arrays.asList(new WordList(classcontent)));
-						result.add(foundClass);
-						foundClass = null;
-						content.clear();
-					} else {
-						content.add(word);
-					}
-				} else {
-					// add word to class-body
-					if (word.getKey().equals(KeyWord.OPENBRACE)) {
-						openBraces++;
-					}
-					content.add(word);
-				}
-				break;
-			}
-		}
-		if (!temporary.isEmpty()) {
-			content.addAll(temporary);
-		}
-		if (!content.isEmpty()) {
-			result.add(new WordList(content));
-		}
-		return result;
-	}
+	
 
 	/**
-	 * Splits reduced word list to methods (and Word-Lists for other stuff)
+	 * Parsing the content of a class or method for inner methods and classes
 	 * 
-	 * @param wordlist
-	 *            - wordlists in classbody
-	 * @returns list of java class contents (Methods or WordLists)
+	 * @param wordlist - the class/method boddy as wordlist
+	 * @returns model of the class/method-body
 	 */
-	public List<JavaFileContent> parseMethods(List<WordInFile> wordlist) {
+	public List<JavaFileContent> parseMethodsAndClasses(List<WordInFile> wordlist) {
 		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
 		int openBraces = 0;
 		int methodDetectionState = 0;
+		int classDefinitionState = 0;
+		JavaClass foundClass = null;
+		String typeString = "";
 		String maybeMethodName = null;
 		List<WordInFile> content = new ArrayList<WordInFile>();
 		List<WordInFile> temporary = new ArrayList<WordInFile>();
@@ -672,228 +504,367 @@ public class JavaFileNormalizer {
 		JavaMethod method = null;
 		for (int i = 0; i < wordlist.size(); i++) {
 			WordInFile word = wordlist.get(i);
-			switch (methodDetectionState) {
-			case 0:
-				// Nothing or only modifiers detected
-				if (word.equals(KeyWord.ANNOTATION)) {
-					// Annotation placeholder outside of method definition
-					// found. Add as Statement
-					content.addAll(temporary);
-					temporary.clear();
-					if (!content.isEmpty()) {
-						List<WordInFile> somecontent = new ArrayList<WordInFile>();
-						somecontent.addAll(content);
-						result.add(new WordList(somecontent));
-						content.clear();
+			if (classDefinitionState > 0) {
+				switch (classDefinitionState) {
+				// class/enum/interface keyword detected
+				case 1:
+					if (word.getKey().equals(KeyWord.OPENBRACE)) {
+						// class definition done
+						classDefinitionState = 4;
+						openBraces++;
+					} else if (word.getKey().equals(KeyWord.EXTENDS)) {
+						classDefinitionState++;
+					} else if (word.getKey().equals(KeyWord.IMPLEMENTS)) {
+						classDefinitionState++;
+						classDefinitionState++;
 					}
-					result.add(new JavaStatement(Arrays.asList(word), StatementType.ANNOTATION));
-				} else if (word.getKey().getType().equals(WordType.MODIFIER)
-						|| word.getKey().equals(KeyWord.SYNCHRONIZED)) {
-					// add modifier to potential header
-					temporary.add(word);
-				} else if (word.getKey().equals(KeyWord.WORD) || word.getKey().getType().equals(WordType.DATATYPE)) {
-					// add potential returntype to potential header
-					temporary.add(word);
-					if (word.getKey().equals(KeyWord.WORD)) {
-						maybeMethodName = word.getWord();
+					break;
+				// in extends list
+				case 2:
+					if (word.getKey().equals(KeyWord.IMPLEMENTS)) {
+						if (!typeString.isEmpty()) {
+							foundClass.getExtending().add(typeString);
+							typeString = "";
+						}
+						classDefinitionState++;
+					} else if (word.getKey().equals(KeyWord.WORD)) {
+						typeString += word.getWord();
+						if (wordlist.get(i + 1).getKey().equals(KeyWord.LESS)) {
+							// extended type is some generic stuff like
+							// List<String>
+							i++;
+							int endOfGeneric = parseGeneric(wordlist, i + 1);
+							while (i < endOfGeneric) {
+								i++;
+							}
+						}
+					} else if (word.getKey().equals(KeyWord.DOT)) {
+						typeString += ".";
+					} else if (word.getKey().equals(KeyWord.COMMA)) {
+						if (!typeString.isEmpty()) {
+							foundClass.getExtending().add(typeString);
+							typeString = "";
+						}
+					} else if (word.getKey().equals(KeyWord.OPENBRACE)) {
+						// class definition done
+						if (!typeString.isEmpty()) {
+							foundClass.getExtending().add(typeString);
+							typeString = "";
+						}
+						classDefinitionState = 4;
+						openBraces++;
 					}
-					methodDetectionState++;
-				} else {
-					// mo method header! reset
-					content.addAll(temporary);
-					content.add(word);
-					temporary.clear();
+					break;
+				// in implements list
+				case 3:
+					if (word.getKey().equals(KeyWord.EXTENDS)) {
+						if (!typeString.isEmpty()) {
+							foundClass.getImplementing().add(typeString);
+							typeString = "";
+						}
+						classDefinitionState--;
+					} else if (word.getKey().equals(KeyWord.WORD)) {
+						typeString += word.getWord();
+						if (wordlist.get(i + 1).getKey().equals(KeyWord.LESS)) {
+							// implemented type is some generic stuff like
+							// List<String>
+							i++;
+							int endOfGeneric = parseGeneric(wordlist, i + 1);
+							while (i < endOfGeneric) {
+								i++;
+							}
+						}
+					} else if (word.getKey().equals(KeyWord.DOT)) {
+						typeString += ".";
+					} else if (word.getKey().equals(KeyWord.COMMA)) {
+						if (!typeString.isEmpty()) {
+							foundClass.getImplementing().add(typeString);
+							typeString = "";
+						}
+					} else if (word.getKey().equals(KeyWord.OPENBRACE)) {
+						// class definition done
+						if (!typeString.isEmpty()) {
+							foundClass.getImplementing().add(typeString);
+							typeString = "";
+						}
+						classDefinitionState++;
+						openBraces++;
+					}
+					break;
+				// in class body
+				case 4:
+					if (word.getKey().equals(KeyWord.CLOSEBRACE)) {
+						openBraces--;
+						if (openBraces == 0) {
+							// end of class body, add to class and result
+							classDefinitionState = 0;
+							List<WordInFile> classcontent = new ArrayList<WordInFile>();
+							classcontent.addAll(content);
+							foundClass.setContent(Arrays.asList(new WordList(classcontent)));
+							result.add(foundClass);
+							foundClass = null;
+							content.clear();
+						} else {
+							content.add(word);
+						}
+					} else {
+						// add word to class-body
+						if (word.getKey().equals(KeyWord.OPENBRACE)) {
+							openBraces++;
+						}
+						content.add(word);
+					}
+					break;
 				}
-				break;
-			case 1:
-				// modifiers and returntype or constructor detected
-				if (word.getKey().equals(KeyWord.OPENPARANTHESE)) {
-					// potential constructor
-					temporary.add(word);
-					methodDetectionState++;
-					methodDetectionState++;
-				} else if (word.getKey().equals(KeyWord.DOT) && wordlist.get(i + 1).getKey().equals(KeyWord.WORD)) {
-					// potentially dot in returntype
-					temporary.add(word);
-					temporary.add(wordlist.get(i + 1));
-					i++;
-				} else if (word.getKey().equals(KeyWord.WORD)
-						&& wordlist.get(i + 1).getKey().equals(KeyWord.OPENPARANTHESE)) {
-					// add potential methodname and open parentheses to
-					// potential header
-					temporary.add(word);
-					temporary.add(wordlist.get(i + 1));
-					maybeMethodName = word.getWord();
-					methodDetectionState++;
-					methodDetectionState++;
-					i++;
-				} else if (word.getKey().equals(KeyWord.OPENBRACKET)
-						&& wordlist.get(i + 1).getKey().equals(KeyWord.CLOSEBRACKET)) {
-					// returntype is an array
-					temporary.add(word);
-					temporary.add(wordlist.get(i + 1));
-					methodDetectionState++;
-					i++;
-				} else if (word.getKey().equals(KeyWord.LESS)) {
-					// returntype is some generic stuff like List<String>
-					int endOfGeneric = parseGeneric(wordlist, i + 1);
-					if (endOfGeneric == 0) {
-						// no valid generic returnType --> no method header!
-						// reset and check word again
+			} else {
+				switch (methodDetectionState) {
+				case 0:
+					// Nothing or only modifiers detected
+					if (word.equals(KeyWord.ANNOTATION)) {
+						// Annotation placeholder outside of method definition
+						// found. Add as Statement
+						content.addAll(temporary);
+						temporary.clear();
+						if (!content.isEmpty()) {
+							List<WordInFile> somecontent = new ArrayList<WordInFile>();
+							somecontent.addAll(content);
+							result.add(new WordList(somecontent));
+							content.clear();
+						}
+						result.add(new JavaStatement(Arrays.asList(word), StatementType.ANNOTATION));
+					} else if (word.getKey().getType().equals(WordType.MODIFIER)
+							|| word.getKey().equals(KeyWord.SYNCHRONIZED)) {
+						// add modifier to potential header
+						temporary.add(word);
+					}
+					if (word.equals(KeyWord.CLASS) || word.equals(KeyWord.INTERFACE) || word.equals(KeyWord.ENUM)) {
+						// class/enum/interface declaration detected. parse it
+						// to JavaClassModel - all the same
+						classDefinitionState++;
+						if (!content.isEmpty()) {
+							List<WordInFile> someContent = new ArrayList<WordInFile>();
+							someContent.addAll(content);
+							result.add(new WordList(someContent));
+							content.clear();
+						}
+						if (!temporary.isEmpty()) {
+							List<WordInFile> modifiers = new ArrayList<WordInFile>();
+							modifiers.addAll(temporary);
+							temporary.clear();
+							foundClass = new JavaClass(wordlist.get(i + 1).getWord(), null, word.getKey(), modifiers,
+									new ArrayList<String>(), new ArrayList<String>());
+						} else {
+							foundClass = new JavaClass(wordlist.get(i + 1).getWord(), null, word.getKey(),
+									new ArrayList<WordInFile>(), new ArrayList<String>(), new ArrayList<String>());
+						}
+						i++;
+					} else if (word.getKey().equals(KeyWord.WORD)
+							|| word.getKey().getType().equals(WordType.DATATYPE)) {
+						// add potential returntype to potential header
+						temporary.add(word);
+						if (word.getKey().equals(KeyWord.WORD)) {
+							maybeMethodName = word.getWord();
+						}
+						methodDetectionState++;
+					} else {
+						// mo method header! reset
+						content.addAll(temporary);
+						content.add(word);
+						temporary.clear();
+					}
+					break;
+				case 1:
+					// modifiers and returntype or constructor detected
+					if (word.getKey().equals(KeyWord.OPENPARANTHESE)) {
+						// potential constructor
+						temporary.add(word);
+						methodDetectionState++;
+						methodDetectionState++;
+					} else if (word.getKey().equals(KeyWord.DOT) && wordlist.get(i + 1).getKey().equals(KeyWord.WORD)) {
+						// potentially dot in returntype
+						temporary.add(word);
+						temporary.add(wordlist.get(i + 1));
+						i++;
+					} else if (word.getKey().equals(KeyWord.WORD)
+							&& wordlist.get(i + 1).getKey().equals(KeyWord.OPENPARANTHESE)) {
+						// add potential methodname and open parentheses to
+						// potential header
+						temporary.add(word);
+						temporary.add(wordlist.get(i + 1));
+						maybeMethodName = word.getWord();
+						methodDetectionState++;
+						methodDetectionState++;
+						i++;
+					} else if (word.getKey().equals(KeyWord.OPENBRACKET)
+							&& wordlist.get(i + 1).getKey().equals(KeyWord.CLOSEBRACKET)) {
+						// returntype is an array
+						temporary.add(word);
+						temporary.add(wordlist.get(i + 1));
+						methodDetectionState++;
+						i++;
+					} else if (word.getKey().equals(KeyWord.LESS)) {
+						// returntype is some generic stuff like List<String>
+						int endOfGeneric = parseGeneric(wordlist, i + 1);
+						if (endOfGeneric == 0) {
+							// no valid generic returnType --> no method header!
+							// reset and check word again
+							i--;
+							maybeMethodName = null;
+							methodDetectionState = 0;
+							content.addAll(temporary);
+							temporary.clear();
+						} else {
+							while (i < endOfGeneric) {
+								temporary.add(wordlist.get(i));
+								i++;
+							}
+							temporary.add(wordlist.get(i));
+							methodDetectionState++;
+						}
+					} else {
+						// no method header! reset and check word again
 						i--;
 						maybeMethodName = null;
 						methodDetectionState = 0;
 						content.addAll(temporary);
 						temporary.clear();
+					}
+					break;
+				case 2:
+					// modifiers and extended returntype detected ([] / <>)
+					if (word.getKey().equals(KeyWord.WORD)
+							&& wordlist.get(i + 1).getKey().equals(KeyWord.OPENPARANTHESE)) {
+						// add potential methodname and open parentheses to
+						// potential header
+						temporary.add(word);
+						temporary.add(wordlist.get(i + 1));
+						maybeMethodName = word.getWord();
+						methodDetectionState++;
+						i++;
 					} else {
-						while (i < endOfGeneric) {
+						// no method header! reset and check word again
+						i--;
+						maybeMethodName = null;
+						methodDetectionState = 0;
+						content.addAll(temporary);
+						temporary.clear();
+					}
+					break;
+				case 3:
+					// modifiers, returntype, methodname and open paranthese
+					// detected
+					WordInFile param = isParameter(wordlist.subList(i, wordlist.size() - 1), false);
+					if (param != null) {
+						// add potential parameter to potential methodheader
+						while (!wordlist.get(i).equals(param)) {
 							temporary.add(wordlist.get(i));
 							i++;
 						}
 						temporary.add(wordlist.get(i));
+						parameter.add(param.getWord());
 						methodDetectionState++;
-					}
-				} else {
-					// no method header! reset and check word again
-					i--;
-					maybeMethodName = null;
-					methodDetectionState = 0;
-					content.addAll(temporary);
-					temporary.clear();
-				}
-				break;
-			case 2:
-				// modifiers and extended returntype detected ([] / <>)
-				if (word.getKey().equals(KeyWord.WORD) && wordlist.get(i + 1).getKey().equals(KeyWord.OPENPARANTHESE)) {
-					// add potential methodname and open parentheses to
-					// potential header
-					temporary.add(word);
-					temporary.add(wordlist.get(i + 1));
-					maybeMethodName = word.getWord();
-					methodDetectionState++;
-					i++;
-				} else {
-					// no method header! reset and check word again
-					i--;
-					maybeMethodName = null;
-					methodDetectionState = 0;
-					content.addAll(temporary);
-					temporary.clear();
-				}
-				break;
-			case 3:
-				// modifiers, returntype, methodname and open paranthese
-				// detected
-				WordInFile param = isParameter(wordlist.subList(i, wordlist.size() - 1), false);
-				if (param != null) {
-					// add potential parameter to potential methodheader
-					while (!wordlist.get(i).equals(param)) {
-						temporary.add(wordlist.get(i));
-						i++;
-					}
-					temporary.add(wordlist.get(i));
-					parameter.add(param.getWord());
-					methodDetectionState++;
-				} else if (word.getKey().equals(KeyWord.CLOSPARANTHESE)) {
-					// end of parameter list, add to potential header
-					temporary.add(word);
-					methodDetectionState++;
-					methodDetectionState++;
-				} else {
-					// no method header! reset and check word again
-					i--;
-					methodDetectionState = 0;
-					maybeMethodName = null;
-					content.addAll(temporary);
-					temporary.clear();
-				}
-				break;
-			case 4:
-				// modifiers, returntype, methodname, open paranthese and at
-				// least one parameter detected
-				WordInFile secondaryparam = isParameter(wordlist.subList(i, wordlist.size() - 1), true);
-				if (secondaryparam != null) {
-					// add potential parameter to potential methodheader
-					while (!wordlist.get(i).equals(secondaryparam)) {
-						temporary.add(wordlist.get(i));
-						i++;
-					}
-					temporary.add(wordlist.get(i));
-					parameter.add(secondaryparam.getWord());
-				} else if (word.getKey().equals(KeyWord.CLOSPARANTHESE)) {
-					// end of parameter list, add to potential header
-					temporary.add(word);
-					methodDetectionState++;
-				} else {
-					// no method header! reset and check word again
-					i--;
-					methodDetectionState = 0;
-					maybeMethodName = null;
-					parameter.clear();
-					content.addAll(temporary);
-					temporary.clear();
-				}
-				break;
-			case 5:
-				// modifiers, returntype, methodname, and parameter list
-				// detected
-				if (word.getKey().equals(KeyWord.THROWS) || word.getKey().equals(KeyWord.WORD)
-						|| word.getKey().equals(KeyWord.COMMA)) {
-					// speciefing stuff like extends / throws / implements
-					// detected
-					temporary.add(word);
-				} else if (word.getKey().equals(KeyWord.OPENBRACE)) {
-					// valid method header. add all before as ClassContent to
-					// result.
-					if (!content.isEmpty()) {
-						List<WordInFile> somecontent = new ArrayList<WordInFile>();
-						somecontent.addAll(content);
-						result.add(new WordList(somecontent));
-						content.clear();
-					}
-					// reset temporary values
-					openBraces++;
-					methodDetectionState++;
-					temporary.clear();
-					List<String> params = new ArrayList<String>();
-					params.addAll(parameter);
-					method = new JavaMethod(maybeMethodName, params, null);
-					maybeMethodName = null;
-					parameter.clear();
-				} else {
-					// no method header! reset and check word again
-					i--;
-					methodDetectionState = 0;
-					maybeMethodName = null;
-					parameter.clear();
-					content.addAll(temporary);
-					temporary.clear();
-				}
-				break;
-			case 6:
-				// valid method header detected, collect words in body
-				if (word.getKey().equals(KeyWord.CLOSEBRACE)) {
-					openBraces--;
-					if (openBraces == 0) {
-						// end of method body, add to method and result
-						methodDetectionState = 0;
-						List<WordInFile> classcontent = new ArrayList<WordInFile>();
-						classcontent.addAll(content);
-						method.setContent(Arrays.asList(new WordList(classcontent)));
-						result.add(method);
-						method = null;
-						content.clear();
+					} else if (word.getKey().equals(KeyWord.CLOSPARANTHESE)) {
+						// end of parameter list, add to potential header
+						temporary.add(word);
+						methodDetectionState++;
+						methodDetectionState++;
 					} else {
+						// no method header! reset and check word again
+						i--;
+						methodDetectionState = 0;
+						maybeMethodName = null;
+						content.addAll(temporary);
+						temporary.clear();
+					}
+					break;
+				case 4:
+					// modifiers, returntype, methodname, open paranthese and at
+					// least one parameter detected
+					WordInFile secondaryparam = isParameter(wordlist.subList(i, wordlist.size() - 1), true);
+					if (secondaryparam != null) {
+						// add potential parameter to potential methodheader
+						while (!wordlist.get(i).equals(secondaryparam)) {
+							temporary.add(wordlist.get(i));
+							i++;
+						}
+						temporary.add(wordlist.get(i));
+						parameter.add(secondaryparam.getWord());
+					} else if (word.getKey().equals(KeyWord.CLOSPARANTHESE)) {
+						// end of parameter list, add to potential header
+						temporary.add(word);
+						methodDetectionState++;
+					} else {
+						// no method header! reset and check word again
+						i--;
+						methodDetectionState = 0;
+						maybeMethodName = null;
+						parameter.clear();
+						content.addAll(temporary);
+						temporary.clear();
+					}
+					break;
+				case 5:
+					// modifiers, returntype, methodname, and parameter list
+					// detected
+					if (word.getKey().equals(KeyWord.THROWS) || word.getKey().equals(KeyWord.WORD)
+							|| word.getKey().equals(KeyWord.COMMA)) {
+						// speciefing stuff like extends / throws / implements
+						// detected
+						temporary.add(word);
+					} else if (word.getKey().equals(KeyWord.OPENBRACE)) {
+						// valid method header. add all before as ClassContent
+						// to
+						// result.
+						if (!content.isEmpty()) {
+							List<WordInFile> somecontent = new ArrayList<WordInFile>();
+							somecontent.addAll(content);
+							result.add(new WordList(somecontent));
+							content.clear();
+						}
+						// reset temporary values
+						openBraces++;
+						methodDetectionState++;
+						temporary.clear();
+						List<String> params = new ArrayList<String>();
+						params.addAll(parameter);
+						method = new JavaMethod(maybeMethodName, params, null);
+						maybeMethodName = null;
+						parameter.clear();
+					} else {
+						// no method header! reset and check word again
+						i--;
+						methodDetectionState = 0;
+						maybeMethodName = null;
+						parameter.clear();
+						content.addAll(temporary);
+						temporary.clear();
+					}
+					break;
+				case 6:
+					// valid method header detected, collect words in body
+					if (word.getKey().equals(KeyWord.CLOSEBRACE)) {
+						openBraces--;
+						if (openBraces == 0) {
+							// end of method body, add to method and result
+							methodDetectionState = 0;
+							List<WordInFile> classcontent = new ArrayList<WordInFile>();
+							classcontent.addAll(content);
+							method.setContent(Arrays.asList(new WordList(classcontent)));
+							result.add(method);
+							method = null;
+							content.clear();
+						} else {
+							content.add(word);
+						}
+					} else {
+						// add word to method-body
+						if (word.getKey().equals(KeyWord.OPENBRACE)) {
+							openBraces++;
+						}
 						content.add(word);
 					}
-				} else {
-					// add word to method-body
-					if (word.getKey().equals(KeyWord.OPENBRACE)) {
-						openBraces++;
-					}
-					content.add(word);
+					break;
 				}
-				break;
 			}
 		}
 		if (!temporary.isEmpty()) {
