@@ -6,7 +6,7 @@ public class JavaMethod extends JavaFileContent{
 	private final String name;
 	private final List<String> parameters;
 	
-	public JavaMethod(String name, List<String> parameters, List<?> body) {
+	public JavaMethod(String name, List<String> parameters, List<JavaFileContent> body) {
 		super(body);
 		this.name = name;
 		this.parameters = parameters;

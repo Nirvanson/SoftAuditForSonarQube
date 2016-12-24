@@ -9,7 +9,7 @@ public class JavaClass extends JavaFileContent {
 	private List<String> extending;
 	private List<String> implementing;
 
-	public JavaClass(String name, List<WordInFile> content, KeyWord type, List<WordInFile> modifiers, List<String> extending,
+	public JavaClass(String name, List<JavaFileContent> content, KeyWord type, List<WordInFile> modifiers, List<String> extending,
 			List<String> implementing) {
 		super(content);
 		this.name = name;

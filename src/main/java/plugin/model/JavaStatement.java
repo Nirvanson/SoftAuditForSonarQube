@@ -5,7 +5,7 @@ import java.util.List;
 public class JavaStatement extends JavaFileContent {
 	private final StatementType type;
 	
-	public JavaStatement(List<WordInFile> content, StatementType type) {
+	public JavaStatement(List<JavaFileContent> content, StatementType type) {
 		super(content);
 		this.type = type;
 	}

@@ -1,15 +1,9 @@
 package plugin.analyser;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.File;
 import java.util.Arrays;
-import java.util.Map;
 
 import org.junit.Test;
-import org.sonar.api.measures.Metric;
-
-import plugin.SoftAuditMetrics;
 
 public class JavaFileAnalyzerTest {
 
@@ -22,9 +16,7 @@ public class JavaFileAnalyzerTest {
     	File input = new File(getClass().getResource("/testdata/ProductImageController.java").getPath());
     	JavaFileAnalyzer analyzer = new JavaFileAnalyzer(Arrays.asList(input));
     	
-    	// do analyze
-    	Map<Metric<Integer>, Double> result = analyzer.analyze();
-    	//assertEquals("Wrong if count", 8d, result.get(SoftAuditMetrics.IFS), 0.1);
-    	//assertEquals("Wrong method count", 5d, result.get(SoftAuditMetrics.MET), 0.1);
+    	// do analyze, check logfile manually
+    	analyzer.analyze();
     }
 }

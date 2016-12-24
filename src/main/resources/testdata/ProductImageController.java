@@ -19,7 +19,7 @@ import traumtaenzer.models.Product;
 import traumtaenzer.models.ProductList;
 
 @Controller
-public class ProductImageController implements java.List<?>, String extends Shit{
+public class ProductImageController implements java.List<?>, String extends java.List<?>{
 
 	@Autowired
 	private ProductList<Product> products;
@@ -41,7 +41,7 @@ public class ProductImageController implements java.List<?>, String extends Shit
 	public static void createUploadDirectoryIfNeeded() {
 		if (!PRODUCT_IMAGES_DIR.exists())
 			PRODUCT_IMAGES_DIR.mkdirs();
-	}
+	};
 
 	/**
 	 * <p>Returns the image for the given {@link Product} id.</p>
@@ -62,7 +62,7 @@ public class ProductImageController implements java.List<?>, String extends Shit
 	 */
 	@RequestMapping(value = "productimage/{pid}", headers = "Accept=image/*")
 	@ResponseBody
-	public java.List<List<String.Arsch>> methodProductImage(@PathVariable("pid") java.String productIdStr) {
+	public java.List<List<String.Arsch>> methodProductImage(@PathVariable("pid") @anotherAnno java.String<shit> productIdStr) {
 
 		createUploadDirectoryIfNeeded();
 
@@ -108,6 +108,17 @@ public class ProductImageController implements java.List<?>, String extends Shit
 				return new byte[0];
 			}
 		}
+	}
+	
+	public class ShittyClass {
+		int x = 0;
+		/**
+		 * Create a new directory for fileuploads
+		 */
+		public static void createUploadDirectoryIfNeeded() {
+			if (!PRODUCT_IMAGES_DIR.exists())
+				PRODUCT_IMAGES_DIR.mkdirs();
+		};
 	}
 
 	/**

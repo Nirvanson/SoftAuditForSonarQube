@@ -1,25 +1,22 @@
 package plugin.analyser;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.api.measures.Metric;
 
 import plugin.SoftAuditMetrics;
 import plugin.model.JavaClass;
 import plugin.model.JavaFileContent;
 import plugin.model.JavaMethod;
-import plugin.model.JavaStatement;
 import plugin.model.WordInFile;
+import plugin.model.WordList;
+import plugin.util.Logger;
 import plugin.model.KeyWord;
 
 /**
@@ -34,13 +31,8 @@ public class JavaFileAnalyzer {
 	 * FileList for Parsing.
 	 */
 	private final Iterable<File> files;
+	private Logger log;
 	private final JavaFileNormalizer normalizer;
-	private final int loglevel;
-
-	/**
-	 * The logger.
-	 */
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	/**
 	 * Analyzer constructor.
@@ -52,7 +44,7 @@ public class JavaFileAnalyzer {
 		super();
 		this.files = files;
 		normalizer = new JavaFileNormalizer();
-		loglevel = 2;
+		log = Logger.getLogger();
 	}
 
 	/**
@@ -62,12 +54,7 @@ public class JavaFileAnalyzer {
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<Metric<Integer>, Double> analyze() {
-		PrintWriter writer = null;
-		try {
-			writer = new PrintWriter("D:\\plugin-log.log", "UTF-8");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
 		Map<Metric<Integer>, Double> result = new HashMap<Metric<Integer>, Double>();
 		// add all measures from metrics list (metrics with keys like base_xyz)
 		for (Metric<?> metric : new SoftAuditMetrics().getMetrics()) {
@@ -78,97 +65,57 @@ public class JavaFileAnalyzer {
 		// start analyzing each relevant file
 		double sourceFiles = 0;
 		for (File file : files) {
-			writer.println("---------- File: " + file.getName() + " ----------");
-			if (loglevel > 3) {
-				try {
-					BufferedReader br = new BufferedReader(new FileReader(file));
-					String fileline;
-					while ((fileline = br.readLine()) != null) {
-						writer.println(fileline);
-					}
-					br.close();
-				} catch (IOException e) {
-					writer.println("File " + file.getName() + " caused IO-Error: " + e);
-				}
-			}
+			log.printFile(file);
 			List<String> normalizedLines = null;
 			try {
 				normalizedLines = normalizer.prepareFile(file);
 			} catch (IOException e) {
-				log.error("File " + file.getName() + " caused IO-Error.", e);
 			}
-			writer.println("*** Step 1 - Extract normalized Lines");
-			if (loglevel > 2) {
-				for (String line : normalizedLines) {
-					writer.println(line);
-				}
-			}
-			writer.println("*** Step 2 - Transform lines to single string");
-			String singleCodeString = normalizer.convertToSingleString(normalizedLines);
-			if (loglevel > 2)
-				writer.println(singleCodeString);
-			writer.println("*** Step 3 - Extract words from code");
-			List<WordInFile> wordList = normalizer.createJavaWordList(singleCodeString);
-			if (loglevel > 2) {
-				for (WordInFile word : wordList) {
-					writer.println(word);
-				}
-			}
-			writer.println("*** Step 4 - Count key words in word list for simple measures");
+			log.printNormalizedLines(normalizedLines);
+			String singleLineCode = normalizer.convertToSingleString(normalizedLines);
+			log.printSingleLineCode(singleLineCode);
+			List<WordInFile> wordList = normalizer.createJavaWordList(singleLineCode);
+			log.printWords(wordList);
 			Map<Metric<Integer>, Double> keyWordMeasures = countKeyWords(wordList);
+			log.printMeasures("keyword", keyWordMeasures);
 			for (Metric<Integer> measure : keyWordMeasures.keySet()) {
-				if (loglevel > 0)
-					writer.println(measure.getName() + ": " + keyWordMeasures.get(measure));
 				result.put(measure, result.get(measure) + keyWordMeasures.get(measure));
 			}
-			writer.println("*** Step 5 - Build basic model of the file from wordlist");
 			List<JavaFileContent> contents = normalizer.parseClassStructure(wordList);
+			log.printModel("class", contents);
 			for (JavaFileContent content : contents) {
 				if (content instanceof JavaClass) {
-					content.setContent(normalizer.parseMethods((List<WordInFile>) content.getContent()));
+					content.setContent(parseClassContent(content.getContent()));
 				}
 			}
-			if (loglevel > 1) {
-				for (JavaFileContent content : contents) {
-					if (content instanceof JavaClass) {
-						writer.println("Class with name: " + ((JavaClass) content).getName() + " extending: " + ((JavaClass) content).getExtending() + " implementing: " + ((JavaClass) content).getImplementing() + " and Body:");
-						for (JavaFileContent innercontent : (List<JavaFileContent>) content.getContent()) {
-							if (innercontent instanceof JavaMethod) {
-								writer.println("	Method with name: " + ((JavaMethod) innercontent).getName()
-										+ " and Parameters: " + ((JavaMethod) innercontent).getParameters());
-								writer.println("	" + innercontent.getContent());
-							} else if (innercontent instanceof JavaStatement) {
-								writer.println("	Statement of type: " + ((JavaStatement) innercontent).getType());
-							} else {
-								writer.println("	Wordlist with length: " + innercontent.getContent().size());
-								writer.println("	" + innercontent.getContent());
-							}
-						}
-					} else if (content instanceof JavaStatement) {
-						writer.println("Statement of type: " + ((JavaStatement) content).getType());
-					} else {
-						writer.println("Wordlist with length: " + content.getContent().size());
-						writer.println(content.getContent());
-					}
-				}
-			}
-			writer.println("*** Step 6 - Count methods and parameters in basic model");
-			for (JavaFileContent content : contents) {
-				if (content instanceof JavaClass) {
-					Map<Metric<Integer>, Double> methodMeasures = countMethods(
-							(List<JavaFileContent>) content.getContent());
-					for (Metric<Integer> measure : methodMeasures.keySet()) {
-						if (loglevel > 0)
-							writer.println(measure.getName() + ": " + methodMeasures.get(measure));
-						result.put(measure, result.get(measure) + methodMeasures.get(measure));
-					}
-				}
+			log.printModel("refined", contents);
+			Map<Metric<Integer>, Double> methodMeasures = countMethods(contents);
+			log.printMeasures("method", methodMeasures);
+			for (Metric<Integer> measure : methodMeasures.keySet()) {
+				result.put(measure, result.get(measure) + methodMeasures.get(measure));
 			}
 			sourceFiles++;
 		}
-		writer.close();
+		log.close();
 		result.put(SoftAuditMetrics.SRC, sourceFiles);
 		result.put(SoftAuditMetrics.OMS, 200d);
+		return result;
+	}
+
+	private List<JavaFileContent> parseClassContent(List<JavaFileContent> contentlist) {
+		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
+		for (JavaFileContent content : contentlist) {
+			if (content instanceof WordList) {
+				for (JavaFileContent innercontent : normalizer.parseInnerClasses(((WordList) content).getWordlist())) {
+					if (innercontent instanceof JavaClass) {
+						innercontent.setContent(parseClassContent(innercontent.getContent()));
+						result.add(innercontent);
+					} else {
+						result.addAll(normalizer.parseMethods(((WordList) innercontent).getWordlist()));
+					}
+				}
+			}
+		}
 		return result;
 	}
 
@@ -180,18 +127,26 @@ public class JavaFileAnalyzer {
 	 * @returns result-map
 	 */
 	private Map<Metric<Integer>, Double> countMethods(List<JavaFileContent> contents) {
-		Map<Metric<Integer>, Double> partialResult = new HashMap<Metric<Integer>, Double>();
+		Map<Metric<Integer>, Double> result = new HashMap<Metric<Integer>, Double>();
+		result.put(SoftAuditMetrics.MET, 0d);
+		result.put(SoftAuditMetrics.PAR, 0d);
 		double methods = 0;
 		double params = 0;
 		for (JavaFileContent content : contents) {
 			if (content instanceof JavaMethod) {
 				methods++;
 				params += ((JavaMethod) content).getParameters().size();
+			} else if (content instanceof JavaClass) {
+				Map<Metric<Integer>, Double> innerResult = countMethods(content.getContent());
+				result.put(SoftAuditMetrics.MET,
+						result.get(SoftAuditMetrics.MET) + innerResult.get(SoftAuditMetrics.MET));
+				result.put(SoftAuditMetrics.PAR,
+						result.get(SoftAuditMetrics.PAR) + innerResult.get(SoftAuditMetrics.PAR));
 			}
 		}
-		partialResult.put(SoftAuditMetrics.MET, methods);
-		partialResult.put(SoftAuditMetrics.PAR, params);
-		return partialResult;
+		result.put(SoftAuditMetrics.MET, result.get(SoftAuditMetrics.MET) + methods);
+		result.put(SoftAuditMetrics.PAR, result.get(SoftAuditMetrics.PAR) + params);
+		return result;
 	}
 
 	/**

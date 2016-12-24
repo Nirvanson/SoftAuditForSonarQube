@@ -3,17 +3,17 @@ package plugin.model;
 import java.util.List;
 
 public class JavaFileContent {
-	private List<?> content;
+	private List<JavaFileContent> content;
 	
-	public JavaFileContent(List<?> content) {
+	public JavaFileContent(List<JavaFileContent> content) {
 		this.content = content;
 	}
 	
-	public List<?> getContent() {
+	public List<JavaFileContent> getContent() {
 		return this.content;
 	}
 	
-	public void setContent(List<?> content) {
+	public void setContent(List<JavaFileContent> content) {
 		this.content = content;
 	}
 }

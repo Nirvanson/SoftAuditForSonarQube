@@ -12,6 +12,7 @@ import org.junit.Test;
 import plugin.model.JavaClass;
 import plugin.model.JavaFileContent;
 import plugin.model.WordInFile;
+import plugin.model.WordList;
 
 public class JavaFileNormalizerTest {
 
@@ -53,7 +54,7 @@ public class JavaFileNormalizerTest {
 		// method extraction
 		for (JavaFileContent content : contents) {
 			if (content instanceof JavaClass) {
-				content.setContent(normalizer.parseMethods((List<WordInFile>) content.getContent()));
+				content.setContent(normalizer.parseMethods(((WordList) content.getContent().get(0)).getWordlist()));
 			}
 		}
 		assertTrue("no contents recieved by method extraction", !contents.isEmpty());

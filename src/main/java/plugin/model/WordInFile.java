@@ -1,10 +1,11 @@
 package plugin.model;
 
-public class WordInFile {
+public class WordInFile extends JavaFileContent{
 	private final String word;
 	private final KeyWord key;
 	
 	public WordInFile(String word, KeyWord key) {
+		super(null);
 		this.word = word;
 		this.key = key;
 	}
