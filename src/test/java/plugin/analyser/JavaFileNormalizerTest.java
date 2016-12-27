@@ -9,10 +9,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import plugin.model.JavaClass;
-import plugin.model.JavaFileContent;
 import plugin.model.WordInFile;
-import plugin.model.WordList;
 
 public class JavaFileNormalizerTest {
 
@@ -46,18 +43,5 @@ public class JavaFileNormalizerTest {
 		assertTrue("no words recieved by wordlist creation", !words.isEmpty());
 		System.out.println("List of words with length: " + words.size());
 		
-		// basic structure extraction
-		List<JavaFileContent> contents = normalizer.parseClassStructure(words);
-		assertTrue("no contents recieved by method extraction", !contents.isEmpty());
-		System.out.println("Splittet to Contentparts (basic structure): " + contents.size());
-		
-		// method extraction
-		for (JavaFileContent content : contents) {
-			if (content instanceof JavaClass) {
-				content.setContent(normalizer.parseMethodsAndClasses(((WordList) content.getContent().get(0)).getWordlist()));
-			}
-		}
-		assertTrue("no contents recieved by method extraction", !contents.isEmpty());
-		System.out.println("Splittet to Contentparts (methods and Wordlists outside of Methods): " + contents.size());
-    }
+	}
 }

@@ -33,6 +33,8 @@ public class JavaFileAnalyzer {
 	private final Iterable<File> files;
 	private Logger log;
 	private final JavaFileNormalizer normalizer;
+	private final JavaBaseModelBuilder builder;
+	private final JavaModelExpander expander;
 
 	/**
 	 * Analyzer constructor.
@@ -44,6 +46,8 @@ public class JavaFileAnalyzer {
 		super();
 		this.files = files;
 		normalizer = new JavaFileNormalizer();
+		builder = new JavaBaseModelBuilder();
+		expander = new JavaModelExpander();
 		log = Logger.getLogger();
 	}
 
@@ -81,11 +85,11 @@ public class JavaFileAnalyzer {
 			for (Metric<Integer> measure : keyWordMeasures.keySet()) {
 				result.put(measure, result.get(measure) + keyWordMeasures.get(measure));
 			}
-			List<JavaFileContent> contents = normalizer.parseClassStructure(wordList);
+			List<JavaFileContent> contents = builder.parseClassStructure(wordList);
 			log.printModel("class", contents);
 			for (JavaFileContent content : contents) {
 				if (content instanceof JavaClass) {
-					content.setContent(parseClassContent(content.getContent()));
+					content.setContent(parseClassContent(content));
 				}
 			}
 			log.printModel("refined", contents);
@@ -93,7 +97,13 @@ public class JavaFileAnalyzer {
 			log.printMeasures("method", methodMeasures);
 			for (Metric<Integer> measure : methodMeasures.keySet()) {
 				result.put(measure, result.get(measure) + methodMeasures.get(measure));
-			}
+			}/*
+			for (JavaFileContent content : contents) {
+				if (content instanceof JavaClass) {
+					content.setContent(parseStructuralStatements(content.getContent()));
+				}
+			}*/
+			log.printModel("expanded", contents);
 			sourceFiles++;
 		}
 		log.close();
@@ -102,15 +112,44 @@ public class JavaFileAnalyzer {
 		return result;
 	}
 
-	private List<JavaFileContent> parseClassContent(List<JavaFileContent> contentlist) {
+	private List<JavaFileContent> parseStructuralStatements(List<JavaFileContent> contentlist) {
 		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
-		for (JavaFileContent content : contentlist) {
-			if (content instanceof WordList) {
-				for (JavaFileContent classcontent : normalizer.parseMethodsAndClasses(((WordList) content).getWordlist())) {
-					if (classcontent instanceof JavaClass || classcontent instanceof JavaMethod) {
-						classcontent.setContent(parseClassContent(classcontent.getContent()));
-						result.add(classcontent);
-					} else {
+		if (!(contentlist == null)) {
+			for (JavaFileContent content : contentlist) {
+				if (content instanceof JavaMethod) {
+					List<JavaFileContent> newMethodContent = new ArrayList<JavaFileContent>();
+					for (JavaFileContent methodcontent : content.getContent()) {
+						if (methodcontent instanceof JavaClass) {
+							newMethodContent.addAll(parseStructuralStatements(methodcontent.getContent()));
+						} else if (methodcontent instanceof WordList) {
+							newMethodContent.addAll(expander.addStructuralStatements(((WordList) methodcontent).getWordlist()));
+						} 
+					} 
+					content.setContent(newMethodContent);
+				} else if (content instanceof JavaClass) {
+					content.setContent(parseStructuralStatements(content.getContent()));
+				}
+				result.add(content);
+			}
+		}
+		return result;
+	}
+	
+	private List<JavaFileContent> parseClassContent(JavaFileContent parent) {
+		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
+		List<JavaFileContent> contentlist = parent.getContent();
+		KeyWord parenttype = null;
+		if (parent instanceof JavaClass) {
+			parenttype = ((JavaClass) parent).getType();
+		}
+		if (!(contentlist == null)) {
+			for (JavaFileContent content : contentlist) {
+				if (content instanceof WordList) {
+					for (JavaFileContent classcontent : builder
+							.parseMethodsAndClasses(((WordList) content).getWordlist(), parenttype)) {
+						if (classcontent instanceof JavaClass || classcontent instanceof JavaMethod) {
+							classcontent.setContent(parseClassContent(classcontent));
+						}
 						result.add(classcontent);
 					}
 				}

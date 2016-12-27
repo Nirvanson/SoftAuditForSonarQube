@@ -16,6 +16,7 @@ import plugin.model.JavaClass;
 import plugin.model.JavaFileContent;
 import plugin.model.JavaMethod;
 import plugin.model.JavaStatement;
+import plugin.model.JavaVariable;
 import plugin.model.WordInFile;
 import plugin.model.WordList;
 
@@ -39,7 +40,7 @@ public class Logger {
 	private Logger() {
 		loglevel = 2;
 		try {
-			writer = new PrintWriter("D:\\plugin-log.log", "UTF-8");
+			writer = new PrintWriter("C:\\Beleg/plugin-log.log", "UTF-8");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -123,9 +124,11 @@ public class Logger {
 	}
 	
 	public void printModel(String step, List<JavaFileContent> contents) {
+		int levelToLog = 1;
 		switch(step) {
 		case "class":
 			writer.println(STEP_5);
+			levelToLog = 2;
 			break;
 		case "refined":
 			writer.println(STEP_6);
@@ -135,7 +138,7 @@ public class Logger {
 			break;
 		}
 		addTime();
-		if (loglevel > 1) {
+		if (loglevel > levelToLog) {
 			printFileContent(contents, 0);
 		}
 	}
@@ -144,14 +147,36 @@ public class Logger {
 		for (JavaFileContent content : contents) {
 			if (content instanceof JavaClass) {
 				JavaClass theClass = (JavaClass) content;
-				writer.println(addTabs(level) + "Class with name: " + theClass.getName() + " extending: "
-						+ theClass.getExtending() + " implementing: "
-						+ theClass.getImplementing() + " and Body:");
+				String classline = addTabs(level) + theClass.getType() + " with name: " + theClass.getName();
+				if (!theClass.getExtending().isEmpty()) {
+					classline += " extending: " + theClass.getExtending();
+				}
+				if (!theClass.getImplementing().isEmpty()) {
+					classline += " implementing: " + theClass.getImplementing();
+				}
+				classline += " and Body:";
+				writer.println(classline);
 				printFileContent(theClass.getContent(), level+1);
 			} else if (content instanceof JavaMethod) {
 				JavaMethod theMethod = (JavaMethod) content;
-				writer.println(addTabs(level) + "Method with name: " + theMethod.getName()
-						+ " and Parameters: " + theMethod.getParameters());
+				String methodline = addTabs(level) + "Method with name: " + theMethod.getName();
+				if (!theMethod.getReturntype().isEmpty()) {
+					methodline += ", Returntype: ";
+					for (WordInFile returnword : theMethod.getReturntype()) {
+						methodline += returnword + " ";
+					}
+				}
+				if (!theMethod.getParameters().isEmpty()) {
+					methodline += ", Parameters: ";
+					for (JavaVariable param : theMethod.getParameters()) {
+						for (WordInFile returnword : param.getType()) {
+							methodline += returnword + " ";
+						}
+						methodline += " " + param.getName();
+					}
+				}
+				methodline += " and Body:";
+				writer.println(methodline);
 				printFileContent(theMethod.getContent(), level+1);
 			} else if (content instanceof JavaStatement) {
 				JavaStatement statement = (JavaStatement) content;
