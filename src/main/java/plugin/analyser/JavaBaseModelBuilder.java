@@ -42,7 +42,7 @@ public class JavaBaseModelBuilder {
 					packageStatement = false;
 					content.add(word);
 					List<JavaFileContent> statement = new ArrayList<JavaFileContent>();
-					statement.addAll(content);
+					statement.add(new WordList(content));
 					fileModel.add(new JavaStatement(statement, StatementType.PACKAGE));
 					content.clear();
 				} else {
@@ -54,7 +54,7 @@ public class JavaBaseModelBuilder {
 					importStatement = false;
 					content.add(word);
 					List<JavaFileContent> statement = new ArrayList<JavaFileContent>();
-					statement.addAll(content);
+					statement.add(new WordList(content));
 					fileModel.add(new JavaStatement(statement, StatementType.IMPORT));
 					content.clear();
 				} else {
@@ -67,7 +67,7 @@ public class JavaBaseModelBuilder {
 					if (word.equals(KeyWord.ANNOTATION)) {
 						// Annotation placeholder outside of class definition
 						// found. Add as Statement
-						fileModel.add(new JavaStatement(Arrays.asList(word), StatementType.ANNOTATION));
+						fileModel.add(new JavaStatement(Arrays.asList(new WordList(Arrays.asList(word))), StatementType.ANNOTATION));
 					} else if (word.equals(KeyWord.IMPORT)) {
 						// start import
 						importStatement = true;
@@ -393,7 +393,7 @@ public class JavaBaseModelBuilder {
 							result.add(new WordList(somecontent));
 							content.clear();
 						}
-						result.add(new JavaStatement(Arrays.asList(word), StatementType.ANNOTATION));
+						result.add(new JavaStatement(Arrays.asList(new WordList(Arrays.asList(word))), StatementType.ANNOTATION));
 					} else if (word.getKey().getType().equals(WordType.MODIFIER)
 							|| word.getKey().equals(KeyWord.SYNCHRONIZED)) {
 						// add modifier to potential header

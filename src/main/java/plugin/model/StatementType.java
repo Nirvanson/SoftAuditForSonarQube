@@ -6,5 +6,6 @@ public enum StatementType {
 	IMPORT,
 	IF,
 	LOOP,
-	RETURN
+	RETURN,
+	BLOCK
 }

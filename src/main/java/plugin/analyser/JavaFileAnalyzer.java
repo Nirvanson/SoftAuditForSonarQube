@@ -97,12 +97,12 @@ public class JavaFileAnalyzer {
 			log.printMeasures("method", methodMeasures);
 			for (Metric<Integer> measure : methodMeasures.keySet()) {
 				result.put(measure, result.get(measure) + methodMeasures.get(measure));
-			}/*
+			}
 			for (JavaFileContent content : contents) {
 				if (content instanceof JavaClass) {
 					content.setContent(parseStructuralStatements(content.getContent()));
 				}
-			}*/
+			}
 			log.printModel("expanded", contents);
 			sourceFiles++;
 		}

@@ -31,6 +31,7 @@ public class Logger {
 	private final String STEP_5 = "*** Step 5 - Build basic model of the file from wordlist";
 	private final String STEP_6 = "*** Step 6 - Recursivly refine codemodel";
 	private final String STEP_7 = "*** Step 7 - Count methods and parameters in model";
+	private final String STEP_8 = "*** Step 8 - Expand model with structural statements (ifs, loops, ...)";
 	private final String TIME = "*** Finished at TIME";
 	private final String INPUT_ERROR = "Method METHODNAME of Logger recieved invalid input: PARAM";
 	
@@ -132,6 +133,10 @@ public class Logger {
 			break;
 		case "refined":
 			writer.println(STEP_6);
+			levelToLog = 2;
+			break;
+		case "expanded":
+			writer.println(STEP_8);
 			break;
 		default:
 			writer.println(INPUT_ERROR.replace("METHODNAME", "printModel").replace("PARAM", step));
@@ -181,6 +186,7 @@ public class Logger {
 			} else if (content instanceof JavaStatement) {
 				JavaStatement statement = (JavaStatement) content;
 				writer.println(addTabs(level) + "Statement of type: " + statement.getType());
+				printFileContent(statement.getContent(), level+1);
 			} else if (content instanceof WordList){
 				WordList wordlist = (WordList) content;
 				writer.println(addTabs(level) + "Wordlist with length: " + wordlist.getWordlist().size());
