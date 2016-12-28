@@ -1,6 +1,7 @@
 package plugin.model;
 
 public enum StatementType {
+	TRY,
 	ANNOTATION,
 	PACKAGE,
 	IMPORT,

@@ -41,9 +41,9 @@ public class JavaBaseModelBuilder {
 				if (word.equals(KeyWord.SEMICOLON)) {
 					packageStatement = false;
 					content.add(word);
-					List<JavaFileContent> statement = new ArrayList<JavaFileContent>();
-					statement.add(new WordList(content));
-					fileModel.add(new JavaStatement(statement, StatementType.PACKAGE));
+					List<WordInFile> statementcontent = new ArrayList<WordInFile>();
+					statementcontent.addAll(content);
+					fileModel.add(new JavaStatement(Arrays.asList(new WordList(statementcontent)), StatementType.PACKAGE));
 					content.clear();
 				} else {
 					content.add(word);
@@ -53,9 +53,9 @@ public class JavaBaseModelBuilder {
 				if (word.equals(KeyWord.SEMICOLON)) {
 					importStatement = false;
 					content.add(word);
-					List<JavaFileContent> statement = new ArrayList<JavaFileContent>();
-					statement.add(new WordList(content));
-					fileModel.add(new JavaStatement(statement, StatementType.IMPORT));
+					List<WordInFile> statementcontent = new ArrayList<WordInFile>();
+					statementcontent.addAll(content);
+					fileModel.add(new JavaStatement(Arrays.asList(new WordList(statementcontent)), StatementType.IMPORT));
 					content.clear();
 				} else {
 					content.add(word);

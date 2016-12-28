@@ -17,6 +17,7 @@ import plugin.model.JavaFileContent;
 import plugin.model.JavaMethod;
 import plugin.model.JavaStatement;
 import plugin.model.JavaVariable;
+import plugin.model.StatementType;
 import plugin.model.WordInFile;
 import plugin.model.WordList;
 
@@ -186,7 +187,19 @@ public class Logger {
 			} else if (content instanceof JavaStatement) {
 				JavaStatement statement = (JavaStatement) content;
 				writer.println(addTabs(level) + "Statement of type: " + statement.getType());
-				printFileContent(statement.getContent(), level+1);
+				if (statement.getType().equals(StatementType.TRY)) {
+					writer.println(addTabs(level+1) + "With try-block:");
+					printFileContent(statement.getContent(), level+2);
+					writer.println(addTabs(level+1) + "And catch-block:");
+					printFileContent(statement.getElsecontent(), level+2);
+					if (statement.getFinallycontent()!=null) {
+						writer.println(addTabs(level+1) + "And finally-block:");
+						printFileContent(statement.getFinallycontent(), level+2);
+					}
+				} else if (!statement.getType().equals(StatementType.ANNOTATION)) {
+					printFileContent(statement.getContent(), level+1);
+				}
+				
 			} else if (content instanceof WordList){
 				WordList wordlist = (WordList) content;
 				writer.println(addTabs(level) + "Wordlist with length: " + wordlist.getWordlist().size());

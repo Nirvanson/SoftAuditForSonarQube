@@ -38,9 +38,10 @@ public class Application {
 	static class TraumtaenzerWebConfiguration extends SalespointWebConfiguration {
 
 		private void registerSupplierProducts(Supplier<? extends Something> supplier, Product ... products) {
+			try {
 			for (@Configuration Product product : products) {
 				if (supplier.addProvidedProduct(Product.class(){}));
-			}
+			} } catch (Exception e) { arschvariable++;}
 		}
 		
 		/**
@@ -51,7 +52,14 @@ public class Application {
 		 */
 		@Override
 		public void addViewControllers(ViewControllerRegistry registry) {
+			try {
 			registry.addViewController("/login").setViewName("login");
+			} catch (Exception e) {
+				return e;
+			} finally {
+				arschvariable++;
+			}
+			return arschvariable;
 		}
 	}
 
