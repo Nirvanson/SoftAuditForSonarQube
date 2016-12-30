@@ -208,6 +208,14 @@ public class Logger {
 						writer.println(addTabs(level+1) + "And Else-block:");
 						printFileContent(statement.getElsecontent(), level+2);
 					}
+				} else if (statement.getType().equals(StatementType.WHILE)) {
+					String condition = "";
+					for (WordInFile conditionWord : statement.getCondition()) {
+						condition += conditionWord + " ";
+					}
+					writer.println(addTabs(level+1) + "Checking condition: " + condition);
+					writer.println(addTabs(level+1) + "Content:");
+					printFileContent(statement.getContent(), level+2);
 				} else if (statement.getType().equals(StatementType.FOR)) {
 					String condition = "";
 					for (WordInFile conditionWord : statement.getCondition()) {
@@ -228,6 +236,8 @@ public class Logger {
 					}
 					writer.println(addTabs(level+1) + "Content:");
 					printFileContent(statement.getContent(), level+2);
+				} else if (statement.getType().equals(StatementType.IMPORT) || statement.getType().equals(StatementType.PACKAGE) || statement.getType().equals(StatementType.RETURN)) {
+					writer.println(addTabs(level+1) + ((WordList) statement.getContent().get(0)).getWordlist());
 				} else if (!statement.getType().equals(StatementType.ANNOTATION)) {
 					printFileContent(statement.getContent(), level+1);
 				}

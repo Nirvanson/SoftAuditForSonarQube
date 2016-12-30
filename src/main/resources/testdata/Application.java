@@ -40,6 +40,9 @@ public class Application {
 		private void registerSupplierProducts(Supplier<? extends Something> supplier, Product ... products) {
 			try {
 				for (int i=0; i<10; i++) {
+					while (i<5) {
+						i++;
+					}
 					if (supplier.addProvidedProduct(Product.class(){}))
 						for (int j : list) if (j<10) return;
 				}

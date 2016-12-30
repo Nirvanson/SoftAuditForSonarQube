@@ -48,18 +48,16 @@ public class JavaModelExpander {
 					otherContent.add(word);
 				} else if (word.equals(KeyWord.WHILE)) {
 					i = parseWhile(content, result, i);
-					//TODO
-					otherContent.add(word);
 				} else if (word.equals(KeyWord.FOR)) {
 					i = parseFor(content, result, i);
 				} else if (word.equals(KeyWord.IF)) {
 					i = parseIf(content, result, i);
 				} else if (word.equals(KeyWord.TRY)) {
-					i = parseTry(content, result, i+2);
+					i = parseTry(content, result, i);
 				} else if (word.equals(KeyWord.RETURN)) {
 					i = parseReturn(content, result, i);
 				} else if (word.equals(KeyWord.OPENBRACE)) {
-					i = parseAnonymousBlock(content, result, i+1);
+					i = parseAnonymousBlock(content, result, i);
 				} 
 			} else {
 				otherContent.add(word);
@@ -77,6 +75,8 @@ public class JavaModelExpander {
 	}
 
 	private int parseAnonymousBlock(List<WordInFile> content, List<JavaFileContent> result, int i) {
+		// skip "{"
+		i++;
 		// add everything until brace is closed to block
 		int openBraces = 1;
 		List<WordInFile> blockcontent = new ArrayList<WordInFile>();
@@ -109,6 +109,8 @@ public class JavaModelExpander {
 	}
 
 	private int parseTry(List<WordInFile> content, List<JavaFileContent> result, int i) {
+		// skip "try{"
+		i += 2;
 		// add everything until brace is closed to tryblock
 		List<WordInFile> tryblock = new ArrayList<WordInFile>();
 		int openBraces = 1;
@@ -185,12 +187,12 @@ public class JavaModelExpander {
 	}
 
 	private int parseIf(List<WordInFile> content, List<JavaFileContent> result, int i) {
+		// skip "if("
+		i += 2;
 		JavaStatement ifStatement = new JavaStatement(null, StatementType.IF);
 		// parse condition
 		List<WordInFile> condition = new ArrayList<WordInFile>();
 		int openParanthesis = 1;
-		i++;
-		i++;
 		while (openParanthesis>0) {
 			if (content.get(i).equals(KeyWord.CLOSPARANTHESE)) {
 				openParanthesis--;
@@ -308,12 +310,12 @@ public class JavaModelExpander {
 	}
 
 	private int parseFor(List<WordInFile> content, List<JavaFileContent> result, int i) {
+		// skip "for("
+		i += 2;
 		JavaStatement forStatement = new JavaStatement(null, StatementType.FOR);
 		// parse declaration
 		List<WordInFile> declaration = new ArrayList<WordInFile>();
 		int openParanthesis = 1;
-		i++;
-		i++;
 		int state = 0;
 		while (openParanthesis>0) {
 			if (content.get(i).equals(KeyWord.CLOSPARANTHESE)) {
@@ -371,7 +373,6 @@ public class JavaModelExpander {
 				int openBraces = 1;
 				i++;
 				while (openBraces>0) {
-					System.out.println(content.get(i));
 					if (content.get(i).equals(KeyWord.CLOSEBRACE)) {
 						openBraces--;
 					}
@@ -397,8 +398,75 @@ public class JavaModelExpander {
 	}
 
 	private int parseWhile(List<WordInFile> content, List<JavaFileContent> result, int i) {
-		// TODO Auto-generated method stub
-		return i;
+		// skip "while("
+		i += 2;
+		JavaStatement whileStatement = new JavaStatement(null, StatementType.WHILE);
+		// parse condition
+		List<WordInFile> condition = new ArrayList<WordInFile>();
+		int openParanthesis = 1;
+		while (openParanthesis>0) {
+			if (content.get(i).equals(KeyWord.CLOSPARANTHESE)) {
+				openParanthesis--;
+			}
+			if (content.get(i).equals(KeyWord.OPENPARANTHESE)) {
+				openParanthesis++;
+			} 
+			if (openParanthesis!=0) {
+				condition.add(content.get(i));
+			}
+			i++;
+		}
+		whileStatement.setCondition(condition);
+		// parse content
+		List<JavaFileContent> whileContent = new ArrayList<JavaFileContent>();
+		// content is single structural statement - parse directly
+		if (content.get(i).equals(KeyWord.IF)) {
+			i = parseIf(content, whileContent, i) + 1;
+			whileStatement.setContent(whileContent);
+		} else if (content.get(i).equals(KeyWord.TRY)) {
+			i = parseTry(content, whileContent, i) + 1;
+			whileStatement.setContent(whileContent);
+		} else if (content.get(i).equals(KeyWord.SWITCH)) {
+			i = parseSwitch(content, whileContent, i) + 1;
+			whileStatement.setContent(whileContent);
+		} else if (content.get(i).equals(KeyWord.FOR)) {
+			i = parseFor(content, whileContent, i) + 1;
+			whileStatement.setContent(whileContent);
+		} else if (content.get(i).equals(KeyWord.WHILE)) {
+			i = parseWhile(content, whileContent, i) + 1;
+			whileStatement.setContent(whileContent);
+		} else if (content.get(i).equals(KeyWord.DO)) {
+			i = parseIf(content, whileContent, i) + 1;
+			whileStatement.setContent(whileContent);
+		} else {
+			List<WordInFile> whileblock = new ArrayList<WordInFile>();
+			if (content.get(i).equals(KeyWord.OPENBRACE)) {
+				// in braces - parse block
+				int openBraces = 1;
+				i++;
+				while (openBraces>0) {
+					if (content.get(i).equals(KeyWord.CLOSEBRACE)) {
+						openBraces--;
+					}
+					if (content.get(i).equals(KeyWord.OPENBRACE)) {
+						openBraces++;
+					} 
+					if (openBraces!=0) {
+						whileblock.add(content.get(i));
+					}
+					i++;
+				}
+			} else {
+			// single (non structural) statement - parse till next semicolon
+				do {
+					whileblock.add(content.get(i));
+					i++;
+				} while(!content.get(i-1).equals(KeyWord.SEMICOLON));
+			}
+			whileStatement.setContent(addStructuralStatements(whileblock));
+		}
+		result.add(whileStatement);
+		return i-1;
 	}
 
 	private int parseDoWhile(List<WordInFile> content, List<JavaFileContent> result, int i) {
