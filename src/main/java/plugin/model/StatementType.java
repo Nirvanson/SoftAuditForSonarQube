@@ -6,7 +6,8 @@ public enum StatementType {
 	PACKAGE,
 	IMPORT,
 	IF,
-	LOOP,
+	FOR,
+	WHILE,
 	RETURN,
 	BLOCK
 }

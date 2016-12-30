@@ -33,15 +33,17 @@ public class Application {
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
-
+ 
 	@Configuration
 	static class TraumtaenzerWebConfiguration extends SalespointWebConfiguration {
 
 		private void registerSupplierProducts(Supplier<? extends Something> supplier, Product ... products) {
 			try {
-			for (@Configuration Product product : products) {
-				if (supplier.addProvidedProduct(Product.class(){}));
-			} } catch (Exception e) { arschvariable++;}
+				for (int i=0; i<10; i++) {
+					if (supplier.addProvidedProduct(Product.class(){}))
+						for (int j : list) if (j<10) return;
+				}
+			} catch (Exception e) { arschvariable++;}
 		}
 		
 		/**

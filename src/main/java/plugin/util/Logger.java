@@ -196,6 +196,38 @@ public class Logger {
 						writer.println(addTabs(level+1) + "And finally-block:");
 						printFileContent(statement.getFinallycontent(), level+2);
 					}
+				} else if (statement.getType().equals(StatementType.IF)) {
+					String condition = "";
+					for (WordInFile conditionWord : statement.getCondition()) {
+						condition += conditionWord + " ";
+					}
+					writer.println(addTabs(level+1) + "Checking condition: " + condition);
+					writer.println(addTabs(level+1) + "With If-block:");
+					printFileContent(statement.getContent(), level+2);
+					if (statement.getElsecontent()!=null) {
+						writer.println(addTabs(level+1) + "And Else-block:");
+						printFileContent(statement.getElsecontent(), level+2);
+					}
+				} else if (statement.getType().equals(StatementType.FOR)) {
+					String condition = "";
+					for (WordInFile conditionWord : statement.getCondition()) {
+						condition += conditionWord + " ";
+					}
+					if (statement.getInitialization()!=null) {
+						String init = "";
+						for (WordInFile conditionWord : statement.getInitialization()) {
+							init += conditionWord + " ";
+						}
+						String inc = "";
+						for (WordInFile conditionWord : statement.getIncrement()) {
+							inc += conditionWord + " ";
+						}
+						writer.println(addTabs(level+1) + "With initialization: " + init + "termination: " + condition + "and increment: " + inc);
+					} else {
+						writer.println(addTabs(level+1) + "Enhanced version scanning: " + condition);
+					}
+					writer.println(addTabs(level+1) + "Content:");
+					printFileContent(statement.getContent(), level+2);
 				} else if (!statement.getType().equals(StatementType.ANNOTATION)) {
 					printFileContent(statement.getContent(), level+1);
 				}
