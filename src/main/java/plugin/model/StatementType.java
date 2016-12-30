@@ -9,5 +9,7 @@ public enum StatementType {
 	FOR,
 	WHILE,
 	RETURN,
-	BLOCK
+	BLOCK,
+	SWITCH,
+	CASE
 }

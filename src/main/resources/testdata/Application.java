@@ -38,15 +38,32 @@ public class Application {
 	static class TraumtaenzerWebConfiguration extends SalespointWebConfiguration {
 
 		private void registerSupplierProducts(Supplier<? extends Something> supplier, Product ... products) {
-			try {
-				for (int i=0; i<10; i++) {
-					while (i<5) {
-						i++;
+			int xxx = 1;
+			switch(x) {
+			case (1):
+				try {
+					for (int i=0; i<10; i++) {
+						do i++; while (i<5);
+						if (supplier.addProvidedProduct(Product.class(){}))
+							for (int j : list) if (j<10) return;
 					}
-					if (supplier.addProvidedProduct(Product.class(){}))
-						for (int j : list) if (j<10) return;
+				} catch (Exception e) { arschvariable++;}
+				break;
+			case 2: {
+				arschvariable++;
+			}
+			case 3:
+				int yyy = 3;
+				switch (yyy) {
+				case 0:
+					return;
+				default:
+					xxx++;
 				}
-			} catch (Exception e) { arschvariable++;}
+			default: return;
+			}
+			
+			
 		}
 		
 		/**

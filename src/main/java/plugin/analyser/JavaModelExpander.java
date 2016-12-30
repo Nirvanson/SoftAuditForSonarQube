@@ -14,20 +14,9 @@ import plugin.model.WordList;
 public class JavaModelExpander {
 
 	public List<JavaFileContent> addStructuralStatements(List<WordInFile> content) {
-		/*int i=0;
-		List<Integer> intlist = new ArrayList<Integer>();
-		switch(value) {case 1: ... break; default: ... break;}
-		{ }
-		do {i++;} while (i<0);
-		while (i<0) {i++;}
-		for (@Something int j=0; j<i; j++)
-			{i++;}
-		for (@Something Integer k : intlist) {k++;}
-		if (i==0) i++; else if (i>9) {i--;}
-		try {xyz();} catch (@Something Exception e) {i--;} finally {i++;}*/
 		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
 		List<WordInFile> otherContent = new ArrayList<WordInFile>();
-		List<KeyWord> keywords = Arrays.asList(KeyWord.DO, KeyWord.WHILE, KeyWord.FOR, KeyWord.IF, KeyWord.TRY, KeyWord.RETURN, KeyWord.OPENBRACE);
+		List<KeyWord> keywords = Arrays.asList(KeyWord.SWITCH, KeyWord.DO, KeyWord.WHILE, KeyWord.FOR, KeyWord.IF, KeyWord.TRY, KeyWord.RETURN, KeyWord.OPENBRACE);
 		
 		for (int i=0; i<content.size(); i++) {
 			WordInFile word = content.get(i);
@@ -40,12 +29,8 @@ public class JavaModelExpander {
 				}
 				if (word.equals(KeyWord.SWITCH)) {
 					i = parseSwitch(content, result, i);
-					//TODO
-					otherContent.add(word);
 				} else if (word.equals(KeyWord.DO)) {
 					i = parseDoWhile(content, result, i);
-					//TODO
-					otherContent.add(word);
 				} else if (word.equals(KeyWord.WHILE)) {
 					i = parseWhile(content, result, i);
 				} else if (word.equals(KeyWord.FOR)) {
@@ -70,8 +55,87 @@ public class JavaModelExpander {
 	}
 	
 	private int parseSwitch(List<WordInFile> content, List<JavaFileContent> result, int i) {
-		// TODO Auto-generated method stub
-		return 0;
+		// skip "switch("
+		i += 2;
+		JavaStatement switchStatement = new JavaStatement(null, StatementType.SWITCH);
+		// parse switchvalue as condition
+		List<WordInFile> condition = new ArrayList<WordInFile>();
+		int openParanthesis = 1;
+		while (openParanthesis>0) {
+			if (content.get(i).equals(KeyWord.CLOSPARANTHESE)) {
+				openParanthesis--;
+			}
+			if (content.get(i).equals(KeyWord.OPENPARANTHESE)) {
+				openParanthesis++;
+			} 
+			if (openParanthesis!=0) {
+				condition.add(content.get(i));
+			}
+			i++;
+		}
+		switchStatement.setCondition(condition);
+		// skip "{"
+		i++;
+		// parse content
+		List<JavaFileContent> switchContent = new ArrayList<JavaFileContent>();
+		int openBraces = 1;
+		List<WordInFile> casecontent = new ArrayList<WordInFile>();
+		List<WordInFile> casecondition = new ArrayList<WordInFile>();
+		JavaStatement currentCase = new JavaStatement(null, StatementType.CASE);
+		if (content.get(i).equals(KeyWord.CLOSEBRACE)) {
+			openBraces--;
+		} else if (content.get(i).equals(KeyWord.OPENBRACE)) {
+			openBraces++;
+		}
+		while (openBraces>0) {
+			// accept only cases in switch braces, to avoid to detect cases of inner switches...
+			while (openBraces==1 && (content.get(i).equals(KeyWord.CASE) || content.get(i).equals(KeyWord.DEFAULT))) {
+				if (!casecontent.isEmpty()) {
+					// add previous case to switch
+					List<WordInFile> onecase = new ArrayList<WordInFile>();
+					onecase.addAll(casecontent);
+					casecontent.clear();
+					currentCase.setContent(addStructuralStatements(onecase));
+					switchContent.add(currentCase);
+					currentCase = new JavaStatement(null, StatementType.CASE);
+				}
+				// skip "case" or "default"
+				i++;
+				// parse case value and set as condition
+				while (!content.get(i).equals(KeyWord.DOUBLEDOT)) {
+					casecondition.add(content.get(i));
+					i++;
+				}
+				if (casecondition.isEmpty()) {
+					// add "default" if no casecondition found
+					casecondition.add(content.get(i-1));
+				}
+				List<WordInFile> onecondition = new ArrayList<WordInFile>();
+				onecondition.addAll(casecondition);
+				casecondition.clear();
+				currentCase.setCondition(onecondition);
+				// skip ":"
+				i++;
+			}
+			if (content.get(i).equals(KeyWord.CLOSEBRACE)) {
+				openBraces--;
+			} else if (content.get(i).equals(KeyWord.OPENBRACE)) {
+				openBraces++;
+			}
+			if (openBraces>0) {
+				casecontent.add(content.get(i));
+			}
+			i++;
+		}
+		// finish switch, add last case to switch
+		List<WordInFile> onecase = new ArrayList<WordInFile>();
+		onecase.addAll(casecontent);
+		casecontent.clear();
+		currentCase.setContent(addStructuralStatements(onecase));
+		switchContent.add(currentCase);
+		switchStatement.setContent(switchContent);
+		result.add(switchStatement);
+		return i;
 	}
 
 	private int parseAnonymousBlock(List<WordInFile> content, List<JavaFileContent> result, int i) {
@@ -470,7 +534,76 @@ public class JavaModelExpander {
 	}
 
 	private int parseDoWhile(List<WordInFile> content, List<JavaFileContent> result, int i) {
-		// TODO Auto-generated method stub
+		// skip "do"
+		i++;
+		JavaStatement whileStatement = new JavaStatement(null, StatementType.WHILE);
+		// parse content
+		List<JavaFileContent> whileContent = new ArrayList<JavaFileContent>();
+		// content is single structural statement - parse directly
+		if (content.get(i).equals(KeyWord.IF)) {
+			i = parseIf(content, whileContent, i) + 1;
+			whileStatement.setContent(whileContent);
+		} else if (content.get(i).equals(KeyWord.TRY)) {
+			i = parseTry(content, whileContent, i) + 1;
+			whileStatement.setContent(whileContent);
+		} else if (content.get(i).equals(KeyWord.SWITCH)) {
+			i = parseSwitch(content, whileContent, i) + 1;
+			whileStatement.setContent(whileContent);
+		} else if (content.get(i).equals(KeyWord.FOR)) {
+			i = parseFor(content, whileContent, i) + 1;
+			whileStatement.setContent(whileContent);
+		} else if (content.get(i).equals(KeyWord.WHILE)) {
+			i = parseWhile(content, whileContent, i) + 1;
+			whileStatement.setContent(whileContent);
+		} else if (content.get(i).equals(KeyWord.DO)) {
+			i = parseIf(content, whileContent, i) + 1;
+			whileStatement.setContent(whileContent);
+		} else {
+			List<WordInFile> whileblock = new ArrayList<WordInFile>();
+			if (content.get(i).equals(KeyWord.OPENBRACE)) {
+				// in braces - parse block
+				int openBraces = 1;
+				i++;
+				while (openBraces>0) {
+					if (content.get(i).equals(KeyWord.CLOSEBRACE)) {
+						openBraces--;
+					}
+					if (content.get(i).equals(KeyWord.OPENBRACE)) {
+						openBraces++;
+					} 
+					if (openBraces!=0) {
+						whileblock.add(content.get(i));
+					}
+					i++;
+				}
+			} else {
+				// single (non structural) statement - parse till next semicolon
+				do {
+					whileblock.add(content.get(i));
+					i++;
+				} while(!content.get(i-1).equals(KeyWord.SEMICOLON));
+			}
+			whileStatement.setContent(addStructuralStatements(whileblock));
+		}
+		// skip "while("
+		i += 2;
+		// parse condition
+		List<WordInFile> condition = new ArrayList<WordInFile>();
+		int openParanthesis = 1;
+		while (openParanthesis>0) {
+			if (content.get(i).equals(KeyWord.CLOSPARANTHESE)) {
+				openParanthesis--;
+			}
+			if (content.get(i).equals(KeyWord.OPENPARANTHESE)) {
+				openParanthesis++;
+			} 
+			if (openParanthesis!=0) {
+				condition.add(content.get(i));
+			}
+			i++;
+		}
+		whileStatement.setCondition(condition);
+		result.add(whileStatement);
 		return i;
 	}
 }

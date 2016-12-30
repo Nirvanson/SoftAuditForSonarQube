@@ -4,7 +4,8 @@ import java.util.List;
 
 public class JavaStatement extends JavaFileContent {
 	
-	// content of JavaFileContent is the block inside ifs, fors, whiles, trys, and blocks
+	// content of JavaFileContent is the block inside ifs, fors, whiles, trys, cases, and blocks
+	// the list of cases in switches
 	// or the statement itself in one-line statements (import-, package-, return-statements, ...)
 	
 	// Statementtype like return, import, if, ...
