@@ -82,6 +82,7 @@ public class JavaModelExpander {
 		List<WordInFile> casecontent = new ArrayList<WordInFile>();
 		List<WordInFile> casecondition = new ArrayList<WordInFile>();
 		JavaStatement currentCase = new JavaStatement(null, StatementType.CASE);
+		currentCase.setCondition(new ArrayList<WordInFile>());
 		if (content.get(i).equals(KeyWord.CLOSEBRACE)) {
 			openBraces--;
 		} else if (content.get(i).equals(KeyWord.OPENBRACE)) {
@@ -93,14 +94,35 @@ public class JavaModelExpander {
 				if (!casecontent.isEmpty()) {
 					// add previous case to switch
 					List<WordInFile> onecase = new ArrayList<WordInFile>();
-					onecase.addAll(casecontent);
+					onecase.addAll(casecontent); 
 					casecontent.clear();
 					currentCase.setContent(addStructuralStatements(onecase));
+					// remove last comma
+					currentCase.getCondition().remove(currentCase.getCondition().size()-1);
 					switchContent.add(currentCase);
 					currentCase = new JavaStatement(null, StatementType.CASE);
+					currentCase.setCondition(new ArrayList<WordInFile>());
 				}
 				// skip "case" or "default"
 				i++;
+				// ignore parantheses around value and parse it
+				if (content.get(i).equals(KeyWord.OPENPARANTHESE)) {
+					openParanthesis = 1;
+					//skip "("
+					i++;
+					while (openParanthesis>0) {
+						if (content.get(i).equals(KeyWord.CLOSPARANTHESE)) {
+							openParanthesis--;
+						}
+						if (content.get(i).equals(KeyWord.OPENPARANTHESE)) {
+							openParanthesis++;
+						} 
+						if (openParanthesis!=0) {
+							casecondition.add(content.get(i));
+						}
+						i++;
+					}
+				}
 				// parse case value and set as condition
 				while (!content.get(i).equals(KeyWord.DOUBLEDOT)) {
 					casecondition.add(content.get(i));
@@ -110,13 +132,13 @@ public class JavaModelExpander {
 					// add "default" if no casecondition found
 					casecondition.add(content.get(i-1));
 				}
-				List<WordInFile> onecondition = new ArrayList<WordInFile>();
-				onecondition.addAll(casecondition);
+				currentCase.getCondition().addAll(casecondition);
+				currentCase.getCondition().add(new WordInFile(null, KeyWord.COMMA));
 				casecondition.clear();
-				currentCase.setCondition(onecondition);
 				// skip ":"
 				i++;
 			}
+			// check ending of switch or inner braces
 			if (content.get(i).equals(KeyWord.CLOSEBRACE)) {
 				openBraces--;
 			} else if (content.get(i).equals(KeyWord.OPENBRACE)) {
@@ -132,6 +154,8 @@ public class JavaModelExpander {
 		onecase.addAll(casecontent);
 		casecontent.clear();
 		currentCase.setContent(addStructuralStatements(onecase));
+		// remove last comma
+		currentCase.getCondition().remove(currentCase.getCondition().size()-1);
 		switchContent.add(currentCase);
 		switchStatement.setContent(switchContent);
 		result.add(switchStatement);
