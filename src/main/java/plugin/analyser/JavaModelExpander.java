@@ -16,8 +16,8 @@ public class JavaModelExpander {
 	public List<JavaFileContent> addStructuralStatements(List<WordInFile> content) {
 		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
 		List<WordInFile> otherContent = new ArrayList<WordInFile>();
-		List<KeyWord> keywords = Arrays.asList(KeyWord.SWITCH, KeyWord.DO, KeyWord.WHILE, KeyWord.FOR, KeyWord.IF, KeyWord.TRY, KeyWord.RETURN, KeyWord.OPENBRACE);
-		
+		List<KeyWord> keywords = Arrays.asList(KeyWord.SWITCH, KeyWord.DO, KeyWord.WHILE, 
+				KeyWord.FOR, KeyWord.IF, KeyWord.TRY, KeyWord.RETURN);
 		for (int i=0; i<content.size(); i++) {
 			WordInFile word = content.get(i);
 			if (keywords.contains(word)){
@@ -41,10 +41,18 @@ public class JavaModelExpander {
 					i = parseTry(content, result, i);
 				} else if (word.equals(KeyWord.RETURN)) {
 					i = parseReturn(content, result, i);
-				} else if (word.equals(KeyWord.OPENBRACE)) {
-					i = parseAnonymousBlock(content, result, i);
 				} 
 			} else {
+				if (word.equals(KeyWord.OPENBRACE) && !content.get(i-1).equals(KeyWord.CLOSEBRACKET)) {
+					if (!otherContent.isEmpty()){
+						List<WordInFile> wordlist = new ArrayList<WordInFile>();
+						wordlist.addAll(otherContent);
+						otherContent.clear();
+						result.add(new WordList(wordlist));
+					} else {
+						i = parseAnonymousBlock(content, result, i);
+					}
+				} 
 				otherContent.add(word);
 			}
 		}

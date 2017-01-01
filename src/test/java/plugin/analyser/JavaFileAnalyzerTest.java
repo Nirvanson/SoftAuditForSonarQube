@@ -6,14 +6,14 @@ import java.util.Arrays;
 import org.junit.Test;
 
 public class JavaFileAnalyzerTest {
-
+	
     public JavaFileAnalyzerTest() {
         super();
     }
 
     @Test
     public void testFileNormalization() {
-    	File input = new File(getClass().getResource("/testdata/Application.java").getPath());
+    	File input = new File(getClass().getResource("/testdata/TraumtaenzerDataInitializer.java").getPath());
     	JavaFileAnalyzer analyzer = new JavaFileAnalyzer(Arrays.asList(input));
     	
     	// do analyze, check logfile manually

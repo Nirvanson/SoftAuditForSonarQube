@@ -10,7 +10,7 @@ public class JavaStatement extends JavaFileContent {
 	
 	// Statementtype like return, import, if, ...
 	private final StatementType type;
-	// condition in while and if, termination in for, declaration in enhanced for
+	// condition in while and if, termination in for, declaration in enhanced for, switchvariable in switch and value of switchvariable in case
 	private List<WordInFile> condition;
 	// in for loop
 	private List<WordInFile> initialization;

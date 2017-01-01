@@ -2,12 +2,14 @@ package plugin.analyser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import plugin.model.JavaClass;
 import plugin.model.JavaFileContent;
 import plugin.model.JavaMethod;
 import plugin.model.JavaStatement;
+import plugin.model.JavaStatementWithAnonymousClass;
 import plugin.model.JavaVariable;
 import plugin.model.KeyWord;
 import plugin.model.StatementType;
@@ -421,6 +423,125 @@ public class JavaBaseModelBuilder {
 									new ArrayList<WordInFile>(), new ArrayList<String>(), new ArrayList<String>());
 						}
 						i++;
+					} else if (word.getKey().equals(KeyWord.NEW)) {
+						// no method or class header, maybe statement with anonymous class
+						maybeMethodName = null;
+						maybeReturnType.clear();
+						modifiers.clear();
+						methodDetectionState = 0;
+						content.addAll(temporary);
+						temporary.clear();
+						int start = i;
+						List<WordInFile> anonymousClassType = new ArrayList<WordInFile>();
+						i++;
+						if (wordlist.get(i).getKey().equals(KeyWord.WORD)) {
+							// detect type of anonymous class. can't be something else than a word...
+							anonymousClassType.add(wordlist.get(i));
+							if (wordlist.get(i + 1).getKey().equals(KeyWord.LESS)) {
+								// type is some generic stuff like
+								// List<String>
+								i++;
+								int endOfGeneric = parseGeneric(wordlist, i + 1);
+								while (i < endOfGeneric) {
+									anonymousClassType.add(wordlist.get(i));
+									i++;
+								}
+								anonymousClassType.add(wordlist.get(i));
+								i++;
+							}
+							if (wordlist.get(i).getKey().equals(KeyWord.OPENPARANTHESE)) {
+								int openParantheses = 1;
+								anonymousClassType.add(wordlist.get(i));
+								while (openParantheses>0) {
+									i++;
+									if (wordlist.get(i).getKey().equals(KeyWord.OPENPARANTHESE)) {
+										openParantheses++;
+									} else if (wordlist.get(i).getKey().equals(KeyWord.CLOSPARANTHESE)) {
+										openParantheses--;
+									}
+									anonymousClassType.add(wordlist.get(i));
+								}
+								i++;
+								if (wordlist.get(i).getKey().equals(KeyWord.OPENBRACE)) {
+									// anonymous class in statement found....
+									int openBracesOfClass = 1;
+									List<WordInFile> statementbefore = new ArrayList<WordInFile>();
+									boolean finished = false;
+									int position = content.size() - 1;
+									int openParanthesesInStatement = 0;
+									while (!finished && position >=0) {
+										if (content.get(position).equals(KeyWord.OPENBRACE) || 
+												content.get(position).equals(KeyWord.CLOSEBRACE) ||
+												content.get(position).equals(KeyWord.SEMICOLON)) {
+											finished = true;
+										} else {
+											if (content.get(position).equals(KeyWord.OPENPARANTHESE)) {
+												openParanthesesInStatement++;
+											} else if (content.get(position).equals(KeyWord.CLOSPARANTHESE)) {
+												openParanthesesInStatement--;
+											}
+											statementbefore.add(content.get(position));
+											content.remove(position);
+											position--;
+										}
+									}
+									Collections.reverse(statementbefore);
+									if (!content.isEmpty()) {
+										List<WordInFile> somecontent = new ArrayList<WordInFile>();
+										somecontent.addAll(content);
+										result.add(new WordList(somecontent));
+										content.clear();
+									}
+									JavaStatementWithAnonymousClass anoclass = new JavaStatementWithAnonymousClass(statementbefore, anonymousClassType);
+									List<WordInFile> classBody = new ArrayList<WordInFile>();
+									while (openBracesOfClass>0) {
+										i++;
+										if (wordlist.get(i).getKey().equals(KeyWord.OPENBRACE)) {
+											openBracesOfClass++;
+										} else if (wordlist.get(i).getKey().equals(KeyWord.CLOSEBRACE)) {
+											openBracesOfClass--;
+										}
+										if (openBracesOfClass>0) {
+											classBody.add(wordlist.get(i));
+										}
+									}
+									anoclass.setContent(Arrays.asList(new WordList(classBody)));
+									finished = false;
+									List<WordInFile> statementafter = new ArrayList<WordInFile>();
+									while (!finished && i<wordlist.size()) {
+										i++;
+										if (openParanthesesInStatement>0) {
+											if (wordlist.get(i).equals(KeyWord.OPENPARANTHESE)) {
+												openParanthesesInStatement++;
+											} else if (wordlist.get(i).equals(KeyWord.CLOSPARANTHESE)) {
+												openParanthesesInStatement--;
+											}
+										} else {
+											if (wordlist.get(i).equals(KeyWord.OPENPARANTHESE)) {
+												openParanthesesInStatement++;
+											} else if (wordlist.get(i).equals(KeyWord.SEMICOLON)) {
+												finished = true;
+											}
+										}
+										statementafter.add(wordlist.get(i));
+									}
+									anoclass.setStatementAfterClass(statementafter);
+									result.add(anoclass);
+								} else {
+									//no anonymous class
+									i = start;
+									content.add(word);
+								}
+							} else {
+								//no anonymous class
+								i = start;
+								content.add(word);
+							}
+						} else {
+							//no anonymous class
+							i = start;
+							content.add(word);
+						}
 					} else if ((parenttype != null) && (word.getKey().equals(KeyWord.WORD)
 							|| word.getKey().getType().equals(WordType.DATATYPE))) {
 						// add potential returntype to potential header
@@ -788,7 +909,7 @@ public class JavaBaseModelBuilder {
 	 *            - wordlist beginning from first word after "<"
 	 * @param position
 	 *            - the current position in isParameter method
-	 * @return position after ">" or 0 if invalid
+	 * @return position of last ">" or 0 if invalid
 	 */
 	private int parseGeneric(List<WordInFile> words, int position) {
 		if (words.get(position).getKey().equals(KeyWord.WORD)

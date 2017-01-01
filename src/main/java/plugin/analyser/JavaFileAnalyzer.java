@@ -14,6 +14,7 @@ import plugin.SoftAuditMetrics;
 import plugin.model.JavaClass;
 import plugin.model.JavaFileContent;
 import plugin.model.JavaMethod;
+import plugin.model.JavaStatementWithAnonymousClass;
 import plugin.model.WordInFile;
 import plugin.model.WordList;
 import plugin.util.Logger;
@@ -98,11 +99,13 @@ public class JavaFileAnalyzer {
 			for (Metric<Integer> measure : methodMeasures.keySet()) {
 				result.put(measure, result.get(measure) + methodMeasures.get(measure));
 			}
+			System.out.println(((WordList) contents.get(contents.size()-1).getContent().get(8).getContent().get(0)).getWordlist());
 			for (JavaFileContent content : contents) {
 				if (content instanceof JavaClass) {
 					content.setContent(parseStructuralStatements(content.getContent()));
 				}
 			}
+			//System.out.println(contents.get(contents.size()-1).getContent().get(3).getContent());
 			log.printModel("expanded", contents);
 			sourceFiles++;
 		}
@@ -116,17 +119,19 @@ public class JavaFileAnalyzer {
 		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
 		if (!(contentlist == null)) {
 			for (JavaFileContent content : contentlist) {
-				if (content instanceof JavaMethod) {
+				if (content instanceof JavaMethod ) {
 					List<JavaFileContent> newMethodContent = new ArrayList<JavaFileContent>();
 					for (JavaFileContent methodcontent : content.getContent()) {
-						if (methodcontent instanceof JavaClass) {
-							newMethodContent.addAll(parseStructuralStatements(methodcontent.getContent()));
+						if (methodcontent instanceof JavaClass || methodcontent instanceof JavaStatementWithAnonymousClass) {
+							methodcontent.setContent(parseStructuralStatements(methodcontent.getContent()));
+							newMethodContent.add(methodcontent);
+							System.out.println("class found");
 						} else if (methodcontent instanceof WordList) {
 							newMethodContent.addAll(expander.addStructuralStatements(((WordList) methodcontent).getWordlist()));
 						} 
 					} 
 					content.setContent(newMethodContent);
-				} else if (content instanceof JavaClass) {
+				} else if (content instanceof JavaClass || content instanceof JavaStatementWithAnonymousClass) {
 					content.setContent(parseStructuralStatements(content.getContent()));
 				}
 				result.add(content);
@@ -141,13 +146,15 @@ public class JavaFileAnalyzer {
 		KeyWord parenttype = null;
 		if (parent instanceof JavaClass) {
 			parenttype = ((JavaClass) parent).getType();
+		} else if (parent instanceof JavaStatementWithAnonymousClass) {
+			parenttype = KeyWord.CLASS;
 		}
 		if (!(contentlist == null)) {
 			for (JavaFileContent content : contentlist) {
 				if (content instanceof WordList) {
 					for (JavaFileContent classcontent : builder
 							.parseMethodsAndClasses(((WordList) content).getWordlist(), parenttype)) {
-						if (classcontent instanceof JavaClass || classcontent instanceof JavaMethod) {
+						if (classcontent instanceof JavaClass || classcontent instanceof JavaMethod || classcontent instanceof JavaStatementWithAnonymousClass) {
 							classcontent.setContent(parseClassContent(classcontent));
 						}
 						result.add(classcontent);

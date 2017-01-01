@@ -16,6 +16,7 @@ import plugin.model.JavaClass;
 import plugin.model.JavaFileContent;
 import plugin.model.JavaMethod;
 import plugin.model.JavaStatement;
+import plugin.model.JavaStatementWithAnonymousClass;
 import plugin.model.JavaVariable;
 import plugin.model.StatementType;
 import plugin.model.WordInFile;
@@ -186,35 +187,60 @@ public class Logger {
 				printFileContent(theMethod.getContent(), level+1);
 			} else if (content instanceof JavaStatement) {
 				JavaStatement statement = (JavaStatement) content;
-				writer.println(addTabs(level) + "Statement of type: " + statement.getType());
-				if (statement.getType().equals(StatementType.TRY)) {
-					writer.println(addTabs(level+1) + "With try-block:");
-					printFileContent(statement.getContent(), level+2);
-					writer.println(addTabs(level+1) + "And catch-block:");
-					printFileContent(statement.getElsecontent(), level+2);
+				String header = addTabs(level) + statement.getType() + "-Statement ";
+				if (statement.getType().equals(StatementType.SWITCH)) {
+					String condition = "";
+					for (WordInFile conditionWord : statement.getCondition()) {
+						condition += conditionWord + " ";
+					}
+					header += "over value of : (" + condition + ") and cases:";
+					writer.println(header);
+					printFileContent(statement.getContent(), level+1);
+				} else if (statement.getType().equals(StatementType.CASE)) {
+					String condition = "";
+					for (WordInFile conditionWord : statement.getCondition()) {
+						condition += conditionWord + " ";
+					}
+					header += "for case: (" + condition + ") and content:";
+					writer.println(header);
+					printFileContent(statement.getContent(), level+1);
+				} else if (statement.getType().equals(StatementType.BLOCK)) {
+					header += "(anonymous block):";
+					writer.println(header);
+					printFileContent(statement.getContent(), level+1);
+				} else if (statement.getType().equals(StatementType.TRY)) {
+					header += "with try-block:";
+					writer.println(header);
+					printFileContent(statement.getContent(), level+1);
+					String condition = "";
+					for (WordInFile conditionWord : statement.getCondition()) {
+						condition += conditionWord + " ";
+					}
+					writer.println(addTabs(level) + "Catching (" + condition + ") And catch-block:");
+					printFileContent(statement.getElsecontent(), level+1);
 					if (statement.getFinallycontent()!=null) {
-						writer.println(addTabs(level+1) + "And finally-block:");
-						printFileContent(statement.getFinallycontent(), level+2);
+						writer.println(addTabs(level) + "And finally-block:");
+						printFileContent(statement.getFinallycontent(), level+1);
 					}
 				} else if (statement.getType().equals(StatementType.IF)) {
 					String condition = "";
 					for (WordInFile conditionWord : statement.getCondition()) {
 						condition += conditionWord + " ";
 					}
-					writer.println(addTabs(level+1) + "Checking condition: " + condition);
-					writer.println(addTabs(level+1) + "With If-block:");
-					printFileContent(statement.getContent(), level+2);
+					header += "Checking condition: (" + condition + ") with if-block:";
+					writer.println(header);
+					printFileContent(statement.getContent(), level+1);
 					if (statement.getElsecontent()!=null) {
-						writer.println(addTabs(level+1) + "And Else-block:");
-						printFileContent(statement.getElsecontent(), level+2);
+						writer.println(addTabs(level) + "And else-block:");
+						printFileContent(statement.getElsecontent(), level+1);
 					}
 				} else if (statement.getType().equals(StatementType.WHILE)) {
 					String condition = "";
 					for (WordInFile conditionWord : statement.getCondition()) {
 						condition += conditionWord + " ";
 					}
-					writer.println(addTabs(level+1) + "Checking condition: " + condition);
-					writer.println(addTabs(level+1) + "Content:");
+					header += "Checking condition: (" + condition + ") with content:";
+					writer.println(header);
 					printFileContent(statement.getContent(), level+2);
 				} else if (statement.getType().equals(StatementType.FOR)) {
 					String condition = "";
@@ -230,22 +256,34 @@ public class Logger {
 						for (WordInFile conditionWord : statement.getIncrement()) {
 							inc += conditionWord + " ";
 						}
-						writer.println(addTabs(level+1) + "With initialization: " + init + "termination: " + condition + "and increment: " + inc);
+						header += "With initialization: (" + init + ") termination: (" + condition + ") increment: (" + inc + ") and content:";
 					} else {
-						writer.println(addTabs(level+1) + "Enhanced version scanning: " + condition);
+						header += "Enhanced version scanning: (" + condition + ") with content:";
 					}
-					writer.println(addTabs(level+1) + "Content:");
-					printFileContent(statement.getContent(), level+2);
-				} else if (statement.getType().equals(StatementType.IMPORT) || statement.getType().equals(StatementType.PACKAGE) || statement.getType().equals(StatementType.RETURN)) {
-					writer.println(addTabs(level+1) + ((WordList) statement.getContent().get(0)).getWordlist());
-				} else if (!statement.getType().equals(StatementType.ANNOTATION)) {
+					writer.println(header);
 					printFileContent(statement.getContent(), level+1);
+				} else if (statement.getType().equals(StatementType.IMPORT) || statement.getType().equals(StatementType.PACKAGE) || statement.getType().equals(StatementType.RETURN)) {
+					writer.println(header + ":" + ((WordList) statement.getContent().get(0)).getWordlist());
+				} else {
+					writer.println(header);
 				}
-				
+			} else if (content instanceof JavaStatementWithAnonymousClass) {
+				JavaStatementWithAnonymousClass theClass = (JavaStatementWithAnonymousClass) content;
+				String classline = addTabs(level) + "Statement with anonymous class: '";
+				for (WordInFile word : theClass.getStatementBeforeClass()) {
+					classline += word + " ";
+				}
+				classline += "' of Type: " + theClass.getClassType() + " with content: ";
+				writer.println(classline);
+				printFileContent(theClass.getContent(), level+1);
+				classline = addTabs(level) + "Ending with: ";
+				for (WordInFile word : theClass.getStatementAfterClass()) {
+					classline += word + " ";
+				}
+				writer.println(classline);
 			} else if (content instanceof WordList){
 				WordList wordlist = (WordList) content;
-				writer.println(addTabs(level) + "Wordlist with length: " + wordlist.getWordlist().size());
-				writer.println(addTabs(level) + wordlist.getWordlist());
+				writer.println(addTabs(level) + "Wordlist with length: " + wordlist.getWordlist().size() + " and content: " + wordlist.getWordlist());
 			} else {
 				writer.println(INPUT_ERROR.replace("METHODNAME", "printFileContent").replace("PARAM", content.toString()));
 			}
