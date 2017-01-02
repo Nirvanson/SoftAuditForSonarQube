@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import plugin.model.JavaClass;
+import plugin.model.JavaEnumValues;
 import plugin.model.JavaFileContent;
 import plugin.model.JavaMethod;
 import plugin.model.JavaStatement;
@@ -98,8 +99,7 @@ public class JavaBaseModelBuilder {
 							|| word.getKey().equals(KeyWord.SYNCHRONIZED)) {
 						// potentially class definition modifier
 						temporary.add(word);
-					} else if (!wordList.get(i-1).equals(KeyWord.DOT) && (word.equals(KeyWord.CLASS) || word.equals(KeyWord.INTERFACE)
-							|| word.equals(KeyWord.ENUM))) {
+					} else if (!wordList.get(i-1).equals(KeyWord.DOT) && (word.getKey().getType().equals(WordType.DECLARATOR))) {
 						// class/enum/interface declaration detected. parse it
 						// to JavaClassModel - all the same
 						classDefinitionState++;
@@ -384,8 +384,8 @@ public class JavaBaseModelBuilder {
 				switch (methodDetectionState) {
 				case 0:
 					// Nothing or only modifiers detected
-					if ((parenttype != null) && word.equals(KeyWord.ANNOTATION)) {
-						// Annotation placeholder outside of method definition
+					if ((parenttype != null) && !parenttype.equals(KeyWord.ENUM) && word.equals(KeyWord.ANNOTATION)) {
+						// Annotation placeholder outside of method or enum definition
 						// found. Add as Statement
 						content.addAll(temporary);
 						temporary.clear();
@@ -401,9 +401,8 @@ public class JavaBaseModelBuilder {
 						// add modifier to potential header
 						temporary.add(word);
 						modifiers.add(word);
-					} else if ((i==0 || !wordlist.get(i-1).equals(KeyWord.DOT)) && (word.equals(KeyWord.CLASS) || word.equals(KeyWord.INTERFACE)
-							|| word.equals(KeyWord.ENUM))) {
-						// class/enum/interface declaration detected. parse it
+					} else if ((i==0 || !wordlist.get(i-1).equals(KeyWord.DOT)) && (word.getKey().getType().equals(WordType.DECLARATOR))) {
+						// class/enum/interface/annotation declaration detected. parse it
 						// to JavaClassModel - all the same
 						classDefinitionState++;
 						if (!content.isEmpty()) {
@@ -1011,5 +1010,54 @@ public class JavaBaseModelBuilder {
 		}
 		// invalid generic
 		return 0;
+	}
+
+	public JavaFileContent extractEnumValues(List<JavaFileContent> result, List<WordInFile> wordlist) {
+		JavaEnumValues values = new JavaEnumValues(new ArrayList<List<WordInFile>>());
+		WordList offcut = null;
+		List<WordInFile> otherContent = new ArrayList<WordInFile>();
+		boolean endOfValues = false; 
+		for (int i=0; i<wordlist.size(); i++) {
+			if (!endOfValues) {
+				boolean endOfValue = false;
+				List<WordInFile> value = new ArrayList<WordInFile>();
+				int openParantheses = 0;
+				while (!endOfValue) {
+					if (i==wordlist.size()) {
+						//end of enum reached
+						values.getValues().add(value);
+						endOfValue = true;
+						endOfValues = true;
+					} else {
+						// count open parantheses to avoid counting an comma inside a value as valueseparator
+						if (wordlist.get(i).equals(KeyWord.OPENPARANTHESE)) {
+							openParantheses++;
+						} else if (wordlist.get(i).equals(KeyWord.CLOSPARANTHESE)) {
+							openParantheses--;
+						}
+						if (openParantheses==0 && (wordlist.get(i).equals(KeyWord.COMMA) || wordlist.get(i).equals(KeyWord.SEMICOLON))) {
+							// end of value reached
+							endOfValue=true;
+							values.getValues().add(value);
+							if (wordlist.get(i).equals(KeyWord.SEMICOLON)) {
+								// end of valuelist reached
+								endOfValues=true;
+							}
+						} else {
+							// word of value detected
+							value.add(wordlist.get(i));
+							i++;
+						}
+					}
+				}
+			} else {
+				otherContent.add(wordlist.get(i));
+			}
+		}
+		result.add(values);
+		if (!otherContent.isEmpty()) {
+			offcut = new WordList(otherContent);
+		}
+		return offcut;
 	}
 }

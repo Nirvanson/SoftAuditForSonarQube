@@ -13,6 +13,7 @@ import java.util.Map;
 import org.sonar.api.measures.Metric;
 
 import plugin.model.JavaClass;
+import plugin.model.JavaEnumValues;
 import plugin.model.JavaFileContent;
 import plugin.model.JavaMethod;
 import plugin.model.JavaStatement;
@@ -281,6 +282,12 @@ public class Logger {
 					classline += word + " ";
 				}
 				writer.println(classline);
+			} else if (content instanceof JavaEnumValues){
+				JavaEnumValues values = (JavaEnumValues) content;
+				writer.println(addTabs(level) + "Enum-Values: ");
+				for (List<WordInFile> value : values.getValues()) {
+					writer.println(addTabs(level+1) + value);
+				}
 			} else if (content instanceof WordList){
 				WordList wordlist = (WordList) content;
 				writer.println(addTabs(level) + "Wordlist with length: " + wordlist.getWordlist().size() + " and content: " + wordlist.getWordlist());

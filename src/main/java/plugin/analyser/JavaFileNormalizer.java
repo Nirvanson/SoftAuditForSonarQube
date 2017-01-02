@@ -200,8 +200,7 @@ public class JavaFileNormalizer {
 				switch (annotationState) {
 				case 0:
 					if (wordInStep1.equals(KeyWord.ANNOTATION)) {
-						// start of annotation. keep "@" as placeholder
-						result.add(wordInStep1);
+						// start of annotation.
 						annotationState++;
 					} else if ((wordInStep1.equals(KeyWord.WORD) && !wordInStep1.getWord().isEmpty())
 							|| !wordInStep1.equals(KeyWord.WORD)) {
@@ -213,9 +212,10 @@ public class JavaFileNormalizer {
 					if (wordInStep1.equals(KeyWord.INTERFACE)) {
 						// annotation declaration. keep it!
 						annotationState = 0;
-						result.add(wordInStep1);
+						result.add(new WordInFile(null, KeyWord.ANNOTATIONINTERFACE));
 					} else {
-						// annotation started by @ followed by free word
+						// annotation started by @ followed by free word,  keep "@" as placeholder
+						result.add(step1.get(i-1));
 						annotationState++;
 					}
 					break;

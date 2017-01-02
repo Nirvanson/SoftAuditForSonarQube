@@ -99,13 +99,11 @@ public class JavaFileAnalyzer {
 			for (Metric<Integer> measure : methodMeasures.keySet()) {
 				result.put(measure, result.get(measure) + methodMeasures.get(measure));
 			}
-			System.out.println(((WordList) contents.get(contents.size()-1).getContent().get(8).getContent().get(0)).getWordlist());
 			for (JavaFileContent content : contents) {
 				if (content instanceof JavaClass) {
 					content.setContent(parseStructuralStatements(content.getContent()));
 				}
 			}
-			//System.out.println(contents.get(contents.size()-1).getContent().get(3).getContent());
 			log.printModel("expanded", contents);
 			sourceFiles++;
 		}
@@ -125,7 +123,6 @@ public class JavaFileAnalyzer {
 						if (methodcontent instanceof JavaClass || methodcontent instanceof JavaStatementWithAnonymousClass) {
 							methodcontent.setContent(parseStructuralStatements(methodcontent.getContent()));
 							newMethodContent.add(methodcontent);
-							System.out.println("class found");
 						} else if (methodcontent instanceof WordList) {
 							newMethodContent.addAll(expander.addStructuralStatements(((WordList) methodcontent).getWordlist()));
 						} 
@@ -142,23 +139,28 @@ public class JavaFileAnalyzer {
 	
 	private List<JavaFileContent> parseClassContent(JavaFileContent parent) {
 		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
-		List<JavaFileContent> contentlist = parent.getContent();
+		JavaFileContent content = null;
+		if (parent.getContent()!=null && !parent.getContent().isEmpty()) {
+			content = parent.getContent().get(0);
+		}
 		KeyWord parenttype = null;
 		if (parent instanceof JavaClass) {
 			parenttype = ((JavaClass) parent).getType();
 		} else if (parent instanceof JavaStatementWithAnonymousClass) {
 			parenttype = KeyWord.CLASS;
 		}
-		if (!(contentlist == null)) {
-			for (JavaFileContent content : contentlist) {
-				if (content instanceof WordList) {
-					for (JavaFileContent classcontent : builder
-							.parseMethodsAndClasses(((WordList) content).getWordlist(), parenttype)) {
-						if (classcontent instanceof JavaClass || classcontent instanceof JavaMethod || classcontent instanceof JavaStatementWithAnonymousClass) {
-							classcontent.setContent(parseClassContent(classcontent));
-						}
-						result.add(classcontent);
+		if (content instanceof WordList) {
+			if (parenttype!=null && parenttype.equals(KeyWord.ENUM)) {
+				//parse enumvalues 
+				content = builder.extractEnumValues(result, ((WordList) content).getWordlist());
+			}
+			//parse methods and classes in Wordlist
+			if (content!=null) {
+				for (JavaFileContent classcontent : builder.parseMethodsAndClasses(((WordList) content).getWordlist(), parenttype)) {
+					if (classcontent instanceof JavaClass || classcontent instanceof JavaMethod || classcontent instanceof JavaStatementWithAnonymousClass) {
+						classcontent.setContent(parseClassContent(classcontent));
 					}
+					result.add(classcontent);
 				}
 			}
 		}

@@ -191,7 +191,7 @@ public class JavaModelExpander {
 		result.add(new JavaStatement(addStructuralStatements(blockcontent), StatementType.BLOCK));
 		return i-1;
 	}
-
+	
 	private int parseReturn(List<WordInFile> content, List<JavaFileContent> result, int i) {
 		// add everything until the next semicolon to returnstatement
 		List<WordInFile> returncontent = new ArrayList<WordInFile>();
