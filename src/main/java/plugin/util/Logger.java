@@ -210,15 +210,24 @@ public class Logger {
 					writer.println(header);
 					printFileContent(statement.getContent(), level+1);
 				} else if (statement.getType().equals(StatementType.TRY)) {
-					header += "with try-block:";
-					writer.println(header);
-					printFileContent(statement.getContent(), level+1);
-					String condition = "";
-					for (WordInFile conditionWord : statement.getCondition()) {
-						condition += conditionWord + " ";
+					if (statement.getResources()!=null) {
+						header += "with resources:";
+						writer.println(header);
+						printFileContent(statement.getResources(), level+1);
+						writer.println(addTabs(level) + "And try-block:");
+					} else {
+						header += "with try-block:";
+						writer.println(header);
 					}
-					writer.println(addTabs(level) + "Catching (" + condition + ") And catch-block:");
-					printFileContent(statement.getElsecontent(), level+1);
+					printFileContent(statement.getContent(), level+1);
+					if (statement.getElsecontent()!=null) {
+						String condition = "";
+						for (WordInFile conditionWord : statement.getCondition()) {
+							condition += conditionWord + " ";
+						}
+						writer.println(addTabs(level) + "Catching (" + condition + ") And catch-block:");
+						printFileContent(statement.getElsecontent(), level+1);
+					}
 					if (statement.getFinallycontent()!=null) {
 						writer.println(addTabs(level) + "And finally-block:");
 						printFileContent(statement.getFinallycontent(), level+1);

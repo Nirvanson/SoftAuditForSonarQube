@@ -205,8 +205,29 @@ public class JavaModelExpander {
 	}
 
 	private int parseTry(List<WordInFile> content, List<JavaFileContent> result, int i) {
-		// skip "try{"
-		i += 2;
+		// skip "try"
+		i++;
+		List<WordInFile> resources = null;
+		if (content.get(i).equals(KeyWord.OPENPARANTHESE)) {
+			// try with resource detected
+			int openParantheses = 1;
+			i++;
+			resources = new ArrayList<WordInFile>();
+			while (openParantheses>0) {
+				if (content.get(i).equals(KeyWord.CLOSPARANTHESE)) {
+					openParantheses--;
+				}
+				if (content.get(i).equals(KeyWord.OPENPARANTHESE)) {
+					openParantheses++;
+				} 
+				if (openParantheses!=0) {
+					resources.add(content.get(i));
+				}
+				i++;
+			}
+		}
+		// skip {
+		i++;
 		// add everything until brace is closed to tryblock
 		List<WordInFile> tryblock = new ArrayList<WordInFile>();
 		int openBraces = 1;
@@ -223,41 +244,46 @@ public class JavaModelExpander {
 			i++;
 		}
 		JavaStatement tryStatement = new JavaStatement(addStructuralStatements(tryblock), StatementType.TRY);
-		// add catched exception as condition (....)
-		List<WordInFile> exception = new ArrayList<WordInFile>();
-		int openParanthesis = 1;
-		i++;
-		i++;
-		while (openParanthesis>0) {
-			if (content.get(i).equals(KeyWord.CLOSPARANTHESE)) {
-				openParanthesis--;
-			}
-			if (content.get(i).equals(KeyWord.OPENPARANTHESE)) {
-				openParanthesis++;
-			} 
-			if (openParanthesis!=0) {
-				exception.add(content.get(i));
-			}
-			i++;
+		if (resources!=null) {
+			tryStatement.setResources(addStructuralStatements(resources));
 		}
-		tryStatement.setCondition(exception);
-		// add catchblock
-		List<WordInFile> catchblock = new ArrayList<WordInFile>();
-		openBraces = 1;
-		i++;
-		while (openBraces>0) {
-			if (content.get(i).equals(KeyWord.CLOSEBRACE)) {
-				openBraces--;
-			}
-			if (content.get(i).equals(KeyWord.OPENBRACE)) {
-				openBraces++;
-			} 
-			if (openBraces!=0) {
-				catchblock.add(content.get(i));
-			}
+		// add catched exception as condition (....) if present
+		if (content.size()>i && content.get(i).equals(KeyWord.CATCH)) {
+			List<WordInFile> exception = new ArrayList<WordInFile>();
+			int openParanthesis = 1;
 			i++;
+			i++;
+			while (openParanthesis>0) {
+				if (content.get(i).equals(KeyWord.CLOSPARANTHESE)) {
+					openParanthesis--;
+				}
+				if (content.get(i).equals(KeyWord.OPENPARANTHESE)) {
+					openParanthesis++;
+				} 
+				if (openParanthesis!=0) {
+					exception.add(content.get(i));
+				}
+				i++;
+			}
+			tryStatement.setCondition(exception);
+			// add catchblock
+			List<WordInFile> catchblock = new ArrayList<WordInFile>();
+			openBraces = 1;
+			i++;
+			while (openBraces>0) {
+				if (content.get(i).equals(KeyWord.CLOSEBRACE)) {
+					openBraces--;
+				}
+				if (content.get(i).equals(KeyWord.OPENBRACE)) {
+					openBraces++;
+				} 
+				if (openBraces!=0) {
+					catchblock.add(content.get(i));
+				}
+				i++;
+			}
+			tryStatement.setElsecontent(addStructuralStatements(catchblock));
 		}
-		tryStatement.setElsecontent(addStructuralStatements(catchblock));
 		// check for finally block and add if present
 		if (content.size()>i && content.get(i).equals(KeyWord.FINALLY)) {
 			i++;

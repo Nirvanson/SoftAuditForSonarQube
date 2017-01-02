@@ -18,6 +18,8 @@ public class JavaStatement extends JavaFileContent {
 	private List<WordInFile> increment;
 	// else block in if, catch block in try
 	private List<JavaFileContent> elsecontent;
+	// resources in try with resources
+	private List<JavaFileContent> resources;
 	// finally block in try
 	private List<JavaFileContent> finallycontent;
 	
@@ -29,6 +31,7 @@ public class JavaStatement extends JavaFileContent {
 		increment = null;
 		elsecontent = null;
 		finallycontent = null;
+		setResources(null);
 	}
 
 	public StatementType getType() {
@@ -73,5 +76,13 @@ public class JavaStatement extends JavaFileContent {
 
 	public void setFinallycontent(List<JavaFileContent> finallycontent) {
 		this.finallycontent = finallycontent;
+	}
+
+	public List<JavaFileContent> getResources() {
+		return resources;
+	}
+
+	public void setResources(List<JavaFileContent> resources) {
+		this.resources = resources;
 	}
 }
