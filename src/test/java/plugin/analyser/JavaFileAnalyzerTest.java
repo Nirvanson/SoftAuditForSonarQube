@@ -13,7 +13,7 @@ public class JavaFileAnalyzerTest {
 
     @Test
     public void testFileNormalization() {
-    	File input = new File(getClass().getResource("/testdata/StaxParser.java").getPath());
+    	File input = new File(getClass().getResource("/testdata/PasswordServiceBean.java").getPath());
     	JavaFileAnalyzer analyzer = new JavaFileAnalyzer(Arrays.asList(input));
     	
     	// do analyze, check logfile manually

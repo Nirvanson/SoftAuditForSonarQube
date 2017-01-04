@@ -220,17 +220,17 @@ public class Logger {
 						writer.println(header);
 					}
 					printFileContent(statement.getContent(), level+1);
-					if (statement.getElsecontent()!=null) {
+					for (List<WordInFile> exception : statement.getCatchedExceptions().keySet()) {
 						String condition = "";
-						for (WordInFile conditionWord : statement.getCondition()) {
+						for (WordInFile conditionWord : exception) {
 							condition += conditionWord + " ";
 						}
 						writer.println(addTabs(level) + "Catching (" + condition + ") And catch-block:");
-						printFileContent(statement.getElsecontent(), level+1);
+						printFileContent(statement.getCatchedExceptions().get(exception), level+1);
 					}
-					if (statement.getFinallycontent()!=null) {
+					if (statement.getOthercontent()!=null) {
 						writer.println(addTabs(level) + "And finally-block:");
-						printFileContent(statement.getFinallycontent(), level+1);
+						printFileContent(statement.getOthercontent(), level+1);
 					}
 				} else if (statement.getType().equals(StatementType.IF)) {
 					String condition = "";
@@ -240,9 +240,9 @@ public class Logger {
 					header += "Checking condition: (" + condition + ") with if-block:";
 					writer.println(header);
 					printFileContent(statement.getContent(), level+1);
-					if (statement.getElsecontent()!=null) {
+					if (statement.getOthercontent()!=null) {
 						writer.println(addTabs(level) + "And else-block:");
-						printFileContent(statement.getElsecontent(), level+1);
+						printFileContent(statement.getOthercontent(), level+1);
 					}
 				} else if (statement.getType().equals(StatementType.WHILE)) {
 					String condition = "";
@@ -251,7 +251,7 @@ public class Logger {
 					}
 					header += "Checking condition: (" + condition + ") with content:";
 					writer.println(header);
-					printFileContent(statement.getContent(), level+2);
+					printFileContent(statement.getContent(), level+1);
 				} else if (statement.getType().equals(StatementType.FOR)) {
 					String condition = "";
 					for (WordInFile conditionWord : statement.getCondition()) {

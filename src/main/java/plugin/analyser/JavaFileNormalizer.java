@@ -194,56 +194,53 @@ public class JavaFileNormalizer {
 		int openParentheses = 0;
 		for (int i = 0; i < step1.size(); i++) {
 			WordInFile wordInStep1 = step1.get(i);
-			// skip ; after } or ;
-			if (!(i > 0 && (step1.get(i - 1).equals(KeyWord.CLOSEBRACE) || step1.get(i - 1).equals(KeyWord.SEMICOLON))
-					&& wordInStep1.equals(KeyWord.SEMICOLON))) {
-				switch (annotationState) {
-				case 0:
-					if (wordInStep1.equals(KeyWord.ANNOTATION)) {
-						// start of annotation.
-						annotationState++;
-					} else if ((wordInStep1.equals(KeyWord.WORD) && !wordInStep1.getWord().isEmpty())
-							|| !wordInStep1.equals(KeyWord.WORD)) {
-						// otherwise add word to list (if not empty)
-						result.add(wordInStep1);
-					}
-					break;
-				case 1:
-					if (wordInStep1.equals(KeyWord.INTERFACE)) {
-						// annotation declaration. keep it!
-						annotationState = 0;
-						result.add(new WordInFile(null, KeyWord.ANNOTATIONINTERFACE));
-					} else {
-						// annotation started by @ followed by free word,  keep "@" as placeholder
-						result.add(step1.get(i-1));
-						annotationState++;
-					}
-					break;
-				case 2:
-					if (wordInStep1.equals(KeyWord.OPENPARANTHESE)) {
-						// annotation has parentheses behind name
-						annotationState++;
-						openParentheses++;
-					} else {
-						// otherwise it ended, check word again
-						annotationState = 0;
-						i--;
-					}
-					break;
-				case 3:
-					if (wordInStep1.equals(KeyWord.OPENPARANTHESE)) {
-						// Parentheses in Parentheses
-						openParentheses++;
-					} else if (wordInStep1.equals(KeyWord.CLOSPARANTHESE)) {
-						// Parentheses closed
-						openParentheses--;
-						if (openParentheses == 0) {
-							// if first parentheses closed it ended
-							annotationState = 0;
-						}
-					}
-					break;
+			switch (annotationState) {
+			case 0:
+				if (wordInStep1.equals(KeyWord.ANNOTATION)) {
+					// start of annotation.
+					annotationState++;
+				} else if ((wordInStep1.equals(KeyWord.WORD) && !wordInStep1.getWord().isEmpty())
+						|| !wordInStep1.equals(KeyWord.WORD)) {
+					// otherwise add word to list (if not empty)
+					result.add(wordInStep1);
 				}
+				break;
+			case 1:
+				if (wordInStep1.equals(KeyWord.INTERFACE)) {
+					// annotation declaration. keep it!
+					annotationState = 0;
+					result.add(new WordInFile(null, KeyWord.ANNOTATIONINTERFACE));
+				} else {
+					// annotation started by @ followed by free word, keep "@"
+					// as placeholder
+					result.add(step1.get(i - 1));
+					annotationState++;
+				}
+				break;
+			case 2:
+				if (wordInStep1.equals(KeyWord.OPENPARANTHESE)) {
+					// annotation has parentheses behind name
+					annotationState++;
+					openParentheses++;
+				} else {
+					// otherwise it ended, check word again
+					annotationState = 0;
+					i--;
+				}
+				break;
+			case 3:
+				if (wordInStep1.equals(KeyWord.OPENPARANTHESE)) {
+					// Parentheses in Parentheses
+					openParentheses++;
+				} else if (wordInStep1.equals(KeyWord.CLOSPARANTHESE)) {
+					// Parentheses closed
+					openParentheses--;
+					if (openParentheses == 0) {
+						// if first parentheses closed it ended
+						annotationState = 0;
+					}
+				}
+				break;
 			}
 		}
 		return result;

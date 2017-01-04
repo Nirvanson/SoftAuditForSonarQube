@@ -2,6 +2,7 @@ package plugin.analyser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import plugin.model.JavaFileContent;
@@ -248,7 +249,8 @@ public class JavaModelExpander {
 			tryStatement.setResources(addStructuralStatements(resources));
 		}
 		// add catched exception as condition (....) if present
-		if (content.size()>i && content.get(i).equals(KeyWord.CATCH)) {
+		tryStatement.setCatchedExceptions(new HashMap<List<WordInFile>, List<JavaFileContent>>());
+		while (content.size()>i && content.get(i).equals(KeyWord.CATCH)) {
 			List<WordInFile> exception = new ArrayList<WordInFile>();
 			int openParanthesis = 1;
 			i++;
@@ -282,7 +284,7 @@ public class JavaModelExpander {
 				}
 				i++;
 			}
-			tryStatement.setElsecontent(addStructuralStatements(catchblock));
+			tryStatement.getCatchedExceptions().put(exception, addStructuralStatements(catchblock));
 		}
 		// check for finally block and add if present
 		if (content.size()>i && content.get(i).equals(KeyWord.FINALLY)) {
@@ -302,7 +304,7 @@ public class JavaModelExpander {
 				}
 				i++;
 			}
-			tryStatement.setFinallycontent(addStructuralStatements(finallyblock));
+			tryStatement.setOthercontent(addStructuralStatements(finallyblock));
 		}
 		result.add(tryStatement);
 		return i-1;
@@ -383,22 +385,22 @@ public class JavaModelExpander {
 			// content is single structural statement - parse directly
 			if (content.get(i).equals(KeyWord.IF)) {
 				i = parseIf(content, elseContent, i) + 1;
-				ifStatement.setElsecontent(elseContent);
+				ifStatement.setOthercontent(elseContent);
 			} else if (content.get(i).equals(KeyWord.TRY)) {
 				i = parseTry(content, elseContent, i) + 1;
-				ifStatement.setElsecontent(elseContent);
+				ifStatement.setOthercontent(elseContent);
 			} else if (content.get(i).equals(KeyWord.SWITCH)) {
 				i = parseSwitch(content, elseContent, i) + 1;
-				ifStatement.setElsecontent(elseContent);
+				ifStatement.setOthercontent(elseContent);
 			} else if (content.get(i).equals(KeyWord.FOR)) {
 				i = parseFor(content, elseContent, i) + 1;
-				ifStatement.setElsecontent(elseContent);
+				ifStatement.setOthercontent(elseContent);
 			} else if (content.get(i).equals(KeyWord.WHILE)) {
 				i = parseWhile(content, elseContent, i) + 1;
-				ifStatement.setElsecontent(elseContent);
+				ifStatement.setOthercontent(elseContent);
 			} else if (content.get(i).equals(KeyWord.DO)) {
 				i = parseIf(content, elseContent, i) + 1;
-				ifStatement.setElsecontent(elseContent);
+				ifStatement.setOthercontent(elseContent);
 			} else {
 				List<WordInFile> elseblock = new ArrayList<WordInFile>();
 				if (content.get(i).equals(KeyWord.OPENBRACE)) {
@@ -424,7 +426,7 @@ public class JavaModelExpander {
 						i++;
 					} while(!content.get(i-1).equals(KeyWord.SEMICOLON));
 				}
-				ifStatement.setElsecontent(addStructuralStatements(elseblock));
+				ifStatement.setOthercontent(addStructuralStatements(elseblock));
 			}
 		}
 		result.add(ifStatement);
@@ -446,7 +448,7 @@ public class JavaModelExpander {
 			if (content.get(i).equals(KeyWord.OPENPARANTHESE)) {
 				openParanthesis++;
 			} 
-			if (openParanthesis!=0) {
+			if (openParanthesis!=0 && !content.get(i).equals(KeyWord.SEMICOLON)) {
 				declaration.add(content.get(i));
 			}
 			if (content.get(i).equals(KeyWord.SEMICOLON)) {

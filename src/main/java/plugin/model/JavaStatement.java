@@ -1,6 +1,7 @@
 package plugin.model;
 
 import java.util.List;
+import java.util.Map;
 
 public class JavaStatement extends JavaFileContent {
 	
@@ -17,11 +18,11 @@ public class JavaStatement extends JavaFileContent {
 	// increment in for
 	private List<WordInFile> increment;
 	// else block in if, catch block in try
-	private List<JavaFileContent> elsecontent;
+	private List<JavaFileContent> othercontent;
 	// resources in try with resources
 	private List<JavaFileContent> resources;
-	// finally block in try
-	private List<JavaFileContent> finallycontent;
+	// list of catched Exceptions with catchblock
+	private Map<List<WordInFile>, List<JavaFileContent>> catchedExceptions;
 	
 	public JavaStatement(List<JavaFileContent> content, StatementType type) {
 		super(content);
@@ -29,8 +30,8 @@ public class JavaStatement extends JavaFileContent {
 		condition = null;
 		initialization = null;
 		increment = null;
-		elsecontent = null;
-		finallycontent = null;
+		othercontent = null;
+		setCatchedExceptions(null);
 		setResources(null);
 	}
 
@@ -62,20 +63,12 @@ public class JavaStatement extends JavaFileContent {
 		this.increment = increment;
 	}
 
-	public List<JavaFileContent> getElsecontent() {
-		return elsecontent;
+	public List<JavaFileContent> getOthercontent() {
+		return othercontent;
 	}
 
-	public void setElsecontent(List<JavaFileContent> elsecontent) {
-		this.elsecontent = elsecontent;
-	}
-
-	public List<JavaFileContent> getFinallycontent() {
-		return finallycontent;
-	}
-
-	public void setFinallycontent(List<JavaFileContent> finallycontent) {
-		this.finallycontent = finallycontent;
+	public void setOthercontent(List<JavaFileContent> elsecontent) {
+		this.othercontent = elsecontent;
 	}
 
 	public List<JavaFileContent> getResources() {
@@ -84,5 +77,13 @@ public class JavaStatement extends JavaFileContent {
 
 	public void setResources(List<JavaFileContent> resources) {
 		this.resources = resources;
+	}
+
+	public Map<List<WordInFile>, List<JavaFileContent>> getCatchedExceptions() {
+		return catchedExceptions;
+	}
+
+	public void setCatchedExceptions(Map<List<WordInFile>, List<JavaFileContent>> catchedExceptions) {
+		this.catchedExceptions = catchedExceptions;
 	}
 }
