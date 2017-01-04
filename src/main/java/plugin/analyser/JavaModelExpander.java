@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import plugin.model.JavaFileContent;
-import plugin.model.JavaStatement;
+import plugin.model.JavaControlStatement;
 import plugin.model.KeyWord;
 import plugin.model.StatementType;
 import plugin.model.WordInFile;
@@ -44,17 +44,17 @@ public class JavaModelExpander {
 					i = parseReturn(content, result, i);
 				} 
 			} else {
-				if (word.equals(KeyWord.OPENBRACE) && !content.get(i-1).equals(KeyWord.CLOSEBRACKET)) {
+				if (word.equals(KeyWord.OPENBRACE) && (i==0 || (!content.get(i-1).equals(KeyWord.CLOSEBRACKET) && !content.get(i-1).equals(KeyWord.ASSERT)))) {
 					if (!otherContent.isEmpty()){
 						List<WordInFile> wordlist = new ArrayList<WordInFile>();
 						wordlist.addAll(otherContent);
 						otherContent.clear();
 						result.add(new WordList(wordlist));
-					} else {
-						i = parseAnonymousBlock(content, result, i);
-					}
-				} 
-				otherContent.add(word);
+					} 
+					i = parseAnonymousBlock(content, result, i);
+				} else {
+					otherContent.add(word);
+				}
 			}
 		}
 		if (!otherContent.isEmpty()){
@@ -66,7 +66,7 @@ public class JavaModelExpander {
 	private int parseSwitch(List<WordInFile> content, List<JavaFileContent> result, int i) {
 		// skip "switch("
 		i += 2;
-		JavaStatement switchStatement = new JavaStatement(null, StatementType.SWITCH);
+		JavaControlStatement switchStatement = new JavaControlStatement(StatementType.SWITCH);
 		// parse switchvalue as condition
 		List<WordInFile> condition = new ArrayList<WordInFile>();
 		int openParanthesis = 1;
@@ -90,7 +90,7 @@ public class JavaModelExpander {
 		int openBraces = 1;
 		List<WordInFile> casecontent = new ArrayList<WordInFile>();
 		List<WordInFile> casecondition = new ArrayList<WordInFile>();
-		JavaStatement currentCase = new JavaStatement(null, StatementType.CASE);
+		JavaControlStatement currentCase = new JavaControlStatement(StatementType.CASE);
 		currentCase.setCondition(new ArrayList<WordInFile>());
 		if (content.get(i).equals(KeyWord.CLOSEBRACE)) {
 			openBraces--;
@@ -105,11 +105,17 @@ public class JavaModelExpander {
 					List<WordInFile> onecase = new ArrayList<WordInFile>();
 					onecase.addAll(casecontent); 
 					casecontent.clear();
-					currentCase.setContent(addStructuralStatements(onecase));
+					List<JavaFileContent> parsedCaseContent = addStructuralStatements(onecase);
+					if (parsedCaseContent.size()==1 && parsedCaseContent.get(0) instanceof JavaControlStatement && ((JavaControlStatement) parsedCaseContent.get(0)).getType().equals(StatementType.BLOCK)) {
+						// if casecontent is completely in braces dont't count it as anonymous block
+						currentCase.setContent(parsedCaseContent.get(0).getContent());
+					} else {
+						currentCase.setContent(parsedCaseContent);
+					}
 					// remove last comma
 					currentCase.getCondition().remove(currentCase.getCondition().size()-1);
 					switchContent.add(currentCase);
-					currentCase = new JavaStatement(null, StatementType.CASE);
+					currentCase = new JavaControlStatement(StatementType.CASE);
 					currentCase.setCondition(new ArrayList<WordInFile>());
 				}
 				// skip "case" or "default"
@@ -162,13 +168,19 @@ public class JavaModelExpander {
 		List<WordInFile> onecase = new ArrayList<WordInFile>();
 		onecase.addAll(casecontent);
 		casecontent.clear();
-		currentCase.setContent(addStructuralStatements(onecase));
+		List<JavaFileContent> parsedCaseContent = addStructuralStatements(onecase);
+		if (parsedCaseContent.size()==1 && parsedCaseContent.get(0) instanceof JavaControlStatement && ((JavaControlStatement) parsedCaseContent.get(0)).getType().equals(StatementType.BLOCK)) {
+			// if casecontent is completely in braces dont't count it as anonymous block
+			currentCase.setContent(parsedCaseContent.get(0).getContent());
+		} else {
+			currentCase.setContent(parsedCaseContent);
+		}
 		// remove last comma
 		currentCase.getCondition().remove(currentCase.getCondition().size()-1);
 		switchContent.add(currentCase);
 		switchStatement.setContent(switchContent);
 		result.add(switchStatement);
-		return i;
+		return i-1;
 	}
 
 	private int parseAnonymousBlock(List<WordInFile> content, List<JavaFileContent> result, int i) {
@@ -189,7 +201,9 @@ public class JavaModelExpander {
 			}
 			i++;
 		}
-		result.add(new JavaStatement(addStructuralStatements(blockcontent), StatementType.BLOCK));
+		JavaControlStatement blockstatement = new JavaControlStatement(StatementType.BLOCK);
+		blockstatement.setContent(addStructuralStatements(blockcontent));
+		result.add(blockstatement);
 		return i-1;
 	}
 	
@@ -201,7 +215,9 @@ public class JavaModelExpander {
 			i++;
 		}
 		returncontent.add(content.get(i));
-		result.add(new JavaStatement(Arrays.asList(new WordList(returncontent)), StatementType.RETURN));
+		JavaControlStatement returnstatement = new JavaControlStatement(StatementType.RETURN);
+		returnstatement.setStatementText(returncontent);
+		result.add(returnstatement);
 		return i;
 	}
 
@@ -244,7 +260,8 @@ public class JavaModelExpander {
 			}
 			i++;
 		}
-		JavaStatement tryStatement = new JavaStatement(addStructuralStatements(tryblock), StatementType.TRY);
+		JavaControlStatement tryStatement = new JavaControlStatement(StatementType.TRY);
+		tryStatement.setContent(addStructuralStatements(tryblock));
 		if (resources!=null) {
 			tryStatement.setResources(addStructuralStatements(resources));
 		}
@@ -313,7 +330,7 @@ public class JavaModelExpander {
 	private int parseIf(List<WordInFile> content, List<JavaFileContent> result, int i) {
 		// skip "if("
 		i += 2;
-		JavaStatement ifStatement = new JavaStatement(null, StatementType.IF);
+		JavaControlStatement ifStatement = new JavaControlStatement(StatementType.IF);
 		// parse condition
 		List<WordInFile> condition = new ArrayList<WordInFile>();
 		int openParanthesis = 1;
@@ -436,7 +453,7 @@ public class JavaModelExpander {
 	private int parseFor(List<WordInFile> content, List<JavaFileContent> result, int i) {
 		// skip "for("
 		i += 2;
-		JavaStatement forStatement = new JavaStatement(null, StatementType.FOR);
+		JavaControlStatement forStatement = new JavaControlStatement(StatementType.FOR);
 		// parse declaration
 		List<WordInFile> declaration = new ArrayList<WordInFile>();
 		int openParanthesis = 1;
@@ -524,7 +541,7 @@ public class JavaModelExpander {
 	private int parseWhile(List<WordInFile> content, List<JavaFileContent> result, int i) {
 		// skip "while("
 		i += 2;
-		JavaStatement whileStatement = new JavaStatement(null, StatementType.WHILE);
+		JavaControlStatement whileStatement = new JavaControlStatement(StatementType.WHILE);
 		// parse condition
 		List<WordInFile> condition = new ArrayList<WordInFile>();
 		int openParanthesis = 1;
@@ -596,7 +613,7 @@ public class JavaModelExpander {
 	private int parseDoWhile(List<WordInFile> content, List<JavaFileContent> result, int i) {
 		// skip "do"
 		i++;
-		JavaStatement whileStatement = new JavaStatement(null, StatementType.WHILE);
+		JavaControlStatement whileStatement = new JavaControlStatement(StatementType.WHILE);
 		// parse content
 		List<JavaFileContent> whileContent = new ArrayList<JavaFileContent>();
 		// content is single structural statement - parse directly

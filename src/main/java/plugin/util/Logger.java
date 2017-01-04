@@ -17,6 +17,7 @@ import plugin.model.JavaEnumValues;
 import plugin.model.JavaFileContent;
 import plugin.model.JavaMethod;
 import plugin.model.JavaStatement;
+import plugin.model.JavaControlStatement;
 import plugin.model.JavaStatementWithAnonymousClass;
 import plugin.model.JavaVariable;
 import plugin.model.StatementType;
@@ -155,7 +156,7 @@ public class Logger {
 		for (JavaFileContent content : contents) {
 			if (content instanceof JavaClass) {
 				JavaClass theClass = (JavaClass) content;
-				String classline = addTabs(level) + theClass.getType() + " with name: " + theClass.getName();
+				String classline = addTabs(level) + theClass.getType().toString().toUpperCase() + " with name: " + theClass.getName();
 				if (!theClass.getExtending().isEmpty()) {
 					classline += " extending: " + theClass.getExtending();
 				}
@@ -167,7 +168,11 @@ public class Logger {
 				printFileContent(theClass.getContent(), level+1);
 			} else if (content instanceof JavaMethod) {
 				JavaMethod theMethod = (JavaMethod) content;
-				String methodline = addTabs(level) + "Method with name: " + theMethod.getName();
+				String methodline = addTabs(level) + "METHOD";
+				if (theMethod.getContent()==null) {
+					methodline += "-interface";
+				}
+				methodline += " with name: " + theMethod.getName();
 				if (!theMethod.getReturntype().isEmpty()) {
 					methodline += ", Returntype: ";
 					for (WordInFile returnword : theMethod.getReturntype()) {
@@ -183,12 +188,21 @@ public class Logger {
 						methodline += " " + param.getName();
 					}
 				}
-				methodline += " and Body:";
+				if (theMethod.getContent()!=null) {
+					methodline += " and ";
+					if (theMethod.getContent().isEmpty()) {
+						methodline += "empty Body";
+					} else {
+						methodline += "Body:";
+					}
+				}
 				writer.println(methodline);
-				printFileContent(theMethod.getContent(), level+1);
-			} else if (content instanceof JavaStatement) {
-				JavaStatement statement = (JavaStatement) content;
-				String header = addTabs(level) + statement.getType() + "-Statement ";
+				if (theMethod.getContent()!=null && !theMethod.getContent().isEmpty()) {
+					printFileContent(theMethod.getContent(), level+1);
+				}
+			} else if (content instanceof JavaControlStatement) {
+				JavaControlStatement statement = (JavaControlStatement) content;
+				String header = addTabs(level) + statement.getType() + " - ControlStatement ";
 				if (statement.getType().equals(StatementType.SWITCH)) {
 					String condition = "";
 					for (WordInFile conditionWord : statement.getCondition()) {
@@ -225,11 +239,11 @@ public class Logger {
 						for (WordInFile conditionWord : exception) {
 							condition += conditionWord + " ";
 						}
-						writer.println(addTabs(level) + "Catching (" + condition + ") And catch-block:");
+						writer.println(addTabs(level) + "CATCH - (" + condition + ") And catch-block:");
 						printFileContent(statement.getCatchedExceptions().get(exception), level+1);
 					}
 					if (statement.getOthercontent()!=null) {
-						writer.println(addTabs(level) + "And finally-block:");
+						writer.println(addTabs(level) + "FINALLY - block:");
 						printFileContent(statement.getOthercontent(), level+1);
 					}
 				} else if (statement.getType().equals(StatementType.IF)) {
@@ -241,7 +255,7 @@ public class Logger {
 					writer.println(header);
 					printFileContent(statement.getContent(), level+1);
 					if (statement.getOthercontent()!=null) {
-						writer.println(addTabs(level) + "And else-block:");
+						writer.println(addTabs(level) + "ELSE - block:");
 						printFileContent(statement.getOthercontent(), level+1);
 					}
 				} else if (statement.getType().equals(StatementType.WHILE)) {
@@ -272,25 +286,33 @@ public class Logger {
 					}
 					writer.println(header);
 					printFileContent(statement.getContent(), level+1);
-				} else if (statement.getType().equals(StatementType.IMPORT) || statement.getType().equals(StatementType.PACKAGE) || statement.getType().equals(StatementType.RETURN)) {
-					writer.println(header + ":" + ((WordList) statement.getContent().get(0)).getWordlist());
+				} else if (statement.getType().equals(StatementType.RETURN)) {
+					writer.println(header + ":" + statement.getStatementText());
 				} else {
 					writer.println(header);
 				}
 			} else if (content instanceof JavaStatementWithAnonymousClass) {
-				JavaStatementWithAnonymousClass theClass = (JavaStatementWithAnonymousClass) content;
-				String classline = addTabs(level) + "Statement with anonymous class: '";
-				for (WordInFile word : theClass.getStatementBeforeClass()) {
+				JavaStatementWithAnonymousClass statement = (JavaStatementWithAnonymousClass) content;
+				String classline = addTabs(level) + statement.getType() + " - Statement with anonymous class: '";
+				for (WordInFile word : statement.getStatementBeforeClass()) {
 					classline += word + " ";
 				}
-				classline += "' of Type: " + theClass.getClassType() + " with content: ";
+				classline += "' of Type: " + statement.getClassType() + " with content: ";
 				writer.println(classline);
-				printFileContent(theClass.getContent(), level+1);
+				printFileContent(statement.getContent(), level+1);
 				classline = addTabs(level) + "Ending with: ";
-				for (WordInFile word : theClass.getStatementAfterClass()) {
+				for (WordInFile word : statement.getStatementAfterClass()) {
 					classline += word + " ";
 				}
 				writer.println(classline);
+			} else if (content instanceof JavaStatement) {
+				JavaStatement statement = (JavaStatement) content;
+				String header = addTabs(level) + statement.getType() + " - Statement ";
+				if (statement.getStatementText()!=null && !statement.getStatementText().isEmpty()) {
+					writer.println(header + ":" + statement.getStatementText());
+				} else {
+					writer.println(header);
+				}
 			} else if (content instanceof JavaEnumValues){
 				JavaEnumValues values = (JavaEnumValues) content;
 				writer.println(addTabs(level) + "Enum-Values: ");
@@ -321,7 +343,6 @@ public class Logger {
 	}
 
 	private void addTime() {
-		writer.println(TIME.replaceAll("TIME", (new SimpleDateFormat("HH:mm:ss:SSS")).format(new Date())));
-		
+		writer.println(TIME.replaceAll("TIME", (new SimpleDateFormat("HH:mm:ss:SSS")).format(new Date())));		
 	}
 }

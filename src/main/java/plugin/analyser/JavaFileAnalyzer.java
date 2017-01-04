@@ -117,7 +117,7 @@ public class JavaFileAnalyzer {
 		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
 		if (!(contentlist == null)) {
 			for (JavaFileContent content : contentlist) {
-				if (content instanceof JavaMethod ) {
+				if (content instanceof JavaMethod && content.getContent()!=null) {
 					List<JavaFileContent> newMethodContent = new ArrayList<JavaFileContent>();
 					for (JavaFileContent methodcontent : content.getContent()) {
 						if (methodcontent instanceof JavaClass || methodcontent instanceof JavaStatementWithAnonymousClass) {
@@ -156,13 +156,20 @@ public class JavaFileAnalyzer {
 			}
 			//parse methods and classes in Wordlist
 			if (content!=null) {
-				for (JavaFileContent classcontent : builder.parseMethodsAndClasses(((WordList) content).getWordlist(), parenttype)) {
+				boolean abstractClass = false;
+				if (parent instanceof JavaClass && parenttype == KeyWord.CLASS && ((JavaClass) parent).getModifiers().contains(new WordInFile(null, KeyWord.ABSTRACT))) {
+					// for parsing abstract classes like interfaces (methodheaders without body)
+					abstractClass = true;
+				}
+				for (JavaFileContent classcontent : builder.parseMethodsAndClasses(((WordList) content).getWordlist(), parenttype, abstractClass)) {
 					if (classcontent instanceof JavaClass || classcontent instanceof JavaMethod || classcontent instanceof JavaStatementWithAnonymousClass) {
 						classcontent.setContent(parseClassContent(classcontent));
 					}
 					result.add(classcontent);
 				}
-			}
+			} 
+		} else if (content==null) {
+			result=null;
 		}
 		return result;
 	}

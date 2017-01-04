@@ -46,7 +46,9 @@ public class JavaBaseModelBuilder {
 					content.add(word);
 					List<WordInFile> statementcontent = new ArrayList<WordInFile>();
 					statementcontent.addAll(content);
-					fileModel.add(new JavaStatement(Arrays.asList(new WordList(statementcontent)), StatementType.PACKAGE));
+					JavaStatement packagestatement = new JavaStatement(StatementType.PACKAGE);
+					packagestatement.setStatementText(statementcontent);
+					fileModel.add(packagestatement);
 					content.clear();
 				} else {
 					content.add(word);
@@ -58,7 +60,9 @@ public class JavaBaseModelBuilder {
 					content.add(word);
 					List<WordInFile> statementcontent = new ArrayList<WordInFile>();
 					statementcontent.addAll(content);
-					fileModel.add(new JavaStatement(Arrays.asList(new WordList(statementcontent)), StatementType.IMPORT));
+					JavaStatement importstatement = new JavaStatement(StatementType.IMPORT);
+					importstatement.setStatementText(statementcontent);
+					fileModel.add(importstatement);
 					content.clear();
 				} else {
 					content.add(word);
@@ -70,7 +74,7 @@ public class JavaBaseModelBuilder {
 					if (word.equals(KeyWord.ANNOTATION)) {
 						// Annotation placeholder outside of class definition
 						// found. Add as Statement
-						fileModel.add(new JavaStatement(Arrays.asList(new WordList(Arrays.asList(word))), StatementType.ANNOTATION));
+						fileModel.add(new JavaStatement(StatementType.ANNOTATION));
 					} else if (word.equals(KeyWord.IMPORT)) {
 						// start import
 						importStatement = true;
@@ -252,7 +256,7 @@ public class JavaBaseModelBuilder {
 	 *            - the class/method boddy as wordlist
 	 * @returns model of the class/method-body
 	 */
-	public List<JavaFileContent> parseMethodsAndClasses(List<WordInFile> wordlist, KeyWord parenttype) {
+	public List<JavaFileContent> parseMethodsAndClasses(List<WordInFile> wordlist, KeyWord parenttype, boolean abstractClass) {
 		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
 		int openBraces = 0;
 		int methodDetectionState = 0;
@@ -395,7 +399,7 @@ public class JavaBaseModelBuilder {
 							result.add(new WordList(somecontent));
 							content.clear();
 						}
-						result.add(new JavaStatement(Arrays.asList(new WordList(Arrays.asList(word))), StatementType.ANNOTATION));
+						result.add(new JavaStatement(StatementType.ANNOTATION));
 					} else if (word.getKey().getType().equals(WordType.MODIFIER)
 							|| word.getKey().equals(KeyWord.SYNCHRONIZED)) {
 						// add modifier to potential header
@@ -717,7 +721,7 @@ public class JavaBaseModelBuilder {
 						// speciefing stuff like extends / throws / implements
 						// detected
 						temporary.add(word);
-					} else if (parenttype.equals(KeyWord.INTERFACE) && word.getKey().equals(KeyWord.SEMICOLON)) {
+					} else if ((parenttype.equals(KeyWord.INTERFACE) || abstractClass) && word.getKey().equals(KeyWord.SEMICOLON)) {
 						// method interface... 
 						if (!content.isEmpty()) {
 							List<WordInFile> somecontent = new ArrayList<WordInFile>();
