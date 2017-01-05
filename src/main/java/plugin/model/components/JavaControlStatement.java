@@ -1,7 +1,11 @@
-package plugin.model;
+package plugin.model.components;
 
 import java.util.List;
 import java.util.Map;
+
+import plugin.model.JavaFileContent;
+import plugin.model.StatementType;
+import plugin.model.WordInFile;
 
 public class JavaControlStatement extends JavaStatement {
 	

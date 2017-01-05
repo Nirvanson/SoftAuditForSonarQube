@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import plugin.analyzer.FileNormalizer;
 import plugin.model.WordInFile;
 
 public class JavaFileNormalizerTest {
@@ -20,7 +21,7 @@ public class JavaFileNormalizerTest {
     @Test
     public void testFileNormalization() {
     	File input = new File(getClass().getResource("/testdata/TestClass.txt").getPath());
-    	JavaFileNormalizer normalizer = new JavaFileNormalizer();
+    	FileNormalizer normalizer = new FileNormalizer();
     	
     	// prepare file
     	List<String> lines = new ArrayList<String>();

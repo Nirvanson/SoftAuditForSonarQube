@@ -1,4 +1,4 @@
-package plugin.analyser;
+package plugin.analyzer;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,7 +11,7 @@ import java.util.List;
 import plugin.model.WordInFile;
 import plugin.model.KeyWord;
 
-public class JavaFileNormalizer {
+public class FileNormalizer {
 	/**
 	 * Prepares File for parsing. remove comments, empty lines, leading
 	 * spaces....

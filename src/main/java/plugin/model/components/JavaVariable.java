@@ -1,6 +1,9 @@
-package plugin.model;
+package plugin.model.components;
 
 import java.util.List;
+
+import plugin.model.JavaFileContent;
+import plugin.model.WordInFile;
 
 public class JavaVariable extends JavaFileContent{
 	private final String name;

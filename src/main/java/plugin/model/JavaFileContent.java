@@ -2,7 +2,7 @@ package plugin.model;
 
 import java.util.List;
 
-public class JavaFileContent {
+public abstract class JavaFileContent {
 	private List<JavaFileContent> content;
 	
 	public JavaFileContent(List<JavaFileContent> content) {

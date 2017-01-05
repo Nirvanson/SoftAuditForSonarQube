@@ -1,6 +1,9 @@
-package plugin.model;
+package plugin.model.components;
 
 import java.util.List;
+
+import plugin.model.JavaFileContent;
+import plugin.model.WordInFile;
 
 public class JavaEnumValues extends JavaFileContent {
 	private List<List<WordInFile>> values;

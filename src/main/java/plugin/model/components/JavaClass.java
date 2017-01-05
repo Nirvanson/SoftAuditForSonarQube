@@ -1,6 +1,10 @@
-package plugin.model;
+package plugin.model.components;
 
 import java.util.List;
+
+import plugin.model.JavaFileContent;
+import plugin.model.KeyWord;
+import plugin.model.WordInFile;
 
 public class JavaClass extends JavaFileContent {
 	private final String name;

@@ -1,24 +1,62 @@
-package plugin.analyser;
+package plugin.analyzer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import plugin.model.JavaClass;
-import plugin.model.JavaEnumValues;
 import plugin.model.JavaFileContent;
-import plugin.model.JavaMethod;
-import plugin.model.JavaStatement;
-import plugin.model.JavaStatementWithAnonymousClass;
-import plugin.model.JavaVariable;
 import plugin.model.KeyWord;
 import plugin.model.StatementType;
 import plugin.model.WordInFile;
 import plugin.model.WordList;
 import plugin.model.WordType;
+import plugin.model.components.JavaClass;
+import plugin.model.components.JavaEnumValues;
+import plugin.model.components.JavaMethod;
+import plugin.model.components.JavaStatement;
+import plugin.model.components.JavaStatementWithAnonymousClass;
+import plugin.model.components.JavaVariable;
 
-public class JavaBaseModelBuilder {
+public class ModelBuilder {
+	
+	public List<JavaFileContent> parseClassContent(JavaFileContent parent) {
+		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
+		JavaFileContent content = null;
+		if (parent.getContent()!=null && !parent.getContent().isEmpty()) {
+			content = parent.getContent().get(0);
+		}
+		KeyWord parenttype = null;
+		if (parent instanceof JavaClass) {
+			parenttype = ((JavaClass) parent).getType();
+		} else if (parent instanceof JavaStatementWithAnonymousClass) {
+			parenttype = KeyWord.CLASS;
+		}
+		if (content instanceof WordList) {
+			if (parenttype!=null && parenttype.equals(KeyWord.ENUM)) {
+				//parse enumvalues 
+				content = extractEnumValues(result, ((WordList) content).getWordlist());
+			}
+			//parse methods and classes in Wordlist
+			if (content!=null) {
+				boolean abstractClass = false;
+				if (parent instanceof JavaClass && parenttype == KeyWord.CLASS && ((JavaClass) parent).getModifiers().contains(new WordInFile(null, KeyWord.ABSTRACT))) {
+					// for parsing abstract classes like interfaces (methodheaders without body)
+					abstractClass = true;
+				}
+				for (JavaFileContent classcontent : parseMethodsAndClasses(((WordList) content).getWordlist(), parenttype, abstractClass)) {
+					if (classcontent instanceof JavaClass || classcontent instanceof JavaMethod || classcontent instanceof JavaStatementWithAnonymousClass) {
+						classcontent.setContent(parseClassContent(classcontent));
+					}
+					result.add(classcontent);
+				}
+			} 
+		} else if (content==null) {
+			result=null;
+		}
+		return result;
+	}
+	
 	/**
 	 * Parsing the basic structure of a java class/interface/enum to model.
 	 * package, imports, classdefinition, Annotations outside class definition
@@ -158,7 +196,7 @@ public class JavaBaseModelBuilder {
 							// extended type is some generic stuff like
 							// List<String>
 							i++;
-							int endOfGeneric = parseGeneric(wordList, i + 1);
+							int endOfGeneric = ModelBuildHelper.parseGeneric(wordList, i + 1);
 							while (i < endOfGeneric) {
 								i++;
 							}
@@ -194,7 +232,7 @@ public class JavaBaseModelBuilder {
 							// implemented type is some generic stuff like
 							// List<String>
 							i++;
-							int endOfGeneric = parseGeneric(wordList, i + 1);
+							int endOfGeneric = ModelBuildHelper.parseGeneric(wordList, i + 1);
 							while (i < endOfGeneric) {
 								i++;
 							}
@@ -256,7 +294,7 @@ public class JavaBaseModelBuilder {
 	 *            - the class/method boddy as wordlist
 	 * @returns model of the class/method-body
 	 */
-	public List<JavaFileContent> parseMethodsAndClasses(List<WordInFile> wordlist, KeyWord parenttype, boolean abstractClass) {
+	private List<JavaFileContent> parseMethodsAndClasses(List<WordInFile> wordlist, KeyWord parenttype, boolean abstractClass) {
 		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
 		int openBraces = 0;
 		int methodDetectionState = 0;
@@ -301,7 +339,7 @@ public class JavaBaseModelBuilder {
 							// extended type is some generic stuff like
 							// List<String>
 							i++;
-							int endOfGeneric = parseGeneric(wordlist, i + 1);
+							int endOfGeneric = ModelBuildHelper.parseGeneric(wordlist, i + 1);
 							while (i < endOfGeneric) {
 								i++;
 							}
@@ -337,7 +375,7 @@ public class JavaBaseModelBuilder {
 							// implemented type is some generic stuff like
 							// List<String>
 							i++;
-							int endOfGeneric = parseGeneric(wordlist, i + 1);
+							int endOfGeneric = ModelBuildHelper.parseGeneric(wordlist, i + 1);
 							while (i < endOfGeneric) {
 								i++;
 							}
@@ -444,7 +482,7 @@ public class JavaBaseModelBuilder {
 								// type is some generic stuff like
 								// List<String>
 								i++;
-								int endOfGeneric = parseGeneric(wordlist, i + 1);
+								int endOfGeneric = ModelBuildHelper.parseGeneric(wordlist, i + 1);
 								while (i < endOfGeneric) {
 									anonymousClassType.add(wordlist.get(i));
 									i++;
@@ -598,7 +636,7 @@ public class JavaBaseModelBuilder {
 						i++;
 					} else if (word.getKey().equals(KeyWord.LESS)) {
 						// returntype is some generic stuff like List<String>
-						int endOfGeneric = parseGeneric(wordlist, i + 1);
+						int endOfGeneric = ModelBuildHelper.parseGeneric(wordlist, i + 1);
 						if (endOfGeneric == 0) {
 							// no valid generic returnType --> no method header!
 							// reset and check word again
@@ -655,7 +693,7 @@ public class JavaBaseModelBuilder {
 				case 3:
 					// modifiers, returntype, methodname and open paranthese
 					// detected
-					WordInFile param = isParameter(wordlist.subList(i, wordlist.size() - 1), false);
+					WordInFile param = ModelBuildHelper.isParameter(wordlist.subList(i, wordlist.size() - 1), false);
 					if (param != null) {
 						// add potential parameter to potential methodheader
 						List<WordInFile> paramtype = new ArrayList<WordInFile>();
@@ -686,7 +724,7 @@ public class JavaBaseModelBuilder {
 				case 4:
 					// modifiers, returntype, methodname, open paranthese and at
 					// least one parameter detected
-					WordInFile secondaryparam = isParameter(wordlist.subList(i, wordlist.size() - 1), true);
+					WordInFile secondaryparam = ModelBuildHelper.isParameter(wordlist.subList(i, wordlist.size() - 1), true);
 					if (secondaryparam != null) {
 						// add potential parameter to potential methodheader
 						List<WordInFile> paramtype = new ArrayList<WordInFile>();
@@ -823,197 +861,6 @@ public class JavaBaseModelBuilder {
 			result.add(new WordList(content));
 		}
 		return result;
-	}
-
-	/**
-	 * checks if following words are valid parameter declaration
-	 * 
-	 * @param words
-	 *            - wordlist beginning from first word after "(" or another
-	 *            parameter
-	 * @param withSeparator
-	 *            - search for "," before parameter declaration
-	 * @return the parameter identifier word
-	 */
-	private WordInFile isParameter(List<WordInFile> words, boolean withSeparator) {
-		int position = 0;
-		if (withSeparator) {
-			if (!words.get(position).getKey().equals(KeyWord.COMMA)) {
-				// separator "," is missing
-				return null;
-			} else {
-				// correct separator ","
-				position++;
-			}
-		}
-		while (words.get(position).getKey().equals(KeyWord.ANNOTATION)) {
-			// annotation on parameter
-			position++;
-		}
-		if (words.get(position).getKey().equals(KeyWord.FINAL)) {
-			// optional modifier final for parameter
-			position++;
-		}
-		if (!(words.get(position).getKey().equals(KeyWord.WORD)
-				|| words.get(position).getKey().getType().equals(WordType.DATATYPE))) {
-			// no valid parameter type
-			return null;
-		} else {
-			// valid parameter type beginning
-			position++;
-		}
-		if (words.get(position).getKey().equals(KeyWord.DOT) && !words.get(position + 1).getKey().equals(KeyWord.DOT)) {
-			while (words.get(position).getKey().equals(KeyWord.DOT)) {
-				position++;
-				if (!(words.get(position).getKey().equals(KeyWord.WORD)
-						|| words.get(position).getKey().getType().equals(WordType.DATATYPE))) {
-					// no valid parameter type
-					return null;
-				} else {
-					// valid parameter type x.y
-					position++;
-				}
-			}
-		}
-		if (words.get(position).getKey().equals(KeyWord.OPENBRACKET)
-				&& words.get(position + 1).getKey().equals(KeyWord.CLOSEBRACKET)) {
-			// parameter type array "String[]"
-			position++;
-			position++;
-		} else if (words.get(position).getKey().equals(KeyWord.DOT)
-				&& words.get(position + 1).getKey().equals(KeyWord.DOT)
-				&& words.get(position + 2).getKey().equals(KeyWord.DOT)) {
-			// variable array of parameters "String..."
-			position++;
-			position++;
-			position++;
-		} else if (words.get(position).getKey().equals(KeyWord.LESS)) {
-			// parse generic datatypes like Hashmap<A,B>
-			position++;
-			position = parseGeneric(words, position);
-			if (position == 0) {
-				return null;
-			}
-			position++;
-		}
-		if (words.get(position).getKey().equals(KeyWord.WORD)) {
-			// correct parameter identifier
-			return words.get(position);
-		}
-		// no correct identifier
-		return null;
-	}
-
-	/**
-	 * parse recursive through generic type elements in Parameter declaration
-	 * like HashMap<String, Integer>
-	 * 
-	 * @param words
-	 *            - wordlist beginning from first word after "<"
-	 * @param position
-	 *            - the current position in isParameter method
-	 * @return position of last ">" or 0 if invalid
-	 */
-	private int parseGeneric(List<WordInFile> words, int position) {
-		if (words.get(position).getKey().equals(KeyWord.WORD)
-				|| words.get(position).getKey().getType().equals(WordType.DATATYPE)) {
-			position++;
-		} else if (words.get(position).getKey().equals(KeyWord.QUESTIONMARK)){
-			position++;
-			if (words.get(position).getKey().equals(KeyWord.EXTENDS)) {
-				position++;
-				if (words.get(position).getKey().equals(KeyWord.WORD)
-						|| words.get(position).getKey().getType().equals(WordType.DATATYPE)) {
-					position++;
-				}
-			}
-		} else {
-			return 0;
-		}
-		while (words.get(position).getKey().equals(KeyWord.DOT)) {
-			position++;
-			if (!(words.get(position).getKey().equals(KeyWord.WORD)
-					|| words.get(position).getKey().getType().equals(WordType.DATATYPE))) {
-				// no valid parameter type
-				return 0;
-			} else {
-				// valid parameter type x.y
-				position++;
-			}
-		}
-		if (words.get(position).getKey().equals(KeyWord.OPENBRACKET)
-				&& words.get(position + 1).getKey().equals(KeyWord.CLOSEBRACKET)) {
-			// parameter type array "String[]"
-			position++;
-			position++;
-		} else if (words.get(position).getKey().equals(KeyWord.LESS)) {
-			// recursive generic parsing...
-			position++;
-			position = parseGeneric(words, position);
-			if (position == 0) {
-				return 0;
-			}
-			position++;
-		}
-		if (words.get(position).getKey().equals(KeyWord.COMMA)) {
-			boolean comma = true;
-			position++;
-			while (comma) {
-				if (words.get(position).getKey().equals(KeyWord.WORD)
-						|| words.get(position).getKey().getType().equals(WordType.DATATYPE)) {
-						position++;
-			} else if (words.get(position).getKey().equals(KeyWord.QUESTIONMARK)){
-				position++;
-				if (words.get(position).getKey().equals(KeyWord.EXTENDS)) {
-					position++;
-					if (words.get(position).getKey().equals(KeyWord.WORD)
-							|| words.get(position).getKey().getType().equals(WordType.DATATYPE)) {
-						position++;
-					}
-				}
-			} else {
-					return 0;
-				}
-				while (words.get(position).getKey().equals(KeyWord.DOT)) {
-					position++;
-					if (!(words.get(position).getKey().equals(KeyWord.WORD)
-							|| words.get(position).getKey().getType().equals(WordType.DATATYPE))) {
-						// no valid parameter type
-						return 0;
-					} else {
-						// valid parameter type x.y
-						position++;
-					}
-				}
-				if (words.get(position).getKey().equals(KeyWord.OPENBRACKET)
-						&& words.get(position + 1).getKey().equals(KeyWord.CLOSEBRACKET)) {
-					// parameter type array "String[]"
-					position++;
-					position++;
-				} else if (words.get(position).getKey().equals(KeyWord.LESS)) {
-					// recursive generic parsing...
-					position++;
-					position = parseGeneric(words, position);
-					if (position == 0) {
-						return 0;
-					}
-					position++;
-				}
-				if (!words.get(position).getKey().equals(KeyWord.COMMA)) {
-					// another generic type behind a comma
-					comma = false;
-				} else {
-					position++;
-				}
-			}
-		}
-		if (words.get(position).getKey().equals(KeyWord.GREATER)) {
-			// close this generic
-			// position++;
-			return position;
-		}
-		// invalid generic
-		return 0;
 	}
 
 	public JavaFileContent extractEnumValues(List<JavaFileContent> result, List<WordInFile> wordlist) {

@@ -1,8 +1,7 @@
-package plugin.analyser;
+package plugin.analyzer;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -11,12 +10,10 @@ import java.util.Map;
 import org.sonar.api.measures.Metric;
 
 import plugin.SoftAuditMetrics;
-import plugin.model.JavaClass;
 import plugin.model.JavaFileContent;
-import plugin.model.JavaMethod;
-import plugin.model.JavaStatementWithAnonymousClass;
 import plugin.model.WordInFile;
-import plugin.model.WordList;
+import plugin.model.components.JavaClass;
+import plugin.model.components.JavaMethod;
 import plugin.util.Logger;
 import plugin.model.KeyWord;
 
@@ -26,16 +23,16 @@ import plugin.model.KeyWord;
  * @author Jan Rucks
  * @version 0.1
  */
-public class JavaFileAnalyzer {
+public class FileAnalyzer {
 
 	/**
 	 * FileList for Parsing.
 	 */
 	private final Iterable<File> files;
 	private Logger log;
-	private final JavaFileNormalizer normalizer;
-	private final JavaBaseModelBuilder builder;
-	private final JavaModelExpander expander;
+	private final FileNormalizer normalizer;
+	private final ModelBuilder builder;
+	private final ModelExpander expander;
 
 	/**
 	 * Analyzer constructor.
@@ -43,12 +40,12 @@ public class JavaFileAnalyzer {
 	 * @param files
 	 *            - The files to analyze
 	 */
-	public JavaFileAnalyzer(final Iterable<File> files) {
+	public FileAnalyzer(final Iterable<File> files) {
 		super();
 		this.files = files;
-		normalizer = new JavaFileNormalizer();
-		builder = new JavaBaseModelBuilder();
-		expander = new JavaModelExpander();
+		normalizer = new FileNormalizer();
+		builder = new ModelBuilder();
+		expander = new ModelExpander();
 		log = Logger.getLogger();
 	}
 
@@ -90,7 +87,7 @@ public class JavaFileAnalyzer {
 			log.printModel("class", contents);
 			for (JavaFileContent content : contents) {
 				if (content instanceof JavaClass) {
-					content.setContent(parseClassContent(content));
+					content.setContent(builder.parseClassContent(content));
 				}
 			}
 			log.printModel("refined", contents);
@@ -101,10 +98,12 @@ public class JavaFileAnalyzer {
 			}
 			for (JavaFileContent content : contents) {
 				if (content instanceof JavaClass) {
-					content.setContent(parseStructuralStatements(content.getContent()));
+					content.setContent(expander.parseStructuralStatements(content.getContent()));
 				}
 			}
 			log.printModel("expanded", contents);
+			contents = expander.splitRemainingWordListsToStatements(contents);
+			log.printModel("full", contents);
 			sourceFiles++;
 		}
 		log.close();
@@ -113,66 +112,9 @@ public class JavaFileAnalyzer {
 		return result;
 	}
 
-	private List<JavaFileContent> parseStructuralStatements(List<JavaFileContent> contentlist) {
-		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
-		if (!(contentlist == null)) {
-			for (JavaFileContent content : contentlist) {
-				if (content instanceof JavaMethod && content.getContent()!=null) {
-					List<JavaFileContent> newMethodContent = new ArrayList<JavaFileContent>();
-					for (JavaFileContent methodcontent : content.getContent()) {
-						if (methodcontent instanceof JavaClass || methodcontent instanceof JavaStatementWithAnonymousClass) {
-							methodcontent.setContent(parseStructuralStatements(methodcontent.getContent()));
-							newMethodContent.add(methodcontent);
-						} else if (methodcontent instanceof WordList) {
-							newMethodContent.addAll(expander.addStructuralStatements(((WordList) methodcontent).getWordlist()));
-						} 
-					} 
-					content.setContent(newMethodContent);
-				} else if (content instanceof JavaClass || content instanceof JavaStatementWithAnonymousClass) {
-					content.setContent(parseStructuralStatements(content.getContent()));
-				}
-				result.add(content);
-			}
-		}
-		return result;
-	}
 	
-	private List<JavaFileContent> parseClassContent(JavaFileContent parent) {
-		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
-		JavaFileContent content = null;
-		if (parent.getContent()!=null && !parent.getContent().isEmpty()) {
-			content = parent.getContent().get(0);
-		}
-		KeyWord parenttype = null;
-		if (parent instanceof JavaClass) {
-			parenttype = ((JavaClass) parent).getType();
-		} else if (parent instanceof JavaStatementWithAnonymousClass) {
-			parenttype = KeyWord.CLASS;
-		}
-		if (content instanceof WordList) {
-			if (parenttype!=null && parenttype.equals(KeyWord.ENUM)) {
-				//parse enumvalues 
-				content = builder.extractEnumValues(result, ((WordList) content).getWordlist());
-			}
-			//parse methods and classes in Wordlist
-			if (content!=null) {
-				boolean abstractClass = false;
-				if (parent instanceof JavaClass && parenttype == KeyWord.CLASS && ((JavaClass) parent).getModifiers().contains(new WordInFile(null, KeyWord.ABSTRACT))) {
-					// for parsing abstract classes like interfaces (methodheaders without body)
-					abstractClass = true;
-				}
-				for (JavaFileContent classcontent : builder.parseMethodsAndClasses(((WordList) content).getWordlist(), parenttype, abstractClass)) {
-					if (classcontent instanceof JavaClass || classcontent instanceof JavaMethod || classcontent instanceof JavaStatementWithAnonymousClass) {
-						classcontent.setContent(parseClassContent(classcontent));
-					}
-					result.add(classcontent);
-				}
-			} 
-		} else if (content==null) {
-			result=null;
-		}
-		return result;
-	}
+	
+	
 
 	/**
 	 * Count methods and their parameters

@@ -1,4 +1,4 @@
-package plugin.analyser;
+package plugin.analyzer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,15 +6,92 @@ import java.util.HashMap;
 import java.util.List;
 
 import plugin.model.JavaFileContent;
-import plugin.model.JavaControlStatement;
 import plugin.model.KeyWord;
 import plugin.model.StatementType;
 import plugin.model.WordInFile;
 import plugin.model.WordList;
+import plugin.model.components.JavaClass;
+import plugin.model.components.JavaControlStatement;
+import plugin.model.components.JavaMethod;
+import plugin.model.components.JavaStatement;
+import plugin.model.components.JavaStatementWithAnonymousClass;
 
-public class JavaModelExpander {
+public class ModelExpander {
+	
+	public List<JavaFileContent> splitRemainingWordListsToStatements(List<JavaFileContent> contents) {
+		if (contents == null) {
+			return null;
+		}
+		if (contents.isEmpty()) {
+			return contents;
+		}
+		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
+		for (JavaFileContent content : contents) {
+			if (content instanceof JavaClass || content instanceof JavaMethod || content instanceof JavaControlStatement
+					|| content instanceof JavaStatementWithAnonymousClass) {
+				content.setContent(splitRemainingWordListsToStatements(content.getContent()));
+			}
+			if (content instanceof JavaControlStatement) {
+				JavaControlStatement ctrlstm = (JavaControlStatement) content;
+				ctrlstm.setOthercontent(splitRemainingWordListsToStatements(ctrlstm.getOthercontent()));
+				ctrlstm.setResources(splitRemainingWordListsToStatements(ctrlstm.getResources()));
+				if (ctrlstm.getCatchedExceptions()!=null) {
+					for (List<WordInFile> exception : ctrlstm.getCatchedExceptions().keySet()) {
+						ctrlstm.getCatchedExceptions().put(exception, splitRemainingWordListsToStatements(ctrlstm.getCatchedExceptions().get(exception)));
+					}
+				}
+				result.add(ctrlstm);
+			} else if (!(content instanceof WordList)) {
+				result.add(content);
+			} else {
+				result.addAll(splitWordListToStatements(((WordList) content).getWordlist()));
+			}
+		}
+		return result;
+	}
 
-	public List<JavaFileContent> addStructuralStatements(List<WordInFile> content) {
+	public List<JavaFileContent> parseStructuralStatements(List<JavaFileContent> contentlist) {
+		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
+		if (!(contentlist == null)) {
+			for (JavaFileContent content : contentlist) {
+				if (content instanceof JavaMethod && content.getContent()!=null) {
+					List<JavaFileContent> newMethodContent = new ArrayList<JavaFileContent>();
+					for (JavaFileContent methodcontent : content.getContent()) {
+						if (methodcontent instanceof JavaClass || methodcontent instanceof JavaStatementWithAnonymousClass) {
+							methodcontent.setContent(parseStructuralStatements(methodcontent.getContent()));
+							newMethodContent.add(methodcontent);
+						} else if (methodcontent instanceof WordList) {
+							newMethodContent.addAll(addStructuralStatements(((WordList) methodcontent).getWordlist()));
+						} 
+					} 
+					content.setContent(newMethodContent);
+				} else if (content instanceof JavaClass || content instanceof JavaStatementWithAnonymousClass) {
+					content.setContent(parseStructuralStatements(content.getContent()));
+				}
+				result.add(content);
+			}
+		}
+		return result;
+	}
+	
+	private List<JavaFileContent> splitWordListToStatements(List<WordInFile> wordlist) {
+		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
+		List<WordInFile> current = new ArrayList<WordInFile>();
+		for (WordInFile word : wordlist) {
+			current.add(word);
+			if (word.equals(KeyWord.SEMICOLON)) {
+				List<WordInFile> statement = new ArrayList<WordInFile>();
+				statement.addAll(current);
+				current.clear();
+				JavaStatement newStatement = new JavaStatement(StatementType.UNSPECIFIED);
+				newStatement.setStatementText(statement);
+				result.add(newStatement);
+			}
+		}
+		return result;
+	}
+	
+	private List<JavaFileContent> addStructuralStatements(List<WordInFile> content) {
 		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
 		List<WordInFile> otherContent = new ArrayList<WordInFile>();
 		List<KeyWord> keywords = Arrays.asList(KeyWord.SWITCH, KeyWord.DO, KeyWord.WHILE, 

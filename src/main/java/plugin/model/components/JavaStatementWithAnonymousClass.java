@@ -1,6 +1,9 @@
-package plugin.model;
+package plugin.model.components;
 
 import java.util.List;
+
+import plugin.model.StatementType;
+import plugin.model.WordInFile;
 
 public class JavaStatementWithAnonymousClass extends JavaStatement {
 	private final List<WordInFile> statementBeforeClass;

@@ -12,17 +12,17 @@ import java.util.Map;
 
 import org.sonar.api.measures.Metric;
 
-import plugin.model.JavaClass;
-import plugin.model.JavaEnumValues;
 import plugin.model.JavaFileContent;
-import plugin.model.JavaMethod;
-import plugin.model.JavaStatement;
-import plugin.model.JavaControlStatement;
-import plugin.model.JavaStatementWithAnonymousClass;
-import plugin.model.JavaVariable;
 import plugin.model.StatementType;
 import plugin.model.WordInFile;
 import plugin.model.WordList;
+import plugin.model.components.JavaClass;
+import plugin.model.components.JavaControlStatement;
+import plugin.model.components.JavaEnumValues;
+import plugin.model.components.JavaMethod;
+import plugin.model.components.JavaStatement;
+import plugin.model.components.JavaStatementWithAnonymousClass;
+import plugin.model.components.JavaVariable;
 
 public class Logger {
 	private static Logger logger;
@@ -36,6 +36,7 @@ public class Logger {
 	private final String STEP_6 = "*** Step 6 - Recursivly refine codemodel";
 	private final String STEP_7 = "*** Step 7 - Count methods and parameters in model";
 	private final String STEP_8 = "*** Step 8 - Expand model with structural statements (ifs, loops, ...)";
+	private final String STEP_9 = "*** Step 9 - Split remaining wordlists to statements";
 	private final String TIME = "*** Finished at TIME";
 	private final String INPUT_ERROR = "Method METHODNAME of Logger recieved invalid input: PARAM";
 	
@@ -141,6 +142,10 @@ public class Logger {
 			break;
 		case "expanded":
 			writer.println(STEP_8);
+			levelToLog = 2;
+			break;
+		case "full":
+			writer.println(STEP_9);
 			break;
 		default:
 			writer.println(INPUT_ERROR.replace("METHODNAME", "printModel").replace("PARAM", step));

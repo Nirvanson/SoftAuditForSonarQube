@@ -11,7 +11,7 @@ import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 
-import plugin.analyser.JavaFileAnalyzer;
+import plugin.analyzer.FileAnalyzer;
 
 /**
  * Analyses project-files in search for relevant information.
@@ -57,7 +57,7 @@ public class SoftAuditSensor implements Sensor {
     	// extract files
         Iterable<File> files = fileSystem.files(fileSystem.predicates().hasLanguage("java"));
         // initalise analyzer 
-        JavaFileAnalyzer analyzer = new JavaFileAnalyzer(files);
+        FileAnalyzer analyzer = new FileAnalyzer(files);
         // measure
         Map<Metric<Integer>, Double> measures = new HashMap<Metric<Integer>, Double>();
         measures = analyzer.analyze();
