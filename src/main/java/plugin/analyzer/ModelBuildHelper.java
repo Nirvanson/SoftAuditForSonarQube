@@ -1,5 +1,6 @@
 package plugin.analyzer;
 
+import java.util.Arrays;
 import java.util.List;
 
 import plugin.model.KeyWord;
@@ -7,6 +8,9 @@ import plugin.model.WordInFile;
 import plugin.model.WordType;
 
 public class ModelBuildHelper {
+	
+	public final static List<KeyWord> keywords = Arrays.asList(KeyWord.SWITCH, KeyWord.DO, KeyWord.WHILE, KeyWord.FOR, KeyWord.IF,
+			KeyWord.TRY, KeyWord.RETURN, KeyWord.SYNCHRONIZED);
 	
 	/**
 	 * checks if following words are valid parameter declaration

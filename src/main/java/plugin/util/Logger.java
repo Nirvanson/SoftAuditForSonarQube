@@ -208,6 +208,9 @@ public class Logger {
 			} else if (content instanceof JavaControlStatement) {
 				JavaControlStatement statement = (JavaControlStatement) content;
 				String header = addTabs(level) + statement.getType() + " - ControlStatement ";
+				if (statement.getLabel()!=null) {
+					header += "labeled with '" + statement.getLabel() + "' ";
+				}
 				if (statement.getType().equals(StatementType.SWITCH)) {
 					String condition = "";
 					for (WordInFile conditionWord : statement.getCondition()) {
@@ -289,6 +292,14 @@ public class Logger {
 					} else {
 						header += "Enhanced version scanning: (" + condition + ") with content:";
 					}
+					writer.println(header);
+					printFileContent(statement.getContent(), level+1);
+				} else if (statement.getType().equals(StatementType.SYNCHRONIZED)) {
+					String condition = "";
+					for (WordInFile conditionWord : statement.getCondition()) {
+						condition += conditionWord + " ";
+					}
+					header += "Over lock: (" + condition + ") with content:";
 					writer.println(header);
 					printFileContent(statement.getContent(), level+1);
 				} else if (statement.getType().equals(StatementType.RETURN)) {

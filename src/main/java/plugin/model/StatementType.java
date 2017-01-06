@@ -12,5 +12,6 @@ public enum StatementType {
 	BLOCK,
 	SWITCH,
 	CASE,
+	SYNCHRONIZED,
 	UNSPECIFIED
 }
