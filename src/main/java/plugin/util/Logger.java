@@ -158,6 +158,7 @@ public class Logger {
 	}
 
 	private void printFileContent(List<JavaFileContent> contents, int level) {
+		if (contents!=null)
 		for (JavaFileContent content : contents) {
 			if (content instanceof JavaClass) {
 				JavaClass theClass = (JavaClass) content;
@@ -299,11 +300,9 @@ public class Logger {
 					header += "Over lock: (" + condition + ") with content:";
 					writer.println(header);
 					printFileContent(statement.getContent(), level+1);
-				} else if (statement.getType().equals(StatementType.RETURN)) {
-					writer.println(header + ":" + statement.getStatementText());
 				} else {
-					writer.println(header);
-				}
+					writer.println(header + ":" + statement.getStatementText());
+				} 
 			} else if (content instanceof JavaStatementWithAnonymousClass) {
 				JavaStatementWithAnonymousClass statement = (JavaStatementWithAnonymousClass) content;
 				String classline = addTabs(level) + statement.getType() + " - Statement with anonymous class: '";

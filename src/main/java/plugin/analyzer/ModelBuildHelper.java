@@ -10,7 +10,7 @@ import plugin.model.WordType;
 public class ModelBuildHelper {
 	
 	public final static List<KeyWord> keywords = Arrays.asList(KeyWord.SWITCH, KeyWord.DO, KeyWord.WHILE, KeyWord.FOR, KeyWord.IF,
-			KeyWord.TRY, KeyWord.RETURN, KeyWord.SYNCHRONIZED);
+			KeyWord.TRY, KeyWord.RETURN, KeyWord.SYNCHRONIZED, KeyWord.BREAK, KeyWord.CONTINUE, KeyWord.ASSERT, KeyWord.THROW);
 	
 	/**
 	 * checks if following words are valid parameter declaration
