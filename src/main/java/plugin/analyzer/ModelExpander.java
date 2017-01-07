@@ -50,6 +50,23 @@ public class ModelExpander {
 		return result;
 	}
 
+	private List<JavaFileContent> splitWordListToStatements(List<WordInFile> wordlist) {
+		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
+		List<WordInFile> current = new ArrayList<WordInFile>();
+		for (WordInFile word : wordlist) {
+			current.add(word);
+			if (word.equals(KeyWord.SEMICOLON)) {
+				List<WordInFile> statement = new ArrayList<WordInFile>();
+				statement.addAll(current);
+				current.clear();
+				JavaStatement newStatement = new JavaStatement(StatementType.UNSPECIFIED);
+				newStatement.setStatementText(statement);
+				result.add(newStatement);
+			}
+		}
+		return result;
+	}
+
 	public List<JavaFileContent> parseStructuralStatements(List<JavaFileContent> contentlist) {
 		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
 		if (!(contentlist == null)) {
@@ -75,92 +92,47 @@ public class ModelExpander {
 		return result;
 	}
 
-	private List<JavaFileContent> splitWordListToStatements(List<WordInFile> wordlist) {
-		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
-		List<WordInFile> current = new ArrayList<WordInFile>();
-		for (WordInFile word : wordlist) {
-			current.add(word);
-			if (word.equals(KeyWord.SEMICOLON)) {
-				List<WordInFile> statement = new ArrayList<WordInFile>();
-				statement.addAll(current);
-				current.clear();
-				JavaStatement newStatement = new JavaStatement(StatementType.UNSPECIFIED);
-				newStatement.setStatementText(statement);
-				result.add(newStatement);
-			}
-		}
-		return result;
-	}
-
 	private List<JavaFileContent> addStructuralStatements(List<WordInFile> content) {
 		List<JavaFileContent> result = new ArrayList<JavaFileContent>();
 		List<WordInFile> otherContent = new ArrayList<WordInFile>();
-		WordInFile potentialLabel = null;
-		boolean labeled = false;
+		List<WordInFile> potentialLabels = new ArrayList<WordInFile>();
 		for (int i = 0; i < content.size(); i++) {
 			WordInFile word = content.get(i);
 			if (ModelBuildHelper.keywords.contains(word)) {
-				if (!labeled) {
-					potentialLabel = null;
-				}
 				if (!otherContent.isEmpty()) {
 					List<WordInFile> wordlist = new ArrayList<WordInFile>();
-					if (labeled) {
-						// if labeled controlstatement, don't add the label to
-						// content before statement
-						for (int j = 0; j < otherContent.size() - 2; j++) {
-							wordlist.add(otherContent.get(j));
-						}
-					} else {
-						// otherwise add all...
-						wordlist.addAll(otherContent);
-					}
+					wordlist.addAll(otherContent);
 					otherContent.clear();
 					result.add(new WordList(wordlist));
 				}
-				if (word.equals(KeyWord.SWITCH)) {
-					i = parseSwitch(content, result, i, potentialLabel);
-				} else if (word.equals(KeyWord.DO)) {
-					i = parseDoWhile(content, result, i, potentialLabel);
-				} else if (word.equals(KeyWord.WHILE)) {
-					i = parseWhile(content, result, i, potentialLabel);
-				} else if (word.equals(KeyWord.FOR)) {
-					i = parseFor(content, result, i, potentialLabel);
-				} else if (word.equals(KeyWord.IF)) {
-					i = parseIf(content, result, i, potentialLabel);
-				} else if (word.equals(KeyWord.TRY)) {
-					i = parseTry(content, result, i, potentialLabel);
-				} else if (word.equals(KeyWord.SYNCHRONIZED)) {
-					i = parseSynchronized(content, result, i, potentialLabel);
-				} else if (word.equals(KeyWord.RETURN)) {
-					i = parseReturn(content, result, i, potentialLabel);
-				}
+				potentialLabels.clear();
+				i = parseSingleStatement(word.getKey(), i, content, result);
 			} else {
 				if (word.equals(KeyWord.OPENBRACE) && (i == 0 || (!content.get(i - 1).equals(KeyWord.CLOSEBRACKET)
-						&& !content.get(i - 1).equals(KeyWord.ASSERT)))) {
+						&& !content.get(i - 1).equals(KeyWord.ASSIGN)))) {
 					if (!otherContent.isEmpty()) {
 						List<WordInFile> wordlist = new ArrayList<WordInFile>();
 						wordlist.addAll(otherContent);
 						otherContent.clear();
 						result.add(new WordList(wordlist));
 					}
-					if (!labeled) {
-						potentialLabel = null;
-					}
-					i = parseAnonymousBlock(content, result, i, potentialLabel);
+					potentialLabels.clear();
+					i = parseAnonymousBlock(content, result, i);
+				} else if (word.getKey().equals(KeyWord.WORD) && content.get(i + 1).equals(KeyWord.DOUBLEDOT)) {
+					potentialLabels.add(word);
+					potentialLabels.add(content.get(i + 1));
+					i++;
 				} else {
-					if (word.getKey().equals(KeyWord.WORD)) {
-						potentialLabel = word;
-						labeled = false;
-					} else if (potentialLabel != null && word.equals(KeyWord.DOUBLEDOT)) {
-						labeled = true;
-					} else {
-						potentialLabel = null;
-						labeled = false;
+					if (!potentialLabels.isEmpty()) {
+						otherContent.addAll(potentialLabels);
+						potentialLabels.clear();
 					}
 					otherContent.add(word);
 				}
 			}
+		}
+		if (!potentialLabels.isEmpty()) {
+			otherContent.addAll(potentialLabels);
 		}
 		if (!otherContent.isEmpty()) {
 			result.add(new WordList(otherContent));
@@ -168,10 +140,43 @@ public class ModelExpander {
 		return result;
 	}
 
-	private int parseSynchronized(List<WordInFile> content, List<JavaFileContent> result, int i, WordInFile label) {
+	private int parseSingleStatement(KeyWord key, int i, List<WordInFile> content, List<JavaFileContent> result) {
+		int endposition;
+		switch (key) {
+		case SWITCH:
+			endposition = parseSwitch(content, result, i);
+			break;
+		case DO:
+			endposition = parseDoWhile(content, result, i);
+			break;
+		case WHILE:
+			endposition = parseWhile(content, result, i);
+			break;
+		case FOR:
+			endposition = parseFor(content, result, i);
+			break;
+		case IF:
+			endposition = parseIf(content, result, i);
+			break;
+		case TRY:
+			endposition = parseTry(content, result, i);
+			break;
+		case SYNCHRONIZED:
+			endposition = parseSynchronized(content, result, i);
+			break;
+		case RETURN:
+			endposition = parseReturn(content, result, i);
+			break;
+		default:
+			endposition = i;
+		}
+		return endposition;
+	}
+
+	private int parseSynchronized(List<WordInFile> content, List<JavaFileContent> result, int i) {
 		// skip "synchronized("
 		i += 2;
-		JavaControlStatement synchronizedStatement = new JavaControlStatement(StatementType.SYNCHRONIZED, label);
+		JavaControlStatement synchronizedStatement = new JavaControlStatement(StatementType.SYNCHRONIZED);
 		// parse words in parantheses as condition
 		List<WordInFile> condition = new ArrayList<WordInFile>();
 		int openParanthesis = 1;
@@ -210,10 +215,10 @@ public class ModelExpander {
 		return i - 1;
 	}
 
-	private int parseSwitch(List<WordInFile> content, List<JavaFileContent> result, int i, WordInFile label) {
+	private int parseSwitch(List<WordInFile> content, List<JavaFileContent> result, int i) {
 		// skip "switch("
 		i += 2;
-		JavaControlStatement switchStatement = new JavaControlStatement(StatementType.SWITCH, label);
+		JavaControlStatement switchStatement = new JavaControlStatement(StatementType.SWITCH);
 		// parse switchvalue as condition
 		List<WordInFile> condition = new ArrayList<WordInFile>();
 		int openParanthesis = 1;
@@ -237,7 +242,7 @@ public class ModelExpander {
 		int openBraces = 1;
 		List<WordInFile> casecontent = new ArrayList<WordInFile>();
 		List<WordInFile> casecondition = new ArrayList<WordInFile>();
-		JavaControlStatement currentCase = new JavaControlStatement(StatementType.CASE, null);
+		JavaControlStatement currentCase = new JavaControlStatement(StatementType.CASE);
 		currentCase.setCondition(new ArrayList<WordInFile>());
 		if (content.get(i).equals(KeyWord.CLOSEBRACE)) {
 			openBraces--;
@@ -266,7 +271,7 @@ public class ModelExpander {
 					// remove last comma
 					currentCase.getCondition().remove(currentCase.getCondition().size() - 1);
 					switchContent.add(currentCase);
-					currentCase = new JavaControlStatement(StatementType.CASE, null);
+					currentCase = new JavaControlStatement(StatementType.CASE);
 					currentCase.setCondition(new ArrayList<WordInFile>());
 				}
 				// skip "case" or "default"
@@ -304,12 +309,17 @@ public class ModelExpander {
 				// skip ":"
 				i++;
 			}
+			// skip labels
+			while (content.get(i).getKey().equals(KeyWord.WORD) && content.get(i+1).equals(KeyWord.DOUBLEDOT)) {
+				i += 2;
+			}
 			// check ending of switch or inner braces
 			if (content.get(i).equals(KeyWord.CLOSEBRACE)) {
 				openBraces--;
 			} else if (content.get(i).equals(KeyWord.OPENBRACE)) {
 				openBraces++;
 			}
+			// if case not ended add word to content
 			if (openBraces > 0) {
 				casecontent.add(content.get(i));
 			}
@@ -336,7 +346,7 @@ public class ModelExpander {
 		return i - 1;
 	}
 
-	private int parseAnonymousBlock(List<WordInFile> content, List<JavaFileContent> result, int i, WordInFile label) {
+	private int parseAnonymousBlock(List<WordInFile> content, List<JavaFileContent> result, int i) {
 		// skip "{"
 		i++;
 		// add everything until brace is closed to block
@@ -354,13 +364,13 @@ public class ModelExpander {
 			}
 			i++;
 		}
-		JavaControlStatement blockstatement = new JavaControlStatement(StatementType.BLOCK, label);
+		JavaControlStatement blockstatement = new JavaControlStatement(StatementType.BLOCK);
 		blockstatement.setContent(addStructuralStatements(blockcontent));
 		result.add(blockstatement);
 		return i - 1;
 	}
 
-	private int parseReturn(List<WordInFile> content, List<JavaFileContent> result, int i, WordInFile label) {
+	private int parseReturn(List<WordInFile> content, List<JavaFileContent> result, int i) {
 		// add everything until the next semicolon to returnstatement
 		List<WordInFile> returncontent = new ArrayList<WordInFile>();
 		while (!content.get(i).equals(KeyWord.SEMICOLON)) {
@@ -368,13 +378,13 @@ public class ModelExpander {
 			i++;
 		}
 		returncontent.add(content.get(i));
-		JavaControlStatement returnstatement = new JavaControlStatement(StatementType.RETURN, label);
+		JavaControlStatement returnstatement = new JavaControlStatement(StatementType.RETURN);
 		returnstatement.setStatementText(returncontent);
 		result.add(returnstatement);
 		return i;
 	}
 
-	private int parseTry(List<WordInFile> content, List<JavaFileContent> result, int i, WordInFile label) {
+	private int parseTry(List<WordInFile> content, List<JavaFileContent> result, int i) {
 		// skip "try"
 		i++;
 		List<WordInFile> resources = null;
@@ -413,7 +423,7 @@ public class ModelExpander {
 			}
 			i++;
 		}
-		JavaControlStatement tryStatement = new JavaControlStatement(StatementType.TRY, label);
+		JavaControlStatement tryStatement = new JavaControlStatement(StatementType.TRY);
 		tryStatement.setContent(addStructuralStatements(tryblock));
 		if (resources != null) {
 			tryStatement.setResources(addStructuralStatements(resources));
@@ -480,10 +490,10 @@ public class ModelExpander {
 		return i - 1;
 	}
 
-	private int parseIf(List<WordInFile> content, List<JavaFileContent> result, int i, WordInFile label) {
+	private int parseIf(List<WordInFile> content, List<JavaFileContent> result, int i) {
 		// skip "if("
 		i += 2;
-		JavaControlStatement ifStatement = new JavaControlStatement(StatementType.IF, label);
+		JavaControlStatement ifStatement = new JavaControlStatement(StatementType.IF);
 		// parse condition
 		List<WordInFile> condition = new ArrayList<WordInFile>();
 		int openParanthesis = 1;
@@ -502,35 +512,13 @@ public class ModelExpander {
 		ifStatement.setCondition(condition);
 		// parse if-block
 		List<JavaFileContent> ifContent = new ArrayList<JavaFileContent>();
-		// content is labeled controlstatement
-		WordInFile contentlabel = null;
-		if (content.size() > i + 1 && content.get(i).getKey().equals(KeyWord.WORD)
-				&& content.get(i + 1).equals(KeyWord.DOUBLEDOT)
-				&& ModelBuildHelper.keywords.contains(content.get(i + 2))) {
-			contentlabel = content.get(i);
+		// skip labels
+		while (content.get(i).getKey().equals(KeyWord.WORD) && content.get(i+1).equals(KeyWord.DOUBLEDOT)) {
 			i += 2;
 		}
-		// content is single structural statement - parse directly
-		if (content.get(i).equals(KeyWord.IF)) {
-			i = parseIf(content, ifContent, i, contentlabel) + 1;
-			ifStatement.setContent(ifContent);
-		} else if (content.get(i).equals(KeyWord.TRY)) {
-			i = parseTry(content, ifContent, i, contentlabel) + 1;
-			ifStatement.setContent(ifContent);
-		} else if (content.get(i).equals(KeyWord.SWITCH)) {
-			i = parseSwitch(content, ifContent, i, contentlabel) + 1;
-			ifStatement.setContent(ifContent);
-		} else if (content.get(i).equals(KeyWord.FOR)) {
-			i = parseFor(content, ifContent, i, contentlabel) + 1;
-			ifStatement.setContent(ifContent);
-		} else if (content.get(i).equals(KeyWord.WHILE)) {
-			i = parseWhile(content, ifContent, i, contentlabel) + 1;
-			ifStatement.setContent(ifContent);
-		} else if (content.get(i).equals(KeyWord.DO)) {
-			i = parseDoWhile(content, ifContent, i, contentlabel) + 1;
-			ifStatement.setContent(ifContent);
-		} else if (content.get(i).equals(KeyWord.SYNCHRONIZED)) {
-			i = parseSynchronized(content, ifContent, i, contentlabel) + 1;
+		if (ModelBuildHelper.keywords.contains(content.get(i))) {
+			// content is single structural statement - parse directly
+			i = parseSingleStatement(content.get(i).getKey(), i, content, ifContent) + 1;
 			ifStatement.setContent(ifContent);
 		} else {
 			List<WordInFile> ifblock = new ArrayList<WordInFile>();
@@ -563,36 +551,14 @@ public class ModelExpander {
 		if (content.size() > i && content.get(i).equals(KeyWord.ELSE)) {
 			i++;
 			List<JavaFileContent> elseContent = new ArrayList<JavaFileContent>();
-			// content is labeled controlstatement
-			contentlabel = null;
-			if (content.size() > i + 1 && content.get(i).getKey().equals(KeyWord.WORD)
-					&& content.get(i + 1).equals(KeyWord.DOUBLEDOT)
-					&& ModelBuildHelper.keywords.contains(content.get(i + 2))) {
-				contentlabel = content.get(i);
+			// skip labels
+			while (content.get(i).getKey().equals(KeyWord.WORD) && content.get(i+1).equals(KeyWord.DOUBLEDOT)) {
 				i += 2;
 			}
-			// content is single structural statement - parse directly
-			if (content.get(i).equals(KeyWord.IF)) {
-				i = parseIf(content, elseContent, i, contentlabel) + 1;
+			if (ModelBuildHelper.keywords.contains(content.get(i))) {
+				// content is single structural statement - parse directly
+				i = parseSingleStatement(content.get(i).getKey(), i, content, elseContent) + 1;
 				ifStatement.setOthercontent(elseContent);
-			} else if (content.get(i).equals(KeyWord.TRY)) {
-				i = parseTry(content, elseContent, i, contentlabel) + 1;
-				ifStatement.setOthercontent(elseContent);
-			} else if (content.get(i).equals(KeyWord.SWITCH)) {
-				i = parseSwitch(content, elseContent, i, contentlabel) + 1;
-				ifStatement.setOthercontent(elseContent);
-			} else if (content.get(i).equals(KeyWord.FOR)) {
-				i = parseFor(content, elseContent, i, contentlabel) + 1;
-				ifStatement.setOthercontent(elseContent);
-			} else if (content.get(i).equals(KeyWord.WHILE)) {
-				i = parseWhile(content, elseContent, i, contentlabel) + 1;
-				ifStatement.setOthercontent(elseContent);
-			} else if (content.get(i).equals(KeyWord.DO)) {
-				i = parseDoWhile(content, elseContent, i, contentlabel) + 1;
-				ifStatement.setOthercontent(elseContent);
-			} else if (content.get(i).equals(KeyWord.SYNCHRONIZED)) {
-				i = parseSynchronized(content, elseContent, i, contentlabel) + 1;
-				ifStatement.setOthercontent(ifContent);
 			} else {
 				List<WordInFile> elseblock = new ArrayList<WordInFile>();
 				if (content.get(i).equals(KeyWord.OPENBRACE)) {
@@ -626,10 +592,10 @@ public class ModelExpander {
 		return i - 1;
 	}
 
-	private int parseFor(List<WordInFile> content, List<JavaFileContent> result, int i, WordInFile label) {
+	private int parseFor(List<WordInFile> content, List<JavaFileContent> result, int i) {
 		// skip "for("
 		i += 2;
-		JavaControlStatement forStatement = new JavaControlStatement(StatementType.FOR, label);
+		JavaControlStatement forStatement = new JavaControlStatement(StatementType.FOR);
 		// parse declaration
 		List<WordInFile> declaration = new ArrayList<WordInFile>();
 		int openParanthesis = 1;
@@ -664,36 +630,14 @@ public class ModelExpander {
 		}
 		// parse content
 		List<JavaFileContent> forContent = new ArrayList<JavaFileContent>();
-		// content is labeled controlstatement
-		WordInFile contentlabel = null;
-		if (content.size() > i + 1 && content.get(i).getKey().equals(KeyWord.WORD)
-				&& content.get(i + 1).equals(KeyWord.DOUBLEDOT)
-				&& ModelBuildHelper.keywords.contains(content.get(i + 2))) {
-			contentlabel = content.get(i);
+		// skip labels
+		while (content.get(i).getKey().equals(KeyWord.WORD) && content.get(i+1).equals(KeyWord.DOUBLEDOT)) {
 			i += 2;
 		}
-		// content is single structural statement - parse directly
-		if (content.get(i).equals(KeyWord.IF)) {
-			i = parseIf(content, forContent, i, contentlabel) + 1;
-			forStatement.setContent(forContent);
-		} else if (content.get(i).equals(KeyWord.TRY)) {
-			i = parseTry(content, forContent, i, contentlabel) + 1;
-			forStatement.setContent(forContent);
-		} else if (content.get(i).equals(KeyWord.SWITCH)) {
-			i = parseSwitch(content, forContent, i, contentlabel) + 1;
-			forStatement.setContent(forContent);
-		} else if (content.get(i).equals(KeyWord.FOR)) {
-			i = parseFor(content, forContent, i, contentlabel) + 1;
-			forStatement.setContent(forContent);
-		} else if (content.get(i).equals(KeyWord.WHILE)) {
-			i = parseWhile(content, forContent, i, contentlabel) + 1;
-			forStatement.setContent(forContent);
-		} else if (content.get(i).equals(KeyWord.DO)) {
-			i = parseDoWhile(content, forContent, i, contentlabel) + 1;
-			forStatement.setContent(forContent);
-		} else if (content.get(i).equals(KeyWord.SYNCHRONIZED)) {
-			i = parseSynchronized(content, forContent, i, contentlabel) + 1;
-			forStatement.setContent(forContent);
+		if (ModelBuildHelper.keywords.contains(content.get(i))) {
+			// content is single structural statement - parse directly
+			i = parseSingleStatement(content.get(i).getKey(), i, content, forContent) + 1;
+			forStatement.setOthercontent(forContent);
 		} else {
 			List<WordInFile> forblock = new ArrayList<WordInFile>();
 			if (content.get(i).equals(KeyWord.OPENBRACE)) {
@@ -725,10 +669,10 @@ public class ModelExpander {
 		return i - 1;
 	}
 
-	private int parseWhile(List<WordInFile> content, List<JavaFileContent> result, int i, WordInFile label) {
+	private int parseWhile(List<WordInFile> content, List<JavaFileContent> result, int i) {
 		// skip "while("
 		i += 2;
-		JavaControlStatement whileStatement = new JavaControlStatement(StatementType.WHILE, label);
+		JavaControlStatement whileStatement = new JavaControlStatement(StatementType.WHILE);
 		// parse condition
 		List<WordInFile> condition = new ArrayList<WordInFile>();
 		int openParanthesis = 1;
@@ -747,36 +691,14 @@ public class ModelExpander {
 		whileStatement.setCondition(condition);
 		// parse content
 		List<JavaFileContent> whileContent = new ArrayList<JavaFileContent>();
-		// content is labeled controlstatement
-		WordInFile contentlabel = null;
-		if (content.size() > i + 1 && content.get(i).getKey().equals(KeyWord.WORD)
-				&& content.get(i + 1).equals(KeyWord.DOUBLEDOT)
-				&& ModelBuildHelper.keywords.contains(content.get(i + 2))) {
-			contentlabel = content.get(i);
+		// skip labels
+		while (content.get(i).getKey().equals(KeyWord.WORD) && content.get(i+1).equals(KeyWord.DOUBLEDOT)) {
 			i += 2;
 		}
-		// content is single structural statement - parse directly
-		if (content.get(i).equals(KeyWord.IF)) {
-			i = parseIf(content, whileContent, i, contentlabel) + 1;
-			whileStatement.setContent(whileContent);
-		} else if (content.get(i).equals(KeyWord.TRY)) {
-			i = parseTry(content, whileContent, i, contentlabel) + 1;
-			whileStatement.setContent(whileContent);
-		} else if (content.get(i).equals(KeyWord.SWITCH)) {
-			i = parseSwitch(content, whileContent, i, contentlabel) + 1;
-			whileStatement.setContent(whileContent);
-		} else if (content.get(i).equals(KeyWord.FOR)) {
-			i = parseFor(content, whileContent, i, contentlabel) + 1;
-			whileStatement.setContent(whileContent);
-		} else if (content.get(i).equals(KeyWord.WHILE)) {
-			i = parseWhile(content, whileContent, i, contentlabel) + 1;
-			whileStatement.setContent(whileContent);
-		} else if (content.get(i).equals(KeyWord.DO)) {
-			i = parseDoWhile(content, whileContent, i, contentlabel) + 1;
-			whileStatement.setContent(whileContent);
-		} else if (content.get(i).equals(KeyWord.SYNCHRONIZED)) {
-			i = parseSynchronized(content, whileContent, i, contentlabel) + 1;
-			whileStatement.setContent(whileContent);
+		if (ModelBuildHelper.keywords.contains(content.get(i))) {
+			// content is single structural statement - parse directly
+			i = parseSingleStatement(content.get(i).getKey(), i, content, whileContent) + 1;
+			whileStatement.setOthercontent(whileContent);
 		} else {
 			List<WordInFile> whileblock = new ArrayList<WordInFile>();
 			if (content.get(i).equals(KeyWord.OPENBRACE)) {
@@ -808,42 +730,20 @@ public class ModelExpander {
 		return i - 1;
 	}
 
-	private int parseDoWhile(List<WordInFile> content, List<JavaFileContent> result, int i, WordInFile label) {
+	private int parseDoWhile(List<WordInFile> content, List<JavaFileContent> result, int i) {
 		// skip "do"
 		i++;
-		JavaControlStatement whileStatement = new JavaControlStatement(StatementType.WHILE, label);
+		JavaControlStatement whileStatement = new JavaControlStatement(StatementType.WHILE);
 		// parse content
 		List<JavaFileContent> whileContent = new ArrayList<JavaFileContent>();
-		// content is labeled controlstatement
-		WordInFile contentlabel = null;
-		if (content.size() > i + 1 && content.get(i).getKey().equals(KeyWord.WORD)
-				&& content.get(i + 1).equals(KeyWord.DOUBLEDOT)
-				&& ModelBuildHelper.keywords.contains(content.get(i + 2))) {
-			contentlabel = content.get(i);
+		// skip labels
+		while (content.get(i).getKey().equals(KeyWord.WORD) && content.get(i+1).equals(KeyWord.DOUBLEDOT)) {
 			i += 2;
 		}
-		// content is single structural statement - parse directly
-		if (content.get(i).equals(KeyWord.IF)) {
-			i = parseIf(content, whileContent, i, contentlabel) + 1;
-			whileStatement.setContent(whileContent);
-		} else if (content.get(i).equals(KeyWord.TRY)) {
-			i = parseTry(content, whileContent, i, contentlabel) + 1;
-			whileStatement.setContent(whileContent);
-		} else if (content.get(i).equals(KeyWord.SWITCH)) {
-			i = parseSwitch(content, whileContent, i, contentlabel) + 1;
-			whileStatement.setContent(whileContent);
-		} else if (content.get(i).equals(KeyWord.FOR)) {
-			i = parseFor(content, whileContent, i, contentlabel) + 1;
-			whileStatement.setContent(whileContent);
-		} else if (content.get(i).equals(KeyWord.WHILE)) {
-			i = parseWhile(content, whileContent, i, contentlabel) + 1;
-			whileStatement.setContent(whileContent);
-		} else if (content.get(i).equals(KeyWord.DO)) {
-			i = parseDoWhile(content, whileContent, i, contentlabel) + 1;
-			whileStatement.setContent(whileContent);
-		} else if (content.get(i).equals(KeyWord.SYNCHRONIZED)) {
-			i = parseSynchronized(content, whileContent, i, contentlabel) + 1;
-			whileStatement.setContent(whileContent);
+		if (ModelBuildHelper.keywords.contains(content.get(i))) {
+			// content is single structural statement - parse directly
+			i = parseSingleStatement(content.get(i).getKey(), i, content, whileContent) + 1;
+			whileStatement.setOthercontent(whileContent);
 		} else {
 			List<WordInFile> whileblock = new ArrayList<WordInFile>();
 			if (content.get(i).equals(KeyWord.OPENBRACE)) {

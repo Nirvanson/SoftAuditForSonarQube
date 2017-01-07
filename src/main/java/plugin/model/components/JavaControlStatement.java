@@ -25,12 +25,9 @@ public class JavaControlStatement extends JavaStatement {
 	private List<JavaFileContent> resources;
 	// list of catched Exceptions with catchblock
 	private Map<List<WordInFile>, List<JavaFileContent>> catchedExceptions;
-	// label
-	private final WordInFile label;
 	
-	public JavaControlStatement(StatementType type, WordInFile label) {
+	public JavaControlStatement(StatementType type) {
 		super(type);
-		this.label = label;
 		condition = null;
 		initialization = null;
 		increment = null;
@@ -85,9 +82,5 @@ public class JavaControlStatement extends JavaStatement {
 
 	public void setCatchedExceptions(Map<List<WordInFile>, List<JavaFileContent>> catchedExceptions) {
 		this.catchedExceptions = catchedExceptions;
-	}
-
-	public WordInFile getLabel() {
-		return label;
 	}
 }

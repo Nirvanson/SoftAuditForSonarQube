@@ -1,6 +1,10 @@
 package plugin.model;
 
 public enum StatementType {
+	BREAK,
+	CONTINUE,
+	ASSERT,
+	THROW,
 	TRY,
 	ANNOTATION,
 	PACKAGE,

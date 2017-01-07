@@ -208,9 +208,6 @@ public class Logger {
 			} else if (content instanceof JavaControlStatement) {
 				JavaControlStatement statement = (JavaControlStatement) content;
 				String header = addTabs(level) + statement.getType() + " - ControlStatement ";
-				if (statement.getLabel()!=null) {
-					header += "labeled with '" + statement.getLabel() + "' ";
-				}
 				if (statement.getType().equals(StatementType.SWITCH)) {
 					String condition = "";
 					for (WordInFile conditionWord : statement.getCondition()) {
