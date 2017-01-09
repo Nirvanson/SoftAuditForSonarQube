@@ -37,6 +37,7 @@ public class Logger {
 	private final String STEP_7 = "*** Step 7 - Count methods and parameters in model";
 	private final String STEP_8 = "*** Step 8 - Expand model with structural statements (ifs, loops, ...)";
 	private final String STEP_9 = "*** Step 9 - Split remaining wordlists to statements";
+	private final String STEP_10 = "*** Step 9 - Extract Variable references/declarations and method Calls in Statements";
 	private final String TIME = "*** Finished at TIME";
 	private final String INPUT_ERROR = "Method METHODNAME of Logger recieved invalid input: PARAM";
 	
@@ -144,8 +145,12 @@ public class Logger {
 			writer.println(STEP_8);
 			levelToLog = 2;
 			break;
-		case "full":
+		case "statement":
 			writer.println(STEP_9);
+			levelToLog = 2;
+			break;
+		case "full":
+			writer.println(STEP_10);
 			break;
 		default:
 			writer.println(INPUT_ERROR.replace("METHODNAME", "printModel").replace("PARAM", step));

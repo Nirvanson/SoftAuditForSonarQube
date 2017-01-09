@@ -17,6 +17,76 @@ import plugin.model.components.JavaStatementWithAnonymousClass;
 
 public class ModelExpander {
 
+	public void extractReferencesAndCalls(List<JavaFileContent> contents) {
+		if (contents == null) {
+			return;
+		}
+		for (JavaFileContent content : contents) {
+			if (content instanceof JavaClass || content instanceof JavaMethod) {
+				extractReferencesAndCalls(content.getContent());
+			} else if (content instanceof JavaStatementWithAnonymousClass) {
+				JavaStatementWithAnonymousClass theStatement = (JavaStatementWithAnonymousClass) content;
+				extractReferencesAndCalls(theStatement.getContent());
+				List<WordInFile> textToScan = new ArrayList<WordInFile>();
+				textToScan.addAll(theStatement.getStatementBeforeClass());
+				textToScan.add(new WordInFile(null, KeyWord.NEW));
+				textToScan.addAll(theStatement.getClassType());
+				textToScan.addAll(theStatement.getStatementAfterClass());
+				doExtractionInStatement(theStatement, textToScan);
+			} else if (content instanceof JavaControlStatement) {
+				JavaControlStatement theStatement = (JavaControlStatement) content;
+				switch(theStatement.getType()) {
+				case SWITCH: case WHILE: case SYNCHRONIZED:
+					doExtractionInStatement(theStatement, theStatement.getCondition());
+					extractReferencesAndCalls(theStatement.getContent());
+					break;
+				case FOR:
+					extractReferencesAndCalls(theStatement.getContent());
+					doExtractionInStatement(theStatement, theStatement.getCondition());
+					if (theStatement.getInitialization()!=null) {
+						doExtractionInStatement(theStatement, theStatement.getInitialization());
+						doExtractionInStatement(theStatement, theStatement.getIncrement());
+					}
+					break;
+				case IF:
+					extractReferencesAndCalls(theStatement.getContent());
+					doExtractionInStatement(theStatement, theStatement.getCondition());
+					if (theStatement.getOthercontent()!=null) {
+						extractReferencesAndCalls(theStatement.getOthercontent());
+					}
+					break;
+			/*	case TRY:
+					endposition = parseTry(content, result, i);
+					break;
+				case RETURN:
+					endposition = parseSingleLineStatement(content, result, i, StatementType.RETURN);
+					break;
+				case BREAK:
+					endposition = parseSingleLineStatement(content, result, i, StatementType.BREAK);
+					break;
+				case CONTINUE:
+					endposition = parseSingleLineStatement(content, result, i, StatementType.CONTINUE);
+					break;
+				case ASSERT:
+					endposition = parseSingleLineStatement(content, result, i, StatementType.ASSERT);
+					break;
+				case THROW:
+					endposition = parseSingleLineStatement(content, result, i, StatementType.THROW);
+					break; */
+				default:
+					//TODO
+				}
+			}
+		}
+	}
+	
+	private void doExtractionInStatement(JavaStatement statement, List<WordInFile> textToScan) {
+		// TODO Auto-generated method stub
+		if (textToScan == null) {
+			textToScan = statement.getStatementText();
+		}
+	}
+
 	public List<JavaFileContent> splitRemainingWordListsToStatements(List<JavaFileContent> contents) {
 		if (contents == null) {
 			return null;

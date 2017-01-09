@@ -103,6 +103,8 @@ public class FileAnalyzer {
 			}
 			log.printModel("expanded", contents);
 			contents = expander.splitRemainingWordListsToStatements(contents);
+			log.printModel("statement", contents);
+			expander.extractReferencesAndCalls(contents);
 			log.printModel("full", contents);
 			sourceFiles++;
 		}
