@@ -37,7 +37,8 @@ public class Logger {
 	private final String STEP_7 = "*** Step 7 - Count methods and parameters in model";
 	private final String STEP_8 = "*** Step 8 - Expand model with structural statements (ifs, loops, ...)";
 	private final String STEP_9 = "*** Step 9 - Split remaining wordlists to statements";
-	private final String STEP_10 = "*** Step 9 - Extract Variable references/declarations and method Calls in Statements";
+	private final String STEP_10 = "*** Step 10 - Extract variable declarations and method Calls in Statements";
+	private final String STEP_11 = "*** Step 11 - Count variables";
 	private final String TIME = "*** Finished at TIME";
 	private final String INPUT_ERROR = "Method METHODNAME of Logger recieved invalid input: PARAM";
 	
@@ -118,6 +119,9 @@ public class Logger {
 		case "method":
 			writer.println(STEP_7);
 			break;
+		case "variables":
+			writer.println(STEP_11);
+			break;
 		default:
 			writer.println(INPUT_ERROR.replace("METHODNAME", "printMeasures").replace("PARAM", step));
 			break;
@@ -149,7 +153,7 @@ public class Logger {
 			writer.println(STEP_9);
 			levelToLog = 2;
 			break;
-		case "full":
+		case "declarations":
 			writer.println(STEP_10);
 			break;
 		default:
@@ -213,9 +217,15 @@ public class Logger {
 				}
 			} else if (content instanceof JavaControlStatement) {
 				JavaControlStatement statement = (JavaControlStatement) content;
-				String header = addTabs(level) + statement.getType() + " - ControlStatement ";
+				String header = addTabs(level) + statement.getType() + " - ControlStatement / ";
 				if (statement.getDeclaredVariables()!=null && !statement.getDeclaredVariables().isEmpty()) {
-					header += "declaring " + statement.getDeclaredVariables().size() + " variables ";
+					header += "declaring " + statement.getDeclaredVariables().size() + " variables / ";
+				}
+				if (statement.getReferencedVariables()!=null && !statement.getReferencedVariables().isEmpty()) {
+					header += "referencing " + statement.getReferencedVariables().size() + " variables / ";
+				}
+				if (statement.getCalledMethods()!=null && !statement.getCalledMethods().isEmpty()) {
+					header += "calling " + statement.getCalledMethods().size() + " methods / ";
 				}
 				if (statement.getType().equals(StatementType.SWITCH)) {
 					String condition = "";
@@ -315,7 +325,13 @@ public class Logger {
 				JavaStatementWithAnonymousClass statement = (JavaStatementWithAnonymousClass) content;
 				String classline = addTabs(level) + statement.getType() + " - Statement with anonymous class";
 				if (statement.getDeclaredVariables()!=null && !statement.getDeclaredVariables().isEmpty()) {
-					classline += " declaring " + statement.getDeclaredVariables().size() + " variables";
+					classline += " / declaring " + statement.getDeclaredVariables().size() + " variables";
+				}
+				if (statement.getReferencedVariables()!=null && !statement.getReferencedVariables().isEmpty()) {
+					classline += " / referencing " + statement.getReferencedVariables().size() + " variables";
+				}
+				if (statement.getCalledMethods()!=null && !statement.getCalledMethods().isEmpty()) {
+					classline += " / calling " + statement.getCalledMethods().size() + " methods";
 				}
 				classline += ": '";
 				for (WordInFile word : statement.getStatementBeforeClass()) {
@@ -334,9 +350,15 @@ public class Logger {
 				if (statement.getType().equals(StatementType.ANNOTATION)) {
 					writer.println(addTabs(level) + statement.getType());
 				} else {
-					String header = addTabs(level) + statement.getType() + " - Statement ";
+					String header = addTabs(level) + statement.getType() + " - Statement";
 					if (statement.getDeclaredVariables()!=null && !statement.getDeclaredVariables().isEmpty()) {
-						header += "declaring " + statement.getDeclaredVariables().size() + " variables ";
+						header += " / declaring " + statement.getDeclaredVariables().size() + " variables";
+					}
+					if (statement.getReferencedVariables()!=null && !statement.getReferencedVariables().isEmpty()) {
+						header += " / referencing " + statement.getReferencedVariables().size() + " variables";
+					}
+					if (statement.getCalledMethods()!=null && !statement.getCalledMethods().isEmpty()) {
+						header += " / calling " + statement.getCalledMethods().size() + " methods";
 					}
 					if (statement.getStatementText()!=null && !statement.getStatementText().isEmpty()) {
 						writer.println(header + ":" + statement.getStatementText());

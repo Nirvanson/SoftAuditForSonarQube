@@ -20,19 +20,19 @@ import plugin.util.ParsingException;
 
 public class ModelExpander {
 
-	public void extractReferencesAndCalls(List<JavaFileContent> contents) throws ParsingException {
+	public void extractDeclarationsAndCalls(List<JavaFileContent> contents) throws ParsingException {
 		if (contents == null) {
 			throw new ParsingException(ParsingErrorType.NULL_POINTER, "Can't extract anything from NULL in ModelExpander.extractReferencesAndCalls!");
 		}
 		for (JavaFileContent content : contents) {
 			if (content instanceof JavaClass || content instanceof JavaMethod) {
 				// parse content
-				extractReferencesAndCalls(content.getContent());
+				extractDeclarationsAndCalls(content.getContent());
 			} else if (content instanceof JavaStatementWithAnonymousClass) {
 				// parse content of anonymous class
 				// build together statement with placeholder for class and scan
 				JavaStatementWithAnonymousClass theStatement = (JavaStatementWithAnonymousClass) content;
-				extractReferencesAndCalls(theStatement.getContent());
+				extractDeclarationsAndCalls(theStatement.getContent());
 				List<WordInFile> textToScan = new ArrayList<WordInFile>();
 				textToScan.addAll(theStatement.getStatementBeforeClass());
 				textToScan.add(new WordInFile(null, KeyWord.NEW));
@@ -42,16 +42,16 @@ public class ModelExpander {
 			} else if (content instanceof JavaControlStatement) {
 				JavaControlStatement theStatement = (JavaControlStatement) content;
 				switch(theStatement.getType()) {
-				case SWITCH: case WHILE: case SYNCHRONIZED:
+				case SWITCH: case WHILE: case SYNCHRONIZED: case CASE:
 					// parse content block
 					// scan condition
 					doExtractionInStatement(theStatement, theStatement.getCondition());
-					extractReferencesAndCalls(theStatement.getContent());
+					extractDeclarationsAndCalls(theStatement.getContent());
 					break;
 				case FOR:
 					// parse content-block
 					// scan initialization, termination and increment or enhanced declaration
-					extractReferencesAndCalls(theStatement.getContent());
+					extractDeclarationsAndCalls(theStatement.getContent());
 					doExtractionInStatement(theStatement, theStatement.getCondition());
 					if (theStatement.getInitialization()!=null) {
 						doExtractionInStatement(theStatement, theStatement.getInitialization());
@@ -61,32 +61,32 @@ public class ModelExpander {
 				case IF:
 					// parse (if available) if-block and else-block
 					// scan text of condition
-					extractReferencesAndCalls(theStatement.getContent());
+					extractDeclarationsAndCalls(theStatement.getContent());
 					doExtractionInStatement(theStatement, theStatement.getCondition());
 					if (theStatement.getOthercontent()!=null) {
-						extractReferencesAndCalls(theStatement.getOthercontent());
+						extractDeclarationsAndCalls(theStatement.getOthercontent());
 					}
 					break;
 				case TRY:
 					// parse (if available) resource-block, try-block, catch-blocks and finally block
 					// scan text of catched exceptions
-					extractReferencesAndCalls(theStatement.getContent());
+					extractDeclarationsAndCalls(theStatement.getContent());
 					if (theStatement.getOthercontent()!=null) {
-						extractReferencesAndCalls(theStatement.getOthercontent());
+						extractDeclarationsAndCalls(theStatement.getOthercontent());
 					}
 					if (theStatement.getResources()!=null) {
-						extractReferencesAndCalls(theStatement.getResources());
+						extractDeclarationsAndCalls(theStatement.getResources());
 					}
 					if (theStatement.getCatchedExceptions()!=null) {
 						for (List<WordInFile> exception : theStatement.getCatchedExceptions().keySet()) {
-							extractReferencesAndCalls(theStatement.getCatchedExceptions().get(exception));
+							extractDeclarationsAndCalls(theStatement.getCatchedExceptions().get(exception));
 							doExtractionInStatement(theStatement, exception);
 						}
 					}
 					break;
 				case BLOCK:
 					// parse block-content
-					extractReferencesAndCalls(theStatement.getContent());
+					extractDeclarationsAndCalls(theStatement.getContent());
 					break;
 				case RETURN: case ASSERT: case THROW:
 					// scan statement-text for returns, assertions and throws
@@ -126,6 +126,7 @@ public class ModelExpander {
 			throw new ParsingException(ParsingErrorType.NULL_POINTER, "Can't extract anything from NULL in ModelExpander.doExtractionInStatement!");
 		}
 		for (int i=0; i<textToScan.size(); i++) {
+			// check if variable declaration. same syntax as method parameter
 			WordInFile declaredVar = ModelBuildHelper.isParameter(textToScan.subList(i, textToScan.size()), false);
 			if (declaredVar!=null) {
 				List<WordInFile> datatype = new ArrayList<WordInFile>();
@@ -134,7 +135,13 @@ public class ModelExpander {
 					i++;
 				}
 				statement.getDeclaredVariables().add(new JavaVariable(declaredVar.getWord(), datatype));
-			}
+			} else if ((textToScan.get(i).getKey().equals(KeyWord.WORD) || textToScan.get(i).equals(KeyWord.THIS) || textToScan.get(i).equals(KeyWord.SUPER) || textToScan.get(i).equals(KeyWord.GREATER))
+					&& (textToScan.size()>i+1 && textToScan.get(i+1).equals(KeyWord.OPENPARANTHESE))){
+				// otherwise check if method call: free-word/super/this followed by "("
+				statement.getCalledMethods().add(textToScan.get(i));
+				// skip "("
+				i++;
+			} 
 		}
 	}
 

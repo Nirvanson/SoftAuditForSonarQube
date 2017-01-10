@@ -2,6 +2,7 @@ package plugin.analyzer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -13,8 +14,13 @@ import plugin.SoftAuditMetrics;
 import plugin.model.JavaFileContent;
 import plugin.model.WordInFile;
 import plugin.model.components.JavaClass;
+import plugin.model.components.JavaControlStatement;
 import plugin.model.components.JavaMethod;
+import plugin.model.components.JavaStatement;
+import plugin.model.components.JavaStatementWithAnonymousClass;
+import plugin.model.components.JavaVariable;
 import plugin.util.Logger;
+import plugin.util.ParsingErrorType;
 import plugin.util.ParsingException;
 import plugin.model.KeyWord;
 
@@ -110,11 +116,20 @@ public class FileAnalyzer {
 			}
 			log.printModel("statement", contents);
 			try {
-				expander.extractReferencesAndCalls(contents);
+				expander.extractDeclarationsAndCalls(contents);
 			} catch (ParsingException e) {
 				e.printStackTrace();
 			}
-			log.printModel("full", contents);
+			log.printModel("declarations", contents);
+			List<String> declaredVariables = new ArrayList<String>();
+			try {
+				declaredVariables = collectVariables(contents);
+			} catch (ParsingException e) {
+				e.printStackTrace();
+			}
+			Map<Metric<Integer>, Double> varMeasures = new HashMap<Metric<Integer>, Double>();
+			varMeasures.put(SoftAuditMetrics.VAR, (double) declaredVariables.size());
+			log.printMeasures("variables", varMeasures);
 			sourceFiles++;
 		}
 		log.close();
@@ -123,9 +138,90 @@ public class FileAnalyzer {
 		return result;
 	}
 
-	
-	
-	
+	private List<String> collectVariables(List<JavaFileContent> contents) throws ParsingException {
+		List<String> result = new ArrayList<String>();
+		if (contents == null || contents.isEmpty()) {
+			return result;
+		}
+		for (JavaFileContent content : contents) {
+			if (content instanceof JavaClass) { 
+				result.addAll(collectVariables(content.getContent()));
+			} else if (content instanceof JavaMethod) {
+				result.addAll(collectVariables(content.getContent()));
+				if (((JavaMethod) content).getParameters()!=null) {
+					for (JavaVariable var: ((JavaMethod) content).getParameters()) {
+						result.add(var.getName());
+					}
+				}
+			} else if (content instanceof JavaStatementWithAnonymousClass) {
+				if (((JavaStatement) content).getDeclaredVariables()!=null) {
+					for (JavaVariable var: ((JavaStatement) content).getDeclaredVariables()) {
+						result.add(var.getName());
+					}
+				}
+				result.addAll(collectVariables(content.getContent()));
+			} else if (content instanceof JavaControlStatement) {
+				JavaControlStatement theStatement = (JavaControlStatement) content;
+				switch(theStatement.getType()) {
+				case SWITCH: case WHILE: case SYNCHRONIZED: case FOR: case BLOCK: case CASE:
+					if (theStatement.getDeclaredVariables()!=null) {
+						for (JavaVariable var: theStatement.getDeclaredVariables()) {
+							result.add(var.getName());
+						}
+					}
+					result.addAll(collectVariables(content.getContent()));
+					break;
+				case IF:
+					if (theStatement.getDeclaredVariables()!=null) {
+						for (JavaVariable var: theStatement.getDeclaredVariables()) {
+							result.add(var.getName());
+						}
+					}
+					result.addAll(collectVariables(content.getContent()));
+					if (theStatement.getOthercontent()!=null) {
+						result.addAll(collectVariables(theStatement.getOthercontent()));
+					}
+					break;
+				case TRY:
+					if (theStatement.getDeclaredVariables()!=null) {
+						for (JavaVariable var: theStatement.getDeclaredVariables()) {
+							result.add(var.getName());
+						}
+					}
+					result.addAll(collectVariables(content.getContent()));
+					if (theStatement.getOthercontent()!=null) {
+						result.addAll(collectVariables(theStatement.getOthercontent()));
+					}
+					if (theStatement.getResources()!=null) {
+						result.addAll(collectVariables(theStatement.getResources()));
+					}
+					if (theStatement.getCatchedExceptions()!=null) {
+						for (List<WordInFile> exception : theStatement.getCatchedExceptions().keySet()) {
+							result.addAll(collectVariables(theStatement.getCatchedExceptions().get(exception)));
+						}
+					}
+					break;
+				case RETURN: case ASSERT: case THROW: case BREAK: case CONTINUE: 
+					if (theStatement.getDeclaredVariables()!=null) {
+						for (JavaVariable var: theStatement.getDeclaredVariables()) {
+							result.add(var.getName());
+						}
+					}
+					break;
+				default:
+					throw new ParsingException(ParsingErrorType.UNKNOWN_ELEMENT_IN_MODEL, "Control-Statement-Type '" + theStatement.getType() + "' is unknown in FileAnalyzer.collectVariables!");
+				}
+			} else if (content instanceof JavaStatement) {
+				JavaStatement theStatement = (JavaStatement) content;
+				if (theStatement.getDeclaredVariables()!=null) {
+					for (JavaVariable var: theStatement.getDeclaredVariables()) {
+						result.add(var.getName());
+					}
+				}
+			}
+		}
+		return result;
+	}
 
 	/**
 	 * Count methods and their parameters
