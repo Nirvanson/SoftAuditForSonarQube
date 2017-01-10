@@ -15,6 +15,7 @@ import plugin.model.WordInFile;
 import plugin.model.components.JavaClass;
 import plugin.model.components.JavaMethod;
 import plugin.util.Logger;
+import plugin.util.ParsingException;
 import plugin.model.KeyWord;
 
 /**
@@ -102,9 +103,17 @@ public class FileAnalyzer {
 				}
 			}
 			log.printModel("expanded", contents);
-			contents = expander.splitRemainingWordListsToStatements(contents);
+			try {
+				contents = expander.splitRemainingWordListsToStatements(contents);
+			} catch (ParsingException e) {
+				e.printStackTrace();
+			}
 			log.printModel("statement", contents);
-			expander.extractReferencesAndCalls(contents);
+			try {
+				expander.extractReferencesAndCalls(contents);
+			} catch (ParsingException e) {
+				e.printStackTrace();
+			}
 			log.printModel("full", contents);
 			sourceFiles++;
 		}

@@ -31,16 +31,22 @@ public class ModelBuildHelper {
 			} else {
 				// correct separator ","
 				position++;
+				if (position>=words.size()) return null;
 			}
 		}
+		System.out.println("separator");
 		while (words.get(position).getKey().equals(KeyWord.ANNOTATION)) {
 			// annotation on parameter
 			position++;
+			if (position>=words.size()) return null;
 		}
-		if (words.get(position).getKey().equals(KeyWord.FINAL)) {
+		System.out.println("annotation");
+		while (words.get(position).getKey().getType().equals(WordType.MODIFIER) || words.get(position).getKey().getType().equals(WordType.STATEMENTORMODIFIER)) {
 			// optional modifier final for parameter
 			position++;
+			if (position>=words.size()) return null;
 		}
+		System.out.println("modifier");
 		if (!(words.get(position).getKey().equals(KeyWord.WORD)
 				|| words.get(position).getKey().getType().equals(WordType.DATATYPE))) {
 			// no valid parameter type
@@ -48,10 +54,12 @@ public class ModelBuildHelper {
 		} else {
 			// valid parameter type beginning
 			position++;
+			if (position>=words.size()) return null;
 		}
 		if (words.get(position).getKey().equals(KeyWord.DOT) && !words.get(position + 1).getKey().equals(KeyWord.DOT)) {
 			while (words.get(position).getKey().equals(KeyWord.DOT)) {
 				position++;
+				if (position>=words.size()) return null;
 				if (!(words.get(position).getKey().equals(KeyWord.WORD)
 						|| words.get(position).getKey().getType().equals(WordType.DATATYPE))) {
 					// no valid parameter type
@@ -59,30 +67,36 @@ public class ModelBuildHelper {
 				} else {
 					// valid parameter type x.y
 					position++;
+					if (position>=words.size()) return null;
 				}
 			}
 		}
-		if (words.get(position).getKey().equals(KeyWord.OPENBRACKET)
+		if (position>words.size() && words.get(position).getKey().equals(KeyWord.OPENBRACKET)
 				&& words.get(position + 1).getKey().equals(KeyWord.CLOSEBRACKET)) {
 			// parameter type array "String[]"
 			position++;
 			position++;
-		} else if (words.get(position).getKey().equals(KeyWord.DOT)
+			if (position>=words.size()) return null;
+		} else if (position>words.size()+1 && words.get(position).getKey().equals(KeyWord.DOT)
 				&& words.get(position + 1).getKey().equals(KeyWord.DOT)
 				&& words.get(position + 2).getKey().equals(KeyWord.DOT)) {
 			// variable array of parameters "String..."
 			position++;
 			position++;
 			position++;
+			if (position>=words.size()) return null;
 		} else if (words.get(position).getKey().equals(KeyWord.LESS)) {
 			// parse generic datatypes like Hashmap<A,B>
 			position++;
+			if (position>=words.size()) return null;
 			position = parseGeneric(words, position);
 			if (position == 0) {
 				return null;
 			}
 			position++;
+			if (position>=words.size()) return null;
 		}
+		System.out.println("datatype");
 		if (words.get(position).getKey().equals(KeyWord.WORD)) {
 			// correct parameter identifier
 			return words.get(position);

@@ -214,6 +214,9 @@ public class Logger {
 			} else if (content instanceof JavaControlStatement) {
 				JavaControlStatement statement = (JavaControlStatement) content;
 				String header = addTabs(level) + statement.getType() + " - ControlStatement ";
+				if (statement.getDeclaredVariables()!=null && !statement.getDeclaredVariables().isEmpty()) {
+					header += "declaring " + statement.getDeclaredVariables().size() + " variables ";
+				}
 				if (statement.getType().equals(StatementType.SWITCH)) {
 					String condition = "";
 					for (WordInFile conditionWord : statement.getCondition()) {
@@ -310,7 +313,11 @@ public class Logger {
 				} 
 			} else if (content instanceof JavaStatementWithAnonymousClass) {
 				JavaStatementWithAnonymousClass statement = (JavaStatementWithAnonymousClass) content;
-				String classline = addTabs(level) + statement.getType() + " - Statement with anonymous class: '";
+				String classline = addTabs(level) + statement.getType() + " - Statement with anonymous class";
+				if (statement.getDeclaredVariables()!=null && !statement.getDeclaredVariables().isEmpty()) {
+					classline += " declaring " + statement.getDeclaredVariables().size() + " variables";
+				}
+				classline += ": '";
 				for (WordInFile word : statement.getStatementBeforeClass()) {
 					classline += word + " ";
 				}
@@ -325,6 +332,9 @@ public class Logger {
 			} else if (content instanceof JavaStatement) {
 				JavaStatement statement = (JavaStatement) content;
 				String header = addTabs(level) + statement.getType() + " - Statement ";
+				if (statement.getDeclaredVariables()!=null && !statement.getDeclaredVariables().isEmpty()) {
+					header += "declaring " + statement.getDeclaredVariables().size() + " variables ";
+				}
 				if (statement.getStatementText()!=null && !statement.getStatementText().isEmpty()) {
 					writer.println(header + ":" + statement.getStatementText());
 				} else {

@@ -19,7 +19,7 @@ public class JavaControlStatement extends JavaStatement {
 	private List<WordInFile> initialization;
 	// increment in for
 	private List<WordInFile> increment;
-	// else block in if, catch block in try
+	// else block in if, finally block in try
 	private List<JavaFileContent> othercontent;
 	// resources in try with resources
 	private List<JavaFileContent> resources;

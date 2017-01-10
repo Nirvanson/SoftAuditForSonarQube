@@ -1,14 +1,12 @@
 package plugin.model;
 
 public enum StatementType {
+	// control statements
 	BREAK,
 	CONTINUE,
 	ASSERT,
 	THROW,
 	TRY,
-	ANNOTATION,
-	PACKAGE,
-	IMPORT,
 	IF,
 	FOR,
 	WHILE,
@@ -17,5 +15,9 @@ public enum StatementType {
 	SWITCH,
 	CASE,
 	SYNCHRONIZED,
+	// other statements
+	ANNOTATION,
+	PACKAGE,
+	IMPORT,
 	UNSPECIFIED
 }

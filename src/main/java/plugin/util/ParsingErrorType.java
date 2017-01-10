@@ -1,0 +1,8 @@
+package plugin.util;
+
+public enum ParsingErrorType {
+	UNKNOWN_ELEMENT_IN_MODEL,
+	UNEXPECTED_CHARACTER_IN_CODE,
+	NULL_POINTER,
+	ARRAY_OUT_OF_BOUNDS
+}
