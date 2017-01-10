@@ -331,14 +331,18 @@ public class Logger {
 				writer.println(classline);
 			} else if (content instanceof JavaStatement) {
 				JavaStatement statement = (JavaStatement) content;
-				String header = addTabs(level) + statement.getType() + " - Statement ";
-				if (statement.getDeclaredVariables()!=null && !statement.getDeclaredVariables().isEmpty()) {
-					header += "declaring " + statement.getDeclaredVariables().size() + " variables ";
-				}
-				if (statement.getStatementText()!=null && !statement.getStatementText().isEmpty()) {
-					writer.println(header + ":" + statement.getStatementText());
+				if (statement.getType().equals(StatementType.ANNOTATION)) {
+					writer.println(addTabs(level) + statement.getType());
 				} else {
+					String header = addTabs(level) + statement.getType() + " - Statement ";
+					if (statement.getDeclaredVariables()!=null && !statement.getDeclaredVariables().isEmpty()) {
+						header += "declaring " + statement.getDeclaredVariables().size() + " variables ";
+					}
+					if (statement.getStatementText()!=null && !statement.getStatementText().isEmpty()) {
+						writer.println(header + ":" + statement.getStatementText());
+					} else {
 					writer.println(header);
+					}
 				}
 			} else if (content instanceof JavaEnumValues){
 				JavaEnumValues values = (JavaEnumValues) content;

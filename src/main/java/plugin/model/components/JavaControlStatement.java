@@ -25,6 +25,10 @@ public class JavaControlStatement extends JavaStatement {
 	private List<JavaFileContent> resources;
 	// list of catched Exceptions with catchblock
 	private Map<List<WordInFile>, List<JavaFileContent>> catchedExceptions;
+	// for ifs, whiles, for-loops and cases defines if content is in braces
+	private boolean contentInBlock;
+	// same as above for elseblock
+	private boolean otherContentInBlock;
 	
 	public JavaControlStatement(StatementType type) {
 		super(type);
@@ -34,6 +38,8 @@ public class JavaControlStatement extends JavaStatement {
 		othercontent = null;
 		setCatchedExceptions(null);
 		setResources(null);
+		setContentInBlock(false);
+		setOtherContentInBlock(false);
 	}
 
 	public List<WordInFile> getCondition() {
@@ -82,5 +88,21 @@ public class JavaControlStatement extends JavaStatement {
 
 	public void setCatchedExceptions(Map<List<WordInFile>, List<JavaFileContent>> catchedExceptions) {
 		this.catchedExceptions = catchedExceptions;
+	}
+
+	public boolean isContentInBlock() {
+		return contentInBlock;
+	}
+
+	public void setContentInBlock(boolean contentInBlock) {
+		this.contentInBlock = contentInBlock;
+	}
+
+	public boolean isOtherContentInBlock() {
+		return otherContentInBlock;
+	}
+
+	public void setOtherContentInBlock(boolean otherContentInBlock) {
+		this.otherContentInBlock = otherContentInBlock;
 	}
 }

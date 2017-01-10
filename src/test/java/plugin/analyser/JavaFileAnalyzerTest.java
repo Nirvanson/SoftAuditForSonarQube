@@ -15,7 +15,7 @@ public class JavaFileAnalyzerTest {
     
     @Test
     public void testFileNormalization() {
-    	File input = new File(getClass().getResource("/testdata/ChangePasswordFacadeBean.java").getPath());
+    	File input = new File(getClass().getResource("/testdata/CourseManagementController.java").getPath());
     	FileAnalyzer analyzer = new FileAnalyzer(Arrays.asList(input));
     	
     	// do analyze, check logfile manually

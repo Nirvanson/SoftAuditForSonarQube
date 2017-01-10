@@ -71,7 +71,6 @@ public class ModelExpander {
 					// parse (if available) resource-block, try-block, catch-blocks and finally block
 					// scan text of catched exceptions
 					extractReferencesAndCalls(theStatement.getContent());
-					doExtractionInStatement(theStatement, theStatement.getCondition());
 					if (theStatement.getOthercontent()!=null) {
 						extractReferencesAndCalls(theStatement.getOthercontent());
 					}
@@ -127,8 +126,6 @@ public class ModelExpander {
 			throw new ParsingException(ParsingErrorType.NULL_POINTER, "Can't extract anything from NULL in ModelExpander.doExtractionInStatement!");
 		}
 		for (int i=0; i<textToScan.size(); i++) {
-			System.out.println(textToScan);
-			System.out.println(textToScan.subList(i, textToScan.size()));
 			WordInFile declaredVar = ModelBuildHelper.isParameter(textToScan.subList(i, textToScan.size()), false);
 			if (declaredVar!=null) {
 				List<WordInFile> datatype = new ArrayList<WordInFile>();
@@ -486,6 +483,7 @@ public class ModelExpander {
 			// if casecontent is completely in braces dont't count it as
 			// anonymous block
 			currentCase.setContent(parsedCaseContent.get(0).getContent());
+			currentCase.setContentInBlock(true);
 		} else {
 			currentCase.setContent(parsedCaseContent);
 		}
@@ -584,7 +582,6 @@ public class ModelExpander {
 				}
 				i++;
 			}
-			tryStatement.setCondition(exception);
 			// add catchblock
 			List<WordInFile> catchblock = new ArrayList<WordInFile>();
 			openBraces = 1;
@@ -661,6 +658,7 @@ public class ModelExpander {
 			List<WordInFile> ifblock = new ArrayList<WordInFile>();
 			if (content.get(i).equals(KeyWord.OPENBRACE)) {
 				// in braces - parse block
+				ifStatement.setContentInBlock(true);
 				int openBraces = 1;
 				i++;
 				while (openBraces > 0) {
@@ -700,6 +698,7 @@ public class ModelExpander {
 				List<WordInFile> elseblock = new ArrayList<WordInFile>();
 				if (content.get(i).equals(KeyWord.OPENBRACE)) {
 					// in braces - parse block
+					ifStatement.setOtherContentInBlock(true);
 					i++;
 					int openBraces = 1;
 					while (openBraces > 0) {
@@ -779,6 +778,7 @@ public class ModelExpander {
 			List<WordInFile> forblock = new ArrayList<WordInFile>();
 			if (content.get(i).equals(KeyWord.OPENBRACE)) {
 				// in braces - parse block
+				forStatement.setContentInBlock(true);
 				int openBraces = 1;
 				i++;
 				while (openBraces > 0) {
@@ -840,6 +840,7 @@ public class ModelExpander {
 			List<WordInFile> whileblock = new ArrayList<WordInFile>();
 			if (content.get(i).equals(KeyWord.OPENBRACE)) {
 				// in braces - parse block
+				whileStatement.setContentInBlock(true);
 				int openBraces = 1;
 				i++;
 				while (openBraces > 0) {
@@ -885,6 +886,7 @@ public class ModelExpander {
 			List<WordInFile> whileblock = new ArrayList<WordInFile>();
 			if (content.get(i).equals(KeyWord.OPENBRACE)) {
 				// in braces - parse block
+				whileStatement.setContentInBlock(true);
 				int openBraces = 1;
 				i++;
 				while (openBraces > 0) {
