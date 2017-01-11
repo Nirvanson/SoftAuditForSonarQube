@@ -80,7 +80,10 @@ public enum KeyWord {
 	ANNOTATIONINTERFACE("@interface", WordType.DECLARATOR),
 	QUESTIONMARK("?", WordType.BREAK),
 	DOUBLEDOT(":", WordType.BREAK),
-	WORD("", WordType.FREEWORD);
+	WORD("", WordType.FREEWORD),
+	VARIDENT("", WordType.VARIDENT),
+	VARTYPE("", WordType.VARTYPE),
+	METHODREF("", WordType.METHODREF);
 	
 	private final String word;
 	private final WordType type;

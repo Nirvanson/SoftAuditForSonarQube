@@ -2,11 +2,12 @@ package plugin.analyzer;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.sonar.api.measures.Metric;
 
@@ -120,16 +121,21 @@ public class FileAnalyzer {
 			} catch (ParsingException e) {
 				e.printStackTrace();
 			}
-			log.printModel("declarations", contents);
-			List<String> declaredVariables = new ArrayList<String>();
+			Set<String> declaredVariables = new HashSet<String>();
 			try {
-				declaredVariables = collectVariables(contents);
+				declaredVariables = collectDeclaredVariables(contents);
 			} catch (ParsingException e) {
 				e.printStackTrace();
 			}
-			Map<Metric<Integer>, Double> varMeasures = new HashMap<Metric<Integer>, Double>();
-			varMeasures.put(SoftAuditMetrics.VAR, (double) declaredVariables.size());
-			log.printMeasures("variables", varMeasures);
+			try {
+				expander.extractReferences(contents, declaredVariables);
+			} catch (ParsingException e) {
+				e.printStackTrace();
+			}
+			log.printModel("declarations", contents);
+			//Map<Metric<Integer>, Double> varMeasures = new HashMap<Metric<Integer>, Double>();
+			//varMeasures.put(SoftAuditMetrics.VAR, (double) declaredVariables.size());
+			//log.printMeasures("variables", varMeasures);
 			sourceFiles++;
 		}
 		log.close();
@@ -138,16 +144,16 @@ public class FileAnalyzer {
 		return result;
 	}
 
-	private List<String> collectVariables(List<JavaFileContent> contents) throws ParsingException {
-		List<String> result = new ArrayList<String>();
+	private Set<String> collectDeclaredVariables(List<JavaFileContent> contents) throws ParsingException {
+		Set<String> result = new HashSet<String>();
 		if (contents == null || contents.isEmpty()) {
 			return result;
 		}
 		for (JavaFileContent content : contents) {
 			if (content instanceof JavaClass) { 
-				result.addAll(collectVariables(content.getContent()));
+				result.addAll(collectDeclaredVariables(content.getContent()));
 			} else if (content instanceof JavaMethod) {
-				result.addAll(collectVariables(content.getContent()));
+				result.addAll(collectDeclaredVariables(content.getContent()));
 				if (((JavaMethod) content).getParameters()!=null) {
 					for (JavaVariable var: ((JavaMethod) content).getParameters()) {
 						result.add(var.getName());
@@ -159,7 +165,7 @@ public class FileAnalyzer {
 						result.add(var.getName());
 					}
 				}
-				result.addAll(collectVariables(content.getContent()));
+				result.addAll(collectDeclaredVariables(content.getContent()));
 			} else if (content instanceof JavaControlStatement) {
 				JavaControlStatement theStatement = (JavaControlStatement) content;
 				switch(theStatement.getType()) {
@@ -169,7 +175,7 @@ public class FileAnalyzer {
 							result.add(var.getName());
 						}
 					}
-					result.addAll(collectVariables(content.getContent()));
+					result.addAll(collectDeclaredVariables(content.getContent()));
 					break;
 				case IF:
 					if (theStatement.getDeclaredVariables()!=null) {
@@ -177,9 +183,9 @@ public class FileAnalyzer {
 							result.add(var.getName());
 						}
 					}
-					result.addAll(collectVariables(content.getContent()));
+					result.addAll(collectDeclaredVariables(content.getContent()));
 					if (theStatement.getOthercontent()!=null) {
-						result.addAll(collectVariables(theStatement.getOthercontent()));
+						result.addAll(collectDeclaredVariables(theStatement.getOthercontent()));
 					}
 					break;
 				case TRY:
@@ -188,16 +194,16 @@ public class FileAnalyzer {
 							result.add(var.getName());
 						}
 					}
-					result.addAll(collectVariables(content.getContent()));
+					result.addAll(collectDeclaredVariables(content.getContent()));
 					if (theStatement.getOthercontent()!=null) {
-						result.addAll(collectVariables(theStatement.getOthercontent()));
+						result.addAll(collectDeclaredVariables(theStatement.getOthercontent()));
 					}
 					if (theStatement.getResources()!=null) {
-						result.addAll(collectVariables(theStatement.getResources()));
+						result.addAll(collectDeclaredVariables(theStatement.getResources()));
 					}
 					if (theStatement.getCatchedExceptions()!=null) {
 						for (List<WordInFile> exception : theStatement.getCatchedExceptions().keySet()) {
-							result.addAll(collectVariables(theStatement.getCatchedExceptions().get(exception)));
+							result.addAll(collectDeclaredVariables(theStatement.getCatchedExceptions().get(exception)));
 						}
 					}
 					break;

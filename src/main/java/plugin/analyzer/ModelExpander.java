@@ -3,6 +3,8 @@ package plugin.analyzer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import plugin.model.JavaFileContent;
 import plugin.model.KeyWord;
@@ -20,9 +22,119 @@ import plugin.util.ParsingException;
 
 public class ModelExpander {
 
+	public void extractReferences(List<JavaFileContent> contents, Set<String> declaredVariables) throws ParsingException {
+		if (contents == null) {
+			throw new ParsingException(ParsingErrorType.NULL_POINTER, "Can't extract anything from NULL in ModelExpander.extractReferences!");
+		}
+		if (declaredVariables==null || declaredVariables.isEmpty()) {
+			return;
+		}
+		for (JavaFileContent content : contents) {
+			if (content instanceof JavaClass || content instanceof JavaMethod) {
+				// parse content
+				extractReferences(content.getContent(), declaredVariables);
+			} else if (content instanceof JavaStatementWithAnonymousClass) {
+				// parse content of anonymous class
+				// build together statement with placeholder for class and scan
+				JavaStatementWithAnonymousClass theStatement = (JavaStatementWithAnonymousClass) content;
+				extractReferences(theStatement.getContent(), declaredVariables);
+				List<WordInFile> textToScan = new ArrayList<WordInFile>();
+				textToScan.addAll(theStatement.getStatementBeforeClass());
+				textToScan.add(new WordInFile(null, KeyWord.NEW));
+				textToScan.addAll(theStatement.getClassType());
+				textToScan.addAll(theStatement.getStatementAfterClass());
+				findReferencesInStatement(theStatement, textToScan, declaredVariables);
+			} else if (content instanceof JavaControlStatement) {
+				JavaControlStatement theStatement = (JavaControlStatement) content;
+				switch(theStatement.getType()) {
+				case SWITCH: case WHILE: case SYNCHRONIZED: case CASE:
+					// parse content block
+					// scan condition
+					findReferencesInStatement(theStatement, theStatement.getCondition(), declaredVariables);
+					extractReferences(theStatement.getContent(), declaredVariables);
+					break;
+				case FOR:
+					// parse content-block
+					// scan initialization, termination and increment or enhanced declaration
+					findReferencesInStatement(theStatement, theStatement.getCondition(), declaredVariables);
+					extractReferences(theStatement.getContent(), declaredVariables);
+					if (theStatement.getInitialization()!=null) {
+						findReferencesInStatement(theStatement, theStatement.getInitialization(), declaredVariables);
+						findReferencesInStatement(theStatement, theStatement.getIncrement(), declaredVariables);
+					}
+					break;
+				case IF:
+					// parse (if available) if-block and else-block
+					// scan text of condition
+					findReferencesInStatement(theStatement, theStatement.getCondition(), declaredVariables);
+					extractReferences(theStatement.getContent(), declaredVariables);
+					if (theStatement.getOthercontent()!=null) {
+						extractReferences(theStatement.getOthercontent(), declaredVariables);
+					}
+					break;
+				case TRY:
+					// parse (if available) resource-block, try-block, catch-blocks and finally block
+					// scan text of catched exceptions
+					extractReferences(theStatement.getContent(), declaredVariables);
+					if (theStatement.getOthercontent()!=null) {
+						extractReferences(theStatement.getOthercontent(), declaredVariables);
+					}
+					if (theStatement.getResources()!=null) {
+						extractReferences(theStatement.getResources(), declaredVariables);
+					}
+					if (theStatement.getCatchedExceptions()!=null) {
+						for (List<WordInFile> exception : theStatement.getCatchedExceptions().keySet()) {
+							extractReferences(theStatement.getCatchedExceptions().get(exception), declaredVariables);
+							findReferencesInStatement(theStatement, exception, declaredVariables);
+						}
+					}
+					break;
+				case BLOCK:
+					// parse block-content
+					extractReferences(theStatement.getContent(), declaredVariables);
+					break;
+				case RETURN: case ASSERT: case THROW:
+					// scan statement-text for returns, assertions and throws
+					findReferencesInStatement(theStatement, theStatement.getStatementText(), declaredVariables);
+					break;
+				case BREAK: case CONTINUE: 
+					// do nothing
+					break;
+				default:
+					throw new ParsingException(ParsingErrorType.UNKNOWN_ELEMENT_IN_MODEL, "Control-Statement-Type '" + theStatement.getType() + "' is unknown in ModelExpander.extractReferences!");
+				}
+			} else if (content instanceof JavaStatement) {
+				JavaStatement theStatement = (JavaStatement) content;
+				switch(theStatement.getType()) {
+				case ANNOTATION: case IMPORT: case PACKAGE:
+					// do nothing
+					break;
+				case UNSPECIFIED:
+					// some other statement. scan statement-text
+					findReferencesInStatement(theStatement, theStatement.getStatementText(), declaredVariables);
+					break;
+				default:
+					throw new ParsingException(ParsingErrorType.UNKNOWN_ELEMENT_IN_MODEL, "Statement-Type '" + theStatement.getType() + "' is unknown in ModelExpander.extractReferences!");
+				}
+			}
+		}
+	}
+	
+	private void findReferencesInStatement(JavaStatement theStatement, List<WordInFile> textToScan,
+			Set<String> declaredVariables) throws ParsingException {
+		if (textToScan == null) {
+			throw new ParsingException(ParsingErrorType.NULL_POINTER, "Can't extract anything from NULL in ModelExpander.findReferencesInStatement!");
+		}
+		for (int i=0; i<textToScan.size(); i++) {
+			if (textToScan.get(i).getKey().equals(KeyWord.WORD) && declaredVariables.contains(textToScan.get(i).getWord())) {
+				theStatement.getReferencedVariables().add(new JavaVariable(textToScan.get(i).getWord(), null));
+			}
+		}
+	}
+
 	public void extractDeclarationsAndCalls(List<JavaFileContent> contents) throws ParsingException {
 		if (contents == null) {
-			throw new ParsingException(ParsingErrorType.NULL_POINTER, "Can't extract anything from NULL in ModelExpander.extractReferencesAndCalls!");
+			throw new ParsingException(ParsingErrorType.NULL_POINTER, "Can't extract anything from NULL in ModelExpander.extractDeclarationsAndCalls!");
 		}
 		for (JavaFileContent content : contents) {
 			if (content instanceof JavaClass || content instanceof JavaMethod) {
@@ -78,10 +190,13 @@ public class ModelExpander {
 						extractDeclarationsAndCalls(theStatement.getResources());
 					}
 					if (theStatement.getCatchedExceptions()!=null) {
+						Map<List<WordInFile>, List<JavaFileContent>> resultMap = new HashMap<List<WordInFile>, List<JavaFileContent>>();
 						for (List<WordInFile> exception : theStatement.getCatchedExceptions().keySet()) {
-							extractDeclarationsAndCalls(theStatement.getCatchedExceptions().get(exception));
-							doExtractionInStatement(theStatement, exception);
+							List<JavaFileContent> exceptioncontent = theStatement.getCatchedExceptions().get(exception);
+							extractDeclarationsAndCalls(exceptioncontent);
+							resultMap.put(doExtractionInStatement(theStatement, exception), exceptioncontent);
 						}
+						theStatement.setCatchedExceptions(resultMap);
 					}
 					break;
 				case BLOCK:
@@ -99,7 +214,7 @@ public class ModelExpander {
 					theStatement.setCalledMethods(null);
 					break;
 				default:
-					throw new ParsingException(ParsingErrorType.UNKNOWN_ELEMENT_IN_MODEL, "Control-Statement-Type '" + theStatement.getType() + "' is unknown in ModelExpander.extractReferencesAndCalls!");
+					throw new ParsingException(ParsingErrorType.UNKNOWN_ELEMENT_IN_MODEL, "Control-Statement-Type '" + theStatement.getType() + "' is unknown in ModelExpander.extractDeclarationsAndCalls!");
 				}
 			} else if (content instanceof JavaStatement) {
 				JavaStatement theStatement = (JavaStatement) content;
@@ -115,13 +230,13 @@ public class ModelExpander {
 					doExtractionInStatement(theStatement, theStatement.getStatementText());
 					break;
 				default:
-					throw new ParsingException(ParsingErrorType.UNKNOWN_ELEMENT_IN_MODEL, "Statement-Type '" + theStatement.getType() + "' is unknown in ModelExpander.extractReferencesAndCalls!");
+					throw new ParsingException(ParsingErrorType.UNKNOWN_ELEMENT_IN_MODEL, "Statement-Type '" + theStatement.getType() + "' is unknown in ModelExpander.extractDeclarationsAndCalls!");
 				}
 			}
 		}
 	}
 	
-	private void doExtractionInStatement(JavaStatement statement, List<WordInFile> textToScan) throws ParsingException {
+	private List<WordInFile> doExtractionInStatement(JavaStatement statement, List<WordInFile> textToScan) throws ParsingException {
 		if (textToScan == null) {
 			throw new ParsingException(ParsingErrorType.NULL_POINTER, "Can't extract anything from NULL in ModelExpander.doExtractionInStatement!");
 		}
@@ -131,18 +246,36 @@ public class ModelExpander {
 			if (declaredVar!=null) {
 				List<WordInFile> datatype = new ArrayList<WordInFile>();
 				while (!textToScan.get(i).equals(declaredVar)) {
+					if (textToScan.get(i).getWord()!=null) {
+						textToScan.set(i, new WordInFile(textToScan.get(i).getWord(), KeyWord.VARTYPE));
+					} else {
+						textToScan.set(i, new WordInFile(textToScan.get(i).getKey().toString(), KeyWord.VARTYPE));
+					}
 					datatype.add(textToScan.get(i));
 					i++;
 				}
+				textToScan.set(i, new WordInFile(textToScan.get(i).getWord(), KeyWord.VARIDENT));
 				statement.getDeclaredVariables().add(new JavaVariable(declaredVar.getWord(), datatype));
-			} else if ((textToScan.get(i).getKey().equals(KeyWord.WORD) || textToScan.get(i).equals(KeyWord.THIS) || textToScan.get(i).equals(KeyWord.SUPER) || textToScan.get(i).equals(KeyWord.GREATER))
+			} else if ((textToScan.get(i).getKey().equals(KeyWord.WORD) || textToScan.get(i).equals(KeyWord.THIS) || textToScan.get(i).equals(KeyWord.SUPER))
 					&& (textToScan.size()>i+1 && textToScan.get(i+1).equals(KeyWord.OPENPARANTHESE))){
 				// otherwise check if method call: free-word/super/this followed by "("
+				textToScan.set(i, new WordInFile(textToScan.get(i).getWord(), KeyWord.METHODREF));
 				statement.getCalledMethods().add(textToScan.get(i));
 				// skip "("
 				i++;
-			} 
+			} else if (textToScan.get(i).getKey().equals(KeyWord.WORD) && textToScan.size()>i+2 && textToScan.get(i+1).equals(KeyWord.LESS)) {
+				// otherwise check if call of constructor with generic
+				int endOfGeneric = ModelBuildHelper.parseGeneric(textToScan, i+2);
+				if (endOfGeneric!=0 && textToScan.size()>endOfGeneric+1 && textToScan.get(endOfGeneric+1).getKey().equals(KeyWord.OPENPARANTHESE)) {
+					statement.getCalledMethods().add(textToScan.get(i));
+					while(i<=endOfGeneric) {
+						textToScan.set(i, new WordInFile(textToScan.get(i).getWord(), KeyWord.METHODREF));
+						i++;
+					}
+				}
+			}
 		}
+		return textToScan;
 	}
 
 	public List<JavaFileContent> splitRemainingWordListsToStatements(List<JavaFileContent> contents) throws ParsingException {

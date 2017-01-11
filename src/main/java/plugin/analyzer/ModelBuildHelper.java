@@ -105,7 +105,7 @@ public class ModelBuildHelper {
 	 * like HashMap<String, Integer>
 	 * 
 	 * @param words
-	 *            - wordlist beginning from first word after "<"
+	 *            - wordlist 
 	 * @param position
 	 *            - the current position in isParameter method
 	 * @return position of last ">" or 0 if invalid
