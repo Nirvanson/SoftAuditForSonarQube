@@ -1,6 +1,5 @@
-package plugin.analyzer;
+package plugin.analyser;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,7 +18,6 @@ import plugin.model.components.JavaMethod;
 import plugin.model.components.JavaStatement;
 import plugin.model.components.JavaStatementWithAnonymousClass;
 import plugin.model.components.JavaVariable;
-import plugin.util.Logger;
 import plugin.util.ParsingException;
 import plugin.model.KeyWord;
 
@@ -29,97 +27,9 @@ import plugin.model.KeyWord;
  * @author Jan Rucks (jan.rucks@gmx.de)
  * @version 0.3
  */
-public class FileAnalyzer {
+public class ModelAnalyser {
 
-    /** FileList for Parsing. */
-    private final Iterable<File> files;
-    /** Logger for detailed file-log. */
-    private Logger log;
-
-    /**
-     * Analyzer constructor.
-     *
-     * @param files - The files to analyze
-     */
-    public FileAnalyzer(final Iterable<File> files) {
-        super();
-        this.files = files;
-        log = Logger.getLogger();
-    }
-
-    /**
-     * Start analyzing.
-     *
-     * @return map with results for measures
-     */
-    public Map<Metric<?>, Double> analyze() {
-
-        Map<Metric<?>, Double> result = new HashMap<Metric<?>, Double>();
-        // add all measures from metrics list (metrics with keys like base_xyz)
-        for (Metric<?> metric : new SoftAuditMetrics().getMetrics()) {
-            if (metric.getKey().startsWith("base")) {
-                result.put(metric, 0d);
-            }
-        }
-        // start analyzing each relevant file
-        double sourceFiles = 0;
-        for (File file : files) {
-            try {
-                // try parsing file
-                log.printFile(file);
-                List<String> normalizedLines = null;
-                normalizedLines = FileNormalizer.prepareFile(file);
-                log.printNormalizedLines(normalizedLines);
-                String singleLineCode = FileNormalizer.convertToSingleString(normalizedLines);
-                log.printSingleLineCode(singleLineCode);
-                List<WordInFile> wordList = FileNormalizer.createJavaWordList(singleLineCode);
-                log.printWords(wordList);
-                Map<Metric<Integer>, Double> keyWordMeasures = countKeyWords(wordList);
-                log.printMeasures("keyword", keyWordMeasures);
-                for (Metric<Integer> measure : keyWordMeasures.keySet()) {
-                    result.put(measure, result.get(measure) + keyWordMeasures.get(measure));
-                }
-                List<JavaFileContent> contents = ModelBuilder.parseClassStructure(wordList);
-                log.printModel("class", contents);
-                for (JavaFileContent content : contents) {
-                    if (content instanceof JavaClass) {
-                        content.setContent(ModelBuilder.parseClassContent(content));
-                    }
-                }
-                log.printModel("refined", contents);
-                Map<Metric<Integer>, Double> methodMeasures = countMethods(contents);
-                log.printMeasures("method", methodMeasures);
-                for (Metric<Integer> measure : methodMeasures.keySet()) {
-                    result.put(measure, result.get(measure) + methodMeasures.get(measure));
-                }
-                for (JavaFileContent content : contents) {
-                    if (content instanceof JavaClass) {
-                        content.setContent(ModelStructureExpander.parseStructuralStatements(content.getContent()));
-                    }
-                }
-                log.printModel("expanded", contents);
-                contents = ModelDetailExpander.parseRemainingWordListsToStatements(contents);
-                log.printModel("statement", contents);
-                ModelDetailExpander.parseDeclarationsAndCalls(contents);
-                Set<String> declaredVariables = new HashSet<String>();
-                declaredVariables = collectDeclaredVariables(contents);
-                ModelDetailExpander.parseReferences(contents, declaredVariables);
-                log.printModel("declarations", contents);
-                // Map<Metric<Integer>, Double> varMeasures = new HashMap<Metric<Integer>, Double>();
-                // varMeasures.put(SoftAuditMetrics.VAR, (double) declaredVariables.size());
-                // log.printMeasures("variables", varMeasures);
-                sourceFiles++;
-            } catch (ParsingException e) {
-                e.printStackTrace();
-            }
-        }
-        log.close();
-        result.put(SoftAuditMetrics.SRC, sourceFiles);
-        result.put(SoftAuditMetrics.OMS, 200d);
-        return result;
-    }
-
-    private Set<String> collectDeclaredVariables(List<JavaFileContent> contents) throws ParsingException {
+    public static Set<String> collectDeclaredVariables(List<JavaFileContent> contents) throws ParsingException {
         Set<String> result = new HashSet<String>();
         if (contents == null || contents.isEmpty()) {
             return result;
@@ -219,7 +129,7 @@ public class FileAnalyzer {
      * @param contents - the JavaClassContents of the file
      * @returns result-map
      */
-    private Map<Metric<Integer>, Double> countMethods(List<JavaFileContent> contents) {
+    public static Map<Metric<Integer>, Double> countMethods(List<JavaFileContent> contents) {
         Map<Metric<Integer>, Double> result = new HashMap<Metric<Integer>, Double>();
         result.put(SoftAuditMetrics.MET, 0d);
         result.put(SoftAuditMetrics.PAR, 0d);
@@ -248,7 +158,7 @@ public class FileAnalyzer {
      * @param words - the words of the file to analyze
      * @returns result-map
      */
-    private Map<Metric<Integer>, Double> countKeyWords(List<WordInFile> words) {
+    public static Map<Metric<Integer>, Double> countKeyWords(List<WordInFile> words) {
         Map<Metric<Integer>, Double> partialResult = new HashMap<Metric<Integer>, Double>();
         // count cases in switches
         partialResult.put(SoftAuditMetrics.CAS, countKey(words, KeyWord.CASE) + countKey(words, KeyWord.DEFAULT));
@@ -275,7 +185,7 @@ public class FileAnalyzer {
         return partialResult;
     }
 
-    private double countKey(List<WordInFile> words, KeyWord key) {
+    private static double countKey(List<WordInFile> words, KeyWord key) {
         return (double) Collections.frequency(words, new WordInFile(null, key));
     }
 }

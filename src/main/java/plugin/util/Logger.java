@@ -48,7 +48,8 @@ public class Logger {
 	private Logger() {
 		loglevel = 2;
 		try {
-			writer = new PrintWriter("C:\\Beleg/plugin-log.log", "UTF-8");
+		    String timestamp = (new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")).format(new Date());
+			writer = new PrintWriter("./target/SensorRun_" + timestamp + ".log", "UTF-8");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

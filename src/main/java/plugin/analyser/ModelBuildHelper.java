@@ -1,4 +1,4 @@
-package plugin.analyzer;
+package plugin.analyser;
 
 import java.util.Arrays;
 import java.util.List;

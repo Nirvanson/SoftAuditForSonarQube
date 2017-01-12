@@ -1,4 +1,4 @@
-package plugin.analyzer;
+package plugin.analyser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
