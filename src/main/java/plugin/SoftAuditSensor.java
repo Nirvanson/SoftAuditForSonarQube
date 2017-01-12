@@ -59,10 +59,10 @@ public class SoftAuditSensor implements Sensor {
         // initalise analyzer 
         FileAnalyzer analyzer = new FileAnalyzer(files);
         // measure
-        Map<Metric<Integer>, Double> measures = new HashMap<Metric<Integer>, Double>();
+        Map<Metric<?>, Double> measures = new HashMap<Metric<?>, Double>();
         measures = analyzer.analyze();
         // save measures
-        for (Metric<Integer> metric: measures.keySet()) {
+        for (Metric<?> metric: measures.keySet()) {
     		sensorContext.saveMeasure(new Measure<Integer>(metric, measures.get(metric)));
     	}
         // compute and save metrics
