@@ -39,6 +39,16 @@ public class SoftAuditSensor implements Sensor {
     private Logger log;
 
     /**
+     * Constructor for test-runs.
+     *
+     * @param fileSystem the project file system
+     */
+    public SoftAuditSensor(String loggername) {
+        this.fileSystem = null;
+        log = Logger.getLogger(loggername);
+    }
+    
+    /**
      * Constructor that sets the file system object for the
      * project being analysed.
      *
@@ -46,7 +56,7 @@ public class SoftAuditSensor implements Sensor {
      */
     public SoftAuditSensor(FileSystem fileSystem) {
         this.fileSystem = fileSystem;
-        log = Logger.getLogger();
+        log = Logger.getLogger(null);
     }
     
     /**
@@ -97,6 +107,7 @@ public class SoftAuditSensor implements Sensor {
         // start analyzing each relevant file
         double sourceFiles = 0;
         for (File file : files) {
+            System.out.println(file);
             try {
                 // try parsing file
                 log.printFile(file);

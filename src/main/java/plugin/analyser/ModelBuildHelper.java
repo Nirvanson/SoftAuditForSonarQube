@@ -134,7 +134,6 @@ public class ModelBuildHelper {
                 return 0;
             }
             while (words.get(position).getKey().equals(KeyWord.DOT)) {
-                System.out.println(words.get(position - 1));
                 position++;
                 if (!(words.get(position).getKey().equals(KeyWord.WORD)
                         || words.get(position).getKey().getType().equals(WordType.DATATYPE))) {

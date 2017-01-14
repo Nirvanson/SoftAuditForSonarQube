@@ -17,7 +17,7 @@ public class JavaFileNormalizerTest {
     public JavaFileNormalizerTest() {
         super();
     }
-
+    
     @Test
     public void testFileNormalization() {
         File input = new File(getClass().getResource("/testdata/TestClass.txt").getPath());

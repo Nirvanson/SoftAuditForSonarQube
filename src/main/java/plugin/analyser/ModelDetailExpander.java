@@ -267,7 +267,6 @@ public class ModelDetailExpander {
                         if (theStatement.getCatchedExceptions() != null) {
                             for (List<WordInFile> exception : theStatement.getCatchedExceptions().keySet()) {
                                 parseReferences(theStatement.getCatchedExceptions().get(exception), declaredVariables);
-                                parseReferencesInStatement(theStatement, exception, declaredVariables);
                             }
                         }
                         break;
@@ -349,6 +348,7 @@ public class ModelDetailExpander {
             // if free-word equals declared variable identifier add as referenced variable
             if (textToScan.get(i).getKey().equals(KeyWord.WORD)
                     && declaredVariables.contains(textToScan.get(i).getWord())) {
+                textToScan.set(i, new WordInFile(textToScan.get(i).getWord(), KeyWord.VARIDENT));
                 theStatement.getReferencedVariables().add(new JavaVariable(textToScan.get(i).getWord(), null));
             }
         }

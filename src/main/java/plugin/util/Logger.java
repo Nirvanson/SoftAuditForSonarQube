@@ -45,19 +45,24 @@ public class Logger {
 	private final int loglevel;
 	private PrintWriter writer;
 		
-	private Logger() {
+	private Logger(String filename) {
+	    if (filename==null) {
+	        filename = "SoftAuditSensorRun";
+	    }
 		loglevel = 2;
 		try {
-		    String timestamp = (new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")).format(new Date());
-			writer = new PrintWriter("./target/SensorRun_" + timestamp + ".log", "UTF-8");
+		    // Logging folder must be changed for deployed plugin!!!
+		    String timestamp = (new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss_")).format(new Date());
+			writer = new PrintWriter("./target/logs/" + timestamp + filename + ".log", "UTF-8");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static Logger getLogger() {
-		if(logger == null) 
-			logger = new Logger();
+	public static Logger getLogger(String filename) {
+		if(logger == null) { 
+			logger = new Logger(filename);
+		}
 		return logger; 
 	}
 	
@@ -384,6 +389,7 @@ public class Logger {
 
 	public void close() {
 		writer.close();
+		logger = null;
 	}
 	
 	private String addTabs(int inputlevel) {
