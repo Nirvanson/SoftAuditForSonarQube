@@ -288,7 +288,7 @@ public class Logger {
 						writer.println(addTabs(level) + "ELSE - block:");
 						printFileContent(statement.getOthercontent(), level+1);
 					}
-				} else if (statement.getType().equals(StatementType.WHILE)) {
+				} else if (statement.getType().equals(StatementType.WHILE) || statement.getType().equals(StatementType.DOWHILE)) {
 					String condition = "";
 					for (WordInFile conditionWord : statement.getCondition()) {
 						condition += conditionWord + " ";

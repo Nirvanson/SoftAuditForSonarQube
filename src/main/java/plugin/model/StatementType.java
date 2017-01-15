@@ -10,6 +10,7 @@ public enum StatementType {
 	IF,
 	FOR,
 	WHILE,
+	DOWHILE,
 	RETURN,
 	BLOCK,
 	SWITCH,
@@ -19,5 +20,10 @@ public enum StatementType {
 	ANNOTATION,
 	PACKAGE,
 	IMPORT,
-	UNSPECIFIED
+	ASSIGNMENT,
+	DECLARATION,
+	UNSPECIFIED,
+	INCREMENT,
+	DECREMENT,
+	METHODCALL
 }

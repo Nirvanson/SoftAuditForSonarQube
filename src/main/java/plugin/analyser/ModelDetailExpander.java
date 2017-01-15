@@ -104,6 +104,7 @@ public class ModelDetailExpander {
                     switch (theStatement.getType()) {
                     case SWITCH:
                     case WHILE:
+                    case DOWHILE:
                     case SYNCHRONIZED:
                     case CASE:
                         // parse content block and scan condition
@@ -227,6 +228,7 @@ public class ModelDetailExpander {
                     switch (theStatement.getType()) {
                     case SWITCH:
                     case WHILE:
+                    case DOWHILE:
                     case SYNCHRONIZED:
                     case CASE:
                         // parse content block
@@ -309,6 +311,220 @@ public class ModelDetailExpander {
         } catch (Exception e) {
             throw new ParsingException("Parsing variable references failed.");
         }
+    }
+
+    /**
+     * Recoursive scanning model for parsing assignments.
+     * 
+     * @param contents - model of the component-body for parsing
+     * @throws ParsingException
+     */
+    public static void parseAssignments(List<JavaFileContent> contents) throws ParsingException {
+        try {
+            for (JavaFileContent content : contents) {
+                if (content instanceof JavaClass || content instanceof JavaMethod) {
+                    // parse content
+                    parseAssignments(content.getContent());
+                } else if (content instanceof JavaStatementWithAnonymousClass) {
+                    // parse content of anonymous class
+                    // build together statement with placeholder for class and scan
+                    JavaStatementWithAnonymousClass theStatement = (JavaStatementWithAnonymousClass) content;
+                    parseAssignments(theStatement.getContent());
+                    List<WordInFile> textToScan = new ArrayList<WordInFile>();
+                    textToScan.addAll(theStatement.getStatementBeforeClass());
+                    textToScan.add(new WordInFile(null, KeyWord.NEW));
+                    textToScan.addAll(theStatement.getClassType());
+                    textToScan.addAll(theStatement.getStatementAfterClass());
+                    content = parseAssignmentsInStatement(theStatement, textToScan);
+                } else if (content instanceof JavaControlStatement) {
+                    JavaControlStatement theStatement = (JavaControlStatement) content;
+                    switch (theStatement.getType()) {
+                    case SWITCH:
+                    case WHILE:
+                    case DOWHILE:
+                    case SYNCHRONIZED:
+                    case CASE:
+                    case FOR:
+                    case BLOCK:
+                        // parse content block
+                        parseAssignments(theStatement.getContent());
+                        break;
+                    case IF:
+                        // parse (if available) if-block and else-block
+                        parseAssignments(theStatement.getContent());
+                        if (theStatement.getOthercontent() != null) {
+                            parseAssignments(theStatement.getOthercontent());
+                        }
+                        break;
+                    case TRY:
+                        // parse (if available) resource-block, try-block, catch-blocks and finally block
+                        parseAssignments(theStatement.getContent());
+                        if (theStatement.getOthercontent() != null) {
+                            parseAssignments(theStatement.getOthercontent());
+                        }
+                        if (theStatement.getResources() != null) {
+                            parseAssignments(theStatement.getResources());
+                        }
+                        if (theStatement.getCatchedExceptions() != null) {
+                            for (List<WordInFile> exception : theStatement.getCatchedExceptions().keySet()) {
+                                parseAssignments(theStatement.getCatchedExceptions().get(exception));
+                            }
+                        }
+                        break;
+                    case RETURN:
+                    case ASSERT:
+                    case THROW:
+                    case BREAK:
+                    case CONTINUE:
+                        // do nothing
+                        break;
+                    default:
+                        throw new ParsingException("Control-Statement-Type '" + theStatement.getType()
+                                + "' is unknown in ModelExpander.parseAssignments!");
+                    }
+                } else if (content instanceof JavaStatement) {
+                    JavaStatement theStatement = (JavaStatement) content;
+                    switch (theStatement.getType()) {
+                    case ANNOTATION:
+                    case IMPORT:
+                    case PACKAGE:
+                        // do nothing
+                        break;
+                    case UNSPECIFIED:
+                        // some other statement. scan statement-text
+                        content = parseAssignmentsInStatement(theStatement, theStatement.getStatementText());
+                        break;
+                    default:
+                        throw new ParsingException("Statement-Type '" + theStatement.getType()
+                                + "' is unknown in ModelExpander.parseAssignments!");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new ParsingException("Parsing assignments failed.");
+        }
+    }
+
+    /**
+     * Recoursive scanning model for parsing remaining statement-types.
+     * 
+     * @param contents - model of the component-body for parsing
+     * @throws ParsingException
+     */
+    public static void parseRemainingStatementTypes(List<JavaFileContent> contents) throws ParsingException {
+        try {
+            for (JavaFileContent content : contents) {
+                if (content instanceof JavaClass || content instanceof JavaMethod) {
+                    // parse content
+                    parseRemainingStatementTypes(content.getContent());
+                } else if (content instanceof JavaStatementWithAnonymousClass) {
+                    // parse content of anonymous class
+                    parseRemainingStatementTypes(content.getContent());
+                } else if (content instanceof JavaControlStatement) {
+                    JavaControlStatement theStatement = (JavaControlStatement) content;
+                    switch (theStatement.getType()) {
+                    case SWITCH:
+                    case WHILE:
+                    case DOWHILE:
+                    case SYNCHRONIZED:
+                    case CASE:
+                    case FOR:
+                    case BLOCK:
+                        // parse content block
+                        parseRemainingStatementTypes(theStatement.getContent());
+                        break;
+                    case IF:
+                        // parse (if available) if-block and else-block
+                        parseRemainingStatementTypes(theStatement.getContent());
+                        if (theStatement.getOthercontent() != null) {
+                            parseRemainingStatementTypes(theStatement.getOthercontent());
+                        }
+                        break;
+                    case TRY:
+                        // parse (if available) resource-block, try-block, catch-blocks and finally block
+                        parseRemainingStatementTypes(theStatement.getContent());
+                        if (theStatement.getOthercontent() != null) {
+                            parseRemainingStatementTypes(theStatement.getOthercontent());
+                        }
+                        if (theStatement.getResources() != null) {
+                            parseRemainingStatementTypes(theStatement.getResources());
+                        }
+                        if (theStatement.getCatchedExceptions() != null) {
+                            for (List<WordInFile> exception : theStatement.getCatchedExceptions().keySet()) {
+                                parseRemainingStatementTypes(theStatement.getCatchedExceptions().get(exception));
+                            }
+                        }
+                        break;
+                    default:
+                        // do nothing
+                        break;
+                    }
+                } else if (content instanceof JavaStatement) {
+                    JavaStatement theStatement = (JavaStatement) content;
+                    if (theStatement.getType().equals(StatementType.UNSPECIFIED)) {
+                        if (theStatement.getCalledMethods()!=null && !theStatement.getCalledMethods().isEmpty()) {
+                            theStatement.setStatementType(StatementType.METHODCALL);
+                        } else if (theStatement.getDeclaredVariables()!=null && !theStatement.getDeclaredVariables().isEmpty()) {
+                            theStatement.setStatementType(StatementType.DECLARATION);
+                        } else {
+                            List<WordInFile> text = theStatement.getStatementText();
+                            for (int i=0; i<text.size(); i++) {
+                                if (text.get(i).equals(KeyWord.ADD) && i<text.size()-1 && text.get(i+1).equals(KeyWord.ADD)) {
+                                    theStatement.setStatementType(StatementType.INCREMENT);
+                                    break;
+                                } else if (text.get(i).equals(KeyWord.SUB) && i<text.size()-1 && text.get(i+1).equals(KeyWord.SUB)) {
+                                    theStatement.setStatementType(StatementType.DECREMENT);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new ParsingException("Parsing remaining statement types failed.");
+        }
+    }
+    
+    private static JavaStatement parseAssignmentsInStatement(JavaStatement theStatement, List<WordInFile> textToScan) {
+        boolean assignmentFound = false;
+        for (int i = 0; i < textToScan.size(); i++) {
+            if (textToScan.get(i).equals(KeyWord.ASSIGN)) {
+                if (i>1 && ModelBuildHelper.operators.contains(textToScan.get(i - 1))) {
+                    // extended assignment like +=
+                    textToScan.set(i - 1,
+                            new WordInFile(textToScan.get(i - 1).getKey().toString(), KeyWord.ASSIGNMENT));
+                    textToScan.set(i, new WordInFile(textToScan.get(i).getKey().toString(), KeyWord.ASSIGNMENT));
+                    assignmentFound = true;
+                } else if (i>2 && ((textToScan.get(i - 1).equals(KeyWord.GREATER)
+                        && textToScan.get(i - 2).equals(KeyWord.GREATER))
+                        || (textToScan.get(i - 1).equals(KeyWord.LESS) 
+                        && textToScan.get(i - 2).equals(KeyWord.LESS)))) {
+                    // Bitshift assignment
+                    textToScan.set(i - 2,
+                            new WordInFile(textToScan.get(i - 2).getKey().toString(), KeyWord.ASSIGNMENT));
+                    textToScan.set(i - 1,
+                            new WordInFile(textToScan.get(i - 1).getKey().toString(), KeyWord.ASSIGNMENT));
+                    textToScan.set(i, new WordInFile(textToScan.get(i).getKey().toString(), KeyWord.ASSIGNMENT));
+                    assignmentFound = true;
+                } else if (i>1 && (textToScan.get(i - 1).equals(KeyWord.COMP) || textToScan.get(i - 1).equals(KeyWord.LESS) || textToScan.get(i - 1).equals(KeyWord.GREATER))) {
+                    // no assignment: != / >= / <=
+                    continue;
+                } else if (i<textToScan.size()-1 && textToScan.get(i - 1).equals(KeyWord.ASSIGN)) {
+                    // no assignment: ==
+                    i++;
+                    continue;
+                } else {
+                    // simple assignment
+                    textToScan.set(i, new WordInFile(textToScan.get(i).getKey().toString(), KeyWord.ASSIGNMENT));
+                    assignmentFound = true;
+                }
+            }
+        }
+        if (assignmentFound) {
+            theStatement.setStatementType(StatementType.ASSIGNMENT);
+        }
+        return theStatement;
     }
 
     /**

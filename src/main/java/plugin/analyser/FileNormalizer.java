@@ -202,6 +202,10 @@ public class FileNormalizer {
                     if (wordInStep1.equals(KeyWord.ANNOTATION)) {
                         // start of annotation.
                         annotationState++;
+                    } else if ((wordInStep1.equals(KeyWord.WORD) && ModelBuildHelper.isNumber(wordInStep1.getWord()))
+                            || (wordInStep1.equals(KeyWord.DOT)) && i<step1.size()-1 && step1.get(i+1).getWord()!=null && ModelBuildHelper.isNumber(step1.get(i+1).getWord())) {
+                        // it's a number... collect all words together that build one number
+                        i = collectNumberWords(result, step1, i);
                     } else if ((wordInStep1.equals(KeyWord.WORD) && !wordInStep1.getWord().isEmpty())
                             || !wordInStep1.equals(KeyWord.WORD)) {
                         // otherwise add word to list (if not empty)
@@ -249,5 +253,24 @@ public class FileNormalizer {
         } catch (Exception e) {
             throw new ParsingException("Word-list creation failed.");
         }
+    }
+
+    private static int collectNumberWords(List<WordInFile> result, List<WordInFile> step1, int i) {
+        boolean endfound = false;
+        String resultingNumber = "";
+        while (!endfound) {
+            if (step1.get(i).equals(KeyWord.WORD) && ModelBuildHelper.isNumber(step1.get(i).getWord())) {
+                resultingNumber += step1.get(i).getWord();
+            } else if (step1.get(i).equals(KeyWord.DOT)) {
+                resultingNumber += ".";
+            } else if (resultingNumber.toLowerCase().endsWith("e") && step1.get(i).equals(KeyWord.SUB)) {
+                resultingNumber += "-";
+            } else {
+                endfound = true;
+            }
+            i++;
+        }
+        result.add(new WordInFile(resultingNumber, KeyWord.CONSTANT));
+        return i-2;
     }
 }

@@ -56,6 +56,7 @@ public class ModelAnalyser {
                 switch (theStatement.getType()) {
                 case SWITCH:
                 case WHILE:
+                case DOWHILE:
                 case SYNCHRONIZED:
                 case FOR:
                 case BLOCK:

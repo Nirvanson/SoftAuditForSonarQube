@@ -816,7 +816,7 @@ public class ModelStructureExpander {
     private static int parseDoWhile(List<WordInFile> content, List<JavaFileContent> result, int i) {
         // skip "do"
         i++;
-        JavaControlStatement whileStatement = new JavaControlStatement(StatementType.WHILE);
+        JavaControlStatement whileStatement = new JavaControlStatement(StatementType.DOWHILE);
         // parse content
         List<JavaFileContent> whileContent = new ArrayList<JavaFileContent>();
         // skip labels

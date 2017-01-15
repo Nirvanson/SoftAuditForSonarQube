@@ -22,7 +22,26 @@ public class ModelBuildHelper {
     /** Single-char words in java code. */
     public final static List<String> breaks = Arrays.asList("\"", "'", "(", ")", "{", "}", "[", "]", "?", ":", ",", ";",
             "@", ".", "+", "-", "*", "/", "%", "<", ">", "=", "!", "~", "&", "|", "^");
+    /** Allowed chars for assignment-operator. */
+    public final static List<KeyWord> operators = Arrays.asList(KeyWord.ADD, KeyWord.SUB, KeyWord.MULT, KeyWord.DIV,
+            KeyWord.MOD, KeyWord.AND, KeyWord.OR, KeyWord.BITXOR);
 
+    public static boolean isNumber(String potentialNumber) {
+        String[] chars = potentialNumber.split("");
+        if (!chars[0].matches("[0-9]")) {
+            return false;
+        }
+        for (int i=1; i<chars.length-1; i++) {
+            if (!chars[i].matches("[0-9e]")) {
+                return false;
+            }
+        }
+        if (!chars[chars.length-1].matches("[0-9defl]")) {
+            return false;
+        }
+        return true;
+    }
+    
     /**
      * checks if following words are valid parameter/variable declaration
      * 

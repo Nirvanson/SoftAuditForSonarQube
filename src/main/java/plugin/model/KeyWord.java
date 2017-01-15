@@ -63,7 +63,7 @@ public enum KeyWord {
 	AND("&", WordType.OPERATOR),
 	OR("|", WordType.OPERATOR),
 	BITCOMP("~", WordType.OPERATOR),
-	BITXEOR("^", WordType.OPERATOR),
+	BITXOR("^", WordType.OPERATOR),
 	ASSIGN("=", WordType.OPERATOR),
 	STRINGLITERAL("\"", WordType.LITERAL),
 	CHARLITERAL("'", WordType.LITERAL),
@@ -83,7 +83,9 @@ public enum KeyWord {
 	WORD("", WordType.FREEWORD),
 	VARIDENT("", WordType.VARIDENT),
 	VARTYPE("", WordType.VARTYPE),
-	METHODREF("", WordType.METHODREF);
+	METHODREF("", WordType.METHODREF),
+	ASSIGNMENT("", WordType.ASSIGNMENT),
+	CONSTANT("", WordType.NUMBER);
 	
 	private final String word;
 	private final WordType type;

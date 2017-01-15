@@ -14,5 +14,7 @@ public enum WordType {
 		FREEWORD,
 		VARIDENT,
 		VARTYPE,
-		METHODREF
+		METHODREF,
+		ASSIGNMENT,
+		NUMBER
 }

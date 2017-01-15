@@ -8,11 +8,16 @@ import java.util.Map;
 public class ParsingHorror {
     private SomeClass stringHolder;
     private Map<Integer, List<String>> someGeneric;
+    private int x;
 
     private abstract class AbstractClass {
         private String someVariable;
 
         public void doSomething() {
+            x = 105;
+            float y = 800.3f;
+            double z = 22.55d;
+            double xyz = 3e-4d;
         }
 
         public String getSomeVariable() {
