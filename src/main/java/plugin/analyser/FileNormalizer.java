@@ -18,7 +18,7 @@ import plugin.model.KeyWord;
  * @version 0.3
  */
 public class FileNormalizer {
-    
+
     /**
      * Prepares File for parsing. remove comments, empty lines, leading spaces....
      * 
@@ -47,24 +47,14 @@ public class FileNormalizer {
                     if (!blockComment && !isLiteralA && !isLiteralB) {
                         switch (c) {
                         case "\"":
-                            if (chars.length > i + 1 && chars[i + 1].equals("\"")) {
-                                // empty literal - ignore
-                                i++;
-                            } else {
-                                // beginning of a "literal", add " as placeholder to new line
-                                isLiteralA = true;
-                                newLine += '"';
-                            }
+                            // beginning of a "literal", add " as placeholder to new line
+                            isLiteralA = true;
+                            newLine += '"';
                             break;
                         case "'":
-                            if (chars.length > i + 1 && chars[i + 1].equals("'")) {
-                                // empty literal - ignore
-                                i++;
-                            } else {
-                                // beginning of a 'literal', add ' as placeholder to new line
-                                isLiteralB = true;
-                                newLine += "'";
-                            }
+                            // beginning of a 'literal', add ' as placeholder to new line
+                            isLiteralB = true;
+                            newLine += "'";
                             break;
                         case "/":
                             if (chars.length > i + 1 && chars[i + 1].equals("/")) {
@@ -203,7 +193,9 @@ public class FileNormalizer {
                         // start of annotation.
                         annotationState++;
                     } else if ((wordInStep1.equals(KeyWord.WORD) && ModelBuildHelper.isNumber(wordInStep1.getWord()))
-                            || (wordInStep1.equals(KeyWord.DOT)) && i<step1.size()-1 && step1.get(i+1).getWord()!=null && ModelBuildHelper.isNumber(step1.get(i+1).getWord())) {
+                            || (wordInStep1.equals(KeyWord.DOT)) && i < step1.size() - 1
+                                    && step1.get(i + 1).getWord() != null
+                                    && ModelBuildHelper.isNumber(step1.get(i + 1).getWord())) {
                         // it's a number... collect all words together that build one number
                         i = collectNumberWords(result, step1, i);
                     } else if ((wordInStep1.equals(KeyWord.WORD) && !wordInStep1.getWord().isEmpty())
@@ -271,6 +263,6 @@ public class FileNormalizer {
             i++;
         }
         result.add(new WordInFile(resultingNumber, KeyWord.CONSTANT));
-        return i-2;
+        return i - 2;
     }
 }

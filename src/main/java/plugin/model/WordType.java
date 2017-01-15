@@ -16,5 +16,6 @@ public enum WordType {
 		VARTYPE,
 		METHODREF,
 		ASSIGNMENT,
-		NUMBER
+		NUMBER,
+		COMPARATOR
 }

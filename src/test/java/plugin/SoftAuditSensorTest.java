@@ -28,6 +28,7 @@ public class SoftAuditSensorTest {
     }
     
     @Test
+    @Ignore
     public void testSelfScan() throws InterruptedException {
         List<File> input = new ArrayList<File>();
         listf("src/main/java", input);

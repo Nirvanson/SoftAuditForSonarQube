@@ -107,7 +107,6 @@ public class SoftAuditSensor implements Sensor {
         // start analyzing each relevant file
         double sourceFiles = 0;
         for (File file : files) {
-            System.out.println(file);
             try {
                 // try parsing file
                 log.printFile(file);
@@ -150,6 +149,7 @@ public class SoftAuditSensor implements Sensor {
                 ModelDetailExpander.parseReferences(contents, declaredVariables);
                 ModelDetailExpander.parseAssignments(contents);
                 ModelDetailExpander.parseRemainingStatementTypes(contents);
+                ModelDetailExpander.parseComparators(contents);
                 log.printModel("declarations", contents);
                 // Map<Metric<Integer>, Double> varMeasures = new HashMap<Metric<Integer>, Double>();
                 // varMeasures.put(SoftAuditMetrics.VAR, (double) declaredVariables.size());

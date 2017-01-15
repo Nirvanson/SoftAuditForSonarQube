@@ -85,7 +85,8 @@ public enum KeyWord {
 	VARTYPE("", WordType.VARTYPE),
 	METHODREF("", WordType.METHODREF),
 	ASSIGNMENT("", WordType.ASSIGNMENT),
-	CONSTANT("", WordType.NUMBER);
+	CONSTANT("", WordType.NUMBER),
+	COMPARATOR("", WordType.COMPARATOR);
 	
 	private final String word;
 	private final WordType type;

@@ -486,6 +486,134 @@ public class ModelDetailExpander {
         }
     }
     
+    /**
+     * Recoursive scanning model for parsing comparators.
+     * 
+     * @param contents - model of the component-body for parsing
+     * @throws ParsingException
+     */
+    public static void parseComparators(List<JavaFileContent> contents) throws ParsingException {
+        try {
+            for (JavaFileContent content : contents) {
+                if (content instanceof JavaClass || content instanceof JavaMethod) {
+                    // parse content
+                    parseComparators(content.getContent());
+                } else if (content instanceof JavaStatementWithAnonymousClass) {
+                    // parse content of anonymous class
+                    // parse statement before and after class
+                    JavaStatementWithAnonymousClass theStatement = (JavaStatementWithAnonymousClass) content;
+                    parseComparators(theStatement.getContent());
+                    parseComparatorsInStatement(theStatement, theStatement.getStatementBeforeClass());
+                    parseComparatorsInStatement(theStatement, theStatement.getStatementAfterClass());
+                } else if (content instanceof JavaControlStatement) {
+                    JavaControlStatement theStatement = (JavaControlStatement) content;
+                    switch (theStatement.getType()) {
+                    case SWITCH:
+                    case WHILE:
+                    case DOWHILE:
+                    case SYNCHRONIZED:
+                    case CASE:
+                        // parse content block
+                        // scan condition
+                        parseComparatorsInStatement(theStatement, theStatement.getCondition());
+                        parseComparators(theStatement.getContent());
+                        break;
+                    case FOR:
+                        // parse content-block
+                        // scan termination or enhanced declaration
+                        parseComparatorsInStatement(theStatement, theStatement.getCondition());
+                        parseComparators(theStatement.getContent());
+                        break;
+                    case IF:
+                        // parse (if available) if-block and else-block
+                        // scan text of condition
+                        parseComparatorsInStatement(theStatement, theStatement.getCondition());
+                        parseComparators(theStatement.getContent());
+                        if (theStatement.getOthercontent() != null) {
+                            parseComparators(theStatement.getOthercontent());
+                        }
+                        break;
+                    case TRY:
+                        // parse (if available) resource-block, try-block, catch-blocks and finally block
+                        // scan text of catched exceptions
+                        parseComparators(theStatement.getContent());
+                        if (theStatement.getOthercontent() != null) {
+                            parseComparators(theStatement.getOthercontent());
+                        }
+                        if (theStatement.getResources() != null) {
+                            parseComparators(theStatement.getResources());
+                        }
+                        if (theStatement.getCatchedExceptions() != null) {
+                            for (List<WordInFile> exception : theStatement.getCatchedExceptions().keySet()) {
+                                parseComparators(theStatement.getCatchedExceptions().get(exception));
+                            }
+                        }
+                        break;
+                    case BLOCK:
+                        // parse block-content
+                        parseComparators(theStatement.getContent());
+                        break;
+                    case RETURN:
+                    case ASSERT:
+                    case THROW:
+                        // scan statement-text for returns, assertions and throws
+                        parseComparatorsInStatement(theStatement, theStatement.getStatementText());
+                        break;
+                    case BREAK:
+                    case CONTINUE:
+                        // do nothing
+                        break;
+                    default:
+                        throw new ParsingException("Control-Statement-Type '" + theStatement.getType()
+                                + "' is unknown in ModelExpander.extractReferences!");
+                    }
+                } else if (content instanceof JavaStatement) {
+                    JavaStatement theStatement = (JavaStatement) content;
+                    switch (theStatement.getType()) {
+                    case ANNOTATION:
+                    case IMPORT:
+                    case PACKAGE:
+                        // do nothing
+                        break;
+                    default:
+                        // some other statement. scan statement-text
+                        parseComparatorsInStatement(theStatement, theStatement.getStatementText());
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new ParsingException("Parsing variable references failed.");
+        }
+    }
+    
+    private static void parseComparatorsInStatement(JavaStatement theStatement, List<WordInFile> textToScan) {
+        for (int i = 0; i < textToScan.size(); i++) {
+            if (i<textToScan.size()-1 && (textToScan.get(i).equals(KeyWord.ASSIGN) && textToScan.get(i+1).equals(KeyWord.ASSIGN)) 
+                    || (textToScan.get(i).equals(KeyWord.COMP) && textToScan.get(i+1).equals(KeyWord.ASSIGN))
+                    || (textToScan.get(i).equals(KeyWord.GREATER) && textToScan.get(i+1).equals(KeyWord.ASSIGN))
+                    || (textToScan.get(i).equals(KeyWord.LESS) && textToScan.get(i+1).equals(KeyWord.ASSIGN))) {
+                // one of == / != / <= / >= found
+                textToScan.set(i, new WordInFile(textToScan.get(i).getKey().toString(), KeyWord.COMPARATOR));
+                textToScan.set(i+1, new WordInFile(textToScan.get(i+1).getKey().toString(), KeyWord.COMPARATOR));
+                i++;
+            } else if (textToScan.get(i).equals(KeyWord.GREATER)) {
+                // > found
+                textToScan.set(i, new WordInFile(textToScan.get(i).getKey().toString(), KeyWord.COMPARATOR));
+            } else if (textToScan.get(i).equals(KeyWord.LESS)) {
+                // < found. only add if not generic
+                int endofGeneric = ModelBuildHelper.parseGeneric(textToScan, i+1);
+                if (endofGeneric == 0) {
+                    // no generic... add as comparator
+                    textToScan.set(i, new WordInFile(textToScan.get(i).getKey().toString(), KeyWord.COMPARATOR));
+                } else {
+                    // skip found generic
+                    i = endofGeneric;
+                }
+            }
+        }
+    }
+
     private static JavaStatement parseAssignmentsInStatement(JavaStatement theStatement, List<WordInFile> textToScan) {
         boolean assignmentFound = false;
         for (int i = 0; i < textToScan.size(); i++) {
