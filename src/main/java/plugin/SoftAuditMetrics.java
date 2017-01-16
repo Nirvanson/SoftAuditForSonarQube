@@ -15,7 +15,7 @@ import org.sonar.api.measures.Metrics;
  */
 public class SoftAuditMetrics implements Metrics {
 
-	private static final Integer level = 0;
+	private static final Integer level = 2;
 	
 	// Level 1 Measures (Minimum needed for 9 metrics scope of the plugin)
     
@@ -712,8 +712,7 @@ public class SoftAuditMetrics implements Metrics {
         			FIA, FIL, INP, OUT, PAN, REP, UFM, VIE, OBP, DAP, FUP, DCO, DFC, CFC, COC, ICO, BRC,
         			DAC, LCF, ACF, TST, FLE, COF, MOD, REU, SEC, POR, MAF, AQF);
     	default:
-    		// Metrics-list with sample measures + metric
-    		return Arrays.asList(CAS, CLA, IFS, IMP, INT, LIT, LOP, MET, PAR, RET, STM, SWI, SRC, OMS, COC);
+    			return null;
     	}
     }
 }

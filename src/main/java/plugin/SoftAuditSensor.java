@@ -1,6 +1,7 @@
 package plugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 
 import plugin.analyser.FileNormalizer;
+import plugin.analyser.ModelAnalyser;
 import plugin.analyser.ModelBuilder;
 import plugin.analyser.ModelDetailExpander;
 import plugin.analyser.ModelStructureExpander;
@@ -98,33 +100,71 @@ public class SoftAuditSensor implements Sensor {
                 result.put(metric, 0d);
             }
         }
-        // start analyzing each relevant file
-        double sourceFiles = 0;
+        ModelAnalyser analyser = new ModelAnalyser();
         for (File file : files) {
         	// try parsing file
         	List<JavaFileContent> fileModel = null;
+        	int reachedParsingLevel = 0;
             try {
             	// step 0 - read file
                 Logger.getLogger(null).printFile(file);
+                reachedParsingLevel++;
+            } catch (IOException exceptionInStepZero) {
+            	// file not readable, skip file completely
+            	exceptionInStepZero.printStackTrace();
+            	continue;
+            }
+            List<WordInFile> wordList = null;
+            try {
                 // step 1 - do file normalization
-                List<WordInFile> wordList = FileNormalizer.doFileNormalization(file);
+                wordList = FileNormalizer.doFileNormalization(file);
+                reachedParsingLevel++;
+            } catch (ParsingException exeptionInStepOne) {
+            	// file normalization failed. skip file completely
+            	exeptionInStepOne.printStackTrace();
+            	continue;
+            }
+            try {
                 // step 2 - build basic model
                 fileModel = ModelBuilder.parseBasicModel(wordList);
+                reachedParsingLevel++;
+            } catch (ParsingException exeptionInStepTwo) {
+            	// Building basic model failed. skip file completely
+            	exeptionInStepTwo.printStackTrace();
+            	continue;
+            }
+            try {
                 // step 3 - refine model by statement structure
                 fileModel = ModelStructureExpander.parseStatementStructure(fileModel);
-                // step 4 - parse model details
-                fileModel = ModelDetailExpander.parseModelDetails(fileModel);
-                sourceFiles++;
-            } catch (ParsingException e) {
-                e.printStackTrace();
+                reachedParsingLevel++;
+            } catch (ParsingException exeptionInStepThree) {
+            	// Refining Model with structural statements failed. skip detail parsing and do basic analysis
+            	exeptionInStepThree.printStackTrace();
             }
+            if (reachedParsingLevel==4) {
+            	try {
+            		// step 4 - parse model details
+            		fileModel = ModelDetailExpander.parseModelDetails(fileModel);
+            		reachedParsingLevel++;
+            	} catch (ParsingException exeptionInStepFour) {
+                	// Refining Model with details failed. Do medium analysis
+                	exeptionInStepFour.printStackTrace();
+                }
+            }
+            // if at least a basic model could be parsed analyze model for available measures
             if (fileModel!=null) {
-            	// do analyzation TODO
+            	Map<Metric<?>, Double> partialResult = analyser.doFileModelAnalysis(fileModel, reachedParsingLevel);
+            	for (Metric<?> metric : partialResult.keySet()) {
+            		result.put(metric, result.get(metric) + partialResult.get(metric));
+            	}
             }
         }
         Logger.getLogger(null).close();
-        result.put(SoftAuditMetrics.SRC, sourceFiles);
-        result.put(SoftAuditMetrics.OMS, 200d);
+        // put non-additive measures to resultmap
+        result.put(SoftAuditMetrics.SRC, analyser.getScannedSourceFiles());
+        result.put(SoftAuditMetrics.OMS, analyser.getOptimalModuleSize());
+        result.put(SoftAuditMetrics.DTY, analyser.getNumberOfDataTypes());
+        result.put(SoftAuditMetrics.STY, analyser.getNumberOfStatementTypes());
         return result;
     }
     

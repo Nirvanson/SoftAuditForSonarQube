@@ -1,18 +1,16 @@
 package plugin.analyser;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.sonar.api.measures.Metric;
 
-import plugin.SoftAuditMetrics;
 import plugin.model.JavaFileContent;
+import plugin.model.StatementType;
 import plugin.model.WordInFile;
-import plugin.model.components.JavaClass;
-import plugin.model.components.JavaMethod;
-import plugin.model.KeyWord;
+import plugin.util.Logger;
 
 /**
  * Java File Parser to extract needed measures for SoftAudit Metrics.
@@ -21,70 +19,60 @@ import plugin.model.KeyWord;
  * @version 0.3
  */
 public class ModelAnalyser {
+	private List<StatementType> usedStatementTypes;
+	private List<List<WordInFile>> usedDataTypes;
+	private double scannedSourceFiles;
+	private final double optimalModuleSize;
 
-    /**
-     * Count methods and their parameters
-     * 
-     * @param contents - the JavaClassContents of the file
-     * @returns result-map
-     */
-    public static Map<Metric<Integer>, Double> countMethods(List<JavaFileContent> contents) {
-        Map<Metric<Integer>, Double> result = new HashMap<Metric<Integer>, Double>();
-        result.put(SoftAuditMetrics.MET, 0d);
-        result.put(SoftAuditMetrics.PAR, 0d);
-        double methods = 0;
-        double params = 0;
-        for (JavaFileContent content : contents) {
-            if (content instanceof JavaMethod) {
-                methods++;
-                params += ((JavaMethod) content).getParameters().size();
-            } else if (content instanceof JavaClass) {
-                Map<Metric<Integer>, Double> innerResult = countMethods(content.getContent());
-                result.put(SoftAuditMetrics.MET,
-                        result.get(SoftAuditMetrics.MET) + innerResult.get(SoftAuditMetrics.MET));
-                result.put(SoftAuditMetrics.PAR,
-                        result.get(SoftAuditMetrics.PAR) + innerResult.get(SoftAuditMetrics.PAR));
-            }
-        }
-        result.put(SoftAuditMetrics.MET, result.get(SoftAuditMetrics.MET) + methods);
-        result.put(SoftAuditMetrics.PAR, result.get(SoftAuditMetrics.PAR) + params);
-        return result;
-    }
+	public ModelAnalyser() {
+		usedStatementTypes = new ArrayList<StatementType>();
+		usedDataTypes = new ArrayList<List<WordInFile>>();
+		scannedSourceFiles = 0.000;
+		// TODO: properties file ?
+		optimalModuleSize = 200.000;
+	}
 
-    /**
-     * Do keyword-count-analysis for file.
-     * 
-     * @param words - the words of the file to analyze
-     * @returns result-map
-     */
-    public static Map<Metric<Integer>, Double> countKeyWords(List<WordInFile> words) {
-        Map<Metric<Integer>, Double> partialResult = new HashMap<Metric<Integer>, Double>();
-        // count cases in switches
-        partialResult.put(SoftAuditMetrics.CAS, countKey(words, KeyWord.CASE) + countKey(words, KeyWord.DEFAULT));
-        // count classes
-        partialResult.put(SoftAuditMetrics.CLA, countKey(words, KeyWord.CLASS));
-        // count if and try statements
-        partialResult.put(SoftAuditMetrics.IFS, countKey(words, KeyWord.IF) + countKey(words, KeyWord.TRY));
-        // count includes as imports and package statements
-        partialResult.put(SoftAuditMetrics.IMP, countKey(words, KeyWord.IMPORT) + countKey(words, KeyWord.PACKAGE));
-        // count interfaces
-        partialResult.put(SoftAuditMetrics.INT, countKey(words, KeyWord.INTERFACE));
-        // count Literals
-        partialResult.put(SoftAuditMetrics.LIT, countKey(words, KeyWord.STRINGLITERAL));
-        // count Loop statements
-        partialResult.put(SoftAuditMetrics.LOP, countKey(words, KeyWord.FOR) + countKey(words, KeyWord.WHILE));
-        // count return statements
-        partialResult.put(SoftAuditMetrics.RET, countKey(words, KeyWord.RETURN));
-        // count switch statements
-        partialResult.put(SoftAuditMetrics.SWI, countKey(words, KeyWord.SWITCH));
-        // count statement-identifiers. has to be cleaned by removing ";" in for
-        // conditions and adding "else if" as 2 statements and if without braces
-        partialResult.put(SoftAuditMetrics.STM, countKey(words, KeyWord.OPENBRACE) + countKey(words, KeyWord.SEMICOLON)
-                + countKey(words, KeyWord.CLOSEBRACE));
-        return partialResult;
-    }
+	public Map<Metric<?>, Double> doFileModelAnalysis(List<JavaFileContent> fileModel, int reachedParsingLevel) {
+		scannedSourceFiles++;
+		Map<Metric<?>, Double> result = new HashMap<Metric<?>, Double>();
+		// TODO: scan model recoursivly to measure all the shit
+		Logger.getLogger(null).printFileMeasures(result);
+		return result;
+	}
 
-    private static double countKey(List<WordInFile> words, KeyWord key) {
-        return (double) Collections.frequency(words, new WordInFile(null, key));
-    }
+	public double getNumberOfStatementTypes() {
+		return (double) usedStatementTypes.size();
+	}
+	
+	public double getNumberOfDataTypes() {
+		return (double) usedDataTypes.size();
+	}
+	
+	public List<StatementType> getUsedStatementTypes() {
+		return usedStatementTypes;
+	}
+
+	public void setUsedStatementTypes(List<StatementType> usedStatementTypes) {
+		this.usedStatementTypes = usedStatementTypes;
+	}
+
+	public List<List<WordInFile>> getUsedDataTypes() {
+		return usedDataTypes;
+	}
+
+	public void setUsedDataTypes(List<List<WordInFile>> usedDataTypes) {
+		this.usedDataTypes = usedDataTypes;
+	}
+
+	public double getScannedSourceFiles() {
+		return scannedSourceFiles;
+	}
+
+	public void setScannedSourceFiles(double scannedSourceFiles) {
+		this.scannedSourceFiles = scannedSourceFiles;
+	}
+
+	public double getOptimalModuleSize() {
+		return optimalModuleSize;
+	}
 }

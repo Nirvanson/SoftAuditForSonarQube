@@ -26,63 +26,61 @@ import plugin.model.components.JavaVariable;
 
 public class Logger {
 	private static Logger logger;
-	
+
 	private final String FILE_HEAD = "---------- File: FILENAME ----------";
 	private final String STEP_1 = "*** Step 1 - Normalize file to wordlist";
 	private final String STEP_2 = "*** Step 2 - Build basic model of the file from wordlist";
 	private final String STEP_3 = "*** Step 3 - Expand model with structural statements";
 	private final String STEP_4 = "*** Step 4 - Expand model with details";
-	// TODO: private final String STEP_5 = "*** Step 5 - Count measures";
+	private final String STEP_5 = "*** Step 5 - Count measures";
 	private final String TIME = "*** Finished at TIME";
 	private final String INPUT_ERROR = "Method METHODNAME of Logger recieved invalid input: PARAM";
-	
+
 	private final int loglevel;
 	private PrintWriter writer;
-		
+
 	private Logger(String filename) {
-	    if (filename==null) {
-	        filename = "SoftAuditSensorRun";
-	    }
+		if (filename == null) {
+			filename = "SoftAuditSensorRun";
+		}
+		// TODO: properties file?
 		loglevel = 2;
 		try {
-		    // Logging folder must be changed for deployed plugin!!!
-		    String timestamp = (new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss_")).format(new Date());
+			// TODO: Logging folder must be changed for deployed plugin!!! (properties file?)
+			String timestamp = (new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss_")).format(new Date());
 			writer = new PrintWriter("./target/logs/" + timestamp + filename + ".log", "UTF-8");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static Logger getLogger(String filename) {
-		if(logger == null) { 
+		if (logger == null) {
 			logger = new Logger(filename);
 		}
-		return logger; 
+		return logger;
 	}
-	
-	public void printFile(File file) {
+
+	public void printFile(File file) throws IOException {
 		writer.println(FILE_HEAD.replace("FILENAME", file.getName()));
-		if (loglevel > 3) {
-			try {
-				BufferedReader br = new BufferedReader(new FileReader(file));
-				String fileline;
-				while ((fileline = br.readLine()) != null) {
-					writer.println(fileline);
-				}
-				br.close();
-			} catch (IOException e) {
-				writer.println(INPUT_ERROR.replace("METHODNAME", "printFile").replace("PARAM", file.toString()));
+		BufferedReader br = new BufferedReader(new FileReader(file));
+
+		String fileline;
+		while ((fileline = br.readLine()) != null) {
+			if (loglevel > 3) {
+				writer.println(fileline);
 			}
 		}
+		br.close();
 	}
-	
+
 	public void printWords(List<WordInFile> words) {
 		writer.println(STEP_1);
 		addTime();
 		if (loglevel > 2) {
 			String sublist = "";
 			for (WordInFile word : words) {
-				if (sublist.length()>100) {
+				if (sublist.length() > 100) {
 					writer.println(sublist);
 					sublist = "";
 				}
@@ -90,15 +88,18 @@ public class Logger {
 			}
 		}
 	}
-	
-	public void printMeasures(String step, Map<Metric<Integer>, Double> measures) {
-		//TODO
-		
+
+	public void printFileMeasures(Map<Metric<?>, Double> measures) {
+		writer.println(STEP_5);
+		addTime();
+		for (Metric<?> metric : measures.keySet()) {
+			writer.println(metric.getName() + ": " + measures.get(metric));
+		}
 	}
-	
+
 	public void printModel(String step, List<JavaFileContent> contents) {
 		int levelToLog = 1;
-		switch(step) {
+		switch (step) {
 		case "basic":
 			writer.println(STEP_2);
 			levelToLog = 2;
@@ -121,225 +122,231 @@ public class Logger {
 	}
 
 	private void printFileContent(List<JavaFileContent> contents, int level) {
-		if (contents!=null)
-		for (JavaFileContent content : contents) {
-			if (content instanceof JavaClass) {
-				JavaClass theClass = (JavaClass) content;
-				String classline = addTabs(level) + theClass.getType().toString().toUpperCase() + " with name: " + theClass.getName();
-				if (!theClass.getExtending().isEmpty()) {
-					classline += " extending: " + theClass.getExtending();
-				}
-				if (!theClass.getImplementing().isEmpty()) {
-					classline += " implementing: " + theClass.getImplementing();
-				}
-				classline += " and Body:";
-				writer.println(classline);
-				printFileContent(theClass.getContent(), level+1);
-			} else if (content instanceof JavaMethod) {
-				JavaMethod theMethod = (JavaMethod) content;
-				String methodline = addTabs(level) + "METHOD";
-				if (theMethod.getContent()==null) {
-					methodline += "-interface";
-				}
-				methodline += " with name: " + theMethod.getName();
-				if (!theMethod.getReturntype().isEmpty()) {
-					methodline += ", Returntype: ";
-					for (WordInFile returnword : theMethod.getReturntype()) {
-						methodline += returnword + " ";
+		if (contents != null)
+			for (JavaFileContent content : contents) {
+				if (content instanceof JavaClass) {
+					JavaClass theClass = (JavaClass) content;
+					String classline = addTabs(level) + theClass.getType().toString().toUpperCase() + " with name: "
+							+ theClass.getName();
+					if (!theClass.getExtending().isEmpty()) {
+						classline += " extending: " + theClass.getExtending();
 					}
-				}
-				if (!theMethod.getParameters().isEmpty()) {
-					methodline += ", Parameters: ";
-					for (JavaVariable param : theMethod.getParameters()) {
-						for (WordInFile returnword : param.getType()) {
+					if (!theClass.getImplementing().isEmpty()) {
+						classline += " implementing: " + theClass.getImplementing();
+					}
+					classline += " and Body:";
+					writer.println(classline);
+					printFileContent(theClass.getContent(), level + 1);
+				} else if (content instanceof JavaMethod) {
+					JavaMethod theMethod = (JavaMethod) content;
+					String methodline = addTabs(level) + "METHOD";
+					if (theMethod.getContent() == null) {
+						methodline += "-interface";
+					}
+					methodline += " with name: " + theMethod.getName();
+					if (!theMethod.getReturntype().isEmpty()) {
+						methodline += ", Returntype: ";
+						for (WordInFile returnword : theMethod.getReturntype()) {
 							methodline += returnword + " ";
 						}
-						methodline += " " + param.getName();
 					}
-				}
-				if (theMethod.getContent()!=null) {
-					methodline += " and ";
-					if (theMethod.getContent().isEmpty()) {
-						methodline += "empty Body";
-					} else {
-						methodline += "Body:";
+					if (!theMethod.getParameters().isEmpty()) {
+						methodline += ", Parameters: ";
+						for (JavaVariable param : theMethod.getParameters()) {
+							for (WordInFile returnword : param.getType()) {
+								methodline += returnword + " ";
+							}
+							methodline += " " + param.getName();
+						}
 					}
-				}
-				writer.println(methodline);
-				if (theMethod.getContent()!=null && !theMethod.getContent().isEmpty()) {
-					printFileContent(theMethod.getContent(), level+1);
-				}
-			} else if (content instanceof JavaControlStatement) {
-				JavaControlStatement statement = (JavaControlStatement) content;
-				String header = addTabs(level) + statement.getType() + " - ControlStatement / ";
-				if (statement.getDeclaredVariables()!=null && !statement.getDeclaredVariables().isEmpty()) {
-					header += "declaring " + statement.getDeclaredVariables().size() + " variables / ";
-				}
-				if (statement.getReferencedVariables()!=null && !statement.getReferencedVariables().isEmpty()) {
-					header += "referencing " + statement.getReferencedVariables().size() + " variables / ";
-				}
-				if (statement.getCalledMethods()!=null && !statement.getCalledMethods().isEmpty()) {
-					header += "calling " + statement.getCalledMethods().size() + " methods / ";
-				}
-				if (statement.getType().equals(StatementType.SWITCH)) {
-					String condition = "";
-					for (WordInFile conditionWord : statement.getCondition()) {
-						condition += conditionWord + " ";
+					if (theMethod.getContent() != null) {
+						methodline += " and ";
+						if (theMethod.getContent().isEmpty()) {
+							methodline += "empty Body";
+						} else {
+							methodline += "Body:";
+						}
 					}
-					header += "over value of : (" + condition + ") and cases:";
-					writer.println(header);
-					printFileContent(statement.getContent(), level+1);
-				} else if (statement.getType().equals(StatementType.CASE)) {
-					String condition = "";
-					for (WordInFile conditionWord : statement.getCondition()) {
-						condition += conditionWord + " ";
+					writer.println(methodline);
+					if (theMethod.getContent() != null && !theMethod.getContent().isEmpty()) {
+						printFileContent(theMethod.getContent(), level + 1);
 					}
-					header += "for case: (" + condition + ") and content:";
-					writer.println(header);
-					printFileContent(statement.getContent(), level+1);
-				} else if (statement.getType().equals(StatementType.BLOCK)) {
-					header += "(anonymous block):";
-					writer.println(header);
-					printFileContent(statement.getContent(), level+1);
-				} else if (statement.getType().equals(StatementType.TRY)) {
-					if (statement.getResources()!=null) {
-						header += "with resources:";
-						writer.println(header);
-						printFileContent(statement.getResources(), level+1);
-						writer.println(addTabs(level) + "And try-block:");
-					} else {
-						header += "with try-block:";
-						writer.println(header);
+				} else if (content instanceof JavaControlStatement) {
+					JavaControlStatement statement = (JavaControlStatement) content;
+					String header = addTabs(level) + statement.getType() + " - ControlStatement / ";
+					if (statement.getDeclaredVariables() != null && !statement.getDeclaredVariables().isEmpty()) {
+						header += "declaring " + statement.getDeclaredVariables().size() + " variables / ";
 					}
-					printFileContent(statement.getContent(), level+1);
-					for (List<WordInFile> exception : statement.getCatchedExceptions().keySet()) {
+					if (statement.getReferencedVariables() != null && !statement.getReferencedVariables().isEmpty()) {
+						header += "referencing " + statement.getReferencedVariables().size() + " variables / ";
+					}
+					if (statement.getCalledMethods() != null && !statement.getCalledMethods().isEmpty()) {
+						header += "calling " + statement.getCalledMethods().size() + " methods / ";
+					}
+					if (statement.getType().equals(StatementType.SWITCH)) {
 						String condition = "";
-						for (WordInFile conditionWord : exception) {
+						for (WordInFile conditionWord : statement.getCondition()) {
 							condition += conditionWord + " ";
 						}
-						writer.println(addTabs(level) + "CATCH - (" + condition + ") And catch-block:");
-						printFileContent(statement.getCatchedExceptions().get(exception), level+1);
-					}
-					if (statement.getOthercontent()!=null) {
-						writer.println(addTabs(level) + "FINALLY - block:");
-						printFileContent(statement.getOthercontent(), level+1);
-					}
-				} else if (statement.getType().equals(StatementType.IF)) {
-					String condition = "";
-					for (WordInFile conditionWord : statement.getCondition()) {
-						condition += conditionWord + " ";
-					}
-					header += "Checking condition: (" + condition + ") with if-block:";
-					writer.println(header);
-					printFileContent(statement.getContent(), level+1);
-					if (statement.getOthercontent()!=null) {
-						writer.println(addTabs(level) + "ELSE - block:");
-						printFileContent(statement.getOthercontent(), level+1);
-					}
-				} else if (statement.getType().equals(StatementType.WHILE) || statement.getType().equals(StatementType.DOWHILE)) {
-					String condition = "";
-					for (WordInFile conditionWord : statement.getCondition()) {
-						condition += conditionWord + " ";
-					}
-					header += "Checking condition: (" + condition + ") with content:";
-					writer.println(header);
-					printFileContent(statement.getContent(), level+1);
-				} else if (statement.getType().equals(StatementType.FOR)) {
-					String condition = "";
-					for (WordInFile conditionWord : statement.getCondition()) {
-						condition += conditionWord + " ";
-					}
-					if (statement.getInitialization()!=null) {
-						String init = "";
-						for (WordInFile conditionWord : statement.getInitialization()) {
-							init += conditionWord + " ";
+						header += "over value of : (" + condition + ") and cases:";
+						writer.println(header);
+						printFileContent(statement.getContent(), level + 1);
+					} else if (statement.getType().equals(StatementType.CASE)) {
+						String condition = "";
+						for (WordInFile conditionWord : statement.getCondition()) {
+							condition += conditionWord + " ";
 						}
-						String inc = "";
-						for (WordInFile conditionWord : statement.getIncrement()) {
-							inc += conditionWord + " ";
+						header += "for case: (" + condition + ") and content:";
+						writer.println(header);
+						printFileContent(statement.getContent(), level + 1);
+					} else if (statement.getType().equals(StatementType.BLOCK)) {
+						header += "(anonymous block):";
+						writer.println(header);
+						printFileContent(statement.getContent(), level + 1);
+					} else if (statement.getType().equals(StatementType.TRY)) {
+						if (statement.getResources() != null) {
+							header += "with resources:";
+							writer.println(header);
+							printFileContent(statement.getResources(), level + 1);
+							writer.println(addTabs(level) + "And try-block:");
+						} else {
+							header += "with try-block:";
+							writer.println(header);
 						}
-						header += "With initialization: (" + init + ") termination: (" + condition + ") increment: (" + inc + ") and content:";
+						printFileContent(statement.getContent(), level + 1);
+						for (List<WordInFile> exception : statement.getCatchedExceptions().keySet()) {
+							String condition = "";
+							for (WordInFile conditionWord : exception) {
+								condition += conditionWord + " ";
+							}
+							writer.println(addTabs(level) + "CATCH - (" + condition + ") And catch-block:");
+							printFileContent(statement.getCatchedExceptions().get(exception), level + 1);
+						}
+						if (statement.getOthercontent() != null) {
+							writer.println(addTabs(level) + "FINALLY - block:");
+							printFileContent(statement.getOthercontent(), level + 1);
+						}
+					} else if (statement.getType().equals(StatementType.IF)) {
+						String condition = "";
+						for (WordInFile conditionWord : statement.getCondition()) {
+							condition += conditionWord + " ";
+						}
+						header += "Checking condition: (" + condition + ") with if-block:";
+						writer.println(header);
+						printFileContent(statement.getContent(), level + 1);
+						if (statement.getOthercontent() != null) {
+							writer.println(addTabs(level) + "ELSE - block:");
+							printFileContent(statement.getOthercontent(), level + 1);
+						}
+					} else if (statement.getType().equals(StatementType.WHILE)
+							|| statement.getType().equals(StatementType.DOWHILE)) {
+						String condition = "";
+						for (WordInFile conditionWord : statement.getCondition()) {
+							condition += conditionWord + " ";
+						}
+						header += "Checking condition: (" + condition + ") with content:";
+						writer.println(header);
+						printFileContent(statement.getContent(), level + 1);
+					} else if (statement.getType().equals(StatementType.FOR)) {
+						String condition = "";
+						for (WordInFile conditionWord : statement.getCondition()) {
+							condition += conditionWord + " ";
+						}
+						if (statement.getInitialization() != null) {
+							String init = "";
+							for (WordInFile conditionWord : statement.getInitialization()) {
+								init += conditionWord + " ";
+							}
+							String inc = "";
+							for (WordInFile conditionWord : statement.getIncrement()) {
+								inc += conditionWord + " ";
+							}
+							header += "With initialization: (" + init + ") termination: (" + condition
+									+ ") increment: (" + inc + ") and content:";
+						} else {
+							header += "Enhanced version scanning: (" + condition + ") with content:";
+						}
+						writer.println(header);
+						printFileContent(statement.getContent(), level + 1);
+					} else if (statement.getType().equals(StatementType.SYNCHRONIZED)) {
+						String condition = "";
+						for (WordInFile conditionWord : statement.getCondition()) {
+							condition += conditionWord + " ";
+						}
+						header += "Over lock: (" + condition + ") with content:";
+						writer.println(header);
+						printFileContent(statement.getContent(), level + 1);
 					} else {
-						header += "Enhanced version scanning: (" + condition + ") with content:";
-					}
-					writer.println(header);
-					printFileContent(statement.getContent(), level+1);
-				} else if (statement.getType().equals(StatementType.SYNCHRONIZED)) {
-					String condition = "";
-					for (WordInFile conditionWord : statement.getCondition()) {
-						condition += conditionWord + " ";
-					}
-					header += "Over lock: (" + condition + ") with content:";
-					writer.println(header);
-					printFileContent(statement.getContent(), level+1);
-				} else {
-					writer.println(header + ":" + statement.getStatementText());
-				} 
-			} else if (content instanceof JavaStatementWithAnonymousClass) {
-				JavaStatementWithAnonymousClass statement = (JavaStatementWithAnonymousClass) content;
-				String classline = addTabs(level) + statement.getType() + " - Statement with anonymous class";
-				if (statement.getDeclaredVariables()!=null && !statement.getDeclaredVariables().isEmpty()) {
-					classline += " / declaring " + statement.getDeclaredVariables().size() + " variables";
-				}
-				if (statement.getReferencedVariables()!=null && !statement.getReferencedVariables().isEmpty()) {
-					classline += " / referencing " + statement.getReferencedVariables().size() + " variables";
-				}
-				if (statement.getCalledMethods()!=null && !statement.getCalledMethods().isEmpty()) {
-					classline += " / calling " + statement.getCalledMethods().size() + " methods";
-				}
-				classline += ": '";
-				for (WordInFile word : statement.getStatementBeforeClass()) {
-					classline += word + " ";
-				}
-				classline += "' of Type: " + statement.getClassType() + " with content: ";
-				writer.println(classline);
-				printFileContent(statement.getContent(), level+1);
-				classline = addTabs(level) + "Ending with: ";
-				for (WordInFile word : statement.getStatementAfterClass()) {
-					classline += word + " ";
-				}
-				writer.println(classline);
-			} else if (content instanceof JavaStatement) {
-				JavaStatement statement = (JavaStatement) content;
-				if (statement.getType().equals(StatementType.ANNOTATION)) {
-					writer.println(addTabs(level) + statement.getType());
-				} else {
-					String header = addTabs(level) + statement.getType() + " - Statement";
-					if (statement.getDeclaredVariables()!=null && !statement.getDeclaredVariables().isEmpty()) {
-						header += " / declaring " + statement.getDeclaredVariables().size() + " variables";
-					}
-					if (statement.getReferencedVariables()!=null && !statement.getReferencedVariables().isEmpty()) {
-						header += " / referencing " + statement.getReferencedVariables().size() + " variables";
-					}
-					if (statement.getCalledMethods()!=null && !statement.getCalledMethods().isEmpty()) {
-						header += " / calling " + statement.getCalledMethods().size() + " methods";
-					}
-					if (statement.getStatementText()!=null && !statement.getStatementText().isEmpty()) {
 						writer.println(header + ":" + statement.getStatementText());
-					} else {
-					writer.println(header);
 					}
+				} else if (content instanceof JavaStatementWithAnonymousClass) {
+					JavaStatementWithAnonymousClass statement = (JavaStatementWithAnonymousClass) content;
+					String classline = addTabs(level) + statement.getType() + " - Statement with anonymous class";
+					if (statement.getDeclaredVariables() != null && !statement.getDeclaredVariables().isEmpty()) {
+						classline += " / declaring " + statement.getDeclaredVariables().size() + " variables";
+					}
+					if (statement.getReferencedVariables() != null && !statement.getReferencedVariables().isEmpty()) {
+						classline += " / referencing " + statement.getReferencedVariables().size() + " variables";
+					}
+					if (statement.getCalledMethods() != null && !statement.getCalledMethods().isEmpty()) {
+						classline += " / calling " + statement.getCalledMethods().size() + " methods";
+					}
+					classline += ": '";
+					for (WordInFile word : statement.getStatementBeforeClass()) {
+						classline += word + " ";
+					}
+					classline += "' of Type: " + statement.getClassType() + " with content: ";
+					writer.println(classline);
+					printFileContent(statement.getContent(), level + 1);
+					classline = addTabs(level) + "Ending with: ";
+					for (WordInFile word : statement.getStatementAfterClass()) {
+						classline += word + " ";
+					}
+					writer.println(classline);
+				} else if (content instanceof JavaStatement) {
+					JavaStatement statement = (JavaStatement) content;
+					if (statement.getType().equals(StatementType.ANNOTATION)) {
+						writer.println(addTabs(level) + statement.getType());
+					} else {
+						String header = addTabs(level) + statement.getType() + " - Statement";
+						if (statement.getDeclaredVariables() != null && !statement.getDeclaredVariables().isEmpty()) {
+							header += " / declaring " + statement.getDeclaredVariables().size() + " variables";
+						}
+						if (statement.getReferencedVariables() != null
+								&& !statement.getReferencedVariables().isEmpty()) {
+							header += " / referencing " + statement.getReferencedVariables().size() + " variables";
+						}
+						if (statement.getCalledMethods() != null && !statement.getCalledMethods().isEmpty()) {
+							header += " / calling " + statement.getCalledMethods().size() + " methods";
+						}
+						if (statement.getStatementText() != null && !statement.getStatementText().isEmpty()) {
+							writer.println(header + ":" + statement.getStatementText());
+						} else {
+							writer.println(header);
+						}
+					}
+				} else if (content instanceof JavaEnumValues) {
+					JavaEnumValues values = (JavaEnumValues) content;
+					writer.println(addTabs(level) + "Enum-Values: ");
+					for (List<WordInFile> value : values.getValues()) {
+						writer.println(addTabs(level + 1) + value);
+					}
+				} else if (content instanceof WordList) {
+					WordList wordlist = (WordList) content;
+					writer.println(addTabs(level) + "Wordlist with length: " + wordlist.getWordlist().size()
+							+ " and content: " + wordlist.getWordlist());
+				} else {
+					writer.println(
+							INPUT_ERROR.replace("METHODNAME", "printFileContent").replace("PARAM", content.toString()));
 				}
-			} else if (content instanceof JavaEnumValues){
-				JavaEnumValues values = (JavaEnumValues) content;
-				writer.println(addTabs(level) + "Enum-Values: ");
-				for (List<WordInFile> value : values.getValues()) {
-					writer.println(addTabs(level+1) + value);
-				}
-			} else if (content instanceof WordList){
-				WordList wordlist = (WordList) content;
-				writer.println(addTabs(level) + "Wordlist with length: " + wordlist.getWordlist().size() + " and content: " + wordlist.getWordlist());
-			} else {
-				writer.println(INPUT_ERROR.replace("METHODNAME", "printFileContent").replace("PARAM", content.toString()));
 			}
-		}
 	}
 
 	public void close() {
 		writer.close();
 		logger = null;
 	}
-	
+
 	private String addTabs(int inputlevel) {
 		int level = inputlevel;
 		String tabs = "";
@@ -351,6 +358,6 @@ public class Logger {
 	}
 
 	private void addTime() {
-		writer.println(TIME.replaceAll("TIME", (new SimpleDateFormat("HH:mm:ss:SSS")).format(new Date())));		
+		writer.println(TIME.replaceAll("TIME", (new SimpleDateFormat("HH:mm:ss:SSS")).format(new Date())));
 	}
 }
