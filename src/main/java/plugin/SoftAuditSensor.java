@@ -20,6 +20,7 @@ import plugin.analyser.ModelDetailExpander;
 import plugin.analyser.ModelStructureExpander;
 import plugin.model.JavaFileContent;
 import plugin.model.WordInFile;
+import plugin.util.AnalyzeException;
 import plugin.util.Logger;
 import plugin.util.ParsingException;
 
@@ -104,7 +105,13 @@ public class SoftAuditSensor implements Sensor {
         for (File file : files) {
         	// try parsing file
         	List<JavaFileContent> fileModel = null;
-        	int reachedParsingLevel = 0;
+        	/* keep reached level of parsing for measurement 
+        	 * -1/0/1 --> no measurement possible, 
+        	 * 2      --> count only imports, classes, interfaces, methods, enums and parameters
+        	 * 3      --> additionally count branches, control statements (if, for, ...)
+        	 * 4      --> count everything needed
+        	 */
+        	int reachedParsingLevel = -1;
             try {
             	// step 0 - read file
                 Logger.getLogger(null).printFile(file);
@@ -119,52 +126,58 @@ public class SoftAuditSensor implements Sensor {
                 // step 1 - do file normalization
                 wordList = FileNormalizer.doFileNormalization(file);
                 reachedParsingLevel++;
-            } catch (ParsingException exeptionInStepOne) {
+            } catch (ParsingException exceptionInStepOne) {
             	// file normalization failed. skip file completely
-            	exeptionInStepOne.printStackTrace();
+            	exceptionInStepOne.printStackTrace();
             	continue;
             }
             try {
                 // step 2 - build basic model
                 fileModel = ModelBuilder.parseBasicModel(wordList);
                 reachedParsingLevel++;
-            } catch (ParsingException exeptionInStepTwo) {
+            } catch (ParsingException exceptionInStepTwo) {
             	// Building basic model failed. skip file completely
-            	exeptionInStepTwo.printStackTrace();
+            	exceptionInStepTwo.printStackTrace();
             	continue;
             }
             try {
                 // step 3 - refine model by statement structure
                 fileModel = ModelStructureExpander.parseStatementStructure(fileModel);
                 reachedParsingLevel++;
-            } catch (ParsingException exeptionInStepThree) {
+            } catch (ParsingException exceptionInStepThree) {
             	// Refining Model with structural statements failed. skip detail parsing and do basic analysis
-            	exeptionInStepThree.printStackTrace();
+            	exceptionInStepThree.printStackTrace();
             }
-            if (reachedParsingLevel==4) {
+            if (reachedParsingLevel==3) {
             	try {
             		// step 4 - parse model details
             		fileModel = ModelDetailExpander.parseModelDetails(fileModel);
             		reachedParsingLevel++;
-            	} catch (ParsingException exeptionInStepFour) {
+            	} catch (ParsingException exceptionInStepFour) {
                 	// Refining Model with details failed. Do medium analysis
-                	exeptionInStepFour.printStackTrace();
+                	exceptionInStepFour.printStackTrace();
                 }
             }
-            // if at least a basic model could be parsed analyze model for available measures
+            // step 5 - if at least a basic model could be parsed analyze model for available measures
             if (fileModel!=null) {
-            	Map<Metric<?>, Double> partialResult = analyser.doFileModelAnalysis(fileModel, reachedParsingLevel);
-            	for (Metric<?> metric : partialResult.keySet()) {
-            		result.put(metric, result.get(metric) + partialResult.get(metric));
-            	}
+            	try {
+            		Map<Metric<?>, Double> partialResult = analyser.doFileModelAnalysis(fileModel, reachedParsingLevel);
+            		for (Metric<?> metric : partialResult.keySet()) {
+            			result.put(metric, result.get(metric) + partialResult.get(metric));
+            		}
+            	} catch (AnalyzeException exceptionInStepFive) {
+                	// Analyzing model failed - ignore file
+                	exceptionInStepFive.printStackTrace();
+                }
             }
         }
-        Logger.getLogger(null).close();
         // put non-additive measures to resultmap
         result.put(SoftAuditMetrics.SRC, analyser.getScannedSourceFiles());
         result.put(SoftAuditMetrics.OMS, analyser.getOptimalModuleSize());
         result.put(SoftAuditMetrics.DTY, analyser.getNumberOfDataTypes());
         result.put(SoftAuditMetrics.STY, analyser.getNumberOfStatementTypes());
+        Logger.getLogger(null).printCumulatedMeasures(result);
+        Logger.getLogger(null).close();
         return result;
     }
     

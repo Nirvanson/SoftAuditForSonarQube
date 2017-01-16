@@ -21,9 +21,18 @@ public enum StatementType {
 	PACKAGE,
 	IMPORT,
 	ASSIGNMENT,
-	DECLARATION,
+	VARDECLARATION,
 	UNSPECIFIED,
 	INCREMENT,
 	DECREMENT,
-	METHODCALL
+	METHODCALL,
+	// statementtypes for counting, not to be set as statementtype on statement in model
+	ELSE,
+	FINALLY,
+	CATCH,
+	METHODDECLARATION, 
+	CLASSDECLARATION, 
+	INTERFACEDECLARATION, 
+	ENUMDECLARATION, 
+	ENUMVALUES
 }

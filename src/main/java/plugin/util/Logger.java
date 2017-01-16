@@ -28,6 +28,7 @@ public class Logger {
 	private static Logger logger;
 
 	private final String FILE_HEAD = "---------- File: FILENAME ----------";
+	private final String SCAN_COMPLETE = "---------- Scan completed ----------";
 	private final String STEP_1 = "*** Step 1 - Normalize file to wordlist";
 	private final String STEP_2 = "*** Step 2 - Build basic model of the file from wordlist";
 	private final String STEP_3 = "*** Step 3 - Expand model with structural statements";
@@ -92,6 +93,13 @@ public class Logger {
 	public void printFileMeasures(Map<Metric<?>, Double> measures) {
 		writer.println(STEP_5);
 		addTime();
+		for (Metric<?> metric : measures.keySet()) {
+			writer.println(metric.getName() + ": " + measures.get(metric));
+		}
+	}
+	
+	public void printCumulatedMeasures(Map<Metric<?>, Double> measures) {
+		writer.println(SCAN_COMPLETE);
 		for (Metric<?> metric : measures.keySet()) {
 			writer.println(metric.getName() + ": " + measures.get(metric));
 		}

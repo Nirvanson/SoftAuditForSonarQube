@@ -501,7 +501,7 @@ public class ModelDetailExpander {
                         if (theStatement.getCalledMethods()!=null && !theStatement.getCalledMethods().isEmpty()) {
                             theStatement.setStatementType(StatementType.METHODCALL);
                         } else if (theStatement.getDeclaredVariables()!=null && !theStatement.getDeclaredVariables().isEmpty()) {
-                            theStatement.setStatementType(StatementType.DECLARATION);
+                            theStatement.setStatementType(StatementType.VARDECLARATION);
                         } else {
                             List<WordInFile> text = theStatement.getStatementText();
                             for (int i=0; i<text.size(); i++) {
