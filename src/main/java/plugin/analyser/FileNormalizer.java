@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import plugin.model.WordInFile;
+import plugin.util.Logger;
 import plugin.util.ParsingException;
 import plugin.model.KeyWord;
 
@@ -19,6 +20,24 @@ import plugin.model.KeyWord;
  */
 public class FileNormalizer {
 
+	/**
+     * Wrapper for normalizing file in correct order.
+     * 
+     * @param file - file to normalize
+     * @throws ParsingException
+     * @return detailed fileModel
+     */
+	public static List<WordInFile> doFileNormalization(File file) throws ParsingException {
+		// step 1 - remove unneeded, blank-spaces, comments, ...
+		List<String> normalizedLines = prepareFile(file);
+	    // step 2 - put all together in one line, remove unneeded spaces
+	    String singleLineCode = FileNormalizer.convertToSingleString(normalizedLines);
+	    // step 3 - Build wordlist
+	    List<WordInFile> wordList = FileNormalizer.createJavaWordList(singleLineCode);
+	    Logger.getLogger(null).printWords(wordList);
+	    return wordList;
+	}
+	
     /**
      * Prepares File for parsing. remove comments, empty lines, leading spaces....
      * 
@@ -26,7 +45,7 @@ public class FileNormalizer {
      * @returns List of relevant lines
      * @throws ParsingException
      */
-    public static List<String> prepareFile(File file) throws ParsingException {
+    private static List<String> prepareFile(File file) throws ParsingException {
         try {
             List<String> result = new ArrayList<String>();
             BufferedReader br = new BufferedReader(new FileReader(file));
@@ -123,7 +142,7 @@ public class FileNormalizer {
      * @throws ParsingException
      * @returns normalized Code-String
      */
-    public static String convertToSingleString(List<String> lines) throws ParsingException {
+    private static String convertToSingleString(List<String> lines) throws ParsingException {
         try {
             String fullCode = "";
             for (String line : lines) {
@@ -157,7 +176,7 @@ public class FileNormalizer {
      * @throws ParsingException
      * @returns word-list
      */
-    public static List<WordInFile> createJavaWordList(String normalizedCode) throws ParsingException {
+    private static List<WordInFile> createJavaWordList(String normalizedCode) throws ParsingException {
         try {
             // characters in breaks and operators between words are always a single word
             List<WordInFile> step1 = new ArrayList<WordInFile>();

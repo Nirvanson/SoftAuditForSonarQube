@@ -2,10 +2,8 @@ package plugin;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
@@ -15,13 +13,11 @@ import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 
 import plugin.analyser.FileNormalizer;
-import plugin.analyser.ModelAnalyser;
 import plugin.analyser.ModelBuilder;
 import plugin.analyser.ModelDetailExpander;
 import plugin.analyser.ModelStructureExpander;
 import plugin.model.JavaFileContent;
 import plugin.model.WordInFile;
-import plugin.model.components.JavaClass;
 import plugin.util.Logger;
 import plugin.util.ParsingException;
 
@@ -35,8 +31,6 @@ public class SoftAuditSensor implements Sensor {
 
     /** The file system object for the project being analysed. */
     private final FileSystem fileSystem;
-    /** Logger for detailed file-log. */
-    private Logger log;
 
     /**
      * Constructor for test-runs.
@@ -45,7 +39,7 @@ public class SoftAuditSensor implements Sensor {
      */
     public SoftAuditSensor(String loggername) {
         this.fileSystem = null;
-        log = Logger.getLogger(loggername);
+        Logger.getLogger(loggername);
     }
     
     /**
@@ -56,7 +50,7 @@ public class SoftAuditSensor implements Sensor {
      */
     public SoftAuditSensor(FileSystem fileSystem) {
         this.fileSystem = fileSystem;
-        log = Logger.getLogger(null);
+        Logger.getLogger(null);
     }
     
     /**
@@ -107,59 +101,28 @@ public class SoftAuditSensor implements Sensor {
         // start analyzing each relevant file
         double sourceFiles = 0;
         for (File file : files) {
+        	// try parsing file
+        	List<JavaFileContent> fileModel = null;
             try {
-                // try parsing file
-                log.printFile(file);
-                List<String> normalizedLines = null;
-                normalizedLines = FileNormalizer.prepareFile(file);
-                log.printNormalizedLines(normalizedLines);
-                String singleLineCode = FileNormalizer.convertToSingleString(normalizedLines);
-                log.printSingleLineCode(singleLineCode);
-                List<WordInFile> wordList = FileNormalizer.createJavaWordList(singleLineCode);
-                log.printWords(wordList);
-                Map<Metric<Integer>, Double> keyWordMeasures = ModelAnalyser.countKeyWords(wordList);
-                log.printMeasures("keyword", keyWordMeasures);
-                for (Metric<Integer> measure : keyWordMeasures.keySet()) {
-                    result.put(measure, result.get(measure) + keyWordMeasures.get(measure));
-                }
-                List<JavaFileContent> contents = ModelBuilder.parseClassStructure(wordList);
-                log.printModel("class", contents);
-                for (JavaFileContent content : contents) {
-                    if (content instanceof JavaClass) {
-                        content.setContent(ModelBuilder.parseClassContent(content));
-                    }
-                }
-                log.printModel("refined", contents);
-                Map<Metric<Integer>, Double> methodMeasures = ModelAnalyser.countMethods(contents);
-                log.printMeasures("method", methodMeasures);
-                for (Metric<Integer> measure : methodMeasures.keySet()) {
-                    result.put(measure, result.get(measure) + methodMeasures.get(measure));
-                }
-                for (JavaFileContent content : contents) {
-                    if (content instanceof JavaClass) {
-                        content.setContent(ModelStructureExpander.parseStructuralStatements(content.getContent()));
-                    }
-                }
-                log.printModel("expanded", contents);
-                contents = ModelDetailExpander.parseRemainingWordListsToStatements(contents);
-                log.printModel("statement", contents);
-                ModelDetailExpander.parseDeclarationsAndCalls(contents);
-                Set<String> declaredVariables = new HashSet<String>();
-                declaredVariables = ModelAnalyser.collectDeclaredVariables(contents);
-                ModelDetailExpander.parseReferences(contents, declaredVariables);
-                ModelDetailExpander.parseAssignments(contents);
-                ModelDetailExpander.parseRemainingStatementTypes(contents);
-                ModelDetailExpander.parseComparators(contents);
-                log.printModel("declarations", contents);
-                // Map<Metric<Integer>, Double> varMeasures = new HashMap<Metric<Integer>, Double>();
-                // varMeasures.put(SoftAuditMetrics.VAR, (double) declaredVariables.size());
-                // log.printMeasures("variables", varMeasures);
+            	// step 0 - read file
+                Logger.getLogger(null).printFile(file);
+                // step 1 - do file normalization
+                List<WordInFile> wordList = FileNormalizer.doFileNormalization(file);
+                // step 2 - build basic model
+                fileModel = ModelBuilder.parseBasicModel(wordList);
+                // step 3 - refine model by statement structure
+                fileModel = ModelStructureExpander.parseStatementStructure(fileModel);
+                // step 4 - parse model details
+                fileModel = ModelDetailExpander.parseModelDetails(fileModel);
                 sourceFiles++;
             } catch (ParsingException e) {
                 e.printStackTrace();
             }
+            if (fileModel!=null) {
+            	// do analyzation TODO
+            }
         }
-        log.close();
+        Logger.getLogger(null).close();
         result.put(SoftAuditMetrics.SRC, sourceFiles);
         result.put(SoftAuditMetrics.OMS, 200d);
         return result;

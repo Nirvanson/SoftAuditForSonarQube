@@ -13,6 +13,7 @@ import plugin.model.components.JavaClass;
 import plugin.model.components.JavaControlStatement;
 import plugin.model.components.JavaMethod;
 import plugin.model.components.JavaStatementWithAnonymousClass;
+import plugin.util.Logger;
 import plugin.util.ParsingException;
 
 /**
@@ -23,6 +24,23 @@ import plugin.util.ParsingException;
  */
 public class ModelStructureExpander {
     
+	/**
+     * Searching the main class/interface/enum declaration of the file and send it's content to parsing.
+     * 
+     * @param contents - the basic model
+     * @throws ParsingException
+     * @returns extended model
+     */
+    public static List<JavaFileContent> parseStatementStructure(List<JavaFileContent> contents) throws ParsingException {
+    	for (JavaFileContent content : contents) {
+            if (content instanceof JavaClass) {
+                content.setContent(parseStructuralStatements(content.getContent()));
+            }
+        }
+    	Logger.getLogger(null).printModel("structure", contents);
+    	return contents;
+    }
+	
     /**
      * Entry-point for parsing structural (control) statements in class-body.
      * 
@@ -30,7 +48,7 @@ public class ModelStructureExpander {
      * @throws ParsingException
      * @return refined model
      */
-    public static List<JavaFileContent> parseStructuralStatements(List<JavaFileContent> contentlist)
+    private static List<JavaFileContent> parseStructuralStatements(List<JavaFileContent> contentlist)
             throws ParsingException {
         try {
             List<JavaFileContent> result = new ArrayList<JavaFileContent>();

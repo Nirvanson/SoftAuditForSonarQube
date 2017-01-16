@@ -17,6 +17,7 @@ import plugin.model.components.JavaMethod;
 import plugin.model.components.JavaStatement;
 import plugin.model.components.JavaStatementWithAnonymousClass;
 import plugin.model.components.JavaVariable;
+import plugin.util.Logger;
 import plugin.util.ParsingException;
 
 /**
@@ -27,6 +28,26 @@ import plugin.util.ParsingException;
  */
 public class ModelBuilder {
 
+	/**
+     * Wrapper for building basic model in correct order.
+     * 
+     * @param wordList - normalized file
+     * @throws ParsingException
+     * @return basic model
+     */
+	public static List<JavaFileContent> parseBasicModel(List<WordInFile> wordList) throws ParsingException {
+		// step 1 - parse basic model from wordlist (class, imports, packages)
+		List<JavaFileContent> fileModel = parseClassStructure(wordList);
+		// step 2 - complete basic model by parsing inner classes and methods
+		for (JavaFileContent content : fileModel) {
+            if (content instanceof JavaClass) {
+                content.setContent(parseClassContent(content));
+            }
+        }
+		Logger.getLogger(null).printModel("basic", fileModel);
+		return fileModel;
+	}
+	
     /**
      * Parsing the basic structure of a java class/interface/enum to model. package, imports, class-definition and
      * annotations outside class definition
@@ -35,7 +56,7 @@ public class ModelBuilder {
      * @throws ParsingException
      * @returns basic model of the file
      */
-    public static List<JavaFileContent> parseClassStructure(List<WordInFile> wordList) throws ParsingException {
+    private static List<JavaFileContent> parseClassStructure(List<WordInFile> wordList) throws ParsingException {
         try {
             List<JavaFileContent> fileModel = new ArrayList<JavaFileContent>();
             boolean packageStatement = false;
@@ -258,16 +279,16 @@ public class ModelBuilder {
             throw new ParsingException("Building base model (outer class structure) failed.");
         }
     }
-
+    
     /**
      * Parsing the inner structure of a class/enum/interface/method determined by methods and inner
      * classes/interfaces/enums. Is called recursive for found methods/interfaces/classes/enums.
      * 
      * @param parent - the model-component to parse inner structure
-     * @throws ParsingException
-     * @returns model of the file structured by classes and methods
+     * @throws ParsingException 
+     * @returns model of the parent-content structured by classes and methods
      */
-    public static List<JavaFileContent> parseClassContent(JavaFileContent parent) throws ParsingException {
+    private static List<JavaFileContent> parseClassContent(JavaFileContent parent) throws ParsingException {
         try {
             List<JavaFileContent> result = new ArrayList<JavaFileContent>();
             JavaFileContent content = null;

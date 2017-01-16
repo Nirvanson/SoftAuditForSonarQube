@@ -28,17 +28,11 @@ public class Logger {
 	private static Logger logger;
 	
 	private final String FILE_HEAD = "---------- File: FILENAME ----------";
-	private final String STEP_1 = "*** Step 1 - Extract normalized Lines";
-	private final String STEP_2 = "*** Step 2 - Transform lines to single string";
-	private final String STEP_3 = "*** Step 3 - Extract words from code";
-	private final String STEP_4 = "*** Step 4 - Count key words in word list for simple measures";
-	private final String STEP_5 = "*** Step 5 - Build basic model of the file from wordlist";
-	private final String STEP_6 = "*** Step 6 - Recursivly refine codemodel";
-	private final String STEP_7 = "*** Step 7 - Count methods and parameters in model";
-	private final String STEP_8 = "*** Step 8 - Expand model with structural statements (ifs, loops, ...)";
-	private final String STEP_9 = "*** Step 9 - Split remaining wordlists to statements";
-	private final String STEP_10 = "*** Step 10 - Extract variable declarations and method Calls in Statements";
-	private final String STEP_11 = "*** Step 11 - Count variables";
+	private final String STEP_1 = "*** Step 1 - Normalize file to wordlist";
+	private final String STEP_2 = "*** Step 2 - Build basic model of the file from wordlist";
+	private final String STEP_3 = "*** Step 3 - Expand model with structural statements";
+	private final String STEP_4 = "*** Step 4 - Expand model with details";
+	// TODO: private final String STEP_5 = "*** Step 5 - Count measures";
 	private final String TIME = "*** Finished at TIME";
 	private final String INPUT_ERROR = "Method METHODNAME of Logger recieved invalid input: PARAM";
 	
@@ -82,28 +76,8 @@ public class Logger {
 		}
 	}
 	
-	public void printNormalizedLines(List<String> lines) {
-		writer.println(STEP_1);
-		addTime();
-		if (loglevel > 2) {
-			for (String line : lines) {
-				writer.println(line);
-			}
-		}
-	}
-	
-	public void printSingleLineCode(String code) {
-		writer.println(STEP_2);
-		addTime();
-		if (loglevel > 2) {
-			for (String chunk : code.split("(?<=\\G.{100})")) {
-				writer.println(chunk);
-			}
-		}
-	}
-	
 	public void printWords(List<WordInFile> words) {
-		writer.println(STEP_3);
+		writer.println(STEP_1);
 		addTime();
 		if (loglevel > 2) {
 			String sublist = "";
@@ -118,49 +92,23 @@ public class Logger {
 	}
 	
 	public void printMeasures(String step, Map<Metric<Integer>, Double> measures) {
-		switch(step) {
-		case "keyword":
-			writer.println(STEP_4);
-			break;
-		case "method":
-			writer.println(STEP_7);
-			break;
-		case "variables":
-			writer.println(STEP_11);
-			break;
-		default:
-			writer.println(INPUT_ERROR.replace("METHODNAME", "printMeasures").replace("PARAM", step));
-			break;
-		}
-		addTime();
-		if (loglevel > 0) {
-			for (Metric<Integer> measure : measures.keySet()) {
-				writer.println(measure.getName() + ": " + measures.get(measure));
-			}
-		}
+		//TODO
+		
 	}
 	
 	public void printModel(String step, List<JavaFileContent> contents) {
 		int levelToLog = 1;
 		switch(step) {
-		case "class":
-			writer.println(STEP_5);
+		case "basic":
+			writer.println(STEP_2);
 			levelToLog = 2;
 			break;
-		case "refined":
-			writer.println(STEP_6);
+		case "structure":
+			writer.println(STEP_3);
 			levelToLog = 2;
 			break;
-		case "expanded":
-			writer.println(STEP_8);
-			levelToLog = 2;
-			break;
-		case "statement":
-			writer.println(STEP_9);
-			levelToLog = 2;
-			break;
-		case "declarations":
-			writer.println(STEP_10);
+		case "detailed":
+			writer.println(STEP_4);
 			break;
 		default:
 			writer.println(INPUT_ERROR.replace("METHODNAME", "printModel").replace("PARAM", step));

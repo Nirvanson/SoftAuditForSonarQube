@@ -2,6 +2,7 @@ package plugin.analyser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,6 +18,7 @@ import plugin.model.components.JavaMethod;
 import plugin.model.components.JavaStatement;
 import plugin.model.components.JavaStatementWithAnonymousClass;
 import plugin.model.components.JavaVariable;
+import plugin.util.Logger;
 import plugin.util.ParsingException;
 
 /**
@@ -28,6 +30,30 @@ import plugin.util.ParsingException;
  */
 public class ModelDetailExpander {
 
+	/**
+     * Wrapper for detailing model in correct order.
+     * 
+     * @param contents - structured model of file
+     * @throws ParsingException
+     * @return detailed fileModel
+     */
+	public static List<JavaFileContent> parseModelDetails(List<JavaFileContent> fileModel) throws ParsingException {
+		// step 1 - parse remaining wordlists to statements
+		fileModel = parseRemainingWordListsToStatements(fileModel);
+        // step 2 - parse variable declarations and method calls
+        parseDeclarationsAndCalls(fileModel);
+        // step 3 - parse variable references
+        parseReferences(fileModel, null);
+        // step 4 - parse assignment statements
+        parseAssignments(fileModel);
+        // step 5 - parse remaining statement-types (methodcalls, increment, decrement, variable declarations)
+        parseRemainingStatementTypes(fileModel);
+        // step 6 - parse comparators in conditions and statements
+        parseComparators(fileModel);
+        Logger.getLogger(null).printModel("detailed", fileModel);
+		return fileModel;
+	}
+	
     /**
      * Recoursive scanning model for remaining word-lists and split them to statements.
      * 
@@ -35,13 +61,12 @@ public class ModelDetailExpander {
      * @throws ParsingException
      * @return refined model
      */
-    public static List<JavaFileContent> parseRemainingWordListsToStatements(List<JavaFileContent> contents)
+    private static List<JavaFileContent> parseRemainingWordListsToStatements(List<JavaFileContent> contents)
             throws ParsingException {
+    	if (contents==null || contents.isEmpty()) {
+    		return contents;
+    	}
         try {
-            if (contents == null) {
-                // ignore null-content. No error!
-                return null;
-            }
             List<JavaFileContent> result = new ArrayList<JavaFileContent>();
             for (JavaFileContent content : contents) {
                 if (content instanceof JavaClass || content instanceof JavaMethod
@@ -82,9 +107,12 @@ public class ModelDetailExpander {
      * @param contents - model of the component-body for parsing
      * @throws ParsingException
      */
-    public static void parseDeclarationsAndCalls(List<JavaFileContent> contents) throws ParsingException {
-        try {
-            for (JavaFileContent content : contents) {
+    private static void parseDeclarationsAndCalls(List<JavaFileContent> contents) throws ParsingException {
+    	if (contents==null || contents.isEmpty()) {
+    		return;
+    	}
+    	try {
+        	for (JavaFileContent content : contents) {
                 if (content instanceof JavaClass || content instanceof JavaMethod) {
                     // parse content
                     parseDeclarationsAndCalls(content.getContent());
@@ -201,13 +229,15 @@ public class ModelDetailExpander {
      * @param declaredVariables - list of declared variables
      * @throws ParsingException
      */
-    public static void parseReferences(List<JavaFileContent> contents, Set<String> declaredVariables)
+    private static void parseReferences(List<JavaFileContent> contents, Set<String> declaredVariables)
             throws ParsingException {
+    	if (declaredVariables == null) {
+    		declaredVariables = collectDeclaredVariables(contents);
+    	}
+    	if (contents==null || contents.isEmpty() || declaredVariables == null || declaredVariables.isEmpty()) {
+    		return;
+    	}
         try {
-            if (declaredVariables == null || declaredVariables.isEmpty()) {
-                // skip this step if no variables declared. No Error!
-                return;
-            }
             for (JavaFileContent content : contents) {
                 if (content instanceof JavaClass || content instanceof JavaMethod) {
                     // parse content
@@ -319,8 +349,11 @@ public class ModelDetailExpander {
      * @param contents - model of the component-body for parsing
      * @throws ParsingException
      */
-    public static void parseAssignments(List<JavaFileContent> contents) throws ParsingException {
-        try {
+    private static void parseAssignments(List<JavaFileContent> contents) throws ParsingException {
+    	if (contents==null || contents.isEmpty()) {
+    		return;
+    	}
+    	try {
             for (JavaFileContent content : contents) {
                 if (content instanceof JavaClass || content instanceof JavaMethod) {
                     // parse content
@@ -411,8 +444,11 @@ public class ModelDetailExpander {
      * @param contents - model of the component-body for parsing
      * @throws ParsingException
      */
-    public static void parseRemainingStatementTypes(List<JavaFileContent> contents) throws ParsingException {
-        try {
+    private static void parseRemainingStatementTypes(List<JavaFileContent> contents) throws ParsingException {
+    	if (contents==null || contents.isEmpty()) {
+    		return;
+    	}
+    	try {
             for (JavaFileContent content : contents) {
                 if (content instanceof JavaClass || content instanceof JavaMethod) {
                     // parse content
@@ -492,8 +528,11 @@ public class ModelDetailExpander {
      * @param contents - model of the component-body for parsing
      * @throws ParsingException
      */
-    public static void parseComparators(List<JavaFileContent> contents) throws ParsingException {
-        try {
+    private static void parseComparators(List<JavaFileContent> contents) throws ParsingException {
+    	if (contents==null || contents.isEmpty()) {
+    		return;
+    	}
+    	try {
             for (JavaFileContent content : contents) {
                 if (content instanceof JavaClass || content instanceof JavaMethod) {
                     // parse content
@@ -747,5 +786,100 @@ public class ModelDetailExpander {
             }
         }
         return textToScan;
+    }
+    
+    private static Set<String> collectDeclaredVariables(List<JavaFileContent> contents) throws ParsingException {
+        Set<String> result = new HashSet<String>();
+        if (contents == null || contents.isEmpty()) {
+            return result;
+        }
+        for (JavaFileContent content : contents) {
+            if (content instanceof JavaClass) {
+                result.addAll(collectDeclaredVariables(content.getContent()));
+            } else if (content instanceof JavaMethod) {
+                result.addAll(collectDeclaredVariables(content.getContent()));
+                if (((JavaMethod) content).getParameters() != null) {
+                    for (JavaVariable var : ((JavaMethod) content).getParameters()) {
+                        result.add(var.getName());
+                    }
+                }
+            } else if (content instanceof JavaStatementWithAnonymousClass) {
+                if (((JavaStatement) content).getDeclaredVariables() != null) {
+                    for (JavaVariable var : ((JavaStatement) content).getDeclaredVariables()) {
+                        result.add(var.getName());
+                    }
+                }
+                result.addAll(collectDeclaredVariables(content.getContent()));
+            } else if (content instanceof JavaControlStatement) {
+                JavaControlStatement theStatement = (JavaControlStatement) content;
+                switch (theStatement.getType()) {
+                case SWITCH:
+                case WHILE:
+                case DOWHILE:
+                case SYNCHRONIZED:
+                case FOR:
+                case BLOCK:
+                case CASE:
+                    if (theStatement.getDeclaredVariables() != null) {
+                        for (JavaVariable var : theStatement.getDeclaredVariables()) {
+                            result.add(var.getName());
+                        }
+                    }
+                    result.addAll(collectDeclaredVariables(content.getContent()));
+                    break;
+                case IF:
+                    if (theStatement.getDeclaredVariables() != null) {
+                        for (JavaVariable var : theStatement.getDeclaredVariables()) {
+                            result.add(var.getName());
+                        }
+                    }
+                    result.addAll(collectDeclaredVariables(content.getContent()));
+                    if (theStatement.getOthercontent() != null) {
+                        result.addAll(collectDeclaredVariables(theStatement.getOthercontent()));
+                    }
+                    break;
+                case TRY:
+                    if (theStatement.getDeclaredVariables() != null) {
+                        for (JavaVariable var : theStatement.getDeclaredVariables()) {
+                            result.add(var.getName());
+                        }
+                    }
+                    result.addAll(collectDeclaredVariables(content.getContent()));
+                    if (theStatement.getOthercontent() != null) {
+                        result.addAll(collectDeclaredVariables(theStatement.getOthercontent()));
+                    }
+                    if (theStatement.getResources() != null) {
+                        result.addAll(collectDeclaredVariables(theStatement.getResources()));
+                    }
+                    if (theStatement.getCatchedExceptions() != null) {
+                        for (List<WordInFile> exception : theStatement.getCatchedExceptions().keySet()) {
+                            result.addAll(collectDeclaredVariables(theStatement.getCatchedExceptions().get(exception)));
+                        }
+                    }
+                    break;
+                case RETURN:
+                case ASSERT:
+                case THROW:
+                case BREAK:
+                case CONTINUE:
+                    if (theStatement.getDeclaredVariables() != null) {
+                        for (JavaVariable var : theStatement.getDeclaredVariables()) {
+                            result.add(var.getName());
+                        }
+                    }
+                    break;
+                default:
+                    throw new ParsingException("Unknown Model-Component!");
+                }
+            } else if (content instanceof JavaStatement) {
+                JavaStatement theStatement = (JavaStatement) content;
+                if (theStatement.getDeclaredVariables() != null) {
+                    for (JavaVariable var : theStatement.getDeclaredVariables()) {
+                        result.add(var.getName());
+                    }
+                }
+            }
+        }
+        return result;
     }
 }

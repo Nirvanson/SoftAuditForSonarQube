@@ -2,10 +2,8 @@ package plugin.analyser;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.sonar.api.measures.Metric;
 
@@ -13,12 +11,7 @@ import plugin.SoftAuditMetrics;
 import plugin.model.JavaFileContent;
 import plugin.model.WordInFile;
 import plugin.model.components.JavaClass;
-import plugin.model.components.JavaControlStatement;
 import plugin.model.components.JavaMethod;
-import plugin.model.components.JavaStatement;
-import plugin.model.components.JavaStatementWithAnonymousClass;
-import plugin.model.components.JavaVariable;
-import plugin.util.ParsingException;
 import plugin.model.KeyWord;
 
 /**
@@ -28,101 +21,6 @@ import plugin.model.KeyWord;
  * @version 0.3
  */
 public class ModelAnalyser {
-
-    public static Set<String> collectDeclaredVariables(List<JavaFileContent> contents) throws ParsingException {
-        Set<String> result = new HashSet<String>();
-        if (contents == null || contents.isEmpty()) {
-            return result;
-        }
-        for (JavaFileContent content : contents) {
-            if (content instanceof JavaClass) {
-                result.addAll(collectDeclaredVariables(content.getContent()));
-            } else if (content instanceof JavaMethod) {
-                result.addAll(collectDeclaredVariables(content.getContent()));
-                if (((JavaMethod) content).getParameters() != null) {
-                    for (JavaVariable var : ((JavaMethod) content).getParameters()) {
-                        result.add(var.getName());
-                    }
-                }
-            } else if (content instanceof JavaStatementWithAnonymousClass) {
-                if (((JavaStatement) content).getDeclaredVariables() != null) {
-                    for (JavaVariable var : ((JavaStatement) content).getDeclaredVariables()) {
-                        result.add(var.getName());
-                    }
-                }
-                result.addAll(collectDeclaredVariables(content.getContent()));
-            } else if (content instanceof JavaControlStatement) {
-                JavaControlStatement theStatement = (JavaControlStatement) content;
-                switch (theStatement.getType()) {
-                case SWITCH:
-                case WHILE:
-                case DOWHILE:
-                case SYNCHRONIZED:
-                case FOR:
-                case BLOCK:
-                case CASE:
-                    if (theStatement.getDeclaredVariables() != null) {
-                        for (JavaVariable var : theStatement.getDeclaredVariables()) {
-                            result.add(var.getName());
-                        }
-                    }
-                    result.addAll(collectDeclaredVariables(content.getContent()));
-                    break;
-                case IF:
-                    if (theStatement.getDeclaredVariables() != null) {
-                        for (JavaVariable var : theStatement.getDeclaredVariables()) {
-                            result.add(var.getName());
-                        }
-                    }
-                    result.addAll(collectDeclaredVariables(content.getContent()));
-                    if (theStatement.getOthercontent() != null) {
-                        result.addAll(collectDeclaredVariables(theStatement.getOthercontent()));
-                    }
-                    break;
-                case TRY:
-                    if (theStatement.getDeclaredVariables() != null) {
-                        for (JavaVariable var : theStatement.getDeclaredVariables()) {
-                            result.add(var.getName());
-                        }
-                    }
-                    result.addAll(collectDeclaredVariables(content.getContent()));
-                    if (theStatement.getOthercontent() != null) {
-                        result.addAll(collectDeclaredVariables(theStatement.getOthercontent()));
-                    }
-                    if (theStatement.getResources() != null) {
-                        result.addAll(collectDeclaredVariables(theStatement.getResources()));
-                    }
-                    if (theStatement.getCatchedExceptions() != null) {
-                        for (List<WordInFile> exception : theStatement.getCatchedExceptions().keySet()) {
-                            result.addAll(collectDeclaredVariables(theStatement.getCatchedExceptions().get(exception)));
-                        }
-                    }
-                    break;
-                case RETURN:
-                case ASSERT:
-                case THROW:
-                case BREAK:
-                case CONTINUE:
-                    if (theStatement.getDeclaredVariables() != null) {
-                        for (JavaVariable var : theStatement.getDeclaredVariables()) {
-                            result.add(var.getName());
-                        }
-                    }
-                    break;
-                default:
-                    throw new ParsingException("Unknown Model-Component!");
-                }
-            } else if (content instanceof JavaStatement) {
-                JavaStatement theStatement = (JavaStatement) content;
-                if (theStatement.getDeclaredVariables() != null) {
-                    for (JavaVariable var : theStatement.getDeclaredVariables()) {
-                        result.add(var.getName());
-                    }
-                }
-            }
-        }
-        return result;
-    }
 
     /**
      * Count methods and their parameters
