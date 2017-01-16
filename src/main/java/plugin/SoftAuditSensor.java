@@ -105,17 +105,9 @@ public class SoftAuditSensor implements Sensor {
         for (File file : files) {
         	// try parsing file
         	List<JavaFileContent> fileModel = null;
-        	/* keep reached level of parsing for measurement 
-        	 * -1/0/1 --> no measurement possible, 
-        	 * 2      --> count only imports, classes, interfaces, methods, enums and parameters
-        	 * 3      --> additionally count branches, control statements (if, for, ...)
-        	 * 4      --> count everything needed
-        	 */
-        	int reachedParsingLevel = -1;
             try {
             	// step 0 - read file
                 Logger.getLogger(null).printFile(file);
-                reachedParsingLevel++;
             } catch (IOException exceptionInStepZero) {
             	// file not readable, skip file completely
             	exceptionInStepZero.printStackTrace();
@@ -125,7 +117,6 @@ public class SoftAuditSensor implements Sensor {
             try {
                 // step 1 - do file normalization
                 wordList = FileNormalizer.doFileNormalization(file);
-                reachedParsingLevel++;
             } catch (ParsingException exceptionInStepOne) {
             	// file normalization failed. skip file completely
             	exceptionInStepOne.printStackTrace();
@@ -134,25 +125,24 @@ public class SoftAuditSensor implements Sensor {
             try {
                 // step 2 - build basic model
                 fileModel = ModelBuilder.parseBasicModel(wordList);
-                reachedParsingLevel++;
             } catch (ParsingException exceptionInStepTwo) {
             	// Building basic model failed. skip file completely
             	exceptionInStepTwo.printStackTrace();
             	continue;
             }
+            boolean structureParsed = false;
             try {
                 // step 3 - refine model by statement structure
                 fileModel = ModelStructureExpander.parseStatementStructure(fileModel);
-                reachedParsingLevel++;
+                structureParsed = true;
             } catch (ParsingException exceptionInStepThree) {
             	// Refining Model with structural statements failed. skip detail parsing and do basic analysis
             	exceptionInStepThree.printStackTrace();
             }
-            if (reachedParsingLevel==3) {
+            if (structureParsed) {
             	try {
             		// step 4 - parse model details
             		fileModel = ModelDetailExpander.parseModelDetails(fileModel);
-            		reachedParsingLevel++;
             	} catch (ParsingException exceptionInStepFour) {
                 	// Refining Model with details failed. Do medium analysis
                 	exceptionInStepFour.printStackTrace();
@@ -161,7 +151,7 @@ public class SoftAuditSensor implements Sensor {
             // step 5 - if at least a basic model could be parsed analyze model for available measures
             if (fileModel!=null) {
             	try {
-            		Map<Metric<?>, Double> partialResult = analyser.doFileModelAnalysis(fileModel, reachedParsingLevel);
+            		Map<Metric<?>, Double> partialResult = analyser.doFileModelAnalysis(fileModel);
             		for (Metric<?> metric : partialResult.keySet()) {
             			result.put(metric, result.get(metric) + partialResult.get(metric));
             		}

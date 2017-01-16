@@ -14,8 +14,8 @@ import java.util.List;
  * @author hodasemi
  *
  */
-public class Day {
-	DayOfWeek dayOfWeek;
+public class Day implements Serializable {
+	public DayOfWeek dayOfWeek;
 	List<Course> courses;
 	LocalDate date;
 	boolean inRequestedMonth;
@@ -34,6 +34,9 @@ public class Day {
 		this.inRequestedMonth = inRequestedMonth;
 	}
 
+	public Day() {
+	    
+	}
 	/**
 	 * Checks if this {@link Day} is in the requested month
 	 *
@@ -57,7 +60,7 @@ public class Day {
 
 		courses.add(newCourse);
 
-		Collections.sort(courses, new Comparator<Course>() {
+		courses = courses + new Comparator<Course>() {
 		    @Override
 			public int compare(Course c1, Course c2)  {
 		    	if (c1.getDate().toLocalTime().isBefore(c2.getDate().toLocalTime())) {
@@ -70,7 +73,7 @@ public class Day {
 
 		    	return 0;
 		    }
-		});
+		};
 	}
 
 	/**

@@ -12,6 +12,7 @@ import plugin.model.KeyWord;
 import plugin.model.StatementType;
 import plugin.model.WordInFile;
 import plugin.model.WordList;
+import plugin.model.WordType;
 import plugin.model.components.JavaClass;
 import plugin.model.components.JavaControlStatement;
 import plugin.model.components.JavaMethod;
@@ -126,7 +127,8 @@ public class ModelDetailExpander {
                     textToScan.add(new WordInFile(null, KeyWord.NEW));
                     textToScan.addAll(theStatement.getClassType());
                     textToScan.addAll(theStatement.getStatementAfterClass());
-                    parseDeclarationsAndCallsInStatement(theStatement, textToScan);
+                    theStatement.setStatementText(textToScan);
+                    parseDeclarationsAndCallsInStatement(theStatement, theStatement.getStatementText());
                 } else if (content instanceof JavaControlStatement) {
                     JavaControlStatement theStatement = (JavaControlStatement) content;
                     switch (theStatement.getType()) {
@@ -247,12 +249,7 @@ public class ModelDetailExpander {
                     // build together statement with placeholder for class and scan
                     JavaStatementWithAnonymousClass theStatement = (JavaStatementWithAnonymousClass) content;
                     parseReferences(theStatement.getContent(), declaredVariables);
-                    List<WordInFile> textToScan = new ArrayList<WordInFile>();
-                    textToScan.addAll(theStatement.getStatementBeforeClass());
-                    textToScan.add(new WordInFile(null, KeyWord.NEW));
-                    textToScan.addAll(theStatement.getClassType());
-                    textToScan.addAll(theStatement.getStatementAfterClass());
-                    parseReferencesInStatement(theStatement, textToScan, declaredVariables);
+                    parseReferencesInStatement(theStatement, theStatement.getStatementText(), declaredVariables);
                 } else if (content instanceof JavaControlStatement) {
                     JavaControlStatement theStatement = (JavaControlStatement) content;
                     switch (theStatement.getType()) {
@@ -363,12 +360,7 @@ public class ModelDetailExpander {
                     // build together statement with placeholder for class and scan
                     JavaStatementWithAnonymousClass theStatement = (JavaStatementWithAnonymousClass) content;
                     parseAssignments(theStatement.getContent());
-                    List<WordInFile> textToScan = new ArrayList<WordInFile>();
-                    textToScan.addAll(theStatement.getStatementBeforeClass());
-                    textToScan.add(new WordInFile(null, KeyWord.NEW));
-                    textToScan.addAll(theStatement.getClassType());
-                    textToScan.addAll(theStatement.getStatementAfterClass());
-                    content = parseAssignmentsInStatement(theStatement, textToScan);
+                    content = parseAssignmentsInStatement(theStatement, theStatement.getStatementText());
                 } else if (content instanceof JavaControlStatement) {
                     JavaControlStatement theStatement = (JavaControlStatement) content;
                     switch (theStatement.getType()) {
@@ -455,7 +447,26 @@ public class ModelDetailExpander {
                     parseRemainingStatementTypes(content.getContent());
                 } else if (content instanceof JavaStatementWithAnonymousClass) {
                     // parse content of anonymous class
-                    parseRemainingStatementTypes(content.getContent());
+                    JavaStatementWithAnonymousClass theStatement = (JavaStatementWithAnonymousClass) content;
+                    parseRemainingStatementTypes(theStatement.getContent());
+                    if (theStatement.getType().equals(StatementType.UNSPECIFIED)) {
+                        if (theStatement.getCalledMethods()!=null && !theStatement.getCalledMethods().isEmpty()) {
+                            theStatement.setStatementType(StatementType.METHODCALL);
+                        } else if (theStatement.getDeclaredVariables()!=null && !theStatement.getDeclaredVariables().isEmpty()) {
+                            theStatement.setStatementType(StatementType.VARDECLARATION);
+                        } else {
+                            List<WordInFile> text = theStatement.getStatementText();
+                            for (int i=0; i<text.size(); i++) {
+                                if (text.get(i).equals(KeyWord.ADD) && i<text.size()-1 && text.get(i+1).equals(KeyWord.ADD)) {
+                                    theStatement.setStatementType(StatementType.INCREMENT);
+                                    break;
+                                } else if (text.get(i).equals(KeyWord.SUB) && i<text.size()-1 && text.get(i+1).equals(KeyWord.SUB)) {
+                                    theStatement.setStatementType(StatementType.DECREMENT);
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 } else if (content instanceof JavaControlStatement) {
                     JavaControlStatement theStatement = (JavaControlStatement) content;
                     switch (theStatement.getType()) {
@@ -542,8 +553,7 @@ public class ModelDetailExpander {
                     // parse statement before and after class
                     JavaStatementWithAnonymousClass theStatement = (JavaStatementWithAnonymousClass) content;
                     parseComparators(theStatement.getContent());
-                    parseComparatorsInStatement(theStatement, theStatement.getStatementBeforeClass());
-                    parseComparatorsInStatement(theStatement, theStatement.getStatementAfterClass());
+                    parseComparatorsInStatement(theStatement, theStatement.getStatementText());
                 } else if (content instanceof JavaControlStatement) {
                     JavaControlStatement theStatement = (JavaControlStatement) content;
                     switch (theStatement.getType()) {
@@ -755,7 +765,7 @@ public class ModelDetailExpander {
                 while (!textToScan.get(i).equals(declaredVar)) {
                     if (textToScan.get(i).getWord() != null) {
                         textToScan.set(i, new WordInFile(textToScan.get(i).getWord(), KeyWord.VARTYPE));
-                    } else {
+                    } else if (!textToScan.get(i).getKey().getType().equals(WordType.MODIFIER)) {
                         textToScan.set(i, new WordInFile(textToScan.get(i).getKey().toString(), KeyWord.VARTYPE));
                     }
                     datatype.add(textToScan.get(i));
