@@ -15,7 +15,7 @@ public class MetricCalculator {
                 (measures.get(SoftAuditMetrics.CLA) * 4) + (measures.get(SoftAuditMetrics.MET) * 3)
                         + (measures.get(SoftAuditMetrics.INT) * 2) + measures.get(SoftAuditMetrics.VAR));
         result.put(SoftAuditMetrics.DCO,
-                ((measures.get(SoftAuditMetrics.PRE) * 2) + (measures.get(SoftAuditMetrics.RES) * 1.5)
+                ((measures.get(SoftAuditMetrics.PRE) * 2)
                         + measures.get(SoftAuditMetrics.ARG) + (measures.get(SoftAuditMetrics.PAR) * 0.5))
                         / (measures.get(SoftAuditMetrics.STM) + measures.get(SoftAuditMetrics.REF)));
         result.put(SoftAuditMetrics.DFC,

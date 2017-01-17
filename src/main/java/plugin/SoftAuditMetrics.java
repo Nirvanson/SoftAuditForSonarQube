@@ -164,15 +164,6 @@ public class SoftAuditMetrics implements Metrics {
 			.setQualitative(false)
 			.setDomain(CoreMetrics.DOMAIN_GENERAL)
 			.create();
-    /**
-     * All variables whose values are set or changed, includes the return values.
-     */
-	public static final Metric<Integer> RES = new Metric.Builder("base_res", "Results", Metric.ValueType.INT)
-			.setDescription("Number of results.")
-			.setDirection(Metric.DIRECTION_NONE)
-			.setQualitative(false)
-			.setDomain(CoreMetrics.DOMAIN_GENERAL)
-			.create();
 	/**
 	 * Number of Return Statements.
 	 */
@@ -696,18 +687,18 @@ public class SoftAuditMetrics implements Metrics {
     	case 1:
     		// Metrics-List with base level metrics
     		return Arrays.asList(
-        			ARG, BRA, CAS, CLA, CON, IFS, INT, LIT, LOP, MAD, MED, MET, MID, PAR, PRE, REF, RES,
+        			ARG, BRA, CAS, CLA, CON, IFS, INT, LIT, LOP, MAD, MED, MET, MID, PAR, PRE, REF, 
         			RET, SED, STM, SWI, VAR, OBP, DCO, DFC, CFC, COC, ACB, TST, FLE, COF, MAB, AQB);
     	case 2:
     		// Metrics-list with medium level metrics
     		return Arrays.asList(
-        			ARG, BRA, CAS, CLA, CON, IFS, INT, LIT, LOP, MAD, MED, MET, MID, PAR, PRE, REF, RES,
+        			ARG, BRA, CAS, CLA, CON, IFS, INT, LIT, LOP, MAD, MED, MET, MID, PAR, PRE, REF, 
         			RET, SED, STM, SWI, VAR, DTY, FFC, FUC, IMP, RUM, SRC, SST, STY, OMS, OBP, DCO, DFC,
         			CFC, COC, ICO, BRC, LCM, ACM, TST, FLE, COF, MOD, REU, SEC, MAM, AQM);
     	case 3:
     		// Metrics-list with full level metrics
     		return Arrays.asList(
-        			ARG, BRA, CAS, CLA, CON, IFS, INT, LIT, LOP, MAD, MED, MET, MID, PAR, PRE, REF, RES,
+        			ARG, BRA, CAS, CLA, CON, IFS, INT, LIT, LOP, MAD, MED, MET, MID, PAR, PRE, REF, 
         			RET, SED, STM, SWI, VAR, DTY, FFC, FUC, IMP, RUM, SRC, SST, STY, OMS, DBA, DBS, DEF,
         			FIA, FIL, INP, OUT, PAN, REP, UFM, VIE, OBP, DAP, FUP, DCO, DFC, CFC, COC, ICO, BRC,
         			DAC, LCF, ACF, TST, FLE, COF, MOD, REU, SEC, POR, MAF, AQF);

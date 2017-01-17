@@ -88,7 +88,11 @@ public class SoftAuditSensor implements Sensor {
         Logger.getLogger(null).printMetrics(metrics);
         // save metrics
         for (Metric<?> metric: metrics.keySet()) {
-            sensorContext.saveMeasure(new Measure<Integer>(metric, metrics.get(metric), 3));
+            if (metrics.get(metric)>1) {
+                sensorContext.saveMeasure(new Measure<Integer>(metric, 1.0, 3));
+            } else {
+                sensorContext.saveMeasure(new Measure<Integer>(metric, metrics.get(metric), 3));
+            }
         }
         Logger.getLogger(null).close();
     }
@@ -108,6 +112,7 @@ public class SoftAuditSensor implements Sensor {
             }
         }
         ModelAnalyser analyser = new ModelAnalyser();
+        Map<List<WordInFile>, List<JavaFileContent>> models = new HashMap<List<WordInFile>, List<JavaFileContent>>();
         for (File file : files) {
         	// try parsing file
         	List<JavaFileContent> fileModel = null;
@@ -156,15 +161,21 @@ public class SoftAuditSensor implements Sensor {
             }
             // step 5 - if at least a basic model could be parsed analyze model for available measures
             if (fileModel!=null) {
-            	try {
-            		Map<Metric<?>, Double> partialResult = analyser.doFileModelAnalysis(fileModel, wordList);
-            		for (Metric<?> metric : partialResult.keySet()) {
-            			result.put(metric, result.get(metric) + partialResult.get(metric));
-            		}
-            	} catch (AnalyzeException exceptionInStepFive) {
-                	// Analyzing model failed - ignore file
-                	exceptionInStepFive.printStackTrace();
+                models.put(wordList, fileModel);
+            }
+        }
+        for (List<WordInFile> file : models.keySet()) {
+            analyser.collectDeclaredMethods(models.get(file));
+        }
+        for (List<WordInFile> file : models.keySet()) {
+            try {
+                Map<Metric<?>, Double> partialResult = analyser.doFileModelAnalysis(models.get(file), file);
+                for (Metric<?> metric : partialResult.keySet()) {
+                    result.put(metric, result.get(metric) + partialResult.get(metric));
                 }
+            } catch (AnalyzeException exceptionInStepFive) {
+                // Analyzing model failed - ignore file
+                exceptionInStepFive.printStackTrace();
             }
         }
         // step 6 - put non-additive measures to resultmap

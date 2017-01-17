@@ -1,4 +1,4 @@
----------- File: FileNormalizer.java ----------
+ ---------- File: FileNormalizer.java ----------
 *** Step 1 - Normalize file to wordlist
 *** Finished at 13:07:22:837
 *** Step 2 - Build basic model of the file from wordlist
@@ -4201,36 +4201,36 @@ Constants: 0.0
 Foreign-Function-Calls: 1.0
 ---------- Measured values ----------
 --- Arguments: 372.0 / 1312 --> ???
---- Literals: 690.0 / 513 --> enumvalues as constants
---- Classes: 25.0 / 24 --> enums as interfaces
---- Methods: 148.0 / 89 + 3 Procedures --> getter/setter ignorieren
+Literals: 690.0 / 513 --> enumvalues as constants
+Classes: 25.0 / 24 --> enums as interfaces
+Methods: 148.0 / 89 + 3 Procedures --> getter/setter ignorieren
 Branches: 1623.0 / 1786
 Major Deficiencies: 0.0 / 375
---- References: 4307.0 / 3773 --- declarations nicht mitzählen
+References: 4307.0 / 3773 --- declarations nicht mitzählen
 Security Deficiencies: 0.0 / 28
 Optimal Module Size: 200.0
---- Cases: 109.0 / 171 --> mehrere cases hintereinander zählen!
+Cases: 109.0 / 171 --> mehrere cases hintereinander zählen!
 Secure Statements: 4195.0
---- Variables: 668.0 / 165 --> schleifenvariablen und parameter nicht mitzählen
+Variables: 668.0 / 165 --> schleifenvariablen und parameter nicht mitzählen
 --- Data Types: 46.0 / 97 --> ???
 Statements: 4282.0 / 3825
 Parameters: 152.0 / 161
 Return-Statements: 125.0 / 137
 --- Results: 759.0 / 1267 --> ???
 Predicates: 1058.0 / 1033
---- Foreign-Function-Calls: 2846.0 / 291 --> nicht die im file sammeln sondern alle und dagegen prüfen?
+Foreign-Function-Calls: 2846.0 / 291 --> nicht die im file sammeln sondern alle und dagegen prüfen?
 Source-Files: 27.0 / 27
 If-Statements: 528.0 / 559
---- Statement-Types: 25.0 / 1934 --> alles außer control statements als eigener typ zählen
---- Interfaces: 0.0 / 3 --> siehe classes
---- Function-Calls: 3169.0 / 2358 --> getter setter calls ignorieren
+Statement-Types: 25.0 / 1934 --> alles außer control statements als eigener typ zählen
+Interfaces: 0.0 / 3 --> siehe classes
+Function-Calls: 3169.0 / 2358 --> getter setter calls ignorieren
 Minor Deficiencies: 0.0 / 1426
 Reusable Methods: 67.0 / 81
 Loop-Statements: 156.0 / 156
 Imports: 203.0 / 227
 Medium Deficiencies: 0.0 / 841
---- Constants: 98.0 / 543 --> siehe literals
---- Switch-Statements: 20.0 / 26 --> meins is richtiger...
+Constants: 98.0 / 543 --> siehe literals
+Switch-Statements: 20.0 / 26 --> meins is richtiger...
 ---------- Calculated Metrics ----------
 Modularity: 0.40084210328306397
 Data Flow Complexity: 0.6898072904573949
