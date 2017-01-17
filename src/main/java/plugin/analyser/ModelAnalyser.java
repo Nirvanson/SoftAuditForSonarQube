@@ -47,13 +47,32 @@ public class ModelAnalyser {
         optimalModuleSize = 200.000;
     }
 
-    public Map<Metric<?>, Double> doFileModelAnalysis(List<JavaFileContent> fileModel) throws AnalyzeException {
+    public Map<Metric<?>, Double> doFileModelAnalysis(List<JavaFileContent> fileModel, List<WordInFile> wordList)
+            throws AnalyzeException {
         scannedSourceFiles++;
         insecureStatements = 0.0;
         declaredMethods = collectDeclaredMethods(fileModel);
         Map<Metric<?>, Double> result = analyzeContentList(fileModel);
+        includeContentScan(result, countLiteralsAndConstants(wordList));
         result.put(SoftAuditMetrics.SST, result.get(SoftAuditMetrics.STM) - insecureStatements);
         Logger.getLogger(null).printFileMeasures(result);
+        return result;
+    }
+
+    private Map<Metric<?>, Double> countLiteralsAndConstants(List<WordInFile> wordList) {
+        double constants = 0.0;
+        double literals = 0.0;
+        for (WordInFile word : wordList) {
+            if (word.equals(KeyWord.STRINGLITERAL)) {
+                literals++;
+            } else if (word.equals(KeyWord.CONSTANT)
+                    && !(word.getWord().equals("0") || word.getWord().equals("1") || word.getWord().equals("2"))) {
+                constants++;
+            }
+        }
+        Map<Metric<?>, Double> result = new HashMap<Metric<?>, Double>();
+        result.put(SoftAuditMetrics.LIT, literals);
+        result.put(SoftAuditMetrics.CON, constants);
         return result;
     }
 
@@ -94,7 +113,7 @@ public class ModelAnalyser {
                 for (JavaFileContent classcontent : theClass.getContent()) {
                     if (classcontent instanceof JavaStatement
                             && ((JavaStatement) classcontent).getDeclaredVariables() != null
-                            && !((JavaStatement) classcontent).getDeclaredVariables().isEmpty() ) {
+                            && !((JavaStatement) classcontent).getDeclaredVariables().isEmpty()) {
                         for (WordInFile wordInStatement : ((JavaStatement) classcontent).getStatementText()) {
                             if (wordInStatement.equals(KeyWord.PUBLIC)) {
                                 insecureStatements++;
@@ -153,47 +172,310 @@ public class ModelAnalyser {
                 usedStatementTypes.add(StatementType.ENUMVALUES);
             } else if (content instanceof JavaStatementWithAnonymousClass) {
                 JavaStatementWithAnonymousClass theStatement = (JavaStatementWithAnonymousClass) content;
-                // include content-scan of anonymous class 
+                // include content-scan of anonymous class
                 includeContentScan(result, analyzeContentList(theStatement.getContent()));
                 // count as 3 statements statement itself and begin / ending of anonymous class
                 countFinding(result, SoftAuditMetrics.STM, 3.0);
                 // count it as class
                 countFinding(result, SoftAuditMetrics.CLA, 1.0);
                 // add possible statement-measures
-                usedStatementTypes.add(theStatement.getType());
-                for (JavaVariable variable : theStatement.getDeclaredVariables()) {
-                    usedDataTypes.add(variable.getType());
+                measureSimpleStatement(theStatement, result);
+            } else if (content instanceof JavaControlStatement) {
+                JavaControlStatement theStatement = (JavaControlStatement) content;
+                switch (theStatement.getType()) {
+                case FOR:
+                    countFinding(result, SoftAuditMetrics.LOP, 1.0);
+                    countFinding(result, SoftAuditMetrics.BRA, 2.0);
+                    // include content-scan of for loop
+                    includeContentScan(result, analyzeContentList(theStatement.getContent()));
+                    // one statement, if content in block additional end statement
+                    if (theStatement.isContentInBlock()) {
+                        countFinding(result, SoftAuditMetrics.STM, 2.0);
+                    } else {
+                        countFinding(result, SoftAuditMetrics.STM, 1.0);
+                    }
+                    // count loop-declaration stuff
+                    for (JavaVariable variable : theStatement.getDeclaredVariables()) {
+                        usedDataTypes.add(variable.getType());
+                    }
+                    countFinding(result, SoftAuditMetrics.VAR, theStatement.getDeclaredVariables().size());
+                    countFinding(result, SoftAuditMetrics.REF,
+                            theStatement.getDeclaredVariables().size() + theStatement.getReferencedVariables().size());
+                    countFinding(result, SoftAuditMetrics.FUC, theStatement.getCalledMethods().size());
+                    for (WordInFile function : theStatement.getCalledMethods()) {
+                        if (!declaredMethods.contains(function.getWord())) {
+                            countFinding(result, SoftAuditMetrics.FFC, 1.0);
+                        }
+                    }
+                    boolean assignFound = false;
+                    if (theStatement.getInitialization() != null && !theStatement.getInitialization().isEmpty()) {
+                        // add statementtype
+                        usedStatementTypes.add(StatementType.FOR);
+                        // count assignment in initialization
+                        for (WordInFile word : theStatement.getInitialization()) {
+                            if (word.getKey().equals(KeyWord.ASSIGNMENT)) {
+                                assignFound = true;
+                            }
+                            if (word.getKey().equals(KeyWord.VARIDENT)) {
+                                if (assignFound) {
+                                    countFinding(result, SoftAuditMetrics.ARG, 1.0);
+                                } else {
+                                    countFinding(result, SoftAuditMetrics.RES, 1.0);
+                                }
+                            }
+                        }
+                        // count comparation in termination
+                        if (theStatement.getCondition() != null && !theStatement.getCondition().isEmpty()) {
+                            for (WordInFile word : theStatement.getCondition()) {
+                                if (word.getKey().equals(KeyWord.VARIDENT)) {
+                                    countFinding(result, SoftAuditMetrics.PRE, 1.0);
+                                }
+                            }
+                        }
+                    } else {
+                        // add statementtype
+                        usedStatementTypes.add(StatementType.ENHANCEDFOR);
+                    }
+                    break;
+                case WHILE:
+                case DOWHILE:
+                    // add statementtype
+                    usedStatementTypes.add(theStatement.getType());
+                    countFinding(result, SoftAuditMetrics.LOP, 1.0);
+                    countFinding(result, SoftAuditMetrics.BRA, 2.0);
+                    // include content-scan of while / dowhile loop
+                    includeContentScan(result, analyzeContentList(theStatement.getContent()));
+                    // one statement, if content in block additional end statement
+                    if (theStatement.isContentInBlock()) {
+                        countFinding(result, SoftAuditMetrics.STM, 2.0);
+                    } else {
+                        countFinding(result, SoftAuditMetrics.STM, 1.0);
+                    }
+                    // count condition stuff
+                    countFinding(result, SoftAuditMetrics.REF, theStatement.getReferencedVariables().size());
+                    countFinding(result, SoftAuditMetrics.FUC, theStatement.getCalledMethods().size());
+                    for (WordInFile function : theStatement.getCalledMethods()) {
+                        if (!declaredMethods.contains(function.getWord())) {
+                            countFinding(result, SoftAuditMetrics.FFC, 1.0);
+                        }
+                    }
+                    if (theStatement.getCondition() != null && !theStatement.getCondition().isEmpty()) {
+                        for (WordInFile word : theStatement.getCondition()) {
+                            if (word.getKey().equals(KeyWord.VARIDENT)) {
+                                countFinding(result, SoftAuditMetrics.PRE, 1.0);
+                            }
+                        }
+                    }
+                    break;
+                case IF:
+                    // add statementtype
+                    usedStatementTypes.add(theStatement.getType());
+                    countFinding(result, SoftAuditMetrics.IFS, 1.0);
+                    countFinding(result, SoftAuditMetrics.BRA, 2.0);
+                    // include content-scan of if-block
+                    includeContentScan(result, analyzeContentList(theStatement.getContent()));
+                    // one statement, if content in block additional end statement
+                    if (theStatement.isContentInBlock()) {
+                        countFinding(result, SoftAuditMetrics.STM, 2.0);
+                    } else {
+                        countFinding(result, SoftAuditMetrics.STM, 1.0);
+                    }
+                    // count else block if present
+                    if (theStatement.getOthercontent() != null && !theStatement.getOthercontent().isEmpty()) {
+                        usedStatementTypes.add(StatementType.ELSE);
+                        includeContentScan(result, analyzeContentList(theStatement.getOthercontent()));
+                        // one statement, if content in block additional end statement
+                        if (theStatement.isOtherContentInBlock()) {
+                            countFinding(result, SoftAuditMetrics.STM, 2.0);
+                        } else {
+                            countFinding(result, SoftAuditMetrics.STM, 1.0);
+                        }
+                    }
+                    // count condition stuff
+                    countFinding(result, SoftAuditMetrics.REF, theStatement.getReferencedVariables().size());
+                    countFinding(result, SoftAuditMetrics.FUC, theStatement.getCalledMethods().size());
+                    for (WordInFile function : theStatement.getCalledMethods()) {
+                        if (!declaredMethods.contains(function.getWord())) {
+                            countFinding(result, SoftAuditMetrics.FFC, 1.0);
+                        }
+                    }
+                    if (theStatement.getCondition() != null && !theStatement.getCondition().isEmpty()) {
+                        for (WordInFile word : theStatement.getCondition()) {
+                            if (word.getKey().equals(KeyWord.VARIDENT)) {
+                                countFinding(result, SoftAuditMetrics.PRE, 1.0);
+                            }
+                        }
+                    }
+                    break;
+                case TRY:
+                    countFinding(result, SoftAuditMetrics.IFS, 1.0);
+                    countFinding(result, SoftAuditMetrics.BRA, 2.0);
+                    // include content-scan of try-block
+                    includeContentScan(result, analyzeContentList(theStatement.getContent()));
+                    // two statements,
+                    countFinding(result, SoftAuditMetrics.STM, 2.0);
+                    // count resourceBlock if present
+                    if (theStatement.getResources() != null && !theStatement.getResources().isEmpty()) {
+                        includeContentScan(result, analyzeContentList(theStatement.getResources()));
+                        usedStatementTypes.add(StatementType.TRYWITHRESOURCES);
+                    } else {
+                        // add statementtype
+                        usedStatementTypes.add(StatementType.TRY);
+                    }
+                    // count finally block if present
+                    if (theStatement.getOthercontent() != null && !theStatement.getOthercontent().isEmpty()) {
+                        usedStatementTypes.add(StatementType.FINALLY);
+                        includeContentScan(result, analyzeContentList(theStatement.getOthercontent()));
+                        // two statements
+                        countFinding(result, SoftAuditMetrics.STM, 2.0);
+                    }
+                    // count catched exceptions
+                    if (theStatement.getCatchedExceptions() != null && !theStatement.getCatchedExceptions().isEmpty()) {
+                        usedStatementTypes.add(StatementType.CATCH);
+                        for (List<WordInFile> exception : theStatement.getCatchedExceptions().keySet()) {
+                            countFinding(result, SoftAuditMetrics.VAR, 1.0);
+                            countFinding(result, SoftAuditMetrics.STM, 2.0);
+                            countFinding(result, SoftAuditMetrics.BRA, 1.0);
+                            includeContentScan(result,
+                                    analyzeContentList(theStatement.getCatchedExceptions().get(exception)));
+                        }
+                    }
+                    break;
+                case BREAK:
+                case CONTINUE:
+                case ASSERT:
+                    countFinding(result, SoftAuditMetrics.STM, 1.0);
+                    usedStatementTypes.add(theStatement.getType());
+                    break;
+                case RETURN:
+                    countFinding(result, SoftAuditMetrics.STM, 1.0);
+                    usedStatementTypes.add(theStatement.getType());
+                    countFinding(result, SoftAuditMetrics.BRA, 1.0);
+                    countFinding(result, SoftAuditMetrics.RET, 1.0);
+                    if (theStatement.getStatementText().size() > 2) {
+                        countFinding(result, SoftAuditMetrics.RES, 1.0);
+                        for (JavaVariable variable : theStatement.getDeclaredVariables()) {
+                            usedDataTypes.add(variable.getType());
+                        }
+                        countFinding(result, SoftAuditMetrics.REF, theStatement.getReferencedVariables().size());
+                        countFinding(result, SoftAuditMetrics.FUC, theStatement.getCalledMethods().size());
+                        for (WordInFile function : theStatement.getCalledMethods()) {
+                            if (!declaredMethods.contains(function.getWord())) {
+                                countFinding(result, SoftAuditMetrics.FFC, 1.0);
+                            }
+                        }
+                        for (WordInFile word : theStatement.getStatementText()) {
+                            double potentialpredicates = 0;
+                            boolean comparation = false;
+                            if (word.getKey().equals(KeyWord.VARIDENT)) {
+                                potentialpredicates++;
+                            } else if (word.getKey().equals(KeyWord.COMPARATOR)) {
+                                comparation = true;
+                            }
+                            if (comparation) {
+                                countFinding(result, SoftAuditMetrics.PRE, potentialpredicates);
+                            }
+                        }
+                    }
+                    break;
+                case THROW:
+                    countFinding(result, SoftAuditMetrics.STM, 1.0);
+                    usedStatementTypes.add(theStatement.getType());
+                    countFinding(result, SoftAuditMetrics.REF, theStatement.getReferencedVariables().size());
+                    countFinding(result, SoftAuditMetrics.FUC, theStatement.getCalledMethods().size());
+                    for (WordInFile function : theStatement.getCalledMethods()) {
+                        if (!declaredMethods.contains(function.getWord())) {
+                            countFinding(result, SoftAuditMetrics.FFC, 1.0);
+                        }
+                    }
+                    break;
+                case BLOCK:
+                    countFinding(result, SoftAuditMetrics.STM, 2.0);
+                    usedStatementTypes.add(theStatement.getType());
+                    includeContentScan(result, analyzeContentList(theStatement.getContent()));
+                    break;
+                case SYNCHRONIZED:
+                case SWITCH:
+                    countFinding(result, SoftAuditMetrics.STM, 2.0);
+                    countFinding(result, SoftAuditMetrics.SWI, 1.0);
+                    usedStatementTypes.add(theStatement.getType());
+                    includeContentScan(result, analyzeContentList(theStatement.getContent()));
+                    countFinding(result, SoftAuditMetrics.REF, theStatement.getReferencedVariables().size());
+                    countFinding(result, SoftAuditMetrics.FUC, theStatement.getCalledMethods().size());
+                    for (WordInFile function : theStatement.getCalledMethods()) {
+                        if (!declaredMethods.contains(function.getWord())) {
+                            countFinding(result, SoftAuditMetrics.FFC, 1.0);
+                        }
+                    }
+                    break;
+                case CASE:
+                    // one statement, if content in block additional end statement
+                    if (theStatement.isContentInBlock()) {
+                        countFinding(result, SoftAuditMetrics.STM, 2.0);
+                    } else {
+                        countFinding(result, SoftAuditMetrics.STM, 1.0);
+                    }
+                    countFinding(result, SoftAuditMetrics.CAS, 1.0);
+                    countFinding(result, SoftAuditMetrics.BRA, 1.0);
+                    usedStatementTypes.add(theStatement.getType());
+                    includeContentScan(result, analyzeContentList(theStatement.getContent()));
+                    break;
+                default:
+                    throw new AnalyzeException("Unknown JavaControlStatementDeclaration: " + theStatement.getType());
                 }
-                countFinding(result, SoftAuditMetrics.VAR, theStatement.getDeclaredVariables().size());
-                countFinding(result, SoftAuditMetrics.REF,
-                        theStatement.getDeclaredVariables().size() + theStatement.getReferencedVariables().size());
+            } else if (content instanceof JavaStatement) {
+                if (!((JavaStatement) content).getType().equals(StatementType.ANNOTATION)) {
+                    countFinding(result, SoftAuditMetrics.STM, 1.0);
+                    measureSimpleStatement((JavaStatement) content, result);
+                }
+            } else {
+                // ignore unparsed stuff
+            }
+        }
+        return result;
+    }
+
+    private void measureSimpleStatement(JavaStatement theStatement, Map<Metric<?>, Double> result) {
+        usedStatementTypes.add(theStatement.getType());
+        if (theStatement.getType().equals(StatementType.IMPORT)
+                || theStatement.getType().equals(StatementType.PACKAGE)) {
+            countFinding(result, SoftAuditMetrics.IMP, 1.0);
+        } else {
+            if (theStatement.getCalledMethods() != null) {
                 countFinding(result, SoftAuditMetrics.FUC, theStatement.getCalledMethods().size());
                 for (WordInFile function : theStatement.getCalledMethods()) {
                     if (!declaredMethods.contains(function.getWord())) {
                         countFinding(result, SoftAuditMetrics.FFC, 1.0);
                     }
                 }
-                if (theStatement.getType().equals(StatementType.ASSIGNMENT)) {
-                    boolean assignFound = false;
-                    countFinding(result, SoftAuditMetrics.RES, 1.0);
-                    for (WordInFile word : theStatement.getStatementText()) {
-                        if (word.getKey().equals(KeyWord.ASSIGNMENT)) {
-                            assignFound = true;
-                        }
-                        if (word.getKey().equals(KeyWord.VARIDENT) && assignFound) {
-                            countFinding(result, SoftAuditMetrics.ARG, 1.0);
+            }
+            if (theStatement.getReferencedVariables() != null) {
+                countFinding(result, SoftAuditMetrics.REF, theStatement.getReferencedVariables().size());
+            }
+            if (theStatement.getDeclaredVariables() != null) {
+                countFinding(result, SoftAuditMetrics.REF, theStatement.getDeclaredVariables().size());
+                if (theStatement.getType().equals(StatementType.ASSIGNMENT)
+                        || theStatement.getType().equals(StatementType.VARDECLARATION)
+                        || theStatement.getType().equals(StatementType.UNSPECIFIED)) {
+                    for (JavaVariable variable : theStatement.getDeclaredVariables()) {
+                        usedDataTypes.add(variable.getType());
+                    }
+                    countFinding(result, SoftAuditMetrics.VAR, theStatement.getDeclaredVariables().size());
+                    if (theStatement.getType().equals(StatementType.ASSIGNMENT)) {
+                        boolean assignFound = false;
+                        countFinding(result, SoftAuditMetrics.RES, 1.0);
+                        for (WordInFile word : theStatement.getStatementText()) {
+                            if (word.getKey().equals(KeyWord.ASSIGNMENT)) {
+                                assignFound = true;
+                            }
+                            if (word.getKey().equals(KeyWord.VARIDENT) && assignFound) {
+                                countFinding(result, SoftAuditMetrics.ARG, 1.0);
+                            }
                         }
                     }
                 }
-            } else if (content instanceof JavaControlStatement) {
-                // TODO
-            } else if (content instanceof JavaStatement) {
-                // TODO
-            } else {
-                // ignore unparsed stuff
             }
         }
-        return result;
     }
 
     private Set<String> collectDeclaredMethods(List<JavaFileContent> contentlist) {
@@ -206,7 +488,8 @@ public class ModelAnalyser {
                 result.addAll(collectDeclaredMethods(content.getContent()));
             } else if (content instanceof JavaMethod) {
                 result.addAll(collectDeclaredMethods(content.getContent()));
-                if (((JavaMethod) content).getReturntype().isEmpty() && result.contains(((JavaMethod) content).getName())) {
+                if (((JavaMethod) content).getReturntype().isEmpty()
+                        && result.contains(((JavaMethod) content).getName())) {
                     // duplicated constructor detected
                     insecureStatements++;
                 } else {

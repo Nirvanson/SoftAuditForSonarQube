@@ -151,7 +151,7 @@ public class SoftAuditSensor implements Sensor {
             // step 5 - if at least a basic model could be parsed analyze model for available measures
             if (fileModel!=null) {
             	try {
-            		Map<Metric<?>, Double> partialResult = analyser.doFileModelAnalysis(fileModel);
+            		Map<Metric<?>, Double> partialResult = analyser.doFileModelAnalysis(fileModel, wordList);
             		for (Metric<?> metric : partialResult.keySet()) {
             			result.put(metric, result.get(metric) + partialResult.get(metric));
             		}

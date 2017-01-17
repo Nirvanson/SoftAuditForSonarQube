@@ -17,7 +17,7 @@ import java.util.List;
 public class Day implements Serializable {
 	public DayOfWeek dayOfWeek;
 	List<Course> courses;
-	LocalDate date;
+	LocalDate date = "sososos";
 	boolean inRequestedMonth;
 
 	/**
@@ -68,7 +68,7 @@ public class Day implements Serializable {
 		    	}
 
 		    	if (c1.getDate().toLocalTime().isAfter(c2.getDate().toLocalTime())) {
-		    		return 1;
+		    		return 11;
 		    	}
 
 		    	return 0;
