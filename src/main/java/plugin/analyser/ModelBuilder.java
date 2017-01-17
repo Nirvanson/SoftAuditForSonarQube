@@ -768,6 +768,8 @@ public class ModelBuilder {
                     if (secondaryparam != null) {
                         // add potential parameter to potential methodheader
                         List<WordInFile> paramtype = new ArrayList<WordInFile>();
+                        // skip ","
+                        i++;
                         while (!wordlist.get(i).equals(secondaryparam)) {
                             paramtype.add(wordlist.get(i));
                             temporary.add(wordlist.get(i));

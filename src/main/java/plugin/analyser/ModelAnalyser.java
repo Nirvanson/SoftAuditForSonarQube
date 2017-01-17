@@ -1,5 +1,6 @@
 package plugin.analyser;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +14,7 @@ import plugin.model.JavaFileContent;
 import plugin.model.KeyWord;
 import plugin.model.StatementType;
 import plugin.model.WordInFile;
+import plugin.model.WordType;
 import plugin.model.components.JavaClass;
 import plugin.model.components.JavaControlStatement;
 import plugin.model.components.JavaEnumValues;
@@ -32,7 +34,7 @@ import plugin.util.Logger;
 public class ModelAnalyser {
     // variables for full analysis
     private Set<StatementType> usedStatementTypes;
-    private Set<List<WordInFile>> usedDataTypes;
+    private Set<String> usedDataTypes;
     private double scannedSourceFiles;
     private final double optimalModuleSize;
     // variables for single file analysis
@@ -41,7 +43,7 @@ public class ModelAnalyser {
 
     public ModelAnalyser() {
         usedStatementTypes = new HashSet<StatementType>();
-        usedDataTypes = new HashSet<List<WordInFile>>();
+        usedDataTypes = new HashSet<String>();
         scannedSourceFiles = 0.000;
         // TODO: properties file ?
         optimalModuleSize = 200.000;
@@ -151,12 +153,12 @@ public class ModelAnalyser {
                 countFinding(result, SoftAuditMetrics.STM, 2.0);
                 countFinding(result, SoftAuditMetrics.MET, 1.0);
                 usedStatementTypes.add(StatementType.METHODDECLARATION);
-                usedDataTypes.add(theMethod.getReturntype());
+                usedDataTypes.add(parseDataType(theMethod.getReturntype()));
                 countFinding(result, SoftAuditMetrics.PAR, theMethod.getParameters().size());
                 countFinding(result, SoftAuditMetrics.VAR, theMethod.getParameters().size());
                 countFinding(result, SoftAuditMetrics.REF, theMethod.getParameters().size());
                 for (JavaVariable parameter : theMethod.getParameters()) {
-                    usedDataTypes.add(parameter.getType());
+                    usedDataTypes.add(parseDataType(parameter.getType()));
                 }
                 // check for FFC hits. if 0 add as RUM
                 Map<Metric<?>, Double> contentScan = analyzeContentList(theMethod.getContent());
@@ -196,7 +198,7 @@ public class ModelAnalyser {
                     }
                     // count loop-declaration stuff
                     for (JavaVariable variable : theStatement.getDeclaredVariables()) {
-                        usedDataTypes.add(variable.getType());
+                        usedDataTypes.add(parseDataType(variable.getType()));
                     }
                     countFinding(result, SoftAuditMetrics.VAR, theStatement.getDeclaredVariables().size());
                     countFinding(result, SoftAuditMetrics.REF,
@@ -355,7 +357,7 @@ public class ModelAnalyser {
                     if (theStatement.getStatementText().size() > 2) {
                         countFinding(result, SoftAuditMetrics.RES, 1.0);
                         for (JavaVariable variable : theStatement.getDeclaredVariables()) {
-                            usedDataTypes.add(variable.getType());
+                            usedDataTypes.add(parseDataType(variable.getType()));
                         }
                         countFinding(result, SoftAuditMetrics.REF, theStatement.getReferencedVariables().size());
                         countFinding(result, SoftAuditMetrics.FUC, theStatement.getCalledMethods().size());
@@ -458,7 +460,7 @@ public class ModelAnalyser {
                         || theStatement.getType().equals(StatementType.VARDECLARATION)
                         || theStatement.getType().equals(StatementType.UNSPECIFIED)) {
                     for (JavaVariable variable : theStatement.getDeclaredVariables()) {
-                        usedDataTypes.add(variable.getType());
+                        usedDataTypes.add(parseDataType(variable.getType()));
                     }
                     countFinding(result, SoftAuditMetrics.VAR, theStatement.getDeclaredVariables().size());
                     if (theStatement.getType().equals(StatementType.ASSIGNMENT)) {
@@ -516,5 +518,20 @@ public class ModelAnalyser {
         } else {
             resultmap.put(measureToCount, findings);
         }
+    }
+
+    private String parseDataType(List<WordInFile> type) {
+        String result = "";
+        for (WordInFile word : type) {
+            if (!word.getKey().getType().equals(WordType.MODIFIER) && !word.getKey().getType().equals(WordType.STATEMENTORMODIFIER)) {
+                List<String> modifiers = Arrays.asList("public", "static", "final", "abstract", "native", "protected", "strictfp", "transient", "volatile", "synchronized");
+                if (word.getWord()==null) {
+                    result += word.getKey();
+                } else if (!modifiers.contains(word.getWord())) {
+                    result += word.getWord();
+                }
+            }
+        }
+        return result;
     }
 }
