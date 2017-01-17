@@ -51,7 +51,7 @@ public class ModelDetailExpander {
         parseRemainingStatementTypes(fileModel);
         // step 6 - parse comparators in conditions and statements
         parseComparators(fileModel);
-        Logger.getLogger(null).printModel("detailed", fileModel);
+        Logger.getLogger().printModel("detailed", fileModel);
 		return fileModel;
 	}
 	

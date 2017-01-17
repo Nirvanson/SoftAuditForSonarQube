@@ -24,28 +24,28 @@ public class SoftAuditSensorTest {
     public void testSingleFileAnalyse() throws InterruptedException {
         String filename = "Day";
         File input = new File("src/main/resources/testdata/" + filename + ".java");
-        SoftAuditSensor sensor = new SoftAuditSensor(filename);
+        SoftAuditSensor sensor = new SoftAuditSensor("_" + filename + ".log");
         
         // do analyze, check logfile manually
         Map<Metric<?>, Double> measures = sensor.doAnalyse(Arrays.asList(input));
         // calculate metrics
         Map<Metric<?>, Double> metrics = MetricCalculator.calculate(measures);
-        Logger.getLogger(null).printMetrics(metrics);
-        Logger.getLogger(null).close();
+        Logger.getLogger().printMetrics(metrics);
+        Logger.getLogger().close();
     }
     
     @Test
     public void testSelfScan() throws InterruptedException {
         List<File> input = new ArrayList<File>();
         listf("src/main/java", input);
-        SoftAuditSensor sensor = new SoftAuditSensor("SelfScan");
+        SoftAuditSensor sensor = new SoftAuditSensor("_SelfScan.log");
         
         // do analyze, check logfile manually
         Map<Metric<?>, Double> measures = sensor.doAnalyse(input);
         // calculate metrics
         Map<Metric<?>, Double> metrics = MetricCalculator.calculate(measures);
-        Logger.getLogger(null).printMetrics(metrics);
-        Logger.getLogger(null).close();
+        Logger.getLogger().printMetrics(metrics);
+        Logger.getLogger().close();
     }
     
     public void listf(String directoryName, List<File> files) {

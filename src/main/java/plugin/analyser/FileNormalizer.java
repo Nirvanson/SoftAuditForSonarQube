@@ -34,7 +34,7 @@ public class FileNormalizer {
 	    String singleLineCode = FileNormalizer.convertToSingleString(normalizedLines);
 	    // step 3 - Build wordlist
 	    List<WordInFile> wordList = FileNormalizer.createJavaWordList(singleLineCode);
-	    Logger.getLogger(null).printWords(wordList);
+	    Logger.getLogger().printWords(wordList);
 	    return wordList;
 	}
 	

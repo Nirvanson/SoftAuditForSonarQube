@@ -44,7 +44,7 @@ public class ModelBuilder {
                 content.setContent(parseClassContent(content));
             }
         }
-		Logger.getLogger(null).printModel("basic", fileModel);
+		Logger.getLogger().printModel("basic", fileModel);
 		return fileModel;
 	}
 	

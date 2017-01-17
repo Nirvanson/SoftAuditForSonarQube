@@ -37,7 +37,7 @@ public class ModelStructureExpander {
                 content.setContent(parseStructuralStatements(content.getContent()));
             }
         }
-    	Logger.getLogger(null).printModel("structure", contents);
+    	Logger.getLogger().printModel("structure", contents);
     	return contents;
     }
 	

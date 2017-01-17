@@ -41,24 +41,23 @@ public class Logger {
 	private final int loglevel;
 	private PrintWriter writer;
 
-	private Logger(String filename) {
-		if (filename == null) {
-			filename = "SoftAuditSensorRun";
-		}
-		// TODO: properties file?
-		loglevel = 2;
+	private Logger(String path, String timestampformat, String filename, int loglevel) {
+		this.loglevel = loglevel;
 		try {
-			// TODO: Logging folder must be changed for deployed plugin!!! (properties file?)
-			String timestamp = (new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss_")).format(new Date());
-			writer = new PrintWriter("./target/logs/" + timestamp + filename + ".log", "UTF-8");
+			String timestamp = (new SimpleDateFormat(timestampformat)).format(new Date());
+			writer = new PrintWriter(path + timestamp + filename, "UTF-8");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static Logger getLogger(String filename) {
+	public static Logger getLogger() {
+	    return logger;
+	}
+	
+	public static Logger getLogger(String path, String timestampformat, String filename, int loglevel) {
 		if (logger == null) {
-			logger = new Logger(filename);
+			logger = new Logger(path, timestampformat, filename, loglevel);
 		}
 		return logger;
 	}

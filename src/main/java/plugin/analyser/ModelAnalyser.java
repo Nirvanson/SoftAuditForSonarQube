@@ -37,7 +37,6 @@ public class ModelAnalyser {
     private double otherStatementTypes;
     private Set<String> usedDataTypes;
     private double scannedSourceFiles;
-    private final double optimalModuleSize;
     private Set<String> declaredMethods;
     private Set<String> getterAndSetter;
 
@@ -46,8 +45,6 @@ public class ModelAnalyser {
         otherStatementTypes = 0.0;
         usedDataTypes = new HashSet<String>();
         scannedSourceFiles = 0.0;
-        // TODO: properties file ?
-        optimalModuleSize = 200.0;
         declaredMethods = new HashSet<String>();
         getterAndSetter = new HashSet<String>();
     }
@@ -59,7 +56,7 @@ public class ModelAnalyser {
         includeContentScan(result, countLiteralsAndConstants(wordList));
         // TODO: STM - SecurityDeficiancies
         result.put(SoftAuditMetrics.SST, result.get(SoftAuditMetrics.STM));
-        Logger.getLogger(null).printFileMeasures(result);
+        Logger.getLogger().printFileMeasures(result);
         return result;
     }
 
@@ -89,10 +86,6 @@ public class ModelAnalyser {
 
     public double getScannedSourceFiles() {
         return scannedSourceFiles;
-    }
-
-    public double getOptimalModuleSize() {
-        return optimalModuleSize;
     }
 
     private Map<Metric<?>, Double> analyzeContentList(List<JavaFileContent> contentlist) throws AnalyzeException {
