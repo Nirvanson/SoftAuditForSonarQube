@@ -14,6 +14,7 @@ import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 
 import plugin.analyser.FileNormalizer;
+import plugin.analyser.MetricCalculator;
 import plugin.analyser.ModelAnalyser;
 import plugin.analyser.ModelBuilder;
 import plugin.analyser.ModelDetailExpander;
@@ -79,12 +80,17 @@ public class SoftAuditSensor implements Sensor {
     	// get measures from files
         Map<Metric<?>, Double> measures = doAnalyse(fileSystem.files(fileSystem.predicates().hasLanguage("java")));
         // save measures
-        for (Metric<?> metric: measures.keySet()) {
-    		sensorContext.saveMeasure(new Measure<Integer>(metric, measures.get(metric)));
+        for (Metric<?> measure: measures.keySet()) {
+    		sensorContext.saveMeasure(new Measure<Integer>(measure, measures.get(measure), 0));
     	}
-        // compute and save metrics
-        sensorContext.saveMeasure(new Measure<Float>(SoftAuditMetrics.COC, (measures.get(SoftAuditMetrics.IFS) + 
-        		measures.get(SoftAuditMetrics.LOP) + measures.get(SoftAuditMetrics.SWI) + measures.get(SoftAuditMetrics.CAS)) / (measures.get(SoftAuditMetrics.MET) * 4)));
+        // calculate metrics
+        Map<Metric<?>, Double> metrics = MetricCalculator.calculate(measures);
+        Logger.getLogger(null).printMetrics(metrics);
+        // save metrics
+        for (Metric<?> metric: metrics.keySet()) {
+            sensorContext.saveMeasure(new Measure<Integer>(metric, metrics.get(metric), 3));
+        }
+        Logger.getLogger(null).close();
     }
 
     /**
@@ -161,13 +167,12 @@ public class SoftAuditSensor implements Sensor {
                 }
             }
         }
-        // put non-additive measures to resultmap
+        // step 6 - put non-additive measures to resultmap
         result.put(SoftAuditMetrics.SRC, analyser.getScannedSourceFiles());
         result.put(SoftAuditMetrics.OMS, analyser.getOptimalModuleSize());
         result.put(SoftAuditMetrics.DTY, analyser.getNumberOfDataTypes());
         result.put(SoftAuditMetrics.STY, analyser.getNumberOfStatementTypes());
         Logger.getLogger(null).printCumulatedMeasures(result);
-        Logger.getLogger(null).close();
         return result;
     }
     

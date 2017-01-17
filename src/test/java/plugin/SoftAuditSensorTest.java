@@ -4,10 +4,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
+import org.sonar.api.measures.Metric;
 
 import plugin.SoftAuditSensor;
+import plugin.analyser.MetricCalculator;
+import plugin.util.Logger;
 
 public class SoftAuditSensorTest {
 	
@@ -23,7 +27,11 @@ public class SoftAuditSensorTest {
         SoftAuditSensor sensor = new SoftAuditSensor(filename);
         
         // do analyze, check logfile manually
-        sensor.doAnalyse(Arrays.asList(input));
+        Map<Metric<?>, Double> measures = sensor.doAnalyse(Arrays.asList(input));
+        // calculate metrics
+        Map<Metric<?>, Double> metrics = MetricCalculator.calculate(measures);
+        Logger.getLogger(null).printMetrics(metrics);
+        Logger.getLogger(null).close();
     }
     
     @Test
@@ -33,7 +41,11 @@ public class SoftAuditSensorTest {
         SoftAuditSensor sensor = new SoftAuditSensor("SelfScan");
         
         // do analyze, check logfile manually
-        sensor.doAnalyse(input);
+        Map<Metric<?>, Double> measures = sensor.doAnalyse(input);
+        // calculate metrics
+        Map<Metric<?>, Double> metrics = MetricCalculator.calculate(measures);
+        Logger.getLogger(null).printMetrics(metrics);
+        Logger.getLogger(null).close();
     }
     
     public void listf(String directoryName, List<File> files) {
