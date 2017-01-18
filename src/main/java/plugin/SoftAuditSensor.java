@@ -11,9 +11,12 @@ import java.util.Properties;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.config.Settings;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 
 import plugin.analyser.FileNormalizer;
 import plugin.analyser.MetricCalculator;
@@ -24,7 +27,7 @@ import plugin.analyser.ModelStructureExpander;
 import plugin.model.JavaFileContent;
 import plugin.model.WordInFile;
 import plugin.util.AnalyzeException;
-import plugin.util.Logger;
+import plugin.util.SoftAuditLogger;
 import plugin.util.ParsingException;
 
 /**
@@ -37,8 +40,8 @@ public class SoftAuditSensor implements Sensor {
 
     /** The file system object for the project being analysed. */
     private final FileSystem fileSystem;
-    private final Properties properties;
-
+    private static final Logger LOGGER = Loggers.get(SoftAuditSensor.class);
+    
     /**
      * Constructor for test-runs.
      *
@@ -46,13 +49,13 @@ public class SoftAuditSensor implements Sensor {
      */
     public SoftAuditSensor(String filename) {
         this.fileSystem = null;
-        properties = new Properties();
+        Properties properties = new Properties();
         try (FileInputStream input = new FileInputStream("soft-audit-plugin.properties");) {
             properties.load(input);
         } catch (IOException ex) {
             ex.printStackTrace();
         } 
-        Logger.getLogger(properties.getProperty("logfilepath"), properties.getProperty("logfiletimestampformat"), 
+        SoftAuditLogger.getLogger(properties.getProperty("logfilepath"), properties.getProperty("logfiletimestampformat"), 
                 filename, Integer.valueOf(properties.getProperty("loglevel")));
     }
 
@@ -63,14 +66,6 @@ public class SoftAuditSensor implements Sensor {
      */
     public SoftAuditSensor(FileSystem fileSystem) {
         this.fileSystem = fileSystem;
-        properties = new Properties();
-        try (FileInputStream input = new FileInputStream("soft-audit-plugin.properties");) {
-            properties.load(input);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } 
-        Logger.getLogger(properties.getProperty("logfilepath"), properties.getProperty("logfiletimestampformat"), 
-                properties.getProperty("logfilename"), Integer.valueOf(properties.getProperty("loglevel")));
     }
 
     /**
@@ -93,15 +88,20 @@ public class SoftAuditSensor implements Sensor {
      * @param sensorContext - the sensor context
      */
     public void analyse(Project project, SensorContext sensorContext) {
+    	Settings properties = sensorContext.settings();
+    	SoftAuditLogger.getLogger(properties.getString("logfilepath"), properties.getString("logfiletimestampformat"), 
+                properties.getString("logfilename"), Integer.valueOf(properties.getInt("loglevel")));
         // get measures from files
         Map<Metric<?>, Double> measures = doAnalyse(fileSystem.files(fileSystem.predicates().hasLanguage("java")));
+        measures.put(SoftAuditMetrics.OMS, Double.valueOf(properties.getDouble("optimalModuleSize")));
         // save measures
         for (Metric<?> measure : measures.keySet()) {
             sensorContext.saveMeasure(new Measure<Integer>(measure, measures.get(measure), 0));
         }
         // calculate metrics
+        LOGGER.info("Calculate metrics");
         Map<Metric<?>, Double> metrics = MetricCalculator.calculate(measures);
-        Logger.getLogger().printMetrics(metrics);
+        SoftAuditLogger.getLogger().printMetrics(metrics);
         // save metrics
         for (Metric<?> metric : metrics.keySet()) {
             if (metrics.get(metric) > 1) {
@@ -110,7 +110,8 @@ public class SoftAuditSensor implements Sensor {
                 sensorContext.saveMeasure(new Measure<Integer>(metric, metrics.get(metric), 3));
             }
         }
-        Logger.getLogger().close();
+        LOGGER.info("SoftAuditSensor finished");
+        SoftAuditLogger.getLogger().close();
     }
 
     /**
@@ -119,8 +120,7 @@ public class SoftAuditSensor implements Sensor {
      * @return map with results for measures
      */
     public Map<Metric<?>, Double> doAnalyse(Iterable<File> files) {
-
-        Map<Metric<?>, Double> result = new HashMap<Metric<?>, Double>();
+    	Map<Metric<?>, Double> result = new HashMap<Metric<?>, Double>();
         // add all measures from metrics list (metrics with keys like base_xyz)
         for (Metric<?> metric : new SoftAuditMetrics().getMetrics()) {
             if (metric.getKey().startsWith("base")) {
@@ -129,12 +129,13 @@ public class SoftAuditSensor implements Sensor {
         }
         ModelAnalyser analyser = new ModelAnalyser();
         Map<List<WordInFile>, List<JavaFileContent>> models = new HashMap<List<WordInFile>, List<JavaFileContent>>();
+        LOGGER.info("Parse java files and build model");
         for (File file : files) {
             // try parsing file
             List<JavaFileContent> fileModel = null;
             try {
                 // step 0 - read file
-                Logger.getLogger().printFile(file);
+            	SoftAuditLogger.getLogger().printFile(file);
             } catch (IOException exceptionInStepZero) {
                 // file not readable, skip file completely
                 exceptionInStepZero.printStackTrace();
@@ -183,6 +184,7 @@ public class SoftAuditSensor implements Sensor {
         for (List<WordInFile> file : models.keySet()) {
             analyser.collectDeclaredMethods(models.get(file));
         }
+        LOGGER.info("Count measures");
         for (List<WordInFile> file : models.keySet()) {
             try {
                 Map<Metric<?>, Double> partialResult = analyser.doFileModelAnalysis(models.get(file), file);
@@ -196,10 +198,9 @@ public class SoftAuditSensor implements Sensor {
         }
         // step 6 - put non-additive measures to resultmap
         result.put(SoftAuditMetrics.SRC, analyser.getScannedSourceFiles());
-        result.put(SoftAuditMetrics.OMS, Double.valueOf(properties.getProperty("optimalModuleSize")));
         result.put(SoftAuditMetrics.DTY, analyser.getNumberOfDataTypes());
         result.put(SoftAuditMetrics.STY, analyser.getNumberOfStatementTypes());
-        Logger.getLogger().printCumulatedMeasures(result);
+        SoftAuditLogger.getLogger().printCumulatedMeasures(result);
         return result;
     }
 

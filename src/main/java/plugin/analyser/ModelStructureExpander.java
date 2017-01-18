@@ -13,7 +13,7 @@ import plugin.model.components.JavaClass;
 import plugin.model.components.JavaControlStatement;
 import plugin.model.components.JavaMethod;
 import plugin.model.components.JavaStatementWithAnonymousClass;
-import plugin.util.Logger;
+import plugin.util.SoftAuditLogger;
 import plugin.util.ParsingException;
 
 /**
@@ -37,7 +37,7 @@ public class ModelStructureExpander {
                 content.setContent(parseStructuralStatements(content.getContent()));
             }
         }
-    	Logger.getLogger().printModel("structure", contents);
+    	SoftAuditLogger.getLogger().printModel("structure", contents);
     	return contents;
     }
 	

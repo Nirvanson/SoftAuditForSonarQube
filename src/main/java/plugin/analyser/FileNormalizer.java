@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import plugin.model.WordInFile;
-import plugin.util.Logger;
+import plugin.util.SoftAuditLogger;
 import plugin.util.ParsingException;
 import plugin.model.KeyWord;
 
@@ -34,7 +34,7 @@ public class FileNormalizer {
 	    String singleLineCode = FileNormalizer.convertToSingleString(normalizedLines);
 	    // step 3 - Build wordlist
 	    List<WordInFile> wordList = FileNormalizer.createJavaWordList(singleLineCode);
-	    Logger.getLogger().printWords(wordList);
+	    SoftAuditLogger.getLogger().printWords(wordList);
 	    return wordList;
 	}
 	

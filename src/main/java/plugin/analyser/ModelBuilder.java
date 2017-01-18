@@ -17,7 +17,7 @@ import plugin.model.components.JavaMethod;
 import plugin.model.components.JavaStatement;
 import plugin.model.components.JavaStatementWithAnonymousClass;
 import plugin.model.components.JavaVariable;
-import plugin.util.Logger;
+import plugin.util.SoftAuditLogger;
 import plugin.util.ParsingException;
 
 /**
@@ -44,7 +44,7 @@ public class ModelBuilder {
                 content.setContent(parseClassContent(content));
             }
         }
-		Logger.getLogger().printModel("basic", fileModel);
+		SoftAuditLogger.getLogger().printModel("basic", fileModel);
 		return fileModel;
 	}
 	

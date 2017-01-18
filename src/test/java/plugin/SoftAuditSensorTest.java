@@ -11,7 +11,7 @@ import org.sonar.api.measures.Metric;
 
 import plugin.SoftAuditSensor;
 import plugin.analyser.MetricCalculator;
-import plugin.util.Logger;
+import plugin.util.SoftAuditLogger;
 
 public class SoftAuditSensorTest {
 	
@@ -30,8 +30,8 @@ public class SoftAuditSensorTest {
         Map<Metric<?>, Double> measures = sensor.doAnalyse(Arrays.asList(input));
         // calculate metrics
         Map<Metric<?>, Double> metrics = MetricCalculator.calculate(measures);
-        Logger.getLogger().printMetrics(metrics);
-        Logger.getLogger().close();
+        SoftAuditLogger.getLogger().printMetrics(metrics);
+        SoftAuditLogger.getLogger().close();
     }
     
     @Test
@@ -44,8 +44,8 @@ public class SoftAuditSensorTest {
         Map<Metric<?>, Double> measures = sensor.doAnalyse(input);
         // calculate metrics
         Map<Metric<?>, Double> metrics = MetricCalculator.calculate(measures);
-        Logger.getLogger().printMetrics(metrics);
-        Logger.getLogger().close();
+        SoftAuditLogger.getLogger().printMetrics(metrics);
+        SoftAuditLogger.getLogger().close();
     }
     
     public void listf(String directoryName, List<File> files) {

@@ -24,8 +24,8 @@ import plugin.model.components.JavaStatement;
 import plugin.model.components.JavaStatementWithAnonymousClass;
 import plugin.model.components.JavaVariable;
 
-public class Logger {
-	private static Logger logger;
+public class SoftAuditLogger {
+	private static SoftAuditLogger logger;
 
 	private final String FILE_HEAD = "---------- File: FILENAME ----------";
 	private final String MEASURES = "---------- Measured values ----------";
@@ -41,7 +41,7 @@ public class Logger {
 	private final int loglevel;
 	private PrintWriter writer;
 
-	private Logger(String path, String timestampformat, String filename, int loglevel) {
+	private SoftAuditLogger(String path, String timestampformat, String filename, int loglevel) {
 		this.loglevel = loglevel;
 		try {
 			String timestamp = (new SimpleDateFormat(timestampformat)).format(new Date());
@@ -51,13 +51,13 @@ public class Logger {
 		}
 	}
 
-	public static Logger getLogger() {
+	public static SoftAuditLogger getLogger() {
 	    return logger;
 	}
 	
-	public static Logger getLogger(String path, String timestampformat, String filename, int loglevel) {
+	public static SoftAuditLogger getLogger(String path, String timestampformat, String filename, int loglevel) {
 		if (logger == null) {
-			logger = new Logger(path, timestampformat, filename, loglevel);
+			logger = new SoftAuditLogger(path, timestampformat, filename, loglevel);
 		}
 		return logger;
 	}

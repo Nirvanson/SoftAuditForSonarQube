@@ -23,7 +23,7 @@ import plugin.model.components.JavaStatement;
 import plugin.model.components.JavaStatementWithAnonymousClass;
 import plugin.model.components.JavaVariable;
 import plugin.util.AnalyzeException;
-import plugin.util.Logger;
+import plugin.util.SoftAuditLogger;
 
 /**
  * Java File Parser to extract needed measures for SoftAudit Metrics.
@@ -56,7 +56,7 @@ public class ModelAnalyser {
         includeContentScan(result, countLiteralsAndConstants(wordList));
         // TODO: STM - SecurityDeficiancies
         result.put(SoftAuditMetrics.SST, result.get(SoftAuditMetrics.STM));
-        Logger.getLogger().printFileMeasures(result);
+        SoftAuditLogger.getLogger().printFileMeasures(result);
         return result;
     }
 
@@ -122,15 +122,17 @@ public class ModelAnalyser {
                 JavaMethod theMethod = (JavaMethod) content;
                 // count header-resulting measures
                 countFinding(result, SoftAuditMetrics.STM, 1.0);
-                if (!(theMethod.getContent().size() == 1 && theMethod.getContent().get(0) instanceof JavaStatement
+                if (theMethod.getContent()!=null && !(theMethod.getContent().size() == 1 && theMethod.getContent().get(0) instanceof JavaStatement
                         && (((JavaStatement) theMethod.getContent().get(0)).getType().equals(StatementType.RETURN)
                                 || ((JavaStatement) theMethod.getContent().get(0)).getType()
                                         .equals(StatementType.ASSIGNMENT)))) {
                     countFinding(result, SoftAuditMetrics.MET, 1.0);
                     usedControlStatementTypes.add(StatementType.METHODDECLARATION);
+                    countFinding(result, SoftAuditMetrics.PAR, theMethod.getParameters().size());
+                } else {
+                	countFinding(result, SoftAuditMetrics.ARG, theMethod.getParameters().size());
                 }
                 usedDataTypes.add(parseDataType(theMethod.getReturntype()));
-                countFinding(result, SoftAuditMetrics.PAR, theMethod.getParameters().size());
                 countFinding(result, SoftAuditMetrics.REF, theMethod.getParameters().size());
                 for (JavaVariable parameter : theMethod.getParameters()) {
                     usedDataTypes.add(parseDataType(parameter.getType()));
@@ -146,7 +148,7 @@ public class ModelAnalyser {
                 // count as 1 statement, each value as literal, add statementtype
                 countFinding(result, SoftAuditMetrics.STM, 1.0);
                 countFinding(result, SoftAuditMetrics.CON, ((JavaEnumValues) content).getValues().size());
-                usedControlStatementTypes.add(StatementType.ENUMVALUES);
+                otherStatementTypes++;
             } else if (content instanceof JavaStatementWithAnonymousClass) {
                 JavaStatementWithAnonymousClass theStatement = (JavaStatementWithAnonymousClass) content;
                 // include content-scan of anonymous class
@@ -300,7 +302,7 @@ public class ModelAnalyser {
                     break;
                 case THROW:
                     countFinding(result, SoftAuditMetrics.STM, 1.0);
-                    usedControlStatementTypes.add(theStatement.getType());
+                    otherStatementTypes++;
                     countFinding(result, SoftAuditMetrics.REF, theStatement.getReferencedVariables().size());
                     countFinding(result, SoftAuditMetrics.ARG, theStatement.getReferencedVariables().size());
                     for (WordInFile function : theStatement.getCalledMethods()) {

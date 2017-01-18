@@ -20,7 +20,7 @@ public class SoftAuditPlugin extends SonarPlugin {
     public SoftAuditPlugin() {
         super();
     }
-
+    
     /**
      * Defines the plugin extensions: metrics, sensor and dashboard widget.
      *
@@ -30,6 +30,7 @@ public class SoftAuditPlugin extends SonarPlugin {
         return Arrays.asList(
         		SoftAuditMetrics.class,
         		SoftAuditSensor.class,
-        		SoftAuditWidget.class);
+        		SoftAuditWidget.class,
+        		SoftAuditDecorator.class);
     }
 }
