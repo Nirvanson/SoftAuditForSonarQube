@@ -1,50 +1,5 @@
-<%
-    def check_image(metric_or_measure)
-        html = ''
-
-        if metric_or_measure.is_a? ProjectMeasure
-            m = metric_or_measure
-        elsif @snapshot
-            m = @snapshot.measure(metric_or_measure)
-        end
-
-        if m.nil?
-            return ''
-        end
-
-        if m && m.metric
-            if m.value == 1
-                html = image_tag(url_for_static(:plugin => 'idemetadata', :path => 'check-round-yes-small.png'), :size => '16x16', :style => 'vertical-align:middle')
-            elsif
-                html = image_tag(url_for_static(:plugin => 'idemetadata', :path => 'check-round-no-small.png'), :size => '16x16', :style => 'vertical-align:middle')
-            end
-        end
-
-        html
-    end
-
-    def remove_brackets(metric_or_measure)
-        out = ''
-
-        if metric_or_measure.is_a? ProjectMeasure
-            m = metric_or_measure
-        elsif @snapshot
-            m = @snapshot.measure(metric_or_measure)
-        end
-
-        if m.nil?
-            return ''
-        end
-
-        if m && m.metric
-            out = m.data[1..-2]
-        end
-
-        out
-    end
-%>
 <div class="dashbox">
-    <h2>Object Points: <%= format_measure('size_obp') %></h2>
+    <span class="big">Object Points: <%= format_measure('size_obp') %></span>
     <h2>Data Complexity: <%= format_measure('complexity_dco') %></h2>
     <h2>Data Flow Complexity: <%= format_measure('complexity_dfc') %></h2>
     <h2>Interface Complexity: <%= format_measure('complexity_ico') %></h2>
@@ -52,7 +7,7 @@
     <h2>Conditional Complexity: <%= format_measure('complexity_coc') %></h2>
     <h2>Branching Complexity: <%= format_measure('complexity_brc') %></h2>
     <h2>Language Complexity: <%= format_measure('complexity_lcm') %></h2>
-    <h3>Average Complexity: <%= format_measure('complexity_acm') %></h3>
+    <span class="big">Average Complexity: <%= format_measure('complexity_acm') %></span>
     <h2>Modularity: <%= format_measure('quality_mod') %></h2>
     <h2>Testability: <%= format_measure('quality_tst') %></h2>
     <h2>Reusability: <%= format_measure('quality_reu') %></h2>
@@ -60,5 +15,5 @@
     <h2>Flexibility: <%= format_measure('quality_fle') %></h2>
     <h2>Conformity: <%= format_measure('quality_cof') %></h2>
     <h2>Maintainability: <%= format_measure('quality_mam') %></h2>
-    <h3>Average Quality: <%= format_measure('quality_aqm') %></h3>
+    <span class="big">Average Quality: <%= format_measure('quality_aqm') %></span>
 </div>

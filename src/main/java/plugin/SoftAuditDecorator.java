@@ -1,5 +1,6 @@
 package plugin;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ import plugin.util.SoftAuditLogger;
 public class SoftAuditDecorator implements Decorator {
 
 	private DecoratorContext context;
+	DecimalFormat df = new DecimalFormat("0.000");
 
 	@Override
 	public boolean shouldExecuteOnProject(Project project) {
@@ -43,32 +45,31 @@ public class SoftAuditDecorator implements Decorator {
 		context.saveMeasure(SoftAuditMetrics.MAD, getValue(CoreMetrics.CRITICAL_VIOLATIONS));
 		context.saveMeasure(SoftAuditMetrics.MED, getValue(CoreMetrics.MAJOR_VIOLATIONS));
 		context.saveMeasure(SoftAuditMetrics.MID, getValue(CoreMetrics.MINOR_VIOLATIONS));
-		// compute number of secure statements determined by security
-		// deficiencies
+		// compute number of secure statements determined by security deficiencies
 		context.saveMeasure(SoftAuditMetrics.SST,
 				getValue(SoftAuditMetrics.STM) - getValue(CoreMetrics.BLOCKER_VIOLATIONS));
-		// calculate metrics
+		// calculate metrics ( *100 because of lacking precision in sonarqube...)
 		Map<Metric<?>, Double> result = new HashMap<Metric<?>, Double>();
 		LOGGER.info("Calculate metrics");
-		result.put(SoftAuditMetrics.OBP,
-				checkMetric((getValue(SoftAuditMetrics.CLA) * 4) + (getValue(SoftAuditMetrics.MET) * 3)
+		context.saveMeasure(new Measure<Integer>(SoftAuditMetrics.OBP,
+				(getValue(SoftAuditMetrics.CLA) * 4) + (getValue(SoftAuditMetrics.MET) * 3)
 						+ (getValue(SoftAuditMetrics.INT) * 2) + getValue(SoftAuditMetrics.VAR)));
 		result.put(SoftAuditMetrics.DCO,
-				checkMetric(((getValue(SoftAuditMetrics.PRE) * 2) + getValue(SoftAuditMetrics.ARG)
+		        checkMetric(((getValue(SoftAuditMetrics.PRE) * 2) + getValue(SoftAuditMetrics.ARG)
 						+ (getValue(SoftAuditMetrics.PAR) * 0.5))
 						/ (getValue(SoftAuditMetrics.STM) + getValue(SoftAuditMetrics.REF))));
 		result.put(SoftAuditMetrics.DFC,
-				checkMetric(1 - ((getValue(SoftAuditMetrics.VAR) * 2) / getValue(SoftAuditMetrics.REF))));
+		        checkMetric(1 - ((getValue(SoftAuditMetrics.VAR) * 2) / getValue(SoftAuditMetrics.REF))));
 		result.put(SoftAuditMetrics.ICO, checkMetric(getValue(SoftAuditMetrics.FFC) / getValue(SoftAuditMetrics.FUC)));
 		result.put(SoftAuditMetrics.CFC, checkMetric((getValue(SoftAuditMetrics.BRA) - (getValue(SoftAuditMetrics.IFS)
 				+ getValue(SoftAuditMetrics.SWI) + getValue(SoftAuditMetrics.LOP) + getValue(SoftAuditMetrics.RET)))
 				/ getValue(SoftAuditMetrics.BRA)));
 		result.put(SoftAuditMetrics.COC,
-				checkMetric((getValue(SoftAuditMetrics.IFS) + getValue(SoftAuditMetrics.SWI)
+		        checkMetric((getValue(SoftAuditMetrics.IFS) + getValue(SoftAuditMetrics.SWI)
 						+ getValue(SoftAuditMetrics.CAS) + getValue(SoftAuditMetrics.LOP) + 1)
 						/ (getValue(SoftAuditMetrics.MET) * 4)));
 		result.put(SoftAuditMetrics.BRC,
-				checkMetric(((getValue(SoftAuditMetrics.FFC) * 2) + (getValue(SoftAuditMetrics.RET) * 2)
+		        checkMetric(((getValue(SoftAuditMetrics.FFC) * 2) + (getValue(SoftAuditMetrics.RET) * 2)
 						+ getValue(SoftAuditMetrics.FUC)) / getValue(SoftAuditMetrics.STM)));
 		result.put(SoftAuditMetrics.LCM, checkMetric(((getValue(SoftAuditMetrics.STY) / getValue(SoftAuditMetrics.STM))
 				+ (getValue(SoftAuditMetrics.DTY) / (getValue(SoftAuditMetrics.VAR) + getValue(SoftAuditMetrics.CON))))
@@ -79,7 +80,7 @@ public class SoftAuditDecorator implements Decorator {
 						+ result.get(SoftAuditMetrics.COC) + result.get(SoftAuditMetrics.BRC)
 						+ result.get(SoftAuditMetrics.LCM)) / 7));
 		result.put(SoftAuditMetrics.MOD,
-				checkMetric(((((getValue(SoftAuditMetrics.CLA) * 4) + (getValue(SoftAuditMetrics.MET) * 2))
+		        checkMetric(((((getValue(SoftAuditMetrics.CLA) * 4) + (getValue(SoftAuditMetrics.MET) * 2))
 						/ ((getValue(SoftAuditMetrics.IMP) * 4) + getValue(SoftAuditMetrics.VAR)))
 						+ (1 - (getValue(SoftAuditMetrics.FFC)
 								/ (getValue(SoftAuditMetrics.FUC) + getValue(SoftAuditMetrics.MET))))
@@ -87,16 +88,16 @@ public class SoftAuditDecorator implements Decorator {
 								/ getValue(SoftAuditMetrics.OMS)))
 						/ 3));
 		result.put(SoftAuditMetrics.TST,
-				checkMetric(((1 - ((getValue(SoftAuditMetrics.BRA) * 2) / getValue(SoftAuditMetrics.STM)))
+		        checkMetric(((1 - ((getValue(SoftAuditMetrics.BRA) * 2) / getValue(SoftAuditMetrics.STM)))
 						+ (1 - ((getValue(SoftAuditMetrics.PRE) * 2) / getValue(SoftAuditMetrics.REF)))) / 2));
 		result.put(SoftAuditMetrics.REU, checkMetric(getValue(SoftAuditMetrics.RUM) / getValue(SoftAuditMetrics.MET)));
 		result.put(SoftAuditMetrics.SEC,
-				checkMetric((getValue(SoftAuditMetrics.SST) / 1.2) / getValue(SoftAuditMetrics.STM)));
+		        checkMetric((getValue(SoftAuditMetrics.SST) / 1.2) / getValue(SoftAuditMetrics.STM)));
 		result.put(SoftAuditMetrics.FLE,
-				checkMetric(1 - ((getValue(SoftAuditMetrics.LIT) + getValue(SoftAuditMetrics.CON))
+		        checkMetric(1 - ((getValue(SoftAuditMetrics.LIT) + getValue(SoftAuditMetrics.CON))
 						/ getValue(SoftAuditMetrics.STM))));
 		result.put(SoftAuditMetrics.COF,
-				checkMetric(1 - (((getValue(SoftAuditMetrics.SED) * 2) + (getValue(SoftAuditMetrics.MAD) * 1.5)
+		        checkMetric(1 - (((getValue(SoftAuditMetrics.SED) * 2) + (getValue(SoftAuditMetrics.MAD) * 1.5)
 						+ getValue(SoftAuditMetrics.MED) + (getValue(SoftAuditMetrics.MID) * 0.5))
 						/ getValue(SoftAuditMetrics.STM))));
 		result.put(SoftAuditMetrics.MAM,
@@ -113,11 +114,7 @@ public class SoftAuditDecorator implements Decorator {
 		SoftAuditLogger.getLogger().printMetrics(result);
 		// save metrics
 		for (Metric<?> metric : result.keySet()) {
-			if (result.get(metric) > 1) {
-				context.saveMeasure(new Measure<Integer>(metric, 1.0, 3));
-			} else {
-				context.saveMeasure(new Measure<Integer>(metric, result.get(metric), 3));
-			}
+			context.saveMeasure(new Measure<String>(metric, df.format(result.get(metric))));
 		}
 	}
 

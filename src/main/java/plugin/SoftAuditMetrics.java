@@ -425,7 +425,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Data Complexity (Based on Chapin) = ((PRE * 2) + (RES * 1,5) + ARG + (PAR * 0,5)) / (STM + REF)
 	 */
-	public static final Metric<Integer> DCO = new Metric.Builder("complexity_dco", "Data Complexity", Metric.ValueType.INT)
+	public static final Metric<String> DCO = new Metric.Builder("complexity_dco", "Data Complexity", Metric.ValueType.STRING)
 			.setDescription("Computed data complexity (Chapin).")
 			.setDirection(Metric.DIRECTION_WORST)
 			.setQualitative(false)
@@ -434,7 +434,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Data Flow Complexity (Based on Elshof) = 1 – ((VAR * 2) / REF)
 	 */
-	public static final Metric<Integer> DFC = new Metric.Builder("complexity_dfc", "Data Flow Complexity", Metric.ValueType.INT)
+	public static final Metric<String> DFC = new Metric.Builder("complexity_dfc", "Data Flow Complexity", Metric.ValueType.STRING)
 			.setDescription("Computed data flow complexity (Elshof).")
 			.setDirection(Metric.DIRECTION_WORST)
 			.setQualitative(false)
@@ -443,7 +443,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Control Flow Complexity (Based on McCabe) = (BRA – (IFS + SWI + LOP + RET)) / BRA
 	 */
-	public static final Metric<Float> CFC = new Metric.Builder("complexity_cfc", "Control Flow Complexity", Metric.ValueType.FLOAT)
+	public static final Metric<String> CFC = new Metric.Builder("complexity_cfc", "Control Flow Complexity", Metric.ValueType.STRING)
 			.setDescription("Computed control flow complexity (McCabe).")
 			.setDirection(Metric.DIRECTION_WORST)
 			.setQualitative(false)
@@ -452,7 +452,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Conditional Complexity (Based on McClure) = (IFS + SWI + CAS + LOP + 1) / (MET * 4)
 	 */
-	public static final Metric<Integer> COC = new Metric.Builder("complexity_coc", "Conditional Complexity", Metric.ValueType.FLOAT)
+	public static final Metric<String> COC = new Metric.Builder("complexity_coc", "Conditional Complexity", Metric.ValueType.STRING)
 			.setDescription("Computed conditional complexity (McClure).")
 			.setDirection(Metric.DIRECTION_WORST)
 			.setQualitative(false)
@@ -461,7 +461,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Average Complexity Base Level = (DCO + DFC + CFC + COC) / 4
 	 */
-	public static final Metric<Integer> ACB = new Metric.Builder("complexity_acb", "Average Complexity", Metric.ValueType.FLOAT)
+	public static final Metric<String> ACB = new Metric.Builder("complexity_acb", "Average Complexity", Metric.ValueType.STRING)
 			.setDescription("Computed average complexity.")
 			.setDirection(Metric.DIRECTION_WORST)
 			.setQualitative(false)
@@ -470,7 +470,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Testability = ((1 – ((BRA * 2) / STM)) + (1 – ((PRE * 2) / REF))) / 2
 	 */
-	public static final Metric<Integer> TST = new Metric.Builder("quality_tst", "Testability", Metric.ValueType.FLOAT)
+	public static final Metric<String> TST = new Metric.Builder("quality_tst", "Testability", Metric.ValueType.STRING)
 			.setDescription("Computed testability.")
 			.setDirection(Metric.DIRECTION_BETTER)
 			.setQualitative(false)
@@ -479,7 +479,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Flexibility = 1 – ((LIT + CON) / STM)
 	 */
-	public static final Metric<Integer> FLE = new Metric.Builder("quality_fle", "Flexibility", Metric.ValueType.FLOAT)
+	public static final Metric<String> FLE = new Metric.Builder("quality_fle", "Flexibility", Metric.ValueType.STRING)
 			.setDescription("Computed flexibility.")
 			.setDirection(Metric.DIRECTION_BETTER)
 			.setQualitative(false)
@@ -488,7 +488,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Conformity = 1 – (((SED * 2) + (MAD * 1,5) + MED + (MID * 0,5)) / STM)
 	 */
-	public static final Metric<Integer> COF = new Metric.Builder("quality_cof", "Conformity", Metric.ValueType.FLOAT)
+	public static final Metric<String> COF = new Metric.Builder("quality_cof", "Conformity", Metric.ValueType.STRING)
 			.setDescription("Computed conformity.")
 			.setDirection(Metric.DIRECTION_BETTER)
 			.setQualitative(false)
@@ -497,7 +497,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Maintainability Base Level = ((1 – ACB) + ((TST + FLE + (COF / 2)) / 3)) / 2
 	 */
-	public static final Metric<Integer> MAB = new Metric.Builder("quality_mab", "Maintainability", Metric.ValueType.FLOAT)
+	public static final Metric<String> MAB = new Metric.Builder("quality_mab", "Maintainability", Metric.ValueType.STRING)
 			.setDescription("Computed maintainability.")
 			.setDirection(Metric.DIRECTION_BETTER)
 			.setQualitative(false)
@@ -506,7 +506,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Average Quality Base Level = (TST + FLE + COF + MAB) / 4
 	 */
-	public static final Metric<Integer> AQB = new Metric.Builder("quality_aqb", "Average Quality", Metric.ValueType.FLOAT)
+	public static final Metric<String> AQB = new Metric.Builder("quality_aqb", "Average Quality", Metric.ValueType.STRING)
 			.setDescription("Computed average quality.")
 			.setDirection(Metric.DIRECTION_BETTER)
 			.setQualitative(false)
@@ -518,7 +518,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Interface Complexity (Based on Henry) = FFC / FUC
 	 */
-	public static final Metric<Integer> ICO = new Metric.Builder("complexity_ico", "Interface Complexity", Metric.ValueType.FLOAT)
+	public static final Metric<String> ICO = new Metric.Builder("complexity_ico", "Interface Complexity", Metric.ValueType.STRING)
 			.setDescription("Computed interface complexity (Henry).")
 			.setDirection(Metric.DIRECTION_WORST)
 			.setQualitative(false)
@@ -527,7 +527,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Branching Complexity (Based on Sneed) = ((FFC * 2) + (RET * 2) + FUC) / STM
 	 */
-	public static final Metric<Integer> BRC = new Metric.Builder("complexity_brc", "Branching Complexity", Metric.ValueType.FLOAT)
+	public static final Metric<String> BRC = new Metric.Builder("complexity_brc", "Branching Complexity", Metric.ValueType.STRING)
 			.setDescription("Computed branching complexity (Sneed).")
 			.setDirection(Metric.DIRECTION_WORST)
 			.setQualitative(false)
@@ -536,7 +536,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Language Complexity Medium Level (Based on Halstead) = ((STY / STM) + (DTY / (VAR + CON))) / 2
 	 */
-	public static final Metric<Integer> LCM = new Metric.Builder("complexity_lcm", "Language Complexity", Metric.ValueType.FLOAT)
+	public static final Metric<String> LCM = new Metric.Builder("complexity_lcm", "Language Complexity", Metric.ValueType.STRING)
 			.setDescription("Computed language complexity (Halstead).")
 			.setDirection(Metric.DIRECTION_WORST)
 			.setQualitative(false)
@@ -545,7 +545,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Average Complexity Medium Level = (DCO + DFC + CFC + COC + ICO + BRC + LCM) / 7
 	 */
-	public static final Metric<Integer> ACM = new Metric.Builder("complexity_acm", "Average Complexity", Metric.ValueType.FLOAT)
+	public static final Metric<String> ACM = new Metric.Builder("complexity_acm", "Average Complexity", Metric.ValueType.STRING)
 			.setDescription("Computed average complexity.")
 			.setDirection(Metric.DIRECTION_WORST)
 			.setQualitative(false)
@@ -554,7 +554,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Modularity = ((((CLA * 4) + (MET * 2)) / ((IMP * 4) + VAR)) + (1 – (FFC / (FUC + MET))) + ((STM / SRC) / OMS)) / 3
 	 */
-	public static final Metric<Integer> MOD = new Metric.Builder("quality_mod", "Modularity", Metric.ValueType.FLOAT)
+	public static final Metric<String> MOD = new Metric.Builder("quality_mod", "Modularity", Metric.ValueType.STRING)
 			.setDescription("Computed modularity.")
 			.setDirection(Metric.DIRECTION_BETTER)
 			.setQualitative(false)
@@ -563,7 +563,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Reusability = RUM / MET
 	 */
-	public static final Metric<Integer> REU = new Metric.Builder("quality_reu", "Reuseability", Metric.ValueType.FLOAT)
+	public static final Metric<String> REU = new Metric.Builder("quality_reu", "Reuseability", Metric.ValueType.STRING)
 			.setDescription("Computed reusability.")
 			.setDirection(Metric.DIRECTION_BETTER)
 			.setQualitative(false)
@@ -572,7 +572,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Security = (SST / 1,2) / STM
 	 */
-	public static final Metric<Integer> SEC = new Metric.Builder("quality_sec", "Security", Metric.ValueType.FLOAT)
+	public static final Metric<String> SEC = new Metric.Builder("quality_sec", "Security", Metric.ValueType.STRING)
 			.setDescription("Computed security.")
 			.setDirection(Metric.DIRECTION_BETTER)
 			.setQualitative(false)
@@ -581,7 +581,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Maintainability Medium Level = ((1 – ACM) + ((MOD + TST + REU + SEC + FLE + (COF / 2)) / 6)) / 2
 	 */
-	public static final Metric<Integer> MAM = new Metric.Builder("quality_mam", "Maintainability", Metric.ValueType.FLOAT)
+	public static final Metric<String> MAM = new Metric.Builder("quality_mam", "Maintainability", Metric.ValueType.STRING)
 			.setDescription("Computed maintainability.")
 			.setDirection(Metric.DIRECTION_BETTER)
 			.setQualitative(false)
@@ -590,7 +590,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Average Quality Medium Level = (MOD + TST + REU + SEC + FLE + COF + MAB) / 7
 	 */
-	public static final Metric<Integer> AQM = new Metric.Builder("quality_aqm", "Average Quality", Metric.ValueType.FLOAT)
+	public static final Metric<String> AQM = new Metric.Builder("quality_aqm", "Average Quality", Metric.ValueType.STRING)
 			.setDescription("Computed average quality.")
 			.setDirection(Metric.DIRECTION_BETTER)
 			.setQualitative(false)
@@ -620,7 +620,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Data Access Complexity (Based on Card) = 1 – (FIL + DBS) / (FIL + DBS + FIA + DBA)
 	 */
-	public static final Metric<Integer> DAC = new Metric.Builder("complexity_dac", "Data Access Complexity", Metric.ValueType.FLOAT)
+	public static final Metric<String> DAC = new Metric.Builder("complexity_dac", "Data Access Complexity", Metric.ValueType.STRING)
 			.setDescription("Computed data access complexity (Card).")
 			.setDirection(Metric.DIRECTION_WORST)
 			.setQualitative(false)
@@ -629,7 +629,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Language Complexity Full Level (Based on Halstead) = ((STY / STM) + (DTY / (VAR + CON + DEF))) / 2
 	 */
-	public static final Metric<Integer> LCF = new Metric.Builder("complexity_lcf", "Language Complexity", Metric.ValueType.FLOAT)
+	public static final Metric<String> LCF = new Metric.Builder("complexity_lcf", "Language Complexity", Metric.ValueType.STRING)
 			.setDescription("Computed language complexity (Halstead).")
 			.setDirection(Metric.DIRECTION_WORST)
 			.setQualitative(false)
@@ -638,7 +638,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Average Complexity Full Level = (DCO + DFC + CFC + COC + ICO + BRC + LCM + DAC) / 8
 	 */
-	public static final Metric<Integer> ACF = new Metric.Builder("complexity_acf", "Average Complexity", Metric.ValueType.FLOAT)
+	public static final Metric<String> ACF = new Metric.Builder("complexity_acf", "Average Complexity", Metric.ValueType.STRING)
 			.setDescription("Computed average complexity.")
 			.setDirection(Metric.DIRECTION_WORST)
 			.setQualitative(false)
@@ -647,7 +647,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Portability = 1 – (((UFM * 2) + (INP * 4) + (OUT * 4) + (FIA * 4) + (DBA * 4) + (FIL * 8) + (REP * 8) + (PAN * 8) + (DBS * 8)) / STM)
 	 */
-	public static final Metric<Integer> POR = new Metric.Builder("quality_por", "Portability", Metric.ValueType.FLOAT)
+	public static final Metric<String> POR = new Metric.Builder("quality_por", "Portability", Metric.ValueType.STRING)
 			.setDescription("Computed portability.")
 			.setDirection(Metric.DIRECTION_BETTER)
 			.setQualitative(false)
@@ -656,7 +656,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Maintainability Full Level = ((1 – ACF) + ((MOD + TST + REU + SEC + FLE + POR + (COF / 2)) / 7)) / 2
 	 */
-	public static final Metric<Integer> MAF = new Metric.Builder("quality_maf", "Maintainability", Metric.ValueType.FLOAT)
+	public static final Metric<String> MAF = new Metric.Builder("quality_maf", "Maintainability", Metric.ValueType.STRING)
 			.setDescription("Computed maintainability.")
 			.setDirection(Metric.DIRECTION_BETTER)
 			.setQualitative(false)
@@ -665,7 +665,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Average Quality Full Level = (MOD + TST + REU + SEC + FLE + COF + MAB + POR) / 8
 	 */
-	public static final Metric<Integer> AQF = new Metric.Builder("quality_aqf", "Average Quality", Metric.ValueType.FLOAT)
+	public static final Metric<String> AQF = new Metric.Builder("quality_aqf", "Average Quality", Metric.ValueType.STRING)
 			.setDescription("Computed average quality.")
 			.setDirection(Metric.DIRECTION_BETTER)
 			.setQualitative(false)
