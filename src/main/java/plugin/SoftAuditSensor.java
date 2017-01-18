@@ -19,7 +19,6 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
 import plugin.analyser.FileNormalizer;
-import plugin.analyser.MetricCalculator;
 import plugin.analyser.ModelAnalyser;
 import plugin.analyser.ModelBuilder;
 import plugin.analyser.ModelDetailExpander;
@@ -98,20 +97,7 @@ public class SoftAuditSensor implements Sensor {
         for (Metric<?> measure : measures.keySet()) {
             sensorContext.saveMeasure(new Measure<Integer>(measure, measures.get(measure), 0));
         }
-        // calculate metrics
-        LOGGER.info("Calculate metrics");
-        Map<Metric<?>, Double> metrics = MetricCalculator.calculate(measures);
-        SoftAuditLogger.getLogger().printMetrics(metrics);
-        // save metrics
-        for (Metric<?> metric : metrics.keySet()) {
-            if (metrics.get(metric) > 1) {
-                sensorContext.saveMeasure(new Measure<Integer>(metric, 1.0, 3));
-            } else {
-                sensorContext.saveMeasure(new Measure<Integer>(metric, metrics.get(metric), 3));
-            }
-        }
         LOGGER.info("SoftAuditSensor finished");
-        SoftAuditLogger.getLogger().close();
     }
 
     /**

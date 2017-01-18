@@ -44,24 +44,21 @@
     end
 %>
 <div class="dashbox">
-    <h2>Number of cases: <%= format_measure('base_cas') %></h2>
-    <h2>Number of classes: <%= format_measure('base_cla') %></h2>
-    <h2>Number of if-statements: <%= format_measure('base_ifs') %></h2>
-    <h2>Number of imports: <%= format_measure('base_imp') %></h2>
-    <h2>Number of interfaces: <%= format_measure('base_int') %></h2>
-    <h2>Number of literals: <%= format_measure('base_lit') %></h2>
-    <h2>Number of loop-statements: <%= format_measure('base_lop') %></h2>
-    <h2>Number of methods: <%= format_measure('base_met') %></h2>
-    <h2>Number of parameters: <%= format_measure('base_par') %></h2>
-    <h2>Number of returns: <%= format_measure('base_ret') %></h2>
-    <h2>Number of statements: <%= format_measure('base_stm') %></h2>
-    <h2>Number of switch-statements: <%= format_measure('base_swi') %></h2>
-    <h2>Number of source files: <%= format_measure('base_src') %></h2>
-    <h2>Optimal module size: <%= format_measure('base_oms') %></h2>
-    <h3>Conditional Complexity (based on McClure):</h3>
-    <p>
-        <span class="big">
-            <%= format_measure('complexity_coc') %>
-        </span>
-    </p>
+    <h2>Object Points: <%= format_measure('size_obp') %></h2>
+    <h2>Data Complexity: <%= format_measure('complexity_dco') %></h2>
+    <h2>Data Flow Complexity: <%= format_measure('complexity_dfc') %></h2>
+    <h2>Interface Complexity: <%= format_measure('complexity_ico') %></h2>
+    <h2>Control Flow Complexity: <%= format_measure('complexity_cfc') %></h2>
+    <h2>Conditional Complexity: <%= format_measure('complexity_coc') %></h2>
+    <h2>Branching Complexity: <%= format_measure('complexity_brc') %></h2>
+    <h2>Language Complexity: <%= format_measure('complexity_lcm') %></h2>
+    <h3>Average Complexity: <%= format_measure('complexity_acm') %></h3>
+    <h2>Modularity: <%= format_measure('quality_mod') %></h2>
+    <h2>Testability: <%= format_measure('quality_tst') %></h2>
+    <h2>Reusability: <%= format_measure('quality_reu') %></h2>
+    <h2>Security: <%= format_measure('quality_sec') %></h2>
+    <h2>Flexibility: <%= format_measure('quality_fle') %></h2>
+    <h2>Conformity: <%= format_measure('quality_cof') %></h2>
+    <h2>Maintainability: <%= format_measure('quality_mam') %></h2>
+    <h3>Average Quality: <%= format_measure('quality_aqm') %></h3>
 </div>

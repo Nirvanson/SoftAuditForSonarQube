@@ -4,13 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Test;
-import org.sonar.api.measures.Metric;
 
 import plugin.SoftAuditSensor;
-import plugin.analyser.MetricCalculator;
 import plugin.util.SoftAuditLogger;
 
 public class SoftAuditSensorTest {
@@ -27,10 +24,7 @@ public class SoftAuditSensorTest {
         SoftAuditSensor sensor = new SoftAuditSensor("_" + filename + ".log");
         
         // do analyze, check logfile manually
-        Map<Metric<?>, Double> measures = sensor.doAnalyse(Arrays.asList(input));
-        // calculate metrics
-        Map<Metric<?>, Double> metrics = MetricCalculator.calculate(measures);
-        SoftAuditLogger.getLogger().printMetrics(metrics);
+        sensor.doAnalyse(Arrays.asList(input));
         SoftAuditLogger.getLogger().close();
     }
     
@@ -41,10 +35,7 @@ public class SoftAuditSensorTest {
         SoftAuditSensor sensor = new SoftAuditSensor("_SelfScan.log");
         
         // do analyze, check logfile manually
-        Map<Metric<?>, Double> measures = sensor.doAnalyse(input);
-        // calculate metrics
-        Map<Metric<?>, Double> metrics = MetricCalculator.calculate(measures);
-        SoftAuditLogger.getLogger().printMetrics(metrics);
+        sensor.doAnalyse(input);
         SoftAuditLogger.getLogger().close();
     }
     

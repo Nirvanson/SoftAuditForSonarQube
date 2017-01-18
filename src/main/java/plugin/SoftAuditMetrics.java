@@ -17,6 +17,66 @@ public class SoftAuditMetrics implements Metrics {
 
 	private static final Integer level = 2;
 	
+	// SonarQube provided measures
+	
+	/**
+	 * Major Deficiencies. Eventually mapping to SonarQube-RuleSet with Code-Smells metric.
+	 */
+	public static final Metric<Integer> MAD = new Metric.Builder("sonar_mad", "Major Deficiencies", Metric.ValueType.INT)
+			.setDescription("Number of major deficiencies.")
+			.setDirection(Metric.DIRECTION_NONE)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();
+	/**
+	 * Medium Deficiencies. Eventually mapping to SonarQube-RuleSet with Code-Smells metric.
+	 */
+	public static final Metric<Integer> MED = new Metric.Builder("sonar_med", "Medium Deficiencies", Metric.ValueType.INT)
+			.setDescription("Number of medium deficiencies.")
+			.setDirection(Metric.DIRECTION_NONE)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();
+	/**
+	 * Minor Deficiencies. Eventually mapping to SonarQube-RuleSet with Code-Smells metric.
+	 */
+	public static final Metric<Integer> MID = new Metric.Builder("sonar_mid", "Minor Deficiencies", Metric.ValueType.INT)
+			.setDescription("Number of minor deficiencies.")
+			.setDirection(Metric.DIRECTION_NONE)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();
+	/**
+	 * Security Deficiencies. Eventually mapping to SonarQube-RuleSet with Code-Smells metric.
+	 */
+	public static final Metric<Integer> SED = new Metric.Builder("sonar_sed", "Security Deficiencies", Metric.ValueType.INT)
+			.setDescription("Number of security deficiencies.")
+			.setDirection(Metric.DIRECTION_NONE)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();
+	/**
+	 * Number of Secure statements. All Statements that DON'T contain:
+	 * - Constructor Methods that are duplicated
+	 * - Return Values not controlled after method invocation
+	 * - Class Variables should that are declared public
+	 * - Derived class that is not declared as final
+	 * - Input Parameter of a Public Method not checked
+	 * - SQL Statement in Java method
+	 * - Object compared with a literal
+	 * - serialzeable Class definition 
+	 * - cloneable class definition 
+	 * - Casting of a variable
+	 * - Return Value not checked
+	 * - Embedded SQL function
+	 */
+	public static final Metric<Integer> SST = new Metric.Builder("sonar_sst", "Secure Statements", Metric.ValueType.INT)
+			.setDescription("Number of secure statements.")
+			.setDirection(Metric.DIRECTION_NONE)
+			.setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_GENERAL)
+			.create();
+	
 	// Level 1 Measures (Minimum needed for 9 metrics scope of the plugin)
     
     /**
@@ -102,37 +162,10 @@ public class SoftAuditMetrics implements Metrics {
 			.setDomain(CoreMetrics.DOMAIN_GENERAL)
 			.create();
 	/**
-	 * Major Deficiencies. Eventually mapping to SonarQube-RuleSet with Code-Smells metric.
-	 */
-	public static final Metric<Integer> MAD = new Metric.Builder("base_mad", "Major Deficiencies", Metric.ValueType.INT)
-			.setDescription("Number of major deficiencies.")
-			.setDirection(Metric.DIRECTION_NONE)
-			.setQualitative(false)
-			.setDomain(CoreMetrics.DOMAIN_GENERAL)
-			.create();
-	/**
-	 * Medium Deficiencies. Eventually mapping to SonarQube-RuleSet with Code-Smells metric.
-	 */
-	public static final Metric<Integer> MED = new Metric.Builder("base_med", "Medium Deficiencies", Metric.ValueType.INT)
-			.setDescription("Number of medium deficiencies.")
-			.setDirection(Metric.DIRECTION_NONE)
-			.setQualitative(false)
-			.setDomain(CoreMetrics.DOMAIN_GENERAL)
-			.create();
-	/**
 	 * Number of Methods / Procedures / Functions. Good mapping to CoreMetrics.
 	 */
 	public static final Metric<Integer> MET = new Metric.Builder("base_met", "Methods", Metric.ValueType.INT)
 			.setDescription("Number of methods.")
-			.setDirection(Metric.DIRECTION_NONE)
-			.setQualitative(false)
-			.setDomain(CoreMetrics.DOMAIN_GENERAL)
-			.create();
-	/**
-	 * Minor Deficiencies. Eventually mapping to SonarQube-RuleSet with Code-Smells metric.
-	 */
-	public static final Metric<Integer> MID = new Metric.Builder("base_mid", "Minor Deficiencies", Metric.ValueType.INT)
-			.setDescription("Number of minor deficiencies.")
 			.setDirection(Metric.DIRECTION_NONE)
 			.setQualitative(false)
 			.setDomain(CoreMetrics.DOMAIN_GENERAL)
@@ -169,15 +202,6 @@ public class SoftAuditMetrics implements Metrics {
 	 */
 	public static final Metric<Integer> RET = new Metric.Builder("base_ret", "Return-Statements", Metric.ValueType.INT)
 			.setDescription("Number of return-statements.")
-			.setDirection(Metric.DIRECTION_NONE)
-			.setQualitative(false)
-			.setDomain(CoreMetrics.DOMAIN_GENERAL)
-			.create();
-	/**
-	 * Security Deficiencies. Eventually mapping to SonarQube-RuleSet with Code-Smells metric.
-	 */
-	public static final Metric<Integer> SED = new Metric.Builder("base_sed", "Security Deficiencies", Metric.ValueType.INT)
-			.setDescription("Number of security deficiencies.")
 			.setDirection(Metric.DIRECTION_NONE)
 			.setQualitative(false)
 			.setDomain(CoreMetrics.DOMAIN_GENERAL)
@@ -262,27 +286,6 @@ public class SoftAuditMetrics implements Metrics {
 	 */
 	public static final Metric<Integer> SRC = new Metric.Builder("base_src", "Source-Files", Metric.ValueType.INT)
 			.setDescription("Number of modules.")
-			.setDirection(Metric.DIRECTION_NONE)
-			.setQualitative(false)
-			.setDomain(CoreMetrics.DOMAIN_GENERAL)
-			.create();
-	/**
-	 * Number of Secure statements. All Statements that DON'T contain:
-	 * - Constructor Methods that are duplicated
-	 * - Return Values not controlled after method invocation
-	 * - Class Variables should that are declared public
-	 * - Derived class that is not declared as final
-	 * - Input Parameter of a Public Method not checked
-	 * - SQL Statement in Java method
-	 * - Object compared with a literal
-	 * - serialzeable Class definition 
-	 * - cloneable class definition 
-	 * - Casting of a variable
-	 * - Return Value not checked
-	 * - Embedded SQL function
-	 */
-	public static final Metric<Integer> SST = new Metric.Builder("base_sst", "Secure Statements", Metric.ValueType.INT)
-			.setDescription("Number of secure statements.")
 			.setDirection(Metric.DIRECTION_NONE)
 			.setQualitative(false)
 			.setDomain(CoreMetrics.DOMAIN_GENERAL)
@@ -422,7 +425,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Data Complexity (Based on Chapin) = ((PRE * 2) + (RES * 1,5) + ARG + (PAR * 0,5)) / (STM + REF)
 	 */
-	public static final Metric<Integer> DCO = new Metric.Builder("complexity_dco", "Data Complexity", Metric.ValueType.FLOAT)
+	public static final Metric<Integer> DCO = new Metric.Builder("complexity_dco", "Data Complexity", Metric.ValueType.INT)
 			.setDescription("Computed data complexity (Chapin).")
 			.setDirection(Metric.DIRECTION_WORST)
 			.setQualitative(false)
@@ -431,7 +434,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Data Flow Complexity (Based on Elshof) = 1 – ((VAR * 2) / REF)
 	 */
-	public static final Metric<Integer> DFC = new Metric.Builder("complexity_dfc", "Data Flow Complexity", Metric.ValueType.FLOAT)
+	public static final Metric<Integer> DFC = new Metric.Builder("complexity_dfc", "Data Flow Complexity", Metric.ValueType.INT)
 			.setDescription("Computed data flow complexity (Elshof).")
 			.setDirection(Metric.DIRECTION_WORST)
 			.setQualitative(false)
@@ -440,7 +443,7 @@ public class SoftAuditMetrics implements Metrics {
 	/**
 	 * Control Flow Complexity (Based on McCabe) = (BRA – (IFS + SWI + LOP + RET)) / BRA
 	 */
-	public static final Metric<Integer> CFC = new Metric.Builder("complexity_cfc", "Control Flow Complexity", Metric.ValueType.FLOAT)
+	public static final Metric<Float> CFC = new Metric.Builder("complexity_cfc", "Control Flow Complexity", Metric.ValueType.FLOAT)
 			.setDescription("Computed control flow complexity (McCabe).")
 			.setDirection(Metric.DIRECTION_WORST)
 			.setQualitative(false)

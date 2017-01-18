@@ -54,8 +54,6 @@ public class ModelAnalyser {
         scannedSourceFiles++;
         Map<Metric<?>, Double> result = analyzeContentList(fileModel);
         includeContentScan(result, countLiteralsAndConstants(wordList));
-        // TODO: STM - SecurityDeficiancies
-        result.put(SoftAuditMetrics.SST, result.get(SoftAuditMetrics.STM));
         SoftAuditLogger.getLogger().printFileMeasures(result);
         return result;
     }
