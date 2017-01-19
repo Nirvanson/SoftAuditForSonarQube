@@ -23,7 +23,6 @@ import plugin.model.components.JavaStatement;
 import plugin.model.components.JavaStatementWithAnonymousClass;
 import plugin.model.components.JavaVariable;
 import plugin.util.AnalyzeException;
-import plugin.util.SoftAuditLogger;
 
 /**
  * Java File Parser to extract needed measures for SoftAudit Metrics.
@@ -54,7 +53,6 @@ public class ModelAnalyser {
         scannedSourceFiles++;
         Map<Metric<?>, Double> result = analyzeContentList(fileModel);
         includeContentScan(result, countLiteralsAndConstants(wordList));
-        SoftAuditLogger.getLogger().printFileMeasures(result);
         return result;
     }
 

@@ -8,7 +8,6 @@ import java.util.List;
 import org.junit.Test;
 
 import plugin.SoftAuditSensor;
-import plugin.util.SoftAuditLogger;
 
 public class SoftAuditSensorTest {
 	
@@ -18,25 +17,23 @@ public class SoftAuditSensorTest {
     }
    
     @Test
-    public void testSingleFileAnalyse() throws InterruptedException {
+    public void testSingleFileAnalyse(){
         String filename = "Day";
         File input = new File("src/main/resources/testdata/" + filename + ".java");
         SoftAuditSensor sensor = new SoftAuditSensor("_" + filename + ".log");
         
         // do analyze, check logfile manually
         sensor.doAnalyse(Arrays.asList(input));
-        SoftAuditLogger.getLogger().close();
     }
     
     @Test
-    public void testSelfScan() throws InterruptedException {
+    public void testSelfScan(){
         List<File> input = new ArrayList<File>();
         listf("src/main/java", input);
         SoftAuditSensor sensor = new SoftAuditSensor("_SelfScan.log");
         
         // do analyze, check logfile manually
         sensor.doAnalyse(input);
-        SoftAuditLogger.getLogger().close();
     }
     
     public void listf(String directoryName, List<File> files) {

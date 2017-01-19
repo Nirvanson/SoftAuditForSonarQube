@@ -3,6 +3,9 @@ package plugin;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +26,7 @@ import plugin.analyser.ModelAnalyser;
 import plugin.analyser.ModelBuilder;
 import plugin.analyser.ModelDetailExpander;
 import plugin.analyser.ModelStructureExpander;
+import plugin.model.AnalyseTriple;
 import plugin.model.JavaFileContent;
 import plugin.model.WordInFile;
 import plugin.util.AnalyzeException;
@@ -54,8 +58,14 @@ public class SoftAuditSensor implements Sensor {
         } catch (IOException ex) {
             ex.printStackTrace();
         } 
-        SoftAuditLogger.getLogger(properties.getProperty("logfilepath"), properties.getProperty("logfiletimestampformat"), 
-                filename, Integer.valueOf(properties.getProperty("loglevel")));
+        String timestamp = (new SimpleDateFormat(properties.getProperty("logfiletimestampformat"))).format(new Date());
+        try {
+            SoftAuditLogger.getLogger(properties.getProperty("logfilepath") + timestamp + filename, Integer.valueOf(properties.getProperty("loglevel")));
+        } catch (NumberFormatException e) {
+            LOGGER.error("Property 'loglevel' is invalid!", e);
+        } catch (IOException e) {
+            LOGGER.error("Initializing SoftAudit-Logger failed!", e);
+        }
     }
 
     /**
@@ -88,8 +98,14 @@ public class SoftAuditSensor implements Sensor {
      */
     public void analyse(Project project, SensorContext sensorContext) {
     	Settings properties = sensorContext.settings();
-    	SoftAuditLogger.getLogger(properties.getString("logfilepath"), properties.getString("logfiletimestampformat"), 
-                properties.getString("logfilename"), Integer.valueOf(properties.getInt("loglevel")));
+    	String timestamp = (new SimpleDateFormat(properties.getString("logfiletimestampformat"))).format(new Date());
+    	String filename = properties.getString("logfilepath") + timestamp + properties.getString("logfilename");
+    	try {
+            SoftAuditLogger.getLogger(filename, Integer.valueOf(properties.getInt("loglevel")));
+        } catch (IOException e) {
+            LOGGER.error("Initializing SoftAudit-Logger failed!", e);
+        }
+    	properties.appendProperty("currentlogfile", filename);
         // get measures from files
         Map<Metric<?>, Double> measures = doAnalyse(fileSystem.files(fileSystem.predicates().hasLanguage("java")));
         measures.put(SoftAuditMetrics.OMS, Double.valueOf(properties.getDouble("optimalModuleSize")));
@@ -97,7 +113,7 @@ public class SoftAuditSensor implements Sensor {
         for (Metric<?> measure : measures.keySet()) {
             sensorContext.saveMeasure(new Measure<Integer>(measure, measures.get(measure), 0));
         }
-        LOGGER.info("SoftAuditSensor finished");
+        LOGGER.info("--- SoftAuditSensor finished");
     }
 
     /**
@@ -114,34 +130,27 @@ public class SoftAuditSensor implements Sensor {
             }
         }
         ModelAnalyser analyser = new ModelAnalyser();
-        Map<List<WordInFile>, List<JavaFileContent>> models = new HashMap<List<WordInFile>, List<JavaFileContent>>();
-        LOGGER.info("Parse java files and build model");
+        List<AnalyseTriple<File, List<WordInFile>, List<JavaFileContent>>> models = new ArrayList<AnalyseTriple<File, List<WordInFile>, List<JavaFileContent>>>();
+        LOGGER.info("--- Parse java files and build filemodels.");
         for (File file : files) {
             // try parsing file
             List<JavaFileContent> fileModel = null;
-            try {
-                // step 0 - read file
-            	SoftAuditLogger.getLogger().printFile(file);
-            } catch (IOException exceptionInStepZero) {
-                // file not readable, skip file completely
-                exceptionInStepZero.printStackTrace();
-                continue;
-            }
             List<WordInFile> wordList = null;
+            LOGGER.info("Parse file " + file.getName());
             try {
                 // step 1 - do file normalization
                 wordList = FileNormalizer.doFileNormalization(file);
-            } catch (ParsingException exceptionInStepOne) {
+            } catch (ParsingException e) {
                 // file normalization failed. skip file completely
-                exceptionInStepOne.printStackTrace();
+                LOGGER.error("Normalizing file to word-list failed!", e);
                 continue;
             }
             try {
                 // step 2 - build basic model
                 fileModel = ModelBuilder.parseBasicModel(wordList);
-            } catch (ParsingException exceptionInStepTwo) {
+            } catch (ParsingException e) {
                 // Building basic model failed. skip file completely
-                exceptionInStepTwo.printStackTrace();
+                LOGGER.error("Building basic model out of word-list failed!", e);
                 continue;
             }
             boolean structureParsed = false;
@@ -149,44 +158,54 @@ public class SoftAuditSensor implements Sensor {
                 // step 3 - refine model by statement structure
                 fileModel = ModelStructureExpander.parseStatementStructure(fileModel);
                 structureParsed = true;
-            } catch (ParsingException exceptionInStepThree) {
+            } catch (ParsingException e) {
                 // Refining Model with structural statements failed. skip detail parsing and do basic analysis
-                exceptionInStepThree.printStackTrace();
+                LOGGER.error("Extending basemodel with structural statements failed!", e);
             }
             if (structureParsed) {
                 try {
                     // step 4 - parse model details
                     fileModel = ModelDetailExpander.parseModelDetails(fileModel);
-                } catch (ParsingException exceptionInStepFour) {
+                } catch (ParsingException e) {
                     // Refining Model with details failed. Do medium analysis
-                    exceptionInStepFour.printStackTrace();
+                    LOGGER.error("Completing structured model with detail information failed!", e);
                 }
             }
-            // step 5 - if at least a basic model could be parsed analyze model for available measures
-            if (fileModel != null) {
-                models.put(wordList, fileModel);
+            models.add(new AnalyseTriple<File, List<WordInFile>, List<JavaFileContent>>(file, wordList, fileModel));
+        }
+        LOGGER.info("--- Count measures in parsed models");
+        LOGGER.info("Collecting declared methods.");
+        try  {
+            for (AnalyseTriple<File, List<WordInFile>, List<JavaFileContent>> parsedFile : models) {
+                if (parsedFile.getModel()!=null) {
+                    analyser.collectDeclaredMethods(parsedFile.getModel());
+                }
             }
+        } catch (Exception e) {
+            // Refining Model with details failed. Do medium analysis
+            LOGGER.error("Collecting declared methods in models failed!", e);
         }
-        for (List<WordInFile> file : models.keySet()) {
-            analyser.collectDeclaredMethods(models.get(file));
-        }
-        LOGGER.info("Count measures");
-        for (List<WordInFile> file : models.keySet()) {
+        for (AnalyseTriple<File, List<WordInFile>, List<JavaFileContent>> parsedFile : models) {
+            LOGGER.info("Measure file " + parsedFile.getFile().getName());
             try {
-                Map<Metric<?>, Double> partialResult = analyser.doFileModelAnalysis(models.get(file), file);
+                Map<Metric<?>, Double> partialResult = analyser.doFileModelAnalysis(parsedFile.getModel(), parsedFile.getWordList());
+                SoftAuditLogger.getLogger().printAnalysedFile(parsedFile, partialResult);
                 for (Metric<?> metric : partialResult.keySet()) {
                     result.put(metric, result.get(metric) + partialResult.get(metric));
                 }
-            } catch (AnalyzeException exceptionInStepFive) {
-                // Analyzing model failed - ignore file
-                exceptionInStepFive.printStackTrace();
+            } catch (AnalyzeException e) {
+                LOGGER.error("Analyzing FileModel failed!", e);
+            } catch (IOException e) {
+                LOGGER.error("Logging parsed file failed!", e);
             }
         }
         // step 6 - put non-additive measures to resultmap
+        LOGGER.info("Add non-additive measures");
         result.put(SoftAuditMetrics.SRC, analyser.getScannedSourceFiles());
         result.put(SoftAuditMetrics.DTY, analyser.getNumberOfDataTypes());
         result.put(SoftAuditMetrics.STY, analyser.getNumberOfStatementTypes());
         SoftAuditLogger.getLogger().printCumulatedMeasures(result);
+        SoftAuditLogger.getLogger().close();
         return result;
     }
 

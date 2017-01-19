@@ -19,7 +19,6 @@ import plugin.model.components.JavaMethod;
 import plugin.model.components.JavaStatement;
 import plugin.model.components.JavaStatementWithAnonymousClass;
 import plugin.model.components.JavaVariable;
-import plugin.util.SoftAuditLogger;
 import plugin.util.ParsingException;
 
 /**
@@ -51,7 +50,6 @@ public class ModelDetailExpander {
         parseRemainingStatementTypes(fileModel);
         // step 6 - parse comparators in conditions and statements
         parseComparators(fileModel);
-        SoftAuditLogger.getLogger().printModel("detailed", fileModel);
 		return fileModel;
 	}
 	
