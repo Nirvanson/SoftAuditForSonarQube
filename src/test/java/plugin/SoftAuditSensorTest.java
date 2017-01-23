@@ -18,12 +18,12 @@ public class SoftAuditSensorTest {
    
     @Test
     public void testSingleFileAnalyse(){
-        String filename = "Day";
+        String filename = "BilanzController";
         File input = new File("src/main/resources/testdata/" + filename + ".java");
         SoftAuditSensor sensor = new SoftAuditSensor("_" + filename + ".log");
         
         // do analyze, check logfile manually
-        sensor.doAnalyse(Arrays.asList(input));
+        sensor.doAnalyse(Arrays.asList(input), 200);
     }
     
     @Test
@@ -33,7 +33,7 @@ public class SoftAuditSensorTest {
         SoftAuditSensor sensor = new SoftAuditSensor("_SelfScan.log");
         
         // do analyze, check logfile manually
-        sensor.doAnalyse(input);
+        sensor.doAnalyse(input, 200);
     }
     
     public void listf(String directoryName, List<File> files) {

@@ -107,8 +107,8 @@ public class SoftAuditSensor implements Sensor {
         }
     	properties.appendProperty("currentlogfile", filename);
         // get measures from files
-        Map<Metric<?>, Double> measures = doAnalyse(fileSystem.files(fileSystem.predicates().hasLanguage("java")));
-        measures.put(SoftAuditMetrics.OMS, Double.valueOf(properties.getDouble("optimalModuleSize")));
+        Map<Metric<?>, Double> measures = doAnalyse(fileSystem.files(fileSystem.predicates().hasLanguage("java")), Double.valueOf(properties.getDouble("optimalModuleSize")));
+        
         // save measures
         for (Metric<?> measure : measures.keySet()) {
             sensorContext.saveMeasure(new Measure<Integer>(measure, measures.get(measure), 0));
@@ -121,7 +121,7 @@ public class SoftAuditSensor implements Sensor {
      *
      * @return map with results for measures
      */
-    public Map<Metric<?>, Double> doAnalyse(Iterable<File> files) {
+    public Map<Metric<?>, Double> doAnalyse(Iterable<File> files, double omsvalue) {
     	Map<Metric<?>, Double> result = new HashMap<Metric<?>, Double>();
         // add all measures from metrics list (metrics with keys like base_xyz)
         for (Metric<?> metric : new SoftAuditMetrics().getMetrics()) {
@@ -129,6 +129,7 @@ public class SoftAuditSensor implements Sensor {
                 result.put(metric, 0d);
             }
         }
+        result.put(SoftAuditMetrics.OMS, omsvalue);
         ModelAnalyser analyser = new ModelAnalyser();
         List<AnalyseTriple<File, List<WordInFile>, List<JavaFileContent>>> models = new ArrayList<AnalyseTriple<File, List<WordInFile>, List<JavaFileContent>>>();
         LOGGER.info("--- Parse java files and build filemodels.");

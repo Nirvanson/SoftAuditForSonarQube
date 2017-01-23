@@ -118,6 +118,7 @@ public class ModelAnalyser {
                 JavaMethod theMethod = (JavaMethod) content;
                 // count header-resulting measures
                 countFinding(result, SoftAuditMetrics.STM, 1.0);
+                Map<Metric<?>, Double> contentScan = analyzeContentList(theMethod.getContent());
                 if (theMethod.getContent()!=null && !(theMethod.getContent().size() == 1 && theMethod.getContent().get(0) instanceof JavaStatement
                         && (((JavaStatement) theMethod.getContent().get(0)).getType().equals(StatementType.RETURN)
                                 || ((JavaStatement) theMethod.getContent().get(0)).getType()
@@ -125,6 +126,10 @@ public class ModelAnalyser {
                     countFinding(result, SoftAuditMetrics.MET, 1.0);
                     usedControlStatementTypes.add(StatementType.METHODDECLARATION);
                     countFinding(result, SoftAuditMetrics.PAR, theMethod.getParameters().size());
+                    // check for FFC hits. if 0 add as RUM
+                    if (!contentScan.containsKey(SoftAuditMetrics.FFC) || contentScan.get(SoftAuditMetrics.FFC) == 0.0) {
+                        countFinding(result, SoftAuditMetrics.RUM, 1.0);
+                    }
                 } else {
                 	countFinding(result, SoftAuditMetrics.ARG, theMethod.getParameters().size());
                 }
@@ -132,11 +137,6 @@ public class ModelAnalyser {
                 countFinding(result, SoftAuditMetrics.REF, theMethod.getParameters().size());
                 for (JavaVariable parameter : theMethod.getParameters()) {
                     usedDataTypes.add(parseDataType(parameter.getType()));
-                }
-                // check for FFC hits. if 0 add as RUM
-                Map<Metric<?>, Double> contentScan = analyzeContentList(theMethod.getContent());
-                if (!contentScan.containsKey(SoftAuditMetrics.FFC) || contentScan.get(SoftAuditMetrics.FFC) == 0.0) {
-                    countFinding(result, SoftAuditMetrics.RUM, 1.0);
                 }
                 // include scan-result from method-content
                 includeContentScan(result, contentScan);

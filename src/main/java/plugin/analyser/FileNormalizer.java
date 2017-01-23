@@ -215,7 +215,7 @@ public class FileNormalizer {
                                     && ModelBuildHelper.isNumber(step1.get(i + 1).getWord())) {
                         // it's a number... collect all words together that build one number
                         i = collectNumberWords(result, step1, i);
-                    } else if ((wordInStep1.equals(KeyWord.WORD) && !wordInStep1.getWord().isEmpty())
+                    } else if ((wordInStep1.equals(KeyWord.WORD) && !wordInStep1.getWord().isEmpty()  && !wordInStep1.getWord().trim().isEmpty())
                             || !wordInStep1.equals(KeyWord.WORD)) {
                         // otherwise add word to list (if not empty)
                         result.add(wordInStep1);
