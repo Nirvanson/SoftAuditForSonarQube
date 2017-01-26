@@ -167,6 +167,12 @@ public class SoftAuditMetrics implements Metrics {
             .setDescription("Number of variables.").setDirection(Metric.DIRECTION_NONE).setQualitative(false)
             .setDomain(CoreMetrics.DOMAIN_GENERAL).create();
     /**
+     * All data attribute declarations.
+     */
+    public static final Metric<Integer> GVA = new Metric.Builder("base_gva", "Global Variables", Metric.ValueType.INT)
+            .setDescription("Number of global variables.").setDirection(Metric.DIRECTION_NONE).setQualitative(false)
+            .setDomain(CoreMetrics.DOMAIN_GENERAL).create();
+    /**
      * Number of different variables types declared like int, float, string, long, user defined.
      */
     public static final Metric<Integer> DTY = new Metric.Builder("base_dty", "Data Types", Metric.ValueType.INT)
@@ -350,7 +356,7 @@ public class SoftAuditMetrics implements Metrics {
     public List<Metric> getMetrics() {
         return Arrays.asList(ARG, BRA, CAS, CLA, CON, IFS, INT, LIT, LOP, MAD, MED, MET, MID, PAR, PRE, REF, RET, SED,
                 STM, SWI, VAR, DTY, FFC, FUC, IMP, RUM, SRC, SST, STY, OMS, OBP, DCO, DFC, CFC, COC, ICO, BRC, LCM, ACM,
-                TST, FLE, COF, MOD, REU, SEC, MAM, AQM, PME);
+                TST, FLE, COF, MOD, REU, SEC, MAM, AQM, PME, GVA);
 
     }
 }

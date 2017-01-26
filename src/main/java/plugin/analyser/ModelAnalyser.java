@@ -114,7 +114,7 @@ public class ModelAnalyser {
                 }
                 for (JavaFileContent classcontent : theClass.getContent()) {
                     if (classcontent instanceof JavaStatement && ((JavaStatement) classcontent).getDeclaredVariables()!=null) {
-                        countFinding(result, SoftAuditMetrics.VAR, ((JavaStatement) classcontent).getDeclaredVariables().size());
+                        countFinding(result, SoftAuditMetrics.GVA, ((JavaStatement) classcontent).getDeclaredVariables().size());
                     }
                 }
                 // include content-scan
@@ -391,7 +391,7 @@ public class ModelAnalyser {
                 countFinding(result, SoftAuditMetrics.REF, theStatement.getReferencedVariables().size());
             }
             if (theStatement.getDeclaredVariables()!=null) {
-                countFinding(result, SoftAuditMetrics.REF, theStatement.getDeclaredVariables().size());
+                countFinding(result, SoftAuditMetrics.VAR, theStatement.getDeclaredVariables().size());
             }
             if (theStatement.getDeclaredVariables() != null && theStatement.getType().equals(StatementType.ASSIGNMENT)
                     || theStatement.getType().equals(StatementType.VARDECLARATION)

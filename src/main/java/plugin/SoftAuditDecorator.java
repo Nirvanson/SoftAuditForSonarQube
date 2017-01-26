@@ -58,7 +58,7 @@ public class SoftAuditDecorator implements Decorator {
         LOGGER.info("Calculate metrics");
         // calculate all metrics which only depend on measures and save result for logger
         resultForLogger.put(SoftAuditMetrics.DCO,
-                ((getValue(SoftAuditMetrics.PRE) * 2) + getValue(SoftAuditMetrics.ARG)
+                ((getValue(SoftAuditMetrics.PRE) * 2) + (getValue(SoftAuditMetrics.ARG) * 1.25)
                         + (getValue(SoftAuditMetrics.PAR) * 0.5))
                         / (getValue(SoftAuditMetrics.STM) + getValue(SoftAuditMetrics.REF)));
         resultForLogger.put(SoftAuditMetrics.DFC,
@@ -73,13 +73,13 @@ public class SoftAuditDecorator implements Decorator {
                         / (getValue(SoftAuditMetrics.MET) * 4));
         resultForLogger.put(SoftAuditMetrics.BRC,
                 ((getValue(SoftAuditMetrics.FFC) * 2) + (getValue(SoftAuditMetrics.RET) * 2)
-                        + getValue(SoftAuditMetrics.FUC)) / getValue(SoftAuditMetrics.STM));
+                        + getValue(SoftAuditMetrics.FUC) - getValue(SoftAuditMetrics.FFC)) / (getValue(SoftAuditMetrics.STM) * 2));
         resultForLogger.put(SoftAuditMetrics.LCM, ((getValue(SoftAuditMetrics.STY) / getValue(SoftAuditMetrics.STM))
                 + (getValue(SoftAuditMetrics.DTY) / (getValue(SoftAuditMetrics.VAR) + getValue(SoftAuditMetrics.CON))))
                 / 2);
         resultForLogger.put(SoftAuditMetrics.MOD,
                 ((((getValue(SoftAuditMetrics.CLA) * 4) + (getValue(SoftAuditMetrics.MET) * 2))
-                        / ((getValue(SoftAuditMetrics.IMP) * 4) + getValue(SoftAuditMetrics.VAR)))
+                        / ((getValue(SoftAuditMetrics.IMP) * 4) + getValue(SoftAuditMetrics.GVA)))
                         + (1 - (getValue(SoftAuditMetrics.FFC)
                                 / (getValue(SoftAuditMetrics.FUC) + getValue(SoftAuditMetrics.MET))))
                         + ((getValue(SoftAuditMetrics.STM) / getValue(SoftAuditMetrics.SRC))
@@ -128,7 +128,7 @@ public class SoftAuditDecorator implements Decorator {
         // calculate Object points (no normalization) and add to both results
         resultForLogger.put(SoftAuditMetrics.OBP,
                 (getValue(SoftAuditMetrics.CLA) * 4) + (getValue(SoftAuditMetrics.MET) * 3)
-                + (getValue(SoftAuditMetrics.INT) * 2) + getValue(SoftAuditMetrics.VAR));
+                + (getValue(SoftAuditMetrics.INT) * 2) + getValue(SoftAuditMetrics.GVA));
         context.saveMeasure(new Measure<Integer>(SoftAuditMetrics.OBP, resultForLogger.get(SoftAuditMetrics.OBP)));
         // do SoftAuditLogging - no better way for getteng properties-access found
         @SuppressWarnings("deprecation")
