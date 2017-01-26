@@ -1,19 +1,153 @@
 <div class="dashbox">
-    <span class="big">Object Points: <%= format_measure('size_obp') %></span>
-    <h2>Data Complexity: <%= format_measure('complexity_dco') %></h2>
-    <h2>Data Flow Complexity: <%= format_measure('complexity_dfc') %></h2>
-    <h2>Interface Complexity: <%= format_measure('complexity_ico') %></h2>
-    <h2>Control Flow Complexity: <%= format_measure('complexity_cfc') %></h2>
-    <h2>Conditional Complexity: <%= format_measure('complexity_coc') %></h2>
-    <h2>Branching Complexity: <%= format_measure('complexity_brc') %></h2>
-    <h2>Language Complexity: <%= format_measure('complexity_lcm') %></h2>
-    <span class="big">Average Complexity: <%= format_measure('complexity_acm') %></span>
-    <h2>Modularity: <%= format_measure('quality_mod') %></h2>
-    <h2>Testability: <%= format_measure('quality_tst') %></h2>
-    <h2>Reusability: <%= format_measure('quality_reu') %></h2>
-    <h2>Security: <%= format_measure('quality_sec') %></h2>
-    <h2>Flexibility: <%= format_measure('quality_fle') %></h2>
-    <h2>Conformity: <%= format_measure('quality_cof') %></h2>
-    <h2>Maintainability: <%= format_measure('quality_mam') %></h2>
-    <span class="big">Average Quality: <%= format_measure('quality_aqm') %></span>
+    <span class="big">Soft-Audit-Metrics-Plugin</span>
+    <hr />
+    <br />
+    <h2><b>Measured values (subset):</b></h2>
+    <br />
+    <table width="100%">
+        <tr>
+            <td width="350px">Measure</td>
+            <td>Value</td>
+        </tr>
+        <tr> 
+            <td colspan="2"><hr /></td>
+        </tr>
+        <tr>
+            <td>Scanned source files</td>
+            <td><%= format_measure('base_src') %></td>
+        </tr>
+        <tr>
+            <td>Number of specified classes</td>
+            <td><%= format_measure('base_cla') %></td>
+        </tr>
+        <tr>
+            <td>Number of specified interfaces and enumerations</td>
+            <td><%= format_measure('base_int') %></td>
+        </tr>
+        <tr>
+            <td>Number of declared non-private methods</td>
+            <td><%= format_measure('base_met') %></td>
+        </tr>
+        <tr>
+            <td>Number of declared private methods</td>
+            <td><%= format_measure('base_pme') %></td>
+        </tr>
+        <tr>
+            <td>Number of declared class variables</td>
+            <td><%= format_measure('base_var') %></td>
+        </tr>
+        <tr>
+            <td>Number of method calls</td>
+            <td><%= format_measure('base_fuc') %></td>
+        </tr>
+        <tr>
+            <td>Number of foreign method calls</td>
+            <td><%= format_measure('base_ffc') %></td>
+        </tr>
+        <tr>
+            <td>Number of imports</td>
+            <td><%= format_measure('base_imp') %></td>
+        </tr>
+        <tr>
+            <td>Number of statements</td>
+            <td><%= format_measure('base_stm') %></td>
+        </tr>
+    </table>
+    <br />
+    <h2><b>Metric results:</b></h2>
+    <br />
+    <table width="100%">
+        <tr>
+            <td width="250px"><h2>Object Points:</h2></td>
+            <td><h2><%= format_measure('size_obp') %></h2></td>
+        </tr>
+        <tr>
+            <td width="250px"><h2>Average Complexity:</h2></td>
+            <td><h2><%= format_measure('complexity_acm') %></h2></td>
+        </tr>
+        <tr>
+            <td width="250px"><h2>Average Quality:</h2></td>
+            <td><h2><%= format_measure('quality_aqm') %></h2></td>
+        </tr>
+    </table>
+    <br />
+    <table width="100%">
+        <tr>
+            <td width="240px"><table>
+                <tr>
+                    <td width="180px">Complexity Metrics</td> 
+                    <td width="40px"></td>
+                </tr>
+                <tr> 
+                    <td colspan="2"><hr /></td>
+                </tr>
+                <tr>
+                    <td>Data Complexity</td> 
+                    <td><%= format_measure('complexity_dco') %></td>
+                </tr>
+                <tr>
+                    <td>Data Flow Complexity</td> 
+                    <td><%= format_measure('complexity_dfc') %></td>
+                </tr>
+                <tr>
+                    <td>Interface Complexity</td> 
+                    <td><%= format_measure('complexity_ico') %></td>
+                </tr>
+                <tr>
+                    <td>Control Flow Complexity</td> 
+                    <td><%= format_measure('complexity_cfc') %></td>
+                </tr>
+                <tr>
+                    <td>Conditional Complexity</td> 
+                    <td><%= format_measure('complexity_coc') %></td>
+                </tr>
+                <tr>
+                    <td>Branching Complexity</td> 
+                    <td><%= format_measure('complexity_brc') %></td>
+                </tr>
+                <tr>
+                    <td>Language Complexity</td> 
+                    <td><%= format_measure('complexity_lcm') %></td>
+                </tr>
+            </table></td>
+            <td width="20px"> </td>
+            <td width="240px"><table>
+                <tr>
+                    <td width="180px">Quality Metrics</td> 
+                    <td width="40px"></td>
+                </tr>
+                <tr> 
+                    <td colspan="2"><hr /></td>
+                </tr>
+                <tr>
+                    <td>Modularity</td> 
+                    <td><%= format_measure('quality_mod') %></td>
+                </tr>
+                <tr>
+                    <td>Testability</td> 
+                    <td><%= format_measure('quality_tst') %></td>
+                </tr>
+                <tr>
+                    <td>Reusability</td> 
+                    <td><%= format_measure('quality_reu') %></td>
+                </tr>
+                <tr>
+                    <td>Security</td> 
+                    <td><%= format_measure('quality_sec') %></td>
+                </tr>
+                <tr>
+                    <td>Flexibility</td> 
+                    <td><%= format_measure('quality_fle') %></td>
+                </tr>
+                <tr>
+                    <td>Conformity</td> 
+                    <td><%= format_measure('quality_cof') %></td>
+                </tr>
+                <tr>
+                    <td>Maintainability</td> 
+                    <td><%= format_measure('quality_mam') %></td>
+                </tr>
+            </table></td>
+        </tr>
+    </table>
 </div>

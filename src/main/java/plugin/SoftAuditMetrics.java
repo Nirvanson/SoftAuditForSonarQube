@@ -118,6 +118,12 @@ public class SoftAuditMetrics implements Metrics {
             .setDescription("Number of methods.").setDirection(Metric.DIRECTION_NONE).setQualitative(false)
             .setDomain(CoreMetrics.DOMAIN_GENERAL).create();
     /**
+     * Number of Methods / Procedures / Functions. Good mapping to CoreMetrics.
+     */
+    public static final Metric<Integer> PME = new Metric.Builder("base_pme", "Private Methods", Metric.ValueType.INT)
+            .setDescription("Number of private methods.").setDirection(Metric.DIRECTION_NONE).setQualitative(false)
+            .setDomain(CoreMetrics.DOMAIN_GENERAL).create();
+    /**
      * All variables in a parameter list, i.e. in an interface to a method.
      */
     public static final Metric<Integer> PAR = new Metric.Builder("base_par", "Parameters", Metric.ValueType.INT)
@@ -344,7 +350,7 @@ public class SoftAuditMetrics implements Metrics {
     public List<Metric> getMetrics() {
         return Arrays.asList(ARG, BRA, CAS, CLA, CON, IFS, INT, LIT, LOP, MAD, MED, MET, MID, PAR, PRE, REF, RET, SED,
                 STM, SWI, VAR, DTY, FFC, FUC, IMP, RUM, SRC, SST, STY, OMS, OBP, DCO, DFC, CFC, COC, ICO, BRC, LCM, ACM,
-                TST, FLE, COF, MOD, REU, SEC, MAM, AQM);
+                TST, FLE, COF, MOD, REU, SEC, MAM, AQM, PME);
 
     }
 }

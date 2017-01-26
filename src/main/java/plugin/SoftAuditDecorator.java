@@ -3,6 +3,7 @@ package plugin;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.sonar.api.batch.Decorator;
@@ -26,7 +27,7 @@ import plugin.util.SoftAuditLogger;
 public class SoftAuditDecorator implements Decorator {
 
     private DecoratorContext context;
-    DecimalFormat df = new DecimalFormat("0.000");
+    DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(Locale.US);
 
     @Override
     public boolean shouldExecuteOnProject(Project project) {
@@ -35,6 +36,7 @@ public class SoftAuditDecorator implements Decorator {
 
     @Override
     public void decorate(Resource resource, DecoratorContext context) {
+        df.applyPattern("0.000");
         Logger LOGGER = Loggers.get(SoftAuditDecorator.class);
         // only execute on project level
         if (!Scopes.isProject(resource)) {

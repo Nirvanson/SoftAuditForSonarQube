@@ -112,6 +112,11 @@ public class ModelAnalyser {
                 default:
                     throw new AnalyzeException("Unknown JavaClassDeclaration: " + theClass.getType());
                 }
+                for (JavaFileContent classcontent : theClass.getContent()) {
+                    if (classcontent instanceof JavaStatement && ((JavaStatement) classcontent).getDeclaredVariables()!=null) {
+                        countFinding(result, SoftAuditMetrics.VAR, ((JavaStatement) classcontent).getDeclaredVariables().size());
+                    }
+                }
                 // include content-scan
                 includeContentScan(result, analyzeContentList(theClass.getContent()));
             } else if (content instanceof JavaMethod) {
@@ -123,7 +128,11 @@ public class ModelAnalyser {
                         && (((JavaStatement) theMethod.getContent().get(0)).getType().equals(StatementType.RETURN)
                                 || ((JavaStatement) theMethod.getContent().get(0)).getType()
                                         .equals(StatementType.ASSIGNMENT)))) {
-                    countFinding(result, SoftAuditMetrics.MET, 1.0);
+                    if (theMethod.getModifiers().contains(new WordInFile(null, KeyWord.PRIVATE))) {
+                        countFinding(result, SoftAuditMetrics.PME, 1.0);
+                    } else {
+                        countFinding(result, SoftAuditMetrics.MET, 1.0);
+                    }
                     usedControlStatementTypes.add(StatementType.METHODDECLARATION);
                     countFinding(result, SoftAuditMetrics.PAR, theMethod.getParameters().size());
                     // check for FFC hits. if 0 add as RUM
@@ -381,14 +390,14 @@ public class ModelAnalyser {
             if (theStatement.getReferencedVariables() != null) {
                 countFinding(result, SoftAuditMetrics.REF, theStatement.getReferencedVariables().size());
             }
+            if (theStatement.getDeclaredVariables()!=null) {
+                countFinding(result, SoftAuditMetrics.REF, theStatement.getDeclaredVariables().size());
+            }
             if (theStatement.getDeclaredVariables() != null && theStatement.getType().equals(StatementType.ASSIGNMENT)
                     || theStatement.getType().equals(StatementType.VARDECLARATION)
                     || theStatement.getType().equals(StatementType.UNSPECIFIED)) {
                 for (JavaVariable variable : theStatement.getDeclaredVariables()) {
                     usedDataTypes.add(parseDataType(variable.getType()));
-                }
-                if (theStatement.getDeclaredVariables()!=null) {
-                    countFinding(result, SoftAuditMetrics.VAR, theStatement.getDeclaredVariables().size());
                 }
             } 
             countFinding(result, SoftAuditMetrics.ARG, theStatement.getReferencedVariables().size());
