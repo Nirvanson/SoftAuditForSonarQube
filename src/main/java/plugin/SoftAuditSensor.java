@@ -1,7 +1,6 @@
 package plugin;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,7 +8,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
@@ -21,12 +19,12 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
-import plugin.analyser.FileNormalizer;
-import plugin.analyser.ModelAnalyser;
-import plugin.analyser.ModelBuilder;
-import plugin.analyser.ModelDetailExpander;
-import plugin.analyser.ModelStructureExpander;
-import plugin.model.AnalyseTriple;
+import plugin.analyzer.FileNormalizer;
+import plugin.analyzer.ModelAnalyzer;
+import plugin.analyzer.ModelBuilder;
+import plugin.analyzer.ModelDetailExpander;
+import plugin.analyzer.ModelStructureExpander;
+import plugin.model.AnalyzeTriple;
 import plugin.model.JavaFileContent;
 import plugin.model.WordInFile;
 import plugin.util.AnalyzeException;
@@ -34,53 +32,45 @@ import plugin.util.SoftAuditLogger;
 import plugin.util.ParsingException;
 
 /**
- * Analyses project-files in search for relevant information.
+ * Analyzing source-files for retrieving measures needed for metric-calculation.
  *
  * @author Jan Rucks
- * @version 0.1
+ * @version 1.0
  */
 public class SoftAuditSensor implements Sensor {
 
-    /** The file system object for the project being analysed. */
-    private final FileSystem fileSystem;
+    /** Console-logger. */
     private static final Logger LOGGER = Loggers.get(SoftAuditSensor.class);
-    
+    /** The file system object for the project being analyzed. */
+    private final FileSystem fileSystem;
+
     /**
      * Constructor for test-runs.
      *
-     * @param fileSystem the project file system
+     * @param filename - for the log-file-writer
      */
-    public SoftAuditSensor(String filename) {
+    protected SoftAuditSensor(String filename) {
         this.fileSystem = null;
-        Properties properties = new Properties();
-        try (FileInputStream input = new FileInputStream("soft-audit-plugin.properties");) {
-            properties.load(input);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } 
-        String timestamp = (new SimpleDateFormat(properties.getProperty("logfiletimestampformat"))).format(new Date());
         try {
-            SoftAuditLogger.getLogger(properties.getProperty("logfilepath") + timestamp + filename, Integer.valueOf(properties.getProperty("loglevel")));
-        } catch (NumberFormatException e) {
-            LOGGER.error("Property 'loglevel' is invalid!", e);
+            SoftAuditLogger.getLogger(filename, 5);
         } catch (IOException e) {
             LOGGER.error("Initializing SoftAudit-Logger failed!", e);
         }
     }
 
     /**
-     * Constructor that sets the file system object for the project being analysed.
+     * Constructor that sets the file system object for the project being analyzed.
      *
-     * @param fileSystem the project file system
+     * @param fileSystem - the project file system
      */
     public SoftAuditSensor(FileSystem fileSystem) {
         this.fileSystem = fileSystem;
     }
 
     /**
-     * Determines whether the sensor should run or not for the given project.
+     * Determines whether the sensor should run or not for the given project. Only Java is supported.
      *
-     * @param project - the project being analysed
+     * @param project - the project being analyzed
      * @return true if java used in project
      */
     public boolean shouldExecuteOnProject(Project project) {
@@ -91,24 +81,39 @@ public class SoftAuditSensor implements Sensor {
     }
 
     /**
-     * Do analysation.
+     * Start analyzing.
      *
-     * @param project - the project being analysed
+     * @param project - the project being analyzed
      * @param sensorContext - the sensor context
      */
     public void analyse(Project project, SensorContext sensorContext) {
-    	Settings properties = sensorContext.settings();
-    	String timestamp = (new SimpleDateFormat(properties.getString("logfiletimestampformat"))).format(new Date());
-    	String filename = properties.getString("logfilepath") + timestamp + properties.getString("logfilename");
-    	try {
+        LOGGER.info("--- SoftAuditSensor started");
+        // initialization with properties values
+        Double optimalModuleSize = null;
+        try {
+            Settings properties = sensorContext.settings();
+            String timestamp = (new SimpleDateFormat(properties.getString("logfiletimestampformat")))
+                    .format(new Date());
+            String filename = properties.getString("logfilepath") + timestamp + properties.getString("logfilename");
             SoftAuditLogger.getLogger(filename, Integer.valueOf(properties.getInt("loglevel")));
+            properties.appendProperty("currentlogfile", filename);
+            optimalModuleSize = Double.valueOf(properties.getDouble("optimalModuleSize"));
         } catch (IOException e) {
+            // initialization failed. Use default for optimalModuleSize and skip file-logging
             LOGGER.error("Initializing SoftAudit-Logger failed!", e);
+            optimalModuleSize = 200.0;
         }
-    	properties.appendProperty("currentlogfile", filename);
-        // get measures from files
-        Map<Metric<?>, Double> measures = doAnalyse(fileSystem.files(fileSystem.predicates().hasLanguage("java")), Double.valueOf(properties.getDouble("optimalModuleSize")));
-        
+
+        // do analyze
+        Map<Metric<?>, Double> measures = doAnalyze(fileSystem.files(fileSystem.predicates().hasLanguage("java")),
+                optimalModuleSize);
+        try {
+            SoftAuditLogger.getLogger().printCumulatedMeasures(measures);
+            SoftAuditLogger.getLogger().close();
+        } catch (IOException e) {
+            LOGGER.error("Logging measures failed!", e);
+        }
+
         // save measures
         for (Metric<?> measure : measures.keySet()) {
             sensorContext.saveMeasure(new Measure<Integer>(measure, measures.get(measure), 0));
@@ -117,24 +122,27 @@ public class SoftAuditSensor implements Sensor {
     }
 
     /**
-     * Start analyzing.
+     * Starts the single analyze-steps and collects the retrieved measures.
      *
+     * @param files - java source files to be analyzed
+     * @param omsvalue - fixed value for optimalModuleSize (from properties)
      * @return map with results for measures
      */
-    public Map<Metric<?>, Double> doAnalyse(Iterable<File> files, double omsvalue) {
-    	Map<Metric<?>, Double> result = new HashMap<Metric<?>, Double>();
-        // add all measures from metrics list (metrics with keys like base_xyz)
+    protected Map<Metric<?>, Double> doAnalyze(Iterable<File> files, double omsvalue) {
+        Map<Metric<?>, Double> result = new HashMap<Metric<?>, Double>();
+        // add all measures from metrics list (metrics with keys like base_xyz) with start-value 0
         for (Metric<?> metric : new SoftAuditMetrics().getMetrics()) {
             if (metric.getKey().startsWith("base")) {
                 result.put(metric, 0d);
             }
         }
+        // add optimalModuleSize from properties
         result.put(SoftAuditMetrics.OMS, omsvalue);
-        ModelAnalyser analyser = new ModelAnalyser();
-        List<AnalyseTriple<File, List<WordInFile>, List<JavaFileContent>>> models = new ArrayList<AnalyseTriple<File, List<WordInFile>, List<JavaFileContent>>>();
+
+        // Parse
+        List<AnalyzeTriple<File, List<WordInFile>, List<JavaFileContent>>> models = new ArrayList<AnalyzeTriple<File, List<WordInFile>, List<JavaFileContent>>>();
         LOGGER.info("--- Parse java files and build filemodels.");
         for (File file : files) {
-            // try parsing file
             List<JavaFileContent> fileModel = null;
             List<WordInFile> wordList = null;
             LOGGER.info("Parse file " + file.getName());
@@ -172,24 +180,30 @@ public class SoftAuditSensor implements Sensor {
                     LOGGER.error("Completing structured model with detail information failed!", e);
                 }
             }
-            models.add(new AnalyseTriple<File, List<WordInFile>, List<JavaFileContent>>(file, wordList, fileModel));
+            models.add(new AnalyzeTriple<File, List<WordInFile>, List<JavaFileContent>>(file, wordList, fileModel));
         }
+
+        // Analyze
         LOGGER.info("--- Count measures in parsed models");
-        LOGGER.info("Collecting declared methods.");
-        try  {
-            for (AnalyseTriple<File, List<WordInFile>, List<JavaFileContent>> parsedFile : models) {
-                if (parsedFile.getModel()!=null) {
-                    analyser.collectDeclaredMethods(parsedFile.getModel());
+        ModelAnalyzer analyzer = new ModelAnalyzer();
+        try {
+            // collect all declared methods (for scanning after foreign function calls)
+            LOGGER.info("Collecting declared methods.");
+            for (AnalyzeTriple<File, List<WordInFile>, List<JavaFileContent>> parsedFile : models) {
+                if (parsedFile.getModel() != null) {
+                    analyzer.collectDeclaredMethods(parsedFile.getModel());
                 }
             }
         } catch (Exception e) {
-            // Refining Model with details failed. Do medium analysis
+            // Collecting Methods in Models failed - maybe invalid results
             LOGGER.error("Collecting declared methods in models failed!", e);
         }
-        for (AnalyseTriple<File, List<WordInFile>, List<JavaFileContent>> parsedFile : models) {
+        for (AnalyzeTriple<File, List<WordInFile>, List<JavaFileContent>> parsedFile : models) {
+            // do measurement in filemodel and wordlist
             LOGGER.info("Measure file " + parsedFile.getFile().getName());
             try {
-                Map<Metric<?>, Double> partialResult = analyser.doFileModelAnalysis(parsedFile.getModel(), parsedFile.getWordList());
+                Map<Metric<?>, Double> partialResult = analyzer.doFileModelAnalysis(parsedFile.getModel(),
+                        parsedFile.getWordList());
                 SoftAuditLogger.getLogger().printAnalysedFile(parsedFile, partialResult);
                 for (Metric<?> metric : partialResult.keySet()) {
                     result.put(metric, result.get(metric) + partialResult.get(metric));
@@ -200,13 +214,13 @@ public class SoftAuditSensor implements Sensor {
                 LOGGER.error("Logging parsed file failed!", e);
             }
         }
-        // step 6 - put non-additive measures to resultmap
-        LOGGER.info("Add non-additive measures");
-        result.put(SoftAuditMetrics.SRC, analyser.getScannedSourceFiles());
-        result.put(SoftAuditMetrics.DTY, analyser.getNumberOfDataTypes());
-        result.put(SoftAuditMetrics.STY, analyser.getNumberOfStatementTypes());
-        SoftAuditLogger.getLogger().printCumulatedMeasures(result);
-        SoftAuditLogger.getLogger().close();
+
+        // Put non-additive measures to result-map
+        LOGGER.info("Add global measures");
+        result.put(SoftAuditMetrics.SRC, analyzer.getScannedSourceFiles());
+        result.put(SoftAuditMetrics.DTY, analyzer.getNumberOfDataTypes());
+        result.put(SoftAuditMetrics.STY, analyzer.getNumberOfStatementTypes());
+
         return result;
     }
 

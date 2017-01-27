@@ -11,7 +11,7 @@ import java.util.Map;
 
 import org.sonar.api.measures.Metric;
 
-import plugin.model.AnalyseTriple;
+import plugin.model.AnalyzeTriple;
 import plugin.model.JavaFileContent;
 import plugin.model.StatementType;
 import plugin.model.WordInFile;
@@ -49,11 +49,14 @@ public class SoftAuditLogger {
         return logger;
     }
 
-    public static SoftAuditLogger getLogger() {
+    public static SoftAuditLogger getLogger() throws IOException {
+        if (logger == null) {
+            throw new IOException("Logger is not initialized!");
+        }
         return logger;
     }
 
-    public void printAnalysedFile(AnalyseTriple<File, List<WordInFile>, List<JavaFileContent>> parsedFile,
+    public void printAnalysedFile(AnalyzeTriple<File, List<WordInFile>, List<JavaFileContent>> parsedFile,
             Map<Metric<?>, Double> measures) throws IOException {
         String filename = parsedFile.getFile().getName();
         printFile(filename, parsedFile.getFile());

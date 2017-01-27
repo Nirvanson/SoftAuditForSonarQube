@@ -9,7 +9,7 @@ import org.sonar.api.web.UserRole;
  * SoftAudit plugin widget definition.
  *
  * @author Jan Rucks
- * @version 0.1
+ * @version 1.0
  */
 @UserRole(UserRole.USER)
 @Description("Shows Quality and Complexity Metrics from SoftAudit for Java-projects.")
@@ -47,7 +47,6 @@ public class SoftAuditWidget extends AbstractRubyTemplate implements RubyRailsWi
      */
     @Override
     protected String getTemplatePath() {
-        String templatePath = "/plugin/softaudit_widget.html.erb";
-        return templatePath;
+        return "/plugin/softaudit_widget.html.erb";
     }
 }

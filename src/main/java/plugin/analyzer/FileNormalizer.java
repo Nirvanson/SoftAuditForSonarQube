@@ -1,4 +1,4 @@
-package plugin.analyser;
+package plugin.analyzer;
 
 import java.io.BufferedReader;
 import java.io.File;

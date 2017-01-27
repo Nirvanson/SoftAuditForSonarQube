@@ -20,20 +20,20 @@ public class SoftAuditSensorTest {
     public void testSingleFileAnalyse(){
         String filename = "BilanzController";
         File input = new File("src/main/resources/testdata/" + filename + ".java");
-        SoftAuditSensor sensor = new SoftAuditSensor("_" + filename + ".log");
+        SoftAuditSensor sensor = new SoftAuditSensor("./target/logs/" + filename + ".log");
         
         // do analyze, check logfile manually
-        sensor.doAnalyse(Arrays.asList(input), 200);
+        sensor.doAnalyze(Arrays.asList(input), 200);
     }
     
     @Test
     public void testSelfScan(){
         List<File> input = new ArrayList<File>();
         listf("src/main/java", input);
-        SoftAuditSensor sensor = new SoftAuditSensor("_SelfScan.log");
+        SoftAuditSensor sensor = new SoftAuditSensor("./target/logs/SelfScan.log");
         
         // do analyze, check logfile manually
-        sensor.doAnalyse(input, 200);
+        sensor.doAnalyze(input, 200);
     }
     
     public void listf(String directoryName, List<File> files) {

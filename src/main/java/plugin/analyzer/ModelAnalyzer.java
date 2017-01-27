@@ -1,4 +1,4 @@
-package plugin.analyser;
+package plugin.analyzer;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,7 +30,7 @@ import plugin.util.AnalyzeException;
  * @author Jan Rucks (jan.rucks@gmx.de)
  * @version 0.3
  */
-public class ModelAnalyser {
+public class ModelAnalyzer {
     // variables for full analysis
     private Set<StatementType> usedControlStatementTypes;
     private double otherStatementTypes;
@@ -39,7 +39,7 @@ public class ModelAnalyser {
     private Set<String> declaredMethods;
     private Set<String> getterAndSetter;
 
-    public ModelAnalyser() {
+    public ModelAnalyzer() {
         usedControlStatementTypes = new HashSet<StatementType>();
         otherStatementTypes = 0.0;
         usedDataTypes = new HashSet<String>();

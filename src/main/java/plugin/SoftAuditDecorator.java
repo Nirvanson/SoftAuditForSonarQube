@@ -23,27 +23,46 @@ import org.sonar.api.utils.log.Loggers;
 
 import plugin.util.SoftAuditLogger;
 
+/**
+ * Calculating metrics out of measured values from SoftAuditSensor and some CoreMetrics.
+ *
+ * @author Jan Rucks
+ * @version 1.0
+ */
 @DependsUpon(DecoratorBarriers.ISSUES_TRACKED)
 public class SoftAuditDecorator implements Decorator {
-
+    
+    /** Console-logger. */
+    private final Logger LOGGER = Loggers.get(SoftAuditDecorator.class);
+    /** Context of the decorator. */
     private DecoratorContext context;
-    DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(Locale.US);
 
+    /**
+     * Determines whether the decorator should run or not for the given project.
+     *
+     * @param project - the project being analyzed
+     * @return true
+     */
     @Override
     public boolean shouldExecuteOnProject(Project project) {
         return true;
     }
 
+    /**
+     * Do metric-calculations.
+     *
+     * @param resource - the resource for which the calculation should be done
+     * @param context - the decorator context
+     */
     @Override
     public void decorate(Resource resource, DecoratorContext context) {
-        df.applyPattern("0.000");
-        Logger LOGGER = Loggers.get(SoftAuditDecorator.class);
         // only execute on project level
         if (!Scopes.isProject(resource)) {
             return;
         }
+        LOGGER.info("--- SoftAuditDecorator started");
         this.context = context;
-        // safe deficiencie-measures from coremetrics
+        // safe deficiency-measures from CoreMetrics
         LOGGER.info("Retrieve SonarQube-provided measures");
         context.saveMeasure(SoftAuditMetrics.SED, getValue(CoreMetrics.BLOCKER_VIOLATIONS));
         context.saveMeasure(SoftAuditMetrics.MAD, getValue(CoreMetrics.CRITICAL_VIOLATIONS));
@@ -52,10 +71,10 @@ public class SoftAuditDecorator implements Decorator {
         // compute number of secure statements determined by security deficiencies
         context.saveMeasure(SoftAuditMetrics.SST,
                 getValue(SoftAuditMetrics.STM) - getValue(CoreMetrics.BLOCKER_VIOLATIONS));
-        // calculate metrics ( *100 because of lacking precision in sonarqube...)
+        // calculate metrics
+        LOGGER.info("Calculate metrics");
         Map<Metric<?>, Double> result = new HashMap<Metric<?>, Double>();
         Map<Metric<?>, Double> resultForLogger = new HashMap<Metric<?>, Double>();
-        LOGGER.info("Calculate metrics");
         // calculate all metrics which only depend on measures and save result for logger
         resultForLogger.put(SoftAuditMetrics.DCO,
                 ((getValue(SoftAuditMetrics.PRE) * 2) + (getValue(SoftAuditMetrics.ARG) * 1.25)
@@ -122,6 +141,8 @@ public class SoftAuditDecorator implements Decorator {
                         + result.get(SoftAuditMetrics.FLE) + result.get(SoftAuditMetrics.COF)
                         + result.get(SoftAuditMetrics.MAM)) / 7);
         result.put(SoftAuditMetrics.AQM, resultForLogger.get(SoftAuditMetrics.AQM));
+        DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(Locale.US);
+        df.applyPattern("0.000");
         for (Metric<?> metric : result.keySet()) {
             context.saveMeasure(new Measure<String>(metric, df.format(result.get(metric))));
         }
@@ -130,19 +151,26 @@ public class SoftAuditDecorator implements Decorator {
                 (getValue(SoftAuditMetrics.CLA) * 4) + (getValue(SoftAuditMetrics.MET) * 3)
                 + (getValue(SoftAuditMetrics.INT) * 2) + getValue(SoftAuditMetrics.GVA));
         context.saveMeasure(new Measure<Integer>(SoftAuditMetrics.OBP, resultForLogger.get(SoftAuditMetrics.OBP)));
-        // do SoftAuditLogging - no better way for getteng properties-access found
+        // do SoftAuditLogging - no better way for getting properties-access found
         @SuppressWarnings("deprecation")
         Settings properties = context.getProject().getSettings();
         try {
             SoftAuditLogger.getLogger(properties.getString("currentlogfile"), properties.getInt("loglevel"));
+            SoftAuditLogger.getLogger().printMetrics(resultForLogger);
+            properties.removeProperty("currentlogfile");
+            SoftAuditLogger.getLogger().close();
         } catch (IOException e) {
             LOGGER.error("Initializing SoftAudit-Logger with log from sensor failed!", e);
         }
-        SoftAuditLogger.getLogger().printMetrics(resultForLogger);
-        properties.removeProperty("currentlogfile");
-        SoftAuditLogger.getLogger().close();
+        LOGGER.info("--- SoftAuditDecorator finished");
     }
 
+    /**
+     * Normalize metric result. Cut off when under 0 or greater then 1.
+     *
+     * @param d - the metric result
+     * @return normalized result
+     */
     private double normalizeResult(double d) {
         if (d > 1) {
             return 1.0;
@@ -153,6 +181,12 @@ public class SoftAuditDecorator implements Decorator {
         return d;
     }
 
+    /**
+     * Retrieve measure from SoftAuditSensor.
+     *
+     * @param metric - the measure to retrieve
+     * @return measured value
+     */
     private double getValue(Metric<?> metric) {
         return MeasureUtils.getValue(context.getMeasure(metric), 0.0);
     }
