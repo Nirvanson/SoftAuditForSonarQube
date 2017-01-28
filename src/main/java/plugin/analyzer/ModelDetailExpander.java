@@ -25,15 +25,15 @@ import plugin.util.ParsingException;
  * Refines fully structured code model (by ModelStructureExpander) with details: splits remaining word-lists to
  * statements and performs extraction of variable declarations, variable references and method calls.
  * 
- * @author Jan Rucks (jan.rucks@gmx.de)
- * @version 0.3
+ * @author Jan Rucks
+ * @version 1.0
  */
 public class ModelDetailExpander {
 
 	/**
      * Wrapper for detailing model in correct order.
      * 
-     * @param contents - structured model of file
+     * @param fileModel - structured model of file
      * @throws ParsingException
      * @return detailed fileModel
      */
@@ -54,7 +54,7 @@ public class ModelDetailExpander {
 	}
 	
     /**
-     * Recoursive scanning model for remaining word-lists and split them to statements.
+     * Recursively scanning model for remaining word-lists and split them to statements.
      * 
      * @param contents - structured model of the component-body for refinement
      * @throws ParsingException
@@ -101,7 +101,7 @@ public class ModelDetailExpander {
     }
 
     /**
-     * Recoursive scanning model for parsing declared variables and method calls.
+     * Recursively scanning model for parsing declared variables and method calls.
      * 
      * @param contents - model of the component-body for parsing
      * @throws ParsingException
@@ -223,7 +223,7 @@ public class ModelDetailExpander {
     }
 
     /**
-     * Recoursive scanning model for parsing referenced variables.
+     * Recursively scanning model for parsing referenced variables.
      * 
      * @param contents - model of the component-body for parsing
      * @param declaredVariables - list of declared variables
@@ -339,7 +339,7 @@ public class ModelDetailExpander {
     }
 
     /**
-     * Recoursive scanning model for parsing assignments.
+     * Recursively scanning model for parsing assignments.
      * 
      * @param contents - model of the component-body for parsing
      * @throws ParsingException
@@ -429,7 +429,7 @@ public class ModelDetailExpander {
     }
 
     /**
-     * Recoursive scanning model for parsing remaining statement-types.
+     * Recursively scanning model for parsing remaining statement-types.
      * 
      * @param contents - model of the component-body for parsing
      * @throws ParsingException
@@ -532,7 +532,7 @@ public class ModelDetailExpander {
     }
     
     /**
-     * Recoursive scanning model for parsing comparators.
+     * Recursively scanning model for parsing comparators.
      * 
      * @param contents - model of the component-body for parsing
      * @throws ParsingException
@@ -634,6 +634,12 @@ public class ModelDetailExpander {
         }
     }
     
+    /**
+     * find comparators in statement.
+     * 
+     * @param theStatement
+     * @param textToScan
+     */
     private static void parseComparatorsInStatement(JavaStatement theStatement, List<WordInFile> textToScan) {
         for (int i = 0; i < textToScan.size(); i++) {
             if (i<textToScan.size()-1 && (textToScan.get(i).equals(KeyWord.ASSIGN) && textToScan.get(i+1).equals(KeyWord.ASSIGN)) 
@@ -661,6 +667,13 @@ public class ModelDetailExpander {
         }
     }
 
+    /**
+     * Find assignment-structure in single statement
+     * 
+     * @param theStatement
+     * @param textToScan
+     * @return structured statement
+     */
     private static JavaStatement parseAssignmentsInStatement(JavaStatement theStatement, List<WordInFile> textToScan) {
         boolean assignmentFound = false;
         for (int i = 0; i < textToScan.size(); i++) {
@@ -703,7 +716,7 @@ public class ModelDetailExpander {
     }
 
     /**
-     * split a word-list to single line statements.
+     * Split a word-list to single line statements.
      * 
      * @param wordlist - word-list remaining after structural statements
      * @return List of statements
@@ -796,6 +809,13 @@ public class ModelDetailExpander {
         return textToScan;
     }
     
+    /**
+     * Collect declared variables in file for checking references.
+     * 
+     * @param contents
+     * @return set of variable identifiers
+     * @throws ParsingException
+     */
     private static Set<String> collectDeclaredVariables(List<JavaFileContent> contents) throws ParsingException {
         Set<String> result = new HashSet<String>();
         if (contents == null || contents.isEmpty()) {

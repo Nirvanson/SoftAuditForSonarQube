@@ -10,8 +10,8 @@ import plugin.model.WordType;
 /**
  * Provides helping function for scanning word-lists for patterns like variable declarations.
  * 
- * @author Jan Rucks (jan.rucks@gmx.de)
- * @version 0.3
+ * @author Jan Rucks
+ * @version 1.0
  */
 public class ParsingHelper {
 
@@ -26,6 +26,14 @@ public class ParsingHelper {
     public final static List<KeyWord> operators = Arrays.asList(KeyWord.ADD, KeyWord.SUB, KeyWord.MULT, KeyWord.DIV,
             KeyWord.MOD, KeyWord.AND, KeyWord.OR, KeyWord.BITXOR);
 
+    /**
+     * Replace KeyWord.WORD words that are numbers by KeyWord.NUMBER words in word-list.
+     * 
+     * @param result - resulting word-list
+     * @param step1 - input-wordlist
+     * @param i - position of number beginning
+     * @return position after number words
+     */
     public static int collectNumberWords(List<WordInFile> result, List<WordInFile> step1, int i) {
         boolean endfound = false;
         String resultingNumber = "";
@@ -44,23 +52,29 @@ public class ParsingHelper {
         result.add(new WordInFile(resultingNumber, KeyWord.CONSTANT));
         return i - 2;
     }
-    
+
+    /**
+     * Check if word in file is a number.
+     * 
+     * @param potentialNumber - to check
+     * @return true if is number
+     */
     public static boolean isNumber(String potentialNumber) {
         String[] chars = potentialNumber.split("");
         if (!chars[0].matches("[0-9]")) {
             return false;
         }
-        for (int i=1; i<chars.length-1; i++) {
+        for (int i = 1; i < chars.length - 1; i++) {
             if (!chars[i].matches("[0-9e]")) {
                 return false;
             }
         }
-        if (!chars[chars.length-1].matches("[0-9defl]")) {
+        if (!chars[chars.length - 1].matches("[0-9defl]")) {
             return false;
         }
         return true;
     }
-    
+
     /**
      * checks if following words are valid parameter/variable declaration
      * 
@@ -150,7 +164,7 @@ public class ParsingHelper {
     /**
      * parse recursive through generic type elements in Parameter declaration like HashMap<String, Integer>
      * 
-     * @param words - wordlist
+     * @param words - word-list
      * @param position - the current position in isParameter method (first after <)
      * @return position of last ">" or 0 if invalid
      */

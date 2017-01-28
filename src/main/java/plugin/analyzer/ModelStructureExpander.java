@@ -18,27 +18,28 @@ import plugin.util.ParsingException;
 /**
  * Refines basic code model (by ModelBuilder) with structural (control) statements.
  * 
- * @author Jan Rucks (jan.rucks@gmx.de)
- * @version 0.3
+ * @author Jan Rucks
+ * @version 1.0
  */
 public class ModelStructureExpander {
-    
-	/**
+
+    /**
      * Searching the main class/interface/enum declaration of the file and send it's content to parsing.
      * 
      * @param contents - the basic model
      * @throws ParsingException
      * @returns extended model
      */
-    public static List<JavaFileContent> parseStatementStructure(List<JavaFileContent> contents) throws ParsingException {
-    	for (JavaFileContent content : contents) {
+    public static List<JavaFileContent> parseStatementStructure(List<JavaFileContent> contents)
+            throws ParsingException {
+        for (JavaFileContent content : contents) {
             if (content instanceof JavaClass) {
                 content.setContent(parseStructuralStatements(content.getContent()));
             }
         }
-    	return contents;
+        return contents;
     }
-	
+
     /**
      * Entry-point for parsing structural (control) statements in class-body.
      * 

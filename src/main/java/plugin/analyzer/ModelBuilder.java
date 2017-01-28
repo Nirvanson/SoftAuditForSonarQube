@@ -22,30 +22,30 @@ import plugin.util.ParsingException;
 /**
  * Builds basic code-model out of the word-list from FileNormalizer. Parsing class and method structure.
  * 
- * @author Jan Rucks (jan.rucks@gmx.de)
- * @version 0.3
+ * @author Jan Rucks
+ * @version 1.0
  */
 public class ModelBuilder {
 
-	/**
+    /**
      * Wrapper for building basic model in correct order.
      * 
      * @param wordList - normalized file
      * @throws ParsingException
      * @return basic model
      */
-	public static List<JavaFileContent> parseBasicModel(List<WordInFile> wordList) throws ParsingException {
-		// step 1 - parse basic model from wordlist (class, imports, packages)
-		List<JavaFileContent> fileModel = parseClassStructure(wordList);
-		// step 2 - complete basic model by parsing inner classes and methods
-		for (JavaFileContent content : fileModel) {
+    public static List<JavaFileContent> parseBasicModel(List<WordInFile> wordList) throws ParsingException {
+        // step 1 - parse basic model from wordlist (class, imports, packages)
+        List<JavaFileContent> fileModel = parseClassStructure(wordList);
+        // step 2 - complete basic model by parsing inner classes and methods
+        for (JavaFileContent content : fileModel) {
             if (content instanceof JavaClass) {
                 content.setContent(parseClassContent(content));
             }
         }
-		return fileModel;
-	}
-	
+        return fileModel;
+    }
+
     /**
      * Parsing the basic structure of a java class/interface/enum to model. package, imports, class-definition and
      * annotations outside class definition
@@ -277,13 +277,13 @@ public class ModelBuilder {
             throw new ParsingException("Building base model (outer class structure) failed.");
         }
     }
-    
+
     /**
      * Parsing the inner structure of a class/enum/interface/method determined by methods and inner
      * classes/interfaces/enums. Is called recursive for found methods/interfaces/classes/enums.
      * 
      * @param parent - the model-component to parse inner structure
-     * @throws ParsingException 
+     * @throws ParsingException
      * @returns model of the parent-content structured by classes and methods
      */
     private static List<JavaFileContent> parseClassContent(JavaFileContent parent) throws ParsingException {
@@ -545,7 +545,8 @@ public class ModelBuilder {
                                 }
                                 i++;
                                 if (wordlist.get(i).getKey().equals(KeyWord.OPENBRACE)) {
-                                    // anonymous class in statement found....
+                                    // anonymous class in statement found go back and 
+                                    // collect statement-content before class
                                     int openBracesOfClass = 1;
                                     List<WordInFile> statementbefore = new ArrayList<WordInFile>();
                                     boolean finished = false;
@@ -574,8 +575,10 @@ public class ModelBuilder {
                                         result.add(new WordList(somecontent));
                                         content.clear();
                                     }
+                                    // create JavaStatementWithAnonymousClass with initial stuff
                                     JavaStatementWithAnonymousClass anoclass = new JavaStatementWithAnonymousClass(
                                             statementbefore, anonymousClassType);
+                                    // Parse body of anonymous class
                                     List<WordInFile> classBody = new ArrayList<WordInFile>();
                                     while (openBracesOfClass > 0) {
                                         i++;
@@ -590,6 +593,7 @@ public class ModelBuilder {
                                     }
                                     anoclass.setContent(Arrays.asList(new WordList(classBody)));
                                     finished = false;
+                                    // Collect statement-content after anonymous class
                                     List<WordInFile> statementafter = new ArrayList<WordInFile>();
                                     while (!finished && i < wordlist.size()) {
                                         i++;
@@ -731,7 +735,8 @@ public class ModelBuilder {
                     break;
                 case 3:
                     // modifiers, returntype, methodname and open paranthese detected
-                    WordInFile param = ParsingHelper.isVariableDeclaration(wordlist.subList(i, wordlist.size() - 1), false);
+                    WordInFile param = ParsingHelper.isVariableDeclaration(wordlist.subList(i, wordlist.size() - 1),
+                            false);
                     if (param != null) {
                         // add potential parameter to potential methodheader
                         List<WordInFile> paramtype = new ArrayList<WordInFile>();
@@ -761,8 +766,8 @@ public class ModelBuilder {
                     break;
                 case 4:
                     // modifiers, returntype, methodname, open paranthese and at least one parameter detected
-                    WordInFile secondaryparam = ParsingHelper.isVariableDeclaration(wordlist.subList(i, wordlist.size() - 1),
-                            true);
+                    WordInFile secondaryparam = ParsingHelper
+                            .isVariableDeclaration(wordlist.subList(i, wordlist.size() - 1), true);
                     if (secondaryparam != null) {
                         // add potential parameter to potential methodheader
                         List<WordInFile> paramtype = new ArrayList<WordInFile>();
@@ -799,7 +804,7 @@ public class ModelBuilder {
                         temporary.add(word);
                     } else if ((parenttype.equals(KeyWord.INTERFACE) || abstractClass)
                             && word.getKey().equals(KeyWord.SEMICOLON)) {
-                        // method interface...
+                        // method interface detected
                         if (!content.isEmpty()) {
                             List<WordInFile> somecontent = new ArrayList<WordInFile>();
                             somecontent.addAll(content);
@@ -891,6 +896,7 @@ public class ModelBuilder {
                 }
             }
         }
+        // add remining words as wordlist to model
         if (!temporary.isEmpty()) {
             content.addAll(temporary);
         }

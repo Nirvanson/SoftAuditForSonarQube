@@ -25,20 +25,28 @@ import plugin.model.components.JavaVariable;
 import plugin.util.AnalyzeException;
 
 /**
- * Java File Parser to extract needed measures for SoftAudit Metrics.
+ * Counts measures in parsed file-models.
  *
- * @author Jan Rucks (jan.rucks@gmx.de)
- * @version 0.3
+ * @author Jan Rucks
+ * @version 1.0
  */
 public class MeasureExtractor {
-    // variables for full analysis
+    /** List of used Control-Statement-types. Hold over all files. */
     private Set<StatementType> usedControlStatementTypes;
+    /** Number of non-control-statements. Each is one type. */
     private double otherStatementTypes;
+    /** List of used Data-Types. Hold over all files. */
     private Set<String> usedDataTypes;
+    /** Number of successfully analyzed source files. */
     private double scannedSourceFiles;
+    /** List of in project declared methods. */
     private Set<String> declaredMethods;
+    /** List of in project declared getter and setter. */
     private Set<String> getterAndSetter;
 
+    /**
+     * Constructor with list-initialization.
+     */
     public MeasureExtractor() {
         usedControlStatementTypes = new HashSet<StatementType>();
         otherStatementTypes = 0.0;
@@ -48,6 +56,14 @@ public class MeasureExtractor {
         getterAndSetter = new HashSet<String>();
     }
 
+    /**
+     * Start counting for single file.
+     * 
+     * @param fileModel - model for main analysis
+     * @param wordList - for literal and constant counting
+     * @return list of measures with value
+     * @throws AnalyzeException
+     */
     public Map<Metric<?>, Double> doFileModelAnalysis(List<JavaFileContent> fileModel, List<WordInFile> wordList)
             throws AnalyzeException {
         scannedSourceFiles++;
@@ -56,6 +72,12 @@ public class MeasureExtractor {
         return result;
     }
 
+    /**
+     * Count literals and constants in word-list.
+     * 
+     * @param wordList
+     * @return list of measures with value
+     */
     private Map<Metric<?>, Double> countLiteralsAndConstants(List<WordInFile> wordList) {
         double constants = 0.0;
         double literals = 0.0;
@@ -72,18 +94,39 @@ public class MeasureExtractor {
         return result;
     }
 
+    /**
+     * Get number of used statement-types after analyzing all files.
+     * 
+     * @return statement-type-count
+     */
     public double getNumberOfStatementTypes() {
         return otherStatementTypes + usedControlStatementTypes.size();
     }
 
+    /**
+     * Get number of used data-types after analyzing all files.
+     * 
+     * @return data-type-count
+     */
     public double getNumberOfDataTypes() {
         return (double) usedDataTypes.size();
     }
 
+    /**
+     * Get number of scanned files after analyzing all files.
+     * 
+     * @return scanned-files-count
+     */
     public double getScannedSourceFiles() {
         return scannedSourceFiles;
     }
 
+    /**
+     * Measure values in file-content-list recursively.
+     * 
+     * @param content-list
+     * @return list of measures with value
+     */
     private Map<Metric<?>, Double> analyzeContentList(List<JavaFileContent> contentlist) throws AnalyzeException {
         Map<Metric<?>, Double> result = new HashMap<Metric<?>, Double>();
         if (contentlist == null || contentlist.isEmpty()) {
@@ -113,8 +156,10 @@ public class MeasureExtractor {
                     throw new AnalyzeException("Unknown JavaClassDeclaration: " + theClass.getType());
                 }
                 for (JavaFileContent classcontent : theClass.getContent()) {
-                    if (classcontent instanceof JavaStatement && ((JavaStatement) classcontent).getDeclaredVariables()!=null) {
-                        countFinding(result, SoftAuditMetrics.GVA, ((JavaStatement) classcontent).getDeclaredVariables().size());
+                    if (classcontent instanceof JavaStatement
+                            && ((JavaStatement) classcontent).getDeclaredVariables() != null) {
+                        countFinding(result, SoftAuditMetrics.GVA,
+                                ((JavaStatement) classcontent).getDeclaredVariables().size());
                     }
                 }
                 // include content-scan
@@ -124,7 +169,8 @@ public class MeasureExtractor {
                 // count header-resulting measures
                 countFinding(result, SoftAuditMetrics.STM, 1.0);
                 Map<Metric<?>, Double> contentScan = analyzeContentList(theMethod.getContent());
-                if (theMethod.getContent()!=null && !(theMethod.getContent().size() == 1 && theMethod.getContent().get(0) instanceof JavaStatement
+                if (theMethod.getContent() != null && !(theMethod.getContent().size() == 1
+                        && theMethod.getContent().get(0) instanceof JavaStatement
                         && (((JavaStatement) theMethod.getContent().get(0)).getType().equals(StatementType.RETURN)
                                 || ((JavaStatement) theMethod.getContent().get(0)).getType()
                                         .equals(StatementType.ASSIGNMENT)))) {
@@ -136,11 +182,12 @@ public class MeasureExtractor {
                     usedControlStatementTypes.add(StatementType.METHODDECLARATION);
                     countFinding(result, SoftAuditMetrics.PAR, theMethod.getParameters().size());
                     // check for FFC hits. if 0 add as RUM
-                    if (!contentScan.containsKey(SoftAuditMetrics.FFC) || contentScan.get(SoftAuditMetrics.FFC) == 0.0) {
+                    if (!contentScan.containsKey(SoftAuditMetrics.FFC)
+                            || contentScan.get(SoftAuditMetrics.FFC) == 0.0) {
                         countFinding(result, SoftAuditMetrics.RUM, 1.0);
                     }
                 } else {
-                	countFinding(result, SoftAuditMetrics.ARG, theMethod.getParameters().size());
+                    countFinding(result, SoftAuditMetrics.ARG, theMethod.getParameters().size());
                 }
                 usedDataTypes.add(parseDataType(theMethod.getReturntype()));
                 countFinding(result, SoftAuditMetrics.REF, theMethod.getParameters().size());
@@ -284,10 +331,12 @@ public class MeasureExtractor {
                 case BREAK:
                 case CONTINUE:
                 case ASSERT:
+                    // count as simple statement. nothing more to do
                     countFinding(result, SoftAuditMetrics.STM, 1.0);
                     usedControlStatementTypes.add(theStatement.getType());
                     break;
                 case RETURN:
+                    // count as return statement, extract variable references and method calls
                     countFinding(result, SoftAuditMetrics.STM, 1.0);
                     usedControlStatementTypes.add(theStatement.getType());
                     countFinding(result, SoftAuditMetrics.BRA, 1.0);
@@ -306,6 +355,7 @@ public class MeasureExtractor {
                     }
                     break;
                 case THROW:
+                    // count as throw statement, extract variable references and method calls
                     countFinding(result, SoftAuditMetrics.STM, 1.0);
                     otherStatementTypes++;
                     countFinding(result, SoftAuditMetrics.REF, theStatement.getReferencedVariables().size());
@@ -320,12 +370,14 @@ public class MeasureExtractor {
                     }
                     break;
                 case BLOCK:
+                    // count as statement and include content scan
                     countFinding(result, SoftAuditMetrics.STM, 1.0);
                     usedControlStatementTypes.add(theStatement.getType());
                     includeContentScan(result, analyzeContentList(theStatement.getContent()));
                     break;
                 case SYNCHRONIZED:
                 case SWITCH:
+                    // count as statement and include content scan
                     countFinding(result, SoftAuditMetrics.STM, 1.0);
                     countFinding(result, SoftAuditMetrics.SWI, 1.0);
                     usedControlStatementTypes.add(theStatement.getType());
@@ -342,7 +394,7 @@ public class MeasureExtractor {
                     }
                     break;
                 case CASE:
-                    // one statement, if content in block additional end statement
+                    // count each case (with shared content) as statement
                     double numbercasesinonestatement = 1.0;
                     for (WordInFile word : theStatement.getCondition()) {
                         if (word.getKey().equals(KeyWord.COMMA)) {
@@ -353,30 +405,38 @@ public class MeasureExtractor {
                     countFinding(result, SoftAuditMetrics.CAS, numbercasesinonestatement);
                     countFinding(result, SoftAuditMetrics.BRA, numbercasesinonestatement);
                     usedControlStatementTypes.add(theStatement.getType());
+                    // include content scan
                     includeContentScan(result, analyzeContentList(theStatement.getContent()));
                     break;
                 default:
                     throw new AnalyzeException("Unknown JavaControlStatementDeclaration: " + theStatement.getType());
                 }
             } else if (content instanceof JavaStatement) {
+                // do simple-statement analysis if not an annotation
                 if (!((JavaStatement) content).getType().equals(StatementType.ANNOTATION)) {
                     countFinding(result, SoftAuditMetrics.STM, 1.0);
                     measureSimpleStatement((JavaStatement) content, result);
                 }
-            } else {
-                // ignore unparsed stuff
             }
         }
         return result;
     }
 
+    /**
+     * Measure values in simple one-line statement.
+     * 
+     * @param theStatement - to analyze
+     * @param result - Measure-map to extend
+     */
     private void measureSimpleStatement(JavaStatement theStatement, Map<Metric<?>, Double> result) {
         if (theStatement.getType().equals(StatementType.IMPORT)
                 || theStatement.getType().equals(StatementType.PACKAGE)) {
+            // imports and packages count as statement and import. Nothing else to do here
             countFinding(result, SoftAuditMetrics.IMP, 1.0);
             usedControlStatementTypes.add(theStatement.getType());
         } else {
             otherStatementTypes++;
+            // count called methods
             if (theStatement.getCalledMethods() != null) {
                 for (WordInFile function : theStatement.getCalledMethods()) {
                     if (!getterAndSetter.contains(function.getWord())) {
@@ -387,31 +447,44 @@ public class MeasureExtractor {
                     }
                 }
             }
+            // count referenced variables
             if (theStatement.getReferencedVariables() != null) {
                 countFinding(result, SoftAuditMetrics.REF, theStatement.getReferencedVariables().size());
+                countFinding(result, SoftAuditMetrics.ARG, theStatement.getReferencedVariables().size());
             }
-            if (theStatement.getDeclaredVariables()!=null) {
+            // count declared variables
+            if (theStatement.getDeclaredVariables() != null) {
                 countFinding(result, SoftAuditMetrics.VAR, theStatement.getDeclaredVariables().size());
             }
+            // count datatypes of all variables
             if (theStatement.getDeclaredVariables() != null && theStatement.getType().equals(StatementType.ASSIGNMENT)
                     || theStatement.getType().equals(StatementType.VARDECLARATION)
                     || theStatement.getType().equals(StatementType.UNSPECIFIED)) {
                 for (JavaVariable variable : theStatement.getDeclaredVariables()) {
                     usedDataTypes.add(parseDataType(variable.getType()));
                 }
-            } 
-            countFinding(result, SoftAuditMetrics.ARG, theStatement.getReferencedVariables().size());
+            }
+
         }
     }
 
+    /**
+     * Collect all in file-content-list declared methods recursively.
+     * 
+     * @param contentlist - to analyze
+     */
     public void collectDeclaredMethods(List<JavaFileContent> contentlist) {
+        // ignore empty content-list
         if (contentlist == null || contentlist.isEmpty()) {
             return;
         }
         for (JavaFileContent content : contentlist) {
             if (content instanceof JavaClass || content instanceof JavaStatementWithAnonymousClass) {
+                // search in inner content of classes
                 collectDeclaredMethods(content.getContent());
             } else if (content instanceof JavaMethod) {
+                // add found method if not a getter or setter and search in method-body 
+                // (for methods in classes in this method...)
                 JavaMethod theMethod = (JavaMethod) content;
                 collectDeclaredMethods(theMethod.getContent());
                 if (theMethod.getContent() != null && theMethod.getContent().size() == 1
@@ -427,6 +500,12 @@ public class MeasureExtractor {
         }
     }
 
+    /**
+     * Include result of counting in inner content in result-map.
+     * 
+     * @param resultmap
+     * @param partialResult
+     */
     private void includeContentScan(Map<Metric<?>, Double> resultmap, Map<Metric<?>, Double> partialResult) {
         for (Metric<?> measureToCount : partialResult.keySet()) {
             if (resultmap.containsKey(measureToCount)) {
@@ -437,6 +516,13 @@ public class MeasureExtractor {
         }
     }
 
+    /**
+     * Count found instance of specified measure.
+     * 
+     * @param resultmap - to include value
+     * @param measureToCount - the found measure
+     * @param findings - the value to include
+     */
     private void countFinding(Map<Metric<?>, Double> resultmap, Metric<?> measureToCount, double findings) {
         if (resultmap.containsKey(measureToCount)) {
             resultmap.put(measureToCount, resultmap.get(measureToCount) + findings);
@@ -445,6 +531,12 @@ public class MeasureExtractor {
         }
     }
 
+    /**
+     * Reduce data-type to normalized form (in model modifiers may be included).
+     * 
+     * @param type
+     * @return normalized type as string
+     */
     private String parseDataType(List<WordInFile> type) {
         String result = "";
         for (WordInFile word : type) {
