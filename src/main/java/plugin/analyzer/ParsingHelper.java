@@ -13,7 +13,7 @@ import plugin.model.WordType;
  * @author Jan Rucks (jan.rucks@gmx.de)
  * @version 0.3
  */
-public class ModelBuildHelper {
+public class ParsingHelper {
 
     /** Keywords for control-statements. */
     public final static List<KeyWord> keywords = Arrays.asList(KeyWord.SWITCH, KeyWord.DO, KeyWord.WHILE, KeyWord.FOR,
@@ -26,6 +26,25 @@ public class ModelBuildHelper {
     public final static List<KeyWord> operators = Arrays.asList(KeyWord.ADD, KeyWord.SUB, KeyWord.MULT, KeyWord.DIV,
             KeyWord.MOD, KeyWord.AND, KeyWord.OR, KeyWord.BITXOR);
 
+    public static int collectNumberWords(List<WordInFile> result, List<WordInFile> step1, int i) {
+        boolean endfound = false;
+        String resultingNumber = "";
+        while (!endfound) {
+            if (step1.get(i).equals(KeyWord.WORD) && ParsingHelper.isNumber(step1.get(i).getWord())) {
+                resultingNumber += step1.get(i).getWord();
+            } else if (step1.get(i).equals(KeyWord.DOT)) {
+                resultingNumber += ".";
+            } else if (resultingNumber.toLowerCase().endsWith("e") && step1.get(i).equals(KeyWord.SUB)) {
+                resultingNumber += "-";
+            } else {
+                endfound = true;
+            }
+            i++;
+        }
+        result.add(new WordInFile(resultingNumber, KeyWord.CONSTANT));
+        return i - 2;
+    }
+    
     public static boolean isNumber(String potentialNumber) {
         String[] chars = potentialNumber.split("");
         if (!chars[0].matches("[0-9]")) {

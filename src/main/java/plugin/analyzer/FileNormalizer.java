@@ -14,30 +14,29 @@ import plugin.model.KeyWord;
  * Parsing .java file. Removes unused elements like comments, literals and empty spaces and extracts a word list from
  * which the code model can be build. In the resulting word-list some simple keyword-measurements can be done.
  * 
- * @author Jan Rucks (jan.rucks@gmx.de)
- * @version 0.3
+ * @author Jan Rucks
+ * @version 1.0
  */
 public class FileNormalizer {
-
-	/**
+    /**
      * Wrapper for normalizing file in correct order.
      * 
      * @param file - file to normalize
      * @throws ParsingException
-     * @return detailed fileModel
+     * @return file as word-list
      */
-	public static List<WordInFile> doFileNormalization(File file) throws ParsingException {
-		// step 1 - remove unneeded, blank-spaces, comments, ...
-		List<String> normalizedLines = prepareFile(file);
-	    // step 2 - put all together in one line, remove unneeded spaces
-	    String singleLineCode = FileNormalizer.convertToSingleString(normalizedLines);
-	    // step 3 - Build wordlist
-	    List<WordInFile> wordList = FileNormalizer.createJavaWordList(singleLineCode);
-	    return wordList;
-	}
-	
+    public static List<WordInFile> doFileNormalization(File file) throws ParsingException {
+        // step 1 - remove unneeded, blank-spaces, comments, ...
+        List<String> normalizedLines = prepareFile(file);
+        // step 2 - put all together in one line, remove unneeded spaces
+        String singleLineCode = FileNormalizer.convertToSingleString(normalizedLines);
+        // step 3 - Build wordlist
+        List<WordInFile> wordList = FileNormalizer.createJavaWordList(singleLineCode);
+        return wordList;
+    }
+
     /**
-     * Prepares File for parsing. remove comments, empty lines, leading spaces....
+     * Prepares File for parsing (remove comments, empty lines, leading spaces...).
      * 
      * @param file - the file to analyze
      * @returns List of relevant lines
@@ -151,12 +150,12 @@ public class FileNormalizer {
             String normalizedCode = "";
             String[] chars = fullCode.split("");
             for (int i = 0; i < chars.length; i++) {
-                if (chars[i].equals(" ") && chars.length > i + 1 && ModelBuildHelper.breaks.contains(chars[i + 1])) {
+                if (chars[i].equals(" ") && chars.length > i + 1 && ParsingHelper.breaks.contains(chars[i + 1])) {
                     // skip space before break-characters
                     continue;
                 }
                 normalizedCode += chars[i];
-                if (ModelBuildHelper.breaks.contains(chars[i]) && chars.length > i + 1 && chars[i + 1].equals(" ")) {
+                if (ParsingHelper.breaks.contains(chars[i]) && chars.length > i + 1 && chars[i + 1].equals(" ")) {
                     // skip space after break-characters
                     i++;
                 }
@@ -168,7 +167,7 @@ public class FileNormalizer {
     }
 
     /**
-     * Splits code into words (special characters count as words!).
+     * Splits code into words (special characters count as words).
      * 
      * @param normalizedCode - Code as single normalized Line
      * @throws ParsingException
@@ -182,7 +181,7 @@ public class FileNormalizer {
             String word = "";
             for (int i = 0; i < chars.length; i++) {
                 // if previous char was an operator
-                if (ModelBuildHelper.breaks.contains(chars[i])) {
+                if (ParsingHelper.breaks.contains(chars[i])) {
                     if (!word.isEmpty()) {
                         // add previous word to list if not empty
                         step1.add(KeyWord.findKeyword(word));
@@ -209,14 +208,14 @@ public class FileNormalizer {
                     if (wordInStep1.equals(KeyWord.ANNOTATION)) {
                         // start of annotation.
                         annotationState++;
-                    } else if ((wordInStep1.equals(KeyWord.WORD) && ModelBuildHelper.isNumber(wordInStep1.getWord()))
+                    } else if ((wordInStep1.equals(KeyWord.WORD) && ParsingHelper.isNumber(wordInStep1.getWord()))
                             || (wordInStep1.equals(KeyWord.DOT)) && i < step1.size() - 1
                                     && step1.get(i + 1).getWord() != null
-                                    && ModelBuildHelper.isNumber(step1.get(i + 1).getWord())) {
+                                    && ParsingHelper.isNumber(step1.get(i + 1).getWord())) {
                         // it's a number... collect all words together that build one number
-                        i = collectNumberWords(result, step1, i);
-                    } else if ((wordInStep1.equals(KeyWord.WORD) && !wordInStep1.getWord().isEmpty()  && !wordInStep1.getWord().trim().isEmpty())
-                            || !wordInStep1.equals(KeyWord.WORD)) {
+                        i = ParsingHelper.collectNumberWords(result, step1, i);
+                    } else if ((wordInStep1.equals(KeyWord.WORD) && !wordInStep1.getWord().isEmpty()
+                            && !wordInStep1.getWord().trim().isEmpty()) || !wordInStep1.equals(KeyWord.WORD)) {
                         // otherwise add word to list (if not empty)
                         result.add(wordInStep1);
                     }
@@ -262,24 +261,5 @@ public class FileNormalizer {
         } catch (Exception e) {
             throw new ParsingException("Word-list creation failed.");
         }
-    }
-
-    private static int collectNumberWords(List<WordInFile> result, List<WordInFile> step1, int i) {
-        boolean endfound = false;
-        String resultingNumber = "";
-        while (!endfound) {
-            if (step1.get(i).equals(KeyWord.WORD) && ModelBuildHelper.isNumber(step1.get(i).getWord())) {
-                resultingNumber += step1.get(i).getWord();
-            } else if (step1.get(i).equals(KeyWord.DOT)) {
-                resultingNumber += ".";
-            } else if (resultingNumber.toLowerCase().endsWith("e") && step1.get(i).equals(KeyWord.SUB)) {
-                resultingNumber += "-";
-            } else {
-                endfound = true;
-            }
-            i++;
-        }
-        result.add(new WordInFile(resultingNumber, KeyWord.CONSTANT));
-        return i - 2;
     }
 }

@@ -92,7 +92,7 @@ public class ModelStructureExpander {
         List<WordInFile> potentialLabels = new ArrayList<WordInFile>();
         for (int i = 0; i < content.size(); i++) {
             WordInFile word = content.get(i);
-            if (ModelBuildHelper.keywords.contains(word)) {
+            if (ParsingHelper.keywords.contains(word)) {
                 // java keyword detected - parse the statement
                 if (!otherContent.isEmpty()) {
                     List<WordInFile> wordlist = new ArrayList<WordInFile>();
@@ -587,7 +587,7 @@ public class ModelStructureExpander {
         while (content.get(i).getKey().equals(KeyWord.WORD) && content.get(i + 1).equals(KeyWord.DOUBLEDOT)) {
             i += 2;
         }
-        if (ModelBuildHelper.keywords.contains(content.get(i))) {
+        if (ParsingHelper.keywords.contains(content.get(i))) {
             // content is single structural statement - parse directly
             i = parseSingleControlStatement(content.get(i).getKey(), i, content, ifContent) + 1;
             ifStatement.setContent(ifContent);
@@ -627,7 +627,7 @@ public class ModelStructureExpander {
             while (content.get(i).getKey().equals(KeyWord.WORD) && content.get(i + 1).equals(KeyWord.DOUBLEDOT)) {
                 i += 2;
             }
-            if (ModelBuildHelper.keywords.contains(content.get(i))) {
+            if (ParsingHelper.keywords.contains(content.get(i))) {
                 // content is single structural statement - parse directly
                 i = parseSingleControlStatement(content.get(i).getKey(), i, content, elseContent) + 1;
                 ifStatement.setOthercontent(elseContent);
@@ -715,7 +715,7 @@ public class ModelStructureExpander {
         while (content.get(i).getKey().equals(KeyWord.WORD) && content.get(i + 1).equals(KeyWord.DOUBLEDOT)) {
             i += 2;
         }
-        if (ModelBuildHelper.keywords.contains(content.get(i))) {
+        if (ParsingHelper.keywords.contains(content.get(i))) {
             // content is single structural statement - parse directly
             i = parseSingleControlStatement(content.get(i).getKey(), i, content, forContent) + 1;
             forStatement.setContent(forContent);
@@ -785,7 +785,7 @@ public class ModelStructureExpander {
         while (content.get(i).getKey().equals(KeyWord.WORD) && content.get(i + 1).equals(KeyWord.DOUBLEDOT)) {
             i += 2;
         }
-        if (ModelBuildHelper.keywords.contains(content.get(i))) {
+        if (ParsingHelper.keywords.contains(content.get(i))) {
             // content is single structural statement - parse directly
             i = parseSingleControlStatement(content.get(i).getKey(), i, content, whileContent) + 1;
             whileStatement.setContent(whileContent);
@@ -839,7 +839,7 @@ public class ModelStructureExpander {
         while (content.get(i).getKey().equals(KeyWord.WORD) && content.get(i + 1).equals(KeyWord.DOUBLEDOT)) {
             i += 2;
         }
-        if (ModelBuildHelper.keywords.contains(content.get(i))) {
+        if (ParsingHelper.keywords.contains(content.get(i))) {
             // content is single structural statement - parse directly
             i = parseSingleControlStatement(content.get(i).getKey(), i, content, whileContent) + 1;
             whileStatement.setContent(whileContent);

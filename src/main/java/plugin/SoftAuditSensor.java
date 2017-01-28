@@ -20,7 +20,7 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
 import plugin.analyzer.FileNormalizer;
-import plugin.analyzer.ModelAnalyzer;
+import plugin.analyzer.MeasureExtractor;
 import plugin.analyzer.ModelBuilder;
 import plugin.analyzer.ModelDetailExpander;
 import plugin.analyzer.ModelStructureExpander;
@@ -185,7 +185,7 @@ public class SoftAuditSensor implements Sensor {
 
         // Analyze
         LOGGER.info("--- Count measures in parsed models");
-        ModelAnalyzer analyzer = new ModelAnalyzer();
+        MeasureExtractor analyzer = new MeasureExtractor();
         try {
             // collect all declared methods (for scanning after foreign function calls)
             LOGGER.info("Collecting declared methods.");

@@ -649,7 +649,7 @@ public class ModelDetailExpander {
                 textToScan.set(i, new WordInFile(textToScan.get(i).getKey().toString(), KeyWord.COMPARATOR));
             } else if (textToScan.get(i).equals(KeyWord.LESS)) {
                 // < found. only add if not generic
-                int endofGeneric = ModelBuildHelper.parseGeneric(textToScan, i+1);
+                int endofGeneric = ParsingHelper.parseGeneric(textToScan, i+1);
                 if (endofGeneric == 0) {
                     // no generic... add as comparator
                     textToScan.set(i, new WordInFile(textToScan.get(i).getKey().toString(), KeyWord.COMPARATOR));
@@ -665,7 +665,7 @@ public class ModelDetailExpander {
         boolean assignmentFound = false;
         for (int i = 0; i < textToScan.size(); i++) {
             if (textToScan.get(i).equals(KeyWord.ASSIGN)) {
-                if (i>1 && ModelBuildHelper.operators.contains(textToScan.get(i - 1))) {
+                if (i>1 && ParsingHelper.operators.contains(textToScan.get(i - 1))) {
                     // extended assignment like +=
                     textToScan.set(i - 1,
                             new WordInFile(textToScan.get(i - 1).getKey().toString(), KeyWord.ASSIGNMENT));
@@ -756,7 +756,7 @@ public class ModelDetailExpander {
             List<WordInFile> textToScan) {
         for (int i = 0; i < textToScan.size(); i++) {
             // check if variable declaration. same syntax as method parameter
-            WordInFile declaredVar = ModelBuildHelper.isVariableDeclaration(textToScan.subList(i, textToScan.size()),
+            WordInFile declaredVar = ParsingHelper.isVariableDeclaration(textToScan.subList(i, textToScan.size()),
                     false);
             if (declaredVar != null) {
                 List<WordInFile> datatype = new ArrayList<WordInFile>();
@@ -782,7 +782,7 @@ public class ModelDetailExpander {
             } else if (textToScan.get(i).getKey().equals(KeyWord.WORD) && textToScan.size() > i + 2
                     && textToScan.get(i + 1).equals(KeyWord.LESS)) {
                 // otherwise check if call of constructor with generic
-                int endOfGeneric = ModelBuildHelper.parseGeneric(textToScan, i + 2);
+                int endOfGeneric = ParsingHelper.parseGeneric(textToScan, i + 2);
                 if (endOfGeneric != 0 && textToScan.size() > endOfGeneric + 1
                         && textToScan.get(endOfGeneric + 1).getKey().equals(KeyWord.OPENPARANTHESE)) {
                     statement.getCalledMethods().add(textToScan.get(i));

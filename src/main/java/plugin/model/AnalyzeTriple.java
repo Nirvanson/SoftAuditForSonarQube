@@ -1,26 +1,56 @@
 package plugin.model;
 
+/**
+ * Triple implementation for parsing-result. Only to be used with <File, List<WordInFile>, List<JavaFileContent>>.
+ *
+ * @author Jan Rucks
+ * @version 1.0
+ */
 public class AnalyzeTriple<T, U, V> {
+    /** The File. */
+    private final T file;
+    /** The file as word-list. */
+    private final U wordList;
+    /** The parsed model. */
+    private final V model;
 
-    private final T first;
-    private final U second;
-    private final V third;
-
-    public AnalyzeTriple(T first, U second, V third) {
-        this.first = first;
-        this.second = second;
-        this.third = third;
+    /**
+     * Constructor with all 3 elements.
+     * 
+     * @param file
+     * @param wordList
+     * @param model
+     */
+    public AnalyzeTriple(T file, U wordList, V model) {
+        this.file = file;
+        this.wordList = wordList;
+        this.model = model;
     }
 
+    /**
+     * Get the file.
+     * 
+     * @return file
+     */
     public T getFile() {
-        return first;
+        return file;
     }
 
+    /**
+     * Get the word-list.
+     * 
+     * @return wordList
+     */
     public U getWordList() {
-        return second;
+        return wordList;
     }
 
+    /**
+     * Get the model.
+     * 
+     * @return model
+     */
     public V getModel() {
-        return third;
+        return model;
     }
 }

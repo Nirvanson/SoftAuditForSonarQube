@@ -30,7 +30,7 @@ import plugin.util.AnalyzeException;
  * @author Jan Rucks (jan.rucks@gmx.de)
  * @version 0.3
  */
-public class ModelAnalyzer {
+public class MeasureExtractor {
     // variables for full analysis
     private Set<StatementType> usedControlStatementTypes;
     private double otherStatementTypes;
@@ -39,7 +39,7 @@ public class ModelAnalyzer {
     private Set<String> declaredMethods;
     private Set<String> getterAndSetter;
 
-    public ModelAnalyzer() {
+    public MeasureExtractor() {
         usedControlStatementTypes = new HashSet<StatementType>();
         otherStatementTypes = 0.0;
         usedDataTypes = new HashSet<String>();

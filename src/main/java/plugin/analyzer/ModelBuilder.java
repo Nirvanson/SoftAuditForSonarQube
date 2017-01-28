@@ -185,7 +185,7 @@ public class ModelBuilder {
                             if (wordList.get(i + 1).getKey().equals(KeyWord.LESS)) {
                                 // extended type is some generic stuff like List<String>
                                 i++;
-                                int endOfGeneric = ModelBuildHelper.parseGeneric(wordList, i + 1);
+                                int endOfGeneric = ParsingHelper.parseGeneric(wordList, i + 1);
                                 while (i < endOfGeneric) {
                                     i++;
                                 }
@@ -220,7 +220,7 @@ public class ModelBuilder {
                             if (wordList.get(i + 1).getKey().equals(KeyWord.LESS)) {
                                 // implemented type is some generic stuff like List<String>
                                 i++;
-                                int endOfGeneric = ModelBuildHelper.parseGeneric(wordList, i + 1);
+                                int endOfGeneric = ParsingHelper.parseGeneric(wordList, i + 1);
                                 while (i < endOfGeneric) {
                                     i++;
                                 }
@@ -383,7 +383,7 @@ public class ModelBuilder {
                         if (wordlist.get(i + 1).getKey().equals(KeyWord.LESS)) {
                             // extended type is some generic stuff like List<String>
                             i++;
-                            int endOfGeneric = ModelBuildHelper.parseGeneric(wordlist, i + 1);
+                            int endOfGeneric = ParsingHelper.parseGeneric(wordlist, i + 1);
                             while (i < endOfGeneric) {
                                 i++;
                             }
@@ -418,7 +418,7 @@ public class ModelBuilder {
                         if (wordlist.get(i + 1).getKey().equals(KeyWord.LESS)) {
                             // implemented type is some generic stuff like List<String>
                             i++;
-                            int endOfGeneric = ModelBuildHelper.parseGeneric(wordlist, i + 1);
+                            int endOfGeneric = ParsingHelper.parseGeneric(wordlist, i + 1);
                             while (i < endOfGeneric) {
                                 i++;
                             }
@@ -523,7 +523,7 @@ public class ModelBuilder {
                             if (wordlist.get(i + 1).getKey().equals(KeyWord.LESS)) {
                                 // type is some generic stuff like List<String>
                                 i++;
-                                int endOfGeneric = ModelBuildHelper.parseGeneric(wordlist, i + 1);
+                                int endOfGeneric = ParsingHelper.parseGeneric(wordlist, i + 1);
                                 while (i < endOfGeneric) {
                                     anonymousClassType.add(wordlist.get(i));
                                     i++;
@@ -677,7 +677,7 @@ public class ModelBuilder {
                         i++;
                     } else if (word.getKey().equals(KeyWord.LESS)) {
                         // returntype is some generic stuff like List<String>
-                        int endOfGeneric = ModelBuildHelper.parseGeneric(wordlist, i + 1);
+                        int endOfGeneric = ParsingHelper.parseGeneric(wordlist, i + 1);
                         if (endOfGeneric == 0) {
                             // no valid generic returnType --> no method header! --> reset and check word again
                             i--;
@@ -731,7 +731,7 @@ public class ModelBuilder {
                     break;
                 case 3:
                     // modifiers, returntype, methodname and open paranthese detected
-                    WordInFile param = ModelBuildHelper.isVariableDeclaration(wordlist.subList(i, wordlist.size() - 1), false);
+                    WordInFile param = ParsingHelper.isVariableDeclaration(wordlist.subList(i, wordlist.size() - 1), false);
                     if (param != null) {
                         // add potential parameter to potential methodheader
                         List<WordInFile> paramtype = new ArrayList<WordInFile>();
@@ -761,7 +761,7 @@ public class ModelBuilder {
                     break;
                 case 4:
                     // modifiers, returntype, methodname, open paranthese and at least one parameter detected
-                    WordInFile secondaryparam = ModelBuildHelper.isVariableDeclaration(wordlist.subList(i, wordlist.size() - 1),
+                    WordInFile secondaryparam = ParsingHelper.isVariableDeclaration(wordlist.subList(i, wordlist.size() - 1),
                             true);
                     if (secondaryparam != null) {
                         // add potential parameter to potential methodheader
