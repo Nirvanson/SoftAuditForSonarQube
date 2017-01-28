@@ -7,62 +7,125 @@ import plugin.model.JavaFileContent;
 import plugin.model.StatementType;
 import plugin.model.WordInFile;
 
+/**
+ * Model for java statements.
+ *
+ * @author Jan Rucks
+ * @version 1.0
+ */
 public class JavaStatement extends JavaFileContent {
-	
-	// the statementtext in single line statments without content
-	private List<WordInFile> statementText;
-	// Statementtype like return, import, if, ...
-	private StatementType type;
-	private List<JavaVariable> declaredVariables;
-	private List<JavaVariable> referencedVariables;
-	private List<WordInFile> calledMethods;
+    /** The statement-text in single line statments without content. */
+    private List<WordInFile> statementText;
+    /** Statement-type (like return, import, if, ...). */
+    private StatementType type;
+    /** List of in statement declared variables (not in content). */
+    private List<JavaVariable> declaredVariables;
+    /** List of in statement referenced variables (not in content). */
+    private List<JavaVariable> referencedVariables;
+    /** List of in statement called methods (not in content). */
+    private List<WordInFile> calledMethods;
 
-	public JavaStatement(StatementType type) {
-		super(null);
-		this.type = type;
-		this.statementText = null;
-		this.declaredVariables = new ArrayList<JavaVariable>();
-		this.referencedVariables = new ArrayList<JavaVariable>();
-		this.calledMethods = new ArrayList<WordInFile>();
-	}
+    /**
+     * Constructor with statement-type. Sets all default-values.
+     * 
+     * @param type - statement-type
+     */
+    public JavaStatement(StatementType type) {
+        super(null);
+        this.type = type;
+        this.statementText = null;
+        this.declaredVariables = new ArrayList<JavaVariable>();
+        this.referencedVariables = new ArrayList<JavaVariable>();
+        this.calledMethods = new ArrayList<WordInFile>();
+    }
 
-	public List<WordInFile> getStatementText() {
-		return statementText;
-	}
+    /**
+     * Get statement text.
+     * 
+     * @return statementText
+     */
+    public List<WordInFile> getStatementText() {
+        return statementText;
+    }
 
-	public void setStatementText(List<WordInFile> statementText) {
-		this.statementText = statementText;
-	}
+    /**
+     * Set statement-text.
+     * 
+     * @param statementText
+     */
+    public void setStatementText(List<WordInFile> statementText) {
+        this.statementText = statementText;
+    }
 
-	public StatementType getType() {
-		return type;
-	}
+    /**
+     * Get statement-type.
+     * 
+     * @return statementType
+     */
+    public StatementType getType() {
+        return type;
+    }
 
-	public void setStatementType(StatementType type) {
-		this.type = type;
-	}
+    /**
+     * Set statement-type.
+     * 
+     * @param type
+     */
+    public void setStatementType(StatementType type) {
+        this.type = type;
+    }
 
-	public List<JavaVariable> getDeclaredVariables() {
-		return declaredVariables;
-	}
+    /**
+     * Get list of declared variables.
+     * 
+     * @return declaredVariables
+     */
+    public List<JavaVariable> getDeclaredVariables() {
+        return declaredVariables;
+    }
 
-	public void setDeclaredVariables(List<JavaVariable> declaredVariables) {
-		this.declaredVariables = declaredVariables;
-	}
+    /**
+     * Set declared variables.
+     * 
+     * @param declaredVariables
+     */
+    public void setDeclaredVariables(List<JavaVariable> declaredVariables) {
+        this.declaredVariables = declaredVariables;
+    }
 
-	public List<JavaVariable> getReferencedVariables() {
-		return referencedVariables;
-	}
+    /**
+     * Get list of referenced variables.
+     * 
+     * @return referencedVariables
+     */
+    public List<JavaVariable> getReferencedVariables() {
+        return referencedVariables;
+    }
 
-	public void setReferencedVariables(List<JavaVariable> referencedVariables) {
-		this.referencedVariables = referencedVariables;
-	}
+    /**
+     * Set referenced variables.
+     * 
+     * @param referencedVariables
+     */
+    public void setReferencedVariables(List<JavaVariable> referencedVariables) {
+        this.referencedVariables = referencedVariables;
+    }
 
-	public List<WordInFile> getCalledMethods() {
-		return calledMethods;
-	}
+    /**
+     * Get list of called methods.
+     * 
+     * @return calledMethods
+     */
+    public List<WordInFile> getCalledMethods() {
+        return calledMethods;
+    }
 
-	public void setCalledMethods(List<WordInFile> calledMethods) {
-		this.calledMethods = calledMethods;
-	}
+    /**
+     * Set called methods.
+     * 
+     * @param calledMethods
+     */
+    public void setCalledMethods(List<WordInFile> calledMethods) {
+        this.calledMethods = calledMethods;
+    }
 }

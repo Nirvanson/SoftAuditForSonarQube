@@ -24,24 +24,53 @@ import plugin.model.components.JavaStatement;
 import plugin.model.components.JavaStatementWithAnonymousClass;
 import plugin.model.components.JavaVariable;
 
+/**
+ * Prints all steps of parsing, analyzing and calculating to log-file.
+ *
+ * @author Jan Rucks
+ * @version 1.0
+ */
 public class SoftAuditLogger {
+    /** The singleton instance. */
     private static SoftAuditLogger logger;
 
+    /** Headline for step 1: printing source-file-content. */
     private final String FILE = "--- FILENAME --- Analyzed Filecontent:";
+    /** Headline for step 2: printing extracted word-list. */
     private final String WORDLIST = "--- FILENAME --- Extracted wordlist:";
+    /** Headline for step 3: printing generated file-model. */
     private final String FILEMODEL = "--- FILENAME --- Generated Model:";
+    /** Headline for step 4: printing measured values for file. */
     private final String FILEMEASURES = "--- FILENAME --- Measured Values:";
+    /** Headline for step 5: printing accumulated measures on project-level. */
     private final String MEASURES = "--- Project-level - Measured values:";
+    /** Headline for step 6: printing calculated metrics on project level. */
     private final String METRICS = "--- Project-level - Calculated Metrics:";
 
+    /** The log-level that determines which steps are printed. */
     private final int loglevel;
+    /** The writer. */
     private PrintWriter writer;
 
+    /**
+     * The Constructor, initializing writer.
+     * 
+     * @param filename - full name of the log-file with path
+     * @param loglevel
+     * @throws IOException - if file creation fails
+     */
     private SoftAuditLogger(String filename, int loglevel) throws IOException {
         this.loglevel = loglevel;
         writer = new PrintWriter(new FileWriter(filename, true));
     }
 
+    /**
+     * Get singleton instance, used for initialization.
+     * 
+     * @param filename - full name of the log-file with path
+     * @param loglevel
+     * @throws IOException - if file creation fails
+     */
     public static SoftAuditLogger getLogger(String filename, int loglevel) throws IOException {
         if (logger == null) {
             logger = new SoftAuditLogger(filename, loglevel);
@@ -49,6 +78,13 @@ public class SoftAuditLogger {
         return logger;
     }
 
+    /**
+     * Get singleton instance, used after initialization.
+     * 
+     * @param filename - full name of the log-file with path
+     * @param loglevel
+     * @throws IOException - if file creation fails
+     */
     public static SoftAuditLogger getLogger() throws IOException {
         if (logger == null) {
             throw new IOException("Logger is not initialized!");
@@ -56,6 +92,13 @@ public class SoftAuditLogger {
         return logger;
     }
 
+    /**
+     * Print steps 1 - 4 for single source file.
+     * 
+     * @param parsedFile - parsing result of file
+     * @param measures - retrieved measures
+     * @throws IOException - if file access fails
+     */
     public void printAnalysedFile(AnalyzeTriple<File, List<WordInFile>, List<JavaFileContent>> parsedFile,
             Map<Metric<?>, Double> measures) throws IOException {
         String filename = parsedFile.getFile().getName();
@@ -65,6 +108,11 @@ public class SoftAuditLogger {
         printFileMeasures(filename, measures);
     }
 
+    /**
+     * Print step 5 on project level.
+     * 
+     * @param measures - accumulated measures
+     */
     public void printCumulatedMeasures(Map<Metric<?>, Double> measures) {
         if (loglevel > 0) {
             writer.println(MEASURES);
@@ -74,22 +122,37 @@ public class SoftAuditLogger {
         }
     }
 
-    public void printMetrics(Map<Metric<?>, Double> measures) {
+    /**
+     * Print step 6 on project level.
+     * 
+     * @param metrics - calculated metrics
+     */
+    public void printMetrics(Map<Metric<?>, Double> metrics) {
         if (loglevel > 0) {
             writer.println(METRICS);
-            for (Metric<?> metric : measures.keySet()) {
-                writer.println(metric.getName() + ": " + measures.get(metric));
+            for (Metric<?> metric : metrics.keySet()) {
+                writer.println(metric.getName() + ": " + metrics.get(metric));
             }
         }
     }
 
+    /**
+     * Close writer and set singleton instance to null.
+     */
     public void close() {
-        if (logger!=null) {
+        if (logger != null) {
             writer.close();
         }
         logger = null;
     }
 
+    /**
+     * Print step 1 - print source-file to log.
+     * 
+     * @param filename - the file name for header
+     * @param file - the file to print
+     * @throws IOException - if file access fails
+     */
     private void printFile(String filename, File file) throws IOException {
         if (loglevel > 4) {
             writer.println(FILE.replace("FILENAME", filename));
@@ -102,6 +165,12 @@ public class SoftAuditLogger {
         }
     }
 
+    /**
+     * Print step 2 - print word-list to log.
+     * 
+     * @param filename - the file name for header
+     * @param words - the the extracted word-list
+     */
     private void printWords(String filename, List<WordInFile> words) {
         if (loglevel > 3) {
             writer.println(WORDLIST.replace("FILENAME", filename));
@@ -116,6 +185,12 @@ public class SoftAuditLogger {
         }
     }
 
+    /**
+     * Print step 3 - print generated file-model to log.
+     * 
+     * @param filename - the file name for header
+     * @param contents - the file-model
+     */
     private void printModel(String filename, List<JavaFileContent> contents) {
         if (loglevel > 2) {
             writer.println(FILEMODEL.replace("FILENAME", filename));
@@ -123,6 +198,12 @@ public class SoftAuditLogger {
         }
     }
 
+    /**
+     * Print step 4 - print measured values of file to log.
+     * 
+     * @param filename - the file name for header
+     * @param measures - the the extracted measures
+     */
     private void printFileMeasures(String filename, Map<Metric<?>, Double> measures) {
         if (loglevel > 1) {
             writer.println(FILEMEASURES.replace("FILENAME", filename));
@@ -132,6 +213,12 @@ public class SoftAuditLogger {
         }
     }
 
+    /**
+     * Recursive printing of file-model-component-lists.
+     * 
+     * @param contents - the list of model-components
+     * @param level - recursion-level for indent
+     */
     private void printFileContent(List<JavaFileContent> contents, int level) {
         if (contents != null)
             for (JavaFileContent content : contents) {
@@ -350,6 +437,12 @@ public class SoftAuditLogger {
             }
     }
 
+    /**
+     * Add indent to a String depending on recursion-level.
+     * 
+     * @param inputlevel - recursion-level for indent
+     * @return String with tabs
+     */
     private String addTabs(int inputlevel) {
         int level = inputlevel;
         String tabs = "";

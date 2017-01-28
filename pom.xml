@@ -9,7 +9,7 @@
     <name>sonar-softaudit-plugin</name>
     <groupId>plugin</groupId>
     <artifactId>sonar-softaudit-plugin</artifactId>
-    <version>0.3</version>
+    <version>1.0</version>
     <packaging>sonar-plugin</packaging>
 
     <properties>
@@ -56,12 +56,6 @@
             <artifactId>sonar-plugin-api</artifactId>
             <version>${sonarqube.version}</version>
             <scope>provided</scope>
-        </dependency>
-		<dependency>
-            <groupId>org.codehaus.sonar</groupId>
-            <artifactId>sonar-testing-harness</artifactId>
-            <version>${sonarqube.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

@@ -7,102 +7,194 @@ import plugin.model.JavaFileContent;
 import plugin.model.StatementType;
 import plugin.model.WordInFile;
 
+/**
+ * Model for Control-Statement like loops, if, try, switch, return and some other.
+ *
+ * @author Jan Rucks
+ * @version 1.0
+ */
 public class JavaControlStatement extends JavaStatement {
-	
-	// content of JavaFileContent is the block inside ifs, fors, whiles, trys, cases, and blocks
-	// the list of cases in switches
-	// or the statement itself in one-line statements (import-, package-, return-statements, ...)
-	
-	// condition in while and if, termination in for, declaration in enhanced for, switchvariable in switch and value of switchvariable in case
-	private List<WordInFile> condition;
-	// in for loop
-	private List<WordInFile> initialization;
-	// increment in for
-	private List<WordInFile> increment;
-	// else block in if, finally block in try
-	private List<JavaFileContent> othercontent;
-	// resources in try with resources
-	private List<JavaFileContent> resources;
-	// list of catched Exceptions with catchblock
-	private Map<List<WordInFile>, List<JavaFileContent>> catchedExceptions;
-	// for ifs, whiles, for-loops and cases defines if content is in braces
-	private boolean contentInBlock;
-	// same as above for elseblock
-	private boolean otherContentInBlock;
-	
-	public JavaControlStatement(StatementType type) {
-		super(type);
-		condition = null;
-		initialization = null;
-		increment = null;
-		othercontent = null;
-		setCatchedExceptions(null);
-		setResources(null);
-		setContentInBlock(false);
-		setOtherContentInBlock(false);
-	}
+    // content of JavaFileContent is the block inside ifs, fors, whiles, trys, cases, and blocks
+    // or the list of cases in switches
 
-	public List<WordInFile> getCondition() {
-		return condition;
-	}
+    /**
+     * Condition in while and if, termination in for, declaration in enhanced for, switch-variable in switch and value
+     * of switch-variable in case.
+     */
+    private List<WordInFile> condition;
+    /** Only set for standard for loops. */
+    private List<WordInFile> initialization;
+    /** Only set for standard for loops. */
+    private List<WordInFile> increment;
+    /** Else block in if and finally block in try. */
+    private List<JavaFileContent> othercontent;
+    /** Resources-block in try with resources. */
+    private List<JavaFileContent> resources;
+    /** List of catched Exceptions with catch-blocks. */
+    private Map<List<WordInFile>, List<JavaFileContent>> catchedExceptions;
+    /** Indicates for ifs, whiles, for-loops and cases if content is in braces. */
+    private boolean contentInBlock;
+    /** Indicates if else-block of an if-statement is in braces. */
+    private boolean otherContentInBlock;
 
-	public void setCondition(List<WordInFile> condition) {
-		this.condition = condition;
-	}
+    /**
+     * Constructor with statement-type. Sets all default-values.
+     * 
+     * @param type - statement-type
+     */
+    public JavaControlStatement(StatementType type) {
+        super(type);
+        this.condition = null;
+        this.initialization = null;
+        this.increment = null;
+        this.othercontent = null;
+        this.catchedExceptions = null;
+        this.resources = null;
+        this.contentInBlock = false;
+        this.otherContentInBlock = false;
+    }
 
-	public List<WordInFile> getInitialization() {
-		return initialization;
-	}
+    /**
+     * Get condition as word-list.
+     * 
+     * @return condition
+     */
+    public List<WordInFile> getCondition() {
+        return condition;
+    }
 
-	public void setInitialization(List<WordInFile> initialization) {
-		this.initialization = initialization;
-	}
+    /**
+     * Set Condition.
+     * 
+     * @param condition
+     */
+    public void setCondition(List<WordInFile> condition) {
+        this.condition = condition;
+    }
 
-	public List<WordInFile> getIncrement() {
-		return increment;
-	}
+    /**
+     * Get initialization as word-list.
+     * 
+     * @return initialization
+     */
+    public List<WordInFile> getInitialization() {
+        return initialization;
+    }
 
-	public void setIncrement(List<WordInFile> increment) {
-		this.increment = increment;
-	}
+    /**
+     * Set Initialization.
+     * 
+     * @param initialization
+     */
+    public void setInitialization(List<WordInFile> initialization) {
+        this.initialization = initialization;
+    }
 
-	public List<JavaFileContent> getOthercontent() {
-		return othercontent;
-	}
+    /**
+     * Get increment as word-list.
+     * 
+     * @return increment
+     */
+    public List<WordInFile> getIncrement() {
+        return increment;
+    }
 
-	public void setOthercontent(List<JavaFileContent> elsecontent) {
-		this.othercontent = elsecontent;
-	}
+    /**
+     * Set increment.
+     * 
+     * @param increment
+     */
+    public void setIncrement(List<WordInFile> increment) {
+        this.increment = increment;
+    }
 
-	public List<JavaFileContent> getResources() {
-		return resources;
-	}
+    /**
+     * Get second content block.
+     * 
+     * @return otherContent
+     */
+    public List<JavaFileContent> getOthercontent() {
+        return othercontent;
+    }
 
-	public void setResources(List<JavaFileContent> resources) {
-		this.resources = resources;
-	}
+    /**
+     * Set second content block.
+     * 
+     * @param elsecontent
+     */
+    public void setOthercontent(List<JavaFileContent> elsecontent) {
+        this.othercontent = elsecontent;
+    }
 
-	public Map<List<WordInFile>, List<JavaFileContent>> getCatchedExceptions() {
-		return catchedExceptions;
-	}
+    /**
+     * Get resources-block.
+     * 
+     * @return resources
+     */
+    public List<JavaFileContent> getResources() {
+        return resources;
+    }
 
-	public void setCatchedExceptions(Map<List<WordInFile>, List<JavaFileContent>> catchedExceptions) {
-		this.catchedExceptions = catchedExceptions;
-	}
+    /**
+     * Set resources-block.
+     * 
+     * @param resources
+     */
+    public void setResources(List<JavaFileContent> resources) {
+        this.resources = resources;
+    }
 
-	public boolean isContentInBlock() {
-		return contentInBlock;
-	}
+    /**
+     * Get catched exceptions with their content-blocks.
+     * 
+     * @return catchedExceptions
+     */
+    public Map<List<WordInFile>, List<JavaFileContent>> getCatchedExceptions() {
+        return catchedExceptions;
+    }
 
-	public void setContentInBlock(boolean contentInBlock) {
-		this.contentInBlock = contentInBlock;
-	}
+    /**
+     * Set catched Exceptions.
+     * 
+     * @param catchedExceptions
+     */
+    public void setCatchedExceptions(Map<List<WordInFile>, List<JavaFileContent>> catchedExceptions) {
+        this.catchedExceptions = catchedExceptions;
+    }
 
-	public boolean isOtherContentInBlock() {
-		return otherContentInBlock;
-	}
+    /**
+     * Check if content is in braces.
+     * 
+     * @return true if content is in braces.
+     */
+    public boolean isContentInBlock() {
+        return contentInBlock;
+    }
 
-	public void setOtherContentInBlock(boolean otherContentInBlock) {
-		this.otherContentInBlock = otherContentInBlock;
-	}
+    /**
+     * Set if content is in braces.
+     * 
+     * @param contentInBlock
+     */
+    public void setContentInBlock(boolean contentInBlock) {
+        this.contentInBlock = contentInBlock;
+    }
+
+    /**
+     * Check if second content is in braces.
+     * 
+     * @return true if second content is in braces
+     */
+    public boolean isOtherContentInBlock() {
+        return otherContentInBlock;
+    }
+
+    /**
+     * Set if second content is in braces.
+     * 
+     * @param otherContentInBlock
+     */
+    public void setOtherContentInBlock(boolean otherContentInBlock) {
+        this.otherContentInBlock = otherContentInBlock;
+    }
 }
