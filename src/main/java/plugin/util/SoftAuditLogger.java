@@ -44,7 +44,9 @@ public class SoftAuditLogger {
     private final String FILEMEASURES = "--- FILENAME --- Measured Values:";
     /** Headline for step 5: printing accumulated measures on project-level. */
     private final String MEASURES = "--- Project-level - Measured values:";
-    /** Headline for step 6: printing calculated metrics on project level. */
+    /** Headline for step 6: printing accumulated measures on project-level. */
+    private final String SONARMEASURES = "--- Project-level - Measures provided by SonarQube:";
+    /** Headline for step 7: printing calculated metrics on project level. */
     private final String METRICS = "--- Project-level - Calculated Metrics:";
 
     /** The log-level that determines which steps are printed. */
@@ -121,9 +123,23 @@ public class SoftAuditLogger {
             }
         }
     }
-
+    
     /**
      * Print step 6 on project level.
+     * 
+     * @param measures - measures provided by sonarqube
+     */
+    public void printSonarMeasures(Map<Metric<?>, Double> measures) {
+        if (loglevel > 0) {
+            writer.println(SONARMEASURES);
+            for (Metric<?> metric : measures.keySet()) {
+                writer.println(metric.getName() + ": " + measures.get(metric));
+            }
+        }
+    }
+
+    /**
+     * Print step 7 on project level.
      * 
      * @param metrics - calculated metrics
      */

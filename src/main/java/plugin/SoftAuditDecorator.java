@@ -1,6 +1,5 @@
 package plugin;
 
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Locale;
@@ -64,13 +63,17 @@ public class SoftAuditDecorator implements Decorator {
         this.context = context;
         // safe deficiency-measures from CoreMetrics
         LOGGER.info("Retrieve SonarQube-provided measures");
-        context.saveMeasure(SoftAuditMetrics.SED, getValue(CoreMetrics.BLOCKER_VIOLATIONS));
-        context.saveMeasure(SoftAuditMetrics.MAD, getValue(CoreMetrics.CRITICAL_VIOLATIONS));
-        context.saveMeasure(SoftAuditMetrics.MED, getValue(CoreMetrics.MAJOR_VIOLATIONS));
-        context.saveMeasure(SoftAuditMetrics.MID, getValue(CoreMetrics.MINOR_VIOLATIONS));
+        Map<Metric<?>, Double> sonarQubeProvidedMeasures = new HashMap<Metric<?>, Double>();
+        sonarQubeProvidedMeasures.put(SoftAuditMetrics.SED, getValue(CoreMetrics.BLOCKER_VIOLATIONS));
+        sonarQubeProvidedMeasures.put(SoftAuditMetrics.MAD, getValue(CoreMetrics.CRITICAL_VIOLATIONS));
+        sonarQubeProvidedMeasures.put(SoftAuditMetrics.MED, getValue(CoreMetrics.MAJOR_VIOLATIONS));
+        sonarQubeProvidedMeasures.put(SoftAuditMetrics.MID, getValue(CoreMetrics.MINOR_VIOLATIONS));
         // compute number of secure statements determined by security deficiencies
-        context.saveMeasure(SoftAuditMetrics.SST,
+        sonarQubeProvidedMeasures.put(SoftAuditMetrics.SST,
                 getValue(SoftAuditMetrics.STM) - getValue(CoreMetrics.BLOCKER_VIOLATIONS));
+        for (Metric<?> metric: sonarQubeProvidedMeasures.keySet()) {
+            context.saveMeasure(metric, normalizeResult(sonarQubeProvidedMeasures.get(metric)));
+        }
         // calculate metrics
         LOGGER.info("Calculate metrics");
         Map<Metric<?>, Double> result = new HashMap<Metric<?>, Double>();
@@ -156,11 +159,12 @@ public class SoftAuditDecorator implements Decorator {
         Settings properties = context.getProject().getSettings();
         try {
             SoftAuditLogger.getLogger(properties.getString("currentlogfile"), properties.getInt("loglevel"));
+            SoftAuditLogger.getLogger().printSonarMeasures(sonarQubeProvidedMeasures);
             SoftAuditLogger.getLogger().printMetrics(resultForLogger);
             properties.removeProperty("currentlogfile");
             SoftAuditLogger.getLogger().close();
-        } catch (IOException e) {
-            LOGGER.error("Initializing SoftAudit-Logger with log from sensor failed!", e);
+        } catch (Exception e) {
+            LOGGER.warn("Initializing SoftAudit-Logger with log from sensor failed!");
         }
         LOGGER.info("--- SoftAuditDecorator finished");
     }

@@ -98,9 +98,9 @@ public class SoftAuditSensor implements Sensor {
             SoftAuditLogger.getLogger(filename, Integer.valueOf(properties.getInt("loglevel")));
             properties.appendProperty("currentlogfile", filename);
             optimalModuleSize = Double.valueOf(properties.getDouble("optimalModuleSize"));
-        } catch (IOException e) {
+        } catch (Exception e) {
             // initialization failed. Use default for optimalModuleSize and skip file-logging
-            LOGGER.error("Initializing SoftAudit-Logger failed!", e);
+            LOGGER.warn("Initializing SoftAudit-Logger failed!");
             optimalModuleSize = 200.0;
         }
 
@@ -111,7 +111,7 @@ public class SoftAuditSensor implements Sensor {
             SoftAuditLogger.getLogger().printCumulatedMeasures(measures);
             SoftAuditLogger.getLogger().close();
         } catch (IOException e) {
-            LOGGER.error("Logging measures failed!", e);
+            LOGGER.warn("Logging measures failed!");
         }
 
         // save measures
@@ -211,7 +211,7 @@ public class SoftAuditSensor implements Sensor {
             } catch (AnalyzeException e) {
                 LOGGER.error("Analyzing FileModel failed!", e);
             } catch (IOException e) {
-                LOGGER.error("Logging parsed file failed!", e);
+                LOGGER.warn("Logging parsed file failed!");
             }
         }
 
