@@ -72,7 +72,7 @@ public class SoftAuditDecorator implements Decorator {
         sonarQubeProvidedMeasures.put(SoftAuditMetrics.SST,
                 getValue(SoftAuditMetrics.STM) - getValue(CoreMetrics.BLOCKER_VIOLATIONS));
         for (Metric<?> metric: sonarQubeProvidedMeasures.keySet()) {
-            context.saveMeasure(metric, normalizeResult(sonarQubeProvidedMeasures.get(metric)));
+            context.saveMeasure(metric, sonarQubeProvidedMeasures.get(metric));
         }
         // calculate metrics
         LOGGER.info("Calculate metrics");
