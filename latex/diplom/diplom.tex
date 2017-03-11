@@ -1,0 +1,48 @@
+% Großer Beleg in deutsch.
+\documentclass[da,ngerman]{stthesis}
+
+% Nur Titelseite in TUD-Layout, Rest in SWT-Layout
+\usepackage[titlepageonly]{tudlayout}
+\usepackage{longtable}
+\usepackage{tabu}
+\usepackage{multirow}
+\usepackage{mathtools}
+\usepackage{wasysym}
+\usepackage{listings}
+
+% Titel
+\title{Erstellung eines (teil-)automatisierten Bewertungssystems für studentische Projekte im Softwarepraktikum}
+% Author
+\author{Jan Rucks}
+% Datum Abgabedatum
+\date{15.09.2017}
+% Geburtstag
+\birthday{07.11.1987}
+% Geburtsort
+\birthplace{Jena}
+% Betreuer
+\supervisor{Dr.-Ing. Birgit Demuth}
+
+\hyphenation{Interpretations-spielraum}
+\bibliographystyle{alpha}
+\lstset{language=java}
+
+\begin{document}
+	\maketitle 
+	\chapter*{Aufgabenstellung}
+		schreib es auf
+		
+	\tableofcontents
+  
+	\chapter{Einleitung}
+  		schreib es auf
+    
+	\chapter{Kapitel}
+		
+  	% Notwendig für korrekte Nummerierung der Anlagen
+  	\backmatter
+  
+  	\appendix
+  	\bibliography{diplombib}
+  
+\end{document}

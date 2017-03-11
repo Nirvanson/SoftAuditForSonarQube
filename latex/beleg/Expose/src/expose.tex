@@ -1,0 +1,185 @@
+%%This is a very basic article template.
+%%There is just one section and two subsections.
+\documentclass[a4paper,pointlessnumbers]{article}
+ 
+\RequirePackage{tabularx,graphicx}
+\RequirePackage[ansinew]{inputenc}
+\RequirePackage[left=20mm,right=20mm,top=30mm,bottom=40mm]{geometry}
+\RequirePackage[cmyk]{xcolor}
+\RequirePackage[
+	pdftoolbar=true,
+	bookmarksopen,
+	bookmarksnumbered=false,
+	bookmarksopenlevel=1,
+	pdfdisplaydoctitle,	
+    colorlinks,%
+    citecolor=black,%
+    filecolor=black,%
+    linkcolor=black,%
+    urlcolor=black
+]{hyperref}
+\RequirePackage{xspace}
+\RequirePackage[ngerman]{babel}
+
+\DeclareFixedFont{\univLightObliqueIX}{OT1}{aun}{l}{sl}{9}
+\DeclareFixedFont{\univLightIX}{OT1}{aun}{l}{n}{9}
+\DeclareFixedFont{\univBoldIX}{OT1}{aun}{b}{n}{9}
+\DeclareFixedFont{\univLightXI}{OT1}{aun}{l}{n}{11}
+\DeclareFixedFont{\univLightObliqueXI}{OT1}{aun}{l}{sl}{11}
+\DeclareFixedFont{\univBoldXI}{OT1}{aun}{b}{n}{11}
+\DeclareFixedFont{\univLightVII}{OT1}{aun}{l}{n}{7}
+\DeclareFixedFont{\univLightObliqueVII}{OT1}{aun}{l}{sl}{7}
+
+\newcommand{\dinBold}{\fontencoding{OT1}\fontfamily{din}\fontseries{b}\selectfont}
+\newcommand{\dinBoldXVI}{\fontencoding{OT1}\fontfamily{din}\fontseries{b}\fontsize{16pt}{19.2pt}\selectfont}
+
+\begin{document}
+  \begin{titlepage}
+	\begin{flushleft}
+	  \begin{tabularx}{\textwidth}{m{2cm}Xm{2cm}}
+	    \includegraphics[height=1.25cm]{tu_logo} & &
+	    \includegraphics[height=2cm]{STgroupLogo} \\
+	  \end{tabularx}
+	\end{flushleft}
+	\vspace{-5mm}
+
+	\begin{tabularx}{\textwidth}{@{}p{8mm}X}
+	  \hline
+	  & \univBoldIX{Fakultät Informatik} 
+	    \univLightIX{Institut für Software- und Multimediatechnik,}
+	    \univLightIX{Lehrstuhl für Softwaretechnologie} \\
+	  \hline
+	\end{tabularx}
+	\vspace{30mm}
+	
+	\begin{tabularx}{\textwidth}{@{}p{8mm}X}
+	  & \univLightXI Expose für großen Beleg \\
+	  & \\
+	  & \LARGE\dinBoldXVI\MakeUppercase{Migrierung der SoftAudit-Tools} \\ 
+	  & \LARGE\dinBoldXVI\MakeUppercase{nach SonarQube} \\
+	  & \\
+	  & \univLightIX bearbeitet von \\
+	  & \univLightXI Jan Rucks \\
+	  & \univLightIX geboren am 07.11.1987 in Jena \\
+	  & \univLightIX Diplom Informatik PO 2004 im 18. Fachsemester \\
+	  & \univLightIX Fachgebiete: \\ 
+	  & \univLightIX - Intelligente Systeme \\
+	  & \univLightIX - Softwaretechnologie \\
+	  & \univLightIX - Systemorientierte Informatik \\
+	  & \univLightIX - Architektur verteilter Systeme \\
+	  & \univLightIX Vertiefungsrichtung: Systems Engineering I und II, sowie Softwaremanagement \\ 
+	  & \univLightIX Nebenfach: Psychologie \\
+	\end{tabularx}
+	\vfill
+	\begin{tabularx}{\textwidth}{@{}p{8mm}X}
+	  & \\
+	  & \univLightIX Betreuer: \\
+	  & \univLightXI Dr.-Ing. Birgit Demuth \\
+	  & \\
+	  & \univLightIX Hochschullehrer: \\
+	  & \univLightXI Prof. Dr. rer. nat. habil. Uwe Aßmann \\
+	\end{tabularx}
+  \end{titlepage}
+
+  \section{Problem- und Fragestellung}
+      Das Softwarevermessungswerkzeug SoftAudit von Harry M. Sneed errechnet
+      mehrere gängige Metriken und ermittelt daraus einen gewichteten Mittelwert
+      um die Qualität und Komplexität von Software zu bewerten. Diese Bewertung
+      wird bereits am Lehrstuhl für Softwaretechnologie genutzt um die Arbeiten
+      von Studenten im Rahmen des Softwarepraktikums zu bewerten. \\
+      Allerdings handelt es sich hierbei um eine eher unhandliche alte 
+      DOS-Anwendung deren Ergebnisse in Text-Dateien ausgegeben werden. Da
+      für das Softwarepraktikums SonarQube zur Bewertung eingeführt wurde,
+      sollen im Rahmen dieser Arbeit die in den SoftAudit-Tools enthaltenen
+      Metriken und die Mittelwertbildung in einem SonarQube-Plugin umgesetzt
+      werden, damit diese weitergenutzt werden können, ohne dabei auf die
+      vielfältigen Möglichkeiten und die moderne Oberfläche von SonarQube
+      verzichten zu müssen.\\
+      Desweiteren soll eine Bewertung dieser Metriken erfolgen und ein vergleich
+      mit anderen Metriken und eventuell eingesetzten Mittelwerten stattfinden.\\
+  \section{Relevanz}
+      Praktische Relevanz: Das zu erstellende SonarQube-Plugin soll für die
+      Bewertung von studentischen Arbeiten im Softwarepraktikum eingesetzt werden. 
+      Darüber hinaus wäre der Einsatz auch in anderen Lehrveranstaltungen mit 
+      praktischen Programmieraufgaben oder zur Selbstkontrolle für Studenten und 
+      Mitarbeitern der TU-Dresden möglich.\\
+      Wissenschaftliche Relevanz: Da die einzelnen verwendeten Metriken bereits
+      ausführlich beschrieben und Bewertet wurden liegt hier der Fokus vor allem
+      beim Vergleich und der Untersuchung der Mittelwertbildungen aus
+      verschiedenen Metriken um eine möglichst umfassende und gute Bewertung
+      von Software zu erreichen.\\
+  \section{Stand der Forschung}
+      Wie bereits beschrieben gibt es eine große Anzahl an Bewertungsmetriken
+      (mehrere hundert) die eingesetzt werden können um Software zu
+      vermessen und zu bewerten. Viele dieser Metriken sind bereits mehrere
+      Jahrzehnte alt und von daher ausführlich betrachtet worden. Im Bereich
+      der Mittelwertbildung zwischen verschiedenen Metriken um die Stärken und
+      Schwächen der Einzelnen auszugleichen, beziehungsweise abzumildern gibt es
+      dagegen deutlich weniger Ansätze in der Forschung. Neben dem in SoftAudit
+      von Harry M. Sneed verfolgten Ansatz soll daher in dieser Arbeit nach
+      weiteren gesucht werden um diese miteinander zu Vergleichen und zu
+      bewerten.\\
+  \section{Vorkenntnisse}
+      Thematisch: Meine Vorkenntnisse im Bereich Softwarevermessung und
+      -Bewertung beschränken sich auf wenige, oberflächliche Berührungspunkte im
+      Rahmen von Lehrveranstaltungen an der TU Dresden (Softwaremanagement) und
+      praktischem Einsatz von Code-Qualitätsrichtlinien in den Projekten an
+      denen ich als Werkstudent bei der T-Systems MMS beteiligt war.\\
+      Praktisch: Die Softwareentwicklung mit Java für Web-Frontend-Anwendungen
+      war ein großteil meiner über 3-Jährigen Werkstudententätigkeit, sodass die
+      Entwicklung eines SonarQube-Plugins keinen großen Einarbeitungsaufwand in
+      die eingesetzten Technologien erfordert. Lediglich SonarQube selbst ist
+      für mich neu.\\
+      \newpage
+  \section{Vorgehen}
+      1. Einarbeitung und Materialsuche: Neben der Einarbeitung in SonarQube und
+      SoftAudit steht die Materialsuche zu diversen Metriken und
+      Vergleichsansätzen im Fordergrund. Der Ausgangspunkt ist dabei das Buch
+      'Software in Zahlen' von Harry M. Sneed.\\
+      2. Plugin-Entwicklung: Umsetzung der in Soft-Audit verwendeten Metriken in
+      einem SonarQube-Plugin. Parallel dazu weitere Materialsuche.\\
+      3. Materialauswertung: Auswertung der gefundenen Literatur um relevante
+      Metriken und Mittelwertbildungen zu extrahieren und im Sinne der
+      Aufgabenstellung aufzubereiten und mit Erfahrungen des entwickelten
+      Plugins zu verknüpfen.\\
+      4. Plugin-Verfeinerung: Wenn möglich Ergänzung des Plugins mit Ergebnissen
+      der Materialauswertung um einige Vergleiche praktisch durchführen zu
+      können.\\
+      5. Abschluss: Einfügen der Vergleiche in die Arbeit und Abschließende
+      Auswertung.\\
+  \section{Zeitplan}
+      bis Anfang Oktober 2016 soll die Einarbeitung und initiale Materialsammlung 
+      abgeschlossen sein.\\
+      Im Oktober und November 2016 soll die Entwicklung des SonarQube Plugins
+      erfolgen.\\
+      von Dezember 2016 bis Januar 2017 ist die Auswertung des Materials und
+      Vergleich der relevanten Metriken und Mittelwertbildungen geplant. In
+      diesem Zeitraum wäre auch die Zwischenpräsentation sinnvoll.\\
+      Im Februar 2017 soll die schriftliche Arbeit fertig werden, damit im März
+      die Verteidigung stattfinden kann.\\
+      Eventuell wäre auch eine parallele Bearbeitung von Plugin-Entwicklung und
+      Materialauswertung sinnvoll um die Zwischenpräsentation eher durchzuführen
+      und früher Erkenntnisse aus einem Bereich in den jeweils anderen mit
+      einfließen lassen zu können.\\
+  \section{Vorläufiges Inhaltsverzeichnis}
+      \textbf{1 Einleitung} \\
+      \textbf{2 Softwarevermessung} \\
+      \hspace*{5mm} 2.1 Metriken \\
+      \hspace*{5mm} 2.2 Mittelwertbildung \\
+      \textbf{3 Plugin-Entwicklung} \\
+      \hspace*{5mm} 3.1 Softaudit \\
+      \hspace*{5mm} 3.2 SonarQube \\
+      \hspace*{5mm} 3.3 Plugin \\
+      \textbf{4 Bewertung und Vergleich} \\
+      \hspace*{5mm} 4.1 Auswahl \\
+      \hspace*{5mm} 4.2 Vergleich \\
+      \hspace*{5mm} 4.3 Bewertung \\
+      \textbf{5 Zusammenfassung} \\
+      \textbf{6 Ausblick} \\
+  \section{Literatur}
+      Sneed, Seidl, Baumgartner: Software in Zahlen \\
+      Sneed: SoftAudit - Beschreibung \\
+      Simon, Seng, Mohaupt: Code-Quality-Management \\
+      Zuse: A Framework of Software Measurement \\
+      (Noch sehr unvollständig, da Materialsuche noch nicht abgeschlossen)
+\end{document}

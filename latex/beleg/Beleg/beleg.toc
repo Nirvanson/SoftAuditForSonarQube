@@ -1,0 +1,33 @@
+\select@language {ngerman}
+\contentsline {chapter}{\numberline {1}Einleitung}{1}{chapter.1}
+\contentsline {section}{\numberline {1.1}Motivation}{1}{section.1.1}
+\contentsline {section}{\numberline {1.2}Begriffskl\IeC {\"a}rung}{2}{section.1.2}
+\contentsline {chapter}{\numberline {2}Softwarevermessung}{5}{chapter.2}
+\contentsline {section}{\numberline {2.1}Messgr\IeC {\"o}\IeC {\ss }en}{6}{section.2.1}
+\contentsline {section}{\numberline {2.2}Metriken}{7}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Komplexit\IeC {\"a}t}{7}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}Qualit\IeC {\"a}t}{8}{subsection.2.2.2}
+\contentsline {section}{\numberline {2.3}SoftAudit}{8}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}Quantit\IeC {\"a}tsmetriken}{9}{subsection.2.3.1}
+\contentsline {subsection}{\numberline {2.3.2}Komplexit\IeC {\"a}tsmetriken}{10}{subsection.2.3.2}
+\contentsline {subsection}{\numberline {2.3.3}Qualit\IeC {\"a}tsmetriken}{11}{subsection.2.3.3}
+\contentsline {section}{\numberline {2.4}SonarQube}{13}{section.2.4}
+\contentsline {chapter}{\numberline {3}Plugin-Entwicklung}{15}{chapter.3}
+\contentsline {section}{\numberline {3.1}Die Schnittstellen zu SonarQube}{15}{section.3.1}
+\contentsline {section}{\numberline {3.2}Parsen von Java-Quelldateien}{16}{section.3.2}
+\contentsline {section}{\numberline {3.3}Das erstellte Code-Modell}{18}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}Java-Datei-Komponenten}{19}{subsection.3.3.1}
+\contentsline {subsection}{\numberline {3.3.2}Weitere Modellbestandteile}{21}{subsection.3.3.2}
+\contentsline {subsection}{\numberline {3.3.3}Beispiel}{22}{subsection.3.3.3}
+\contentsline {section}{\numberline {3.4}Messen der ben\IeC {\"o}tigten Werte}{23}{section.3.4}
+\contentsline {subsection}{\numberline {3.4.1}Das Problem der Messwertdefinition}{25}{subsection.3.4.1}
+\contentsline {section}{\numberline {3.5}Metriken berechnen}{26}{section.3.5}
+\contentsline {section}{\numberline {3.6}Darstellung im SonarQube-Widget}{28}{section.3.6}
+\contentsline {chapter}{\numberline {4}Plugin-Einsatz}{31}{chapter.4}
+\contentsline {section}{\numberline {4.1}Messergebnisse im Vergleich zu SoftAudit}{31}{section.4.1}
+\contentsline {section}{\numberline {4.2}Metrik-Resultate im Vergleich zu SoftAudit}{33}{section.4.2}
+\contentsline {chapter}{\numberline {5}Bewertung}{35}{chapter.5}
+\contentsline {section}{\numberline {5.1}Interpretation der Ergebnisse}{35}{section.5.1}
+\contentsline {section}{\numberline {5.2}Bedeutung f\IeC {\"u}r die Verwendung im Softwarepraktikum}{38}{section.5.2}
+\contentsline {section}{\numberline {5.3}Vergleich zu Code-Quality-Index nach Simon}{39}{section.5.3}
+\contentsline {chapter}{\numberline {6}Zusammenfassung und Ausblick}{41}{chapter.6}

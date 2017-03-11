@@ -1,0 +1,67 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{KST{\etalchar{+}}86}
+
+\bibitem[CP14]{SonarQubeInAction}
+G.~Ann Campbell and Patroklos~P. Papapetrou.
+\newblock {\em SonarQube in Action}.
+\newblock Manning, 2014.
+
+\bibitem[deo14]{PluginTutorial}
+deors.
+\newblock Writing your own sonarqube plug-ins.
+\newblock https://deors.wordpress.com/2014/03/20/sonarqube-plugins-1/, März
+  2014.
+
+\bibitem[ED07]{SoftwareMeasurement}
+Christof Ebert and Reiner Dumke.
+\newblock {\em Software Measurement: Establish - Extract - Evaluate - Execute}.
+\newblock Springer, 2007.
+
+\bibitem[FP96]{SoftwareMetrics}
+Norman~E. Fenton and Shari~Lawrence Pfleeger.
+\newblock {\em Software Metrics: A Rigorous and Practical Approach}.
+\newblock International Thomson Computer Press, 1996.
+
+\bibitem[Hal77]{SoftwareScience}
+Maurice~H. Halstead.
+\newblock {\em Elements of software science}.
+\newblock Elsevier, 1977.
+
+\bibitem[KST{\etalchar{+}}86]{SoftwareComplexityMeasurement}
+Joseph~K. Kearney, Robert~L. Sedlmeyer, William~B. Thompson, Michael~A. Gray,
+  and Michael~A. Adler.
+\newblock Software complexity measurement.
+\newblock {\em Communications of the ACM}, 29(11), Nov. 1986.
+
+\bibitem[McC76]{AComplexityMeasure}
+Thomas~J. McCabe.
+\newblock A complexity measure.
+\newblock {\em IEEE Transactions on Software Engineering}, SE-2:308--320, 1976.
+
+\bibitem[Sne10]{SoftAuditDoku}
+Harry~M. Sneed.
+\newblock {\em SoftAudit - System Auditing Werkzeug - Version 1.5}.
+\newblock Anecon, Dez. 2010.
+
+\bibitem[Son17]{APIChanges}
+SonarQube.
+\newblock Api changes.
+\newblock https://docs.sonarqube.org/display/DEV/API+Changes, Jan. 2017.
+
+\bibitem[SSB10]{SoftwareInZahlen}
+Harry~M. Sneed, Richard Seidl, and Manfred Baumgartner.
+\newblock {\em Software in Zahlen - Die Vermessung von Applikationen}.
+\newblock Hanser, 2010.
+
+\bibitem[SSM06]{CodeQualityManagement}
+Frank Simon, Olaf Seng, and Thomas Mohaupt.
+\newblock {\em Code-Quality-Management: Technische Qualität industrieller
+  Softwaresysteme transparent und vergleichbar gemacht}.
+\newblock dpunkt.verlag, 2006.
+
+\bibitem[Zus98]{FrameworkSoftwareMeasurement}
+Horst Zuse.
+\newblock {\em A Framework of Software Measurement}.
+\newblock De Gruyter, 1998.
+
+\end{thebibliography}
