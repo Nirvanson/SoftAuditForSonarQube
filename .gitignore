@@ -1,0 +1,4 @@
+/plugin/target/
+/plugin/.settings/
+.classpath
+.project
