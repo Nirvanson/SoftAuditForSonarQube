@@ -1,0 +1,60 @@
+major;"FIXME" tags should be handled;Java
+critical;"for" loop incrementers should modify the variable being tested in the loop's stop condition;Java, bug
+minor;"NOPMD" suppression comments should not be used;Java, bad-practice
+major;"NOSONAR" should not be used to switch off issues;Java, bad-practice
+major;"NullPointerException" should not be caught;Java, cert, cwe, error-handling, security
+major;"NullPointerException" should not be explicitly thrown;Java, pitfall
+critical;"public static" fields should be constant;Java, cert, cwe, security
+blocker;"return" statements should not occur in "finally" blocks;Java, bug, cwe, error-handling
+minor;"switch case" clauses should not have too many lines;Java, brain-overload
+major;"switch" statements should end with a "default" clause;Java, cert, cwe, misra
+minor;"switch" statements should have at least 3 "case" clauses;Java, misra
+info;"TODO" tags should be handled;Java
+critical;"toString()" and "clone()" methods should not return null;Java, bug, cwe
+blocker;A "for" loop update clause should move the counter in the right direction;Java, bug
+minor;A close curly brace should be located at the beginning of a line;Java, convention
+major;A field should not duplicate the name of its containing class;Java, brain-overload
+minor;Abstract classes without fields should be converted to interfaces;Java, java8
+major;An open curly brace should be located at the end of a line;Java, convention
+minor;Class names should comply with a naming convention;Java, convention
+major;Class names should not shadow interfaces or superclasses;Java, pitfall
+major;Classes from "sun.*" packages should not be used;Java, lock-in, pitfall
+major;Classes should not be empty;Java, clumsy
+major;Classes should not be too complex;Java, brain-overload
+major;Close curly brace and the next "else", "catch" and "finally" keywords should be located on the same line;Java, convention
+major;Collapsible "if" statements should be merged;Java, clumsy
+critical;Collections should not be passed as arguments to their own methods;Java, bug
+minor;Constant names should comply with a naming convention;Java, convention
+major;Control flow statements "if", "for", "while", "switch" and "try" should not be nested too deeply;Java, brain-overload
+minor;Control structures should use curly braces;Java, cert, cwe, misra, pitfall
+critical;Credentials should not be hard-coded;Java, cwe, owasp-a2, sans-top25-porous, security
+major;Cycles between packages should be removed;Java, design
+minor;Deprecated methods should not be used;Java, cwe, obsolete, owasp-a9, security
+major;Expressions should not be too complex;Java, brain-overload
+minor;Field names should comply with a naming convention;Java, convention
+critical;Floating point numbers should not be tested for equality;Java, bug, misra
+major;Generic exceptions should never be thrown;Java, cwe, error-handling, security
+critical;Inappropriate "Collection" calls should not be made;Java, bug
+major;Increment (++) and decrement (--) operators should not be mixed with other operators in an expression;Java, cert, misra
+critical;Invalid "Date" values should not be used;Java, bug
+minor;Lines should not be too long;Java, convention
+critical;Loop conditions should be true at least once;Java, bug
+minor;Magic numbers should not be used;Java, brain-overload
+major;Math operands should be cast before assignment;Java, bug, cwe, sans-top25-risky, security
+major;Member variable visibility should be specified;Java, security
+major;Method parameters, caught exceptions and foreach variables should not be reassigned;Java, misra, pitfall
+major;Methods should not be empty;Java, suspicious
+major;Methods should not have too many return statements;Java, brain-overload
+major;Nested blocks of code should not be left empty;Java, bug
+critical;Objects should not be created to be dropped immediately without being used;Java, bug, unused
+major;Package declaration should match source file directory;Java, pitfall
+minor;Redundant casts should not be used;Java, clumsy
+critical;Related "if/else if" statements should not have the same condition;Java, bug, cert, pitfall, unused
+major;Return values should not be ignored when function calls don't have any side effects;Java, bug, cert, misra
+minor;Statements should be on separate lines;Java, convention
+major;Strings should be compared using "equals()";Java, cwe
+minor;The default unnamed package should not be used;Java, convention
+major;Unused method parameters should be removed;Java, misra, unused
+major;Useless "if(true) {...}" and "if(false){...}" blocks should be removed;Java, cwe, misra
+critical;Values passed to SQL commands should be sanitized;Java, cwe, hibernate, owasp-a1, sans-top25-insecure, security, sql
+major;Variables should not be self-assigned;Java, bug, cert
