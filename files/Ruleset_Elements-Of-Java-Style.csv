@@ -1,0 +1,109 @@
+ID;TAG;RULE;DESCRIPTION;CATEGORIES;COMMENT
+EJS-001;General;Adhere to the style of the original;Bei Änderungen den Stil des Originals beibehalten;Coding, Style;UNAUTOMATIC
+EJS-002;General;Adhere to the Principle of Least Astonishment;Methoden so implementieren wie man es erwarten würde - Simpel, Eindeutig, Vollständig, Konsistent, Robust;Coding, Naming;UNAUTOMATIC
+EJS-003;General;Do it right the first time;Regeln für sämtlichen Code anwenden - Auch Tests, Prototypen, usw.;Coding, Style;UNAUTOMATIC
+EJS-004;General;Document and deviations;Manchmal sind Regelabweichungen sinnvoll - müssen aber dokumentiert sein;Coding;UNAUTOMATIC
+EJS-005;Formatting;Indent nested code;Konsistente Einrückung im gesamtem Team;Style;-
+EJS-006;Formatting;Break up long lines;Lange Zeilen konsistent aufteilen - konstante maximale Zeilenlänge z.B.80/132;Style;-
+EJS-007;Formatting;Include white space;Leerzeichen vor/nach Klammern und Operatoren, Leerzeilen zwischen logischen Abschnitten, Class-Members, Klassendefinitionen;Style;-
+EJS-008;Formatting;Do not use "hard" tabs;Keine tabs verwenden - stattdessen Leerzeichen;Style;-
+EJS-009;Naming;Use meaningfull names;Sprechende Namen für Klassen, Methoden und Variablen verwenden;Naming;UNAUTOMATIC
+EJS-010;Naming;Use familiar names;Begriffe der fachlichen Domäne für Benennung verwenden;Naming;UNAUTOMATIC
+EJS-011;Naming;Question exxessively long names;Sehr lange Namen hinterfragen - eventuell aufteilen;Naming, Coding;UNAUTOMATIC
+EJS-012;Naming;Join the vowel generation;Keine Abkürzungen in Namen verwenden;Naming;UNAUTOMATIC
+EJS-013;Naming;Capitalize only the first letter in acronyms;Bei Akronymen im Namen nur den ersten Buchstaben groß schreiben ("loadXml") bzw. komplett klein am Anfang ("xmlModel") oder groß in Konstanten ("XML_SAMPLE");Naming;UNAUTOMATIC
+EJS-014;Naming;Do not use names that differ only in case;Keine Namen verwenden die sich nur in Groß-/Kleinschreibung unterscheiden;Naming;-
+EJS-015;Naming;Use the reversed, lowercase form of your organization's Internet domain name as the root qualifier for your package names;Umgekehrte Web-Domain als Wurzel-Package verwenden ("com.t-systems.");Naming, Structure;-
+EJS-016;Naming;Use a single, lowercase word as the root name of each package;Einzelnes kleingeschriebenes Wort als Package-Namen verwenden;Naming;-
+EJS-017;Naming;Use the same name for a new version of a package, but only if that new version is still binary compatible with the previous version, otherwise, use a new name;Für eine neue Version eines Packages nur den selben Namen verwenden wenn die Versionen kompatibel sind;Naming, Coding;UNAUTOMATIC
+EJS-018;Naming;Capitalizethe first letter of each word that appears in a class or interface name;Jedes Wort in Klassennamen am Anfang groß schreiben ("PageLoader");Naming, Classes;-
+EJS-019;Naming;Use nouns when naming classes;Nomen in Klassennamen verwenden;Naming, Classes;UNAUTOMATIC
+EJS-020;Naming;Pluralize the names of classes that group related attributes, static services, or constants;Pluralformen für Klassennamen verwenden wenn gleichartige Attribute, statische Methoden oder Konstanten gruppiert werden;Naming, Classes;UNAUTOMATIC
+EJS-021;Naming;Use nouns or adjectives when naming interfaces;Je nach Verwendungszweck Nomen(Service-Beschreibung) oder Adjektive(Eigenschafts-Beschreibung) für Interfaces;Naming, Interfaces;UNAUTOMATIC
+EJS-022;Naming;Use lowercase for the first word and capitalize only the first letter of each wordsubsequent word word that appears in a method name;Das erste Wort in Methodennamen klein schreiben, jedes weitere Wort am Anfang groß ("loadPage");Naming, Methods;-
+EJS-023;Naming;Use verbs when naming methods;Verben für Methodennamen verwenden;Naming, Methods;UNAUTOMATIC
+EJS-024;Naming;Follow the JavaBeans conventions for naming property accessor methods;JavaBeans-Namenskonvention für getter und setter verwenden ("isXYZ"/"getXYZ"/"setXYZ");Naming, Methods;-
+EJS-025;Naming;Use lowercase for the first word and capitalize only the first letter of each subsequent word that appears in a variable name;Das erste Wort in Variablennamen klein schreiben, jedes weitere Wort am Anfang groß ("pageNumber");Naming, Variables;-
+EJS-026;Naming;Use nouns to name variables;Nomen für Variablennamen verwenden;Naming, Variables;UNAUTOMATIC
+EJS-027;Naming;Pluralize the names of collection references;Variablen die Objektmengen bezeichnen mit Pluralform benennen;Naming, Variables;UNAUTOMATIC
+EJS-028;Naming;Establish and use a set of standard names for trivial "throwaway" variables;Kurze Standardnamen für Wegwerfvariablen benutzen (z.B "s" für Strings oder "e" für Exceptions);Naming, Variables;UNAUTOMATIC
+EJS-029;Naming;Qualify field variables with "this" to distinguish them from local variables;Klassenvariablen immer mit this referenzieren;Variables;-
+EJS-030;Naming;When a Constructor or "set" method assigns a parameter to a field, give that parameter the same name as the field;Wenn ein Parameter eines Konstruktors oder Setters zum setzen einer Klassenvariable benutzt wird sollte er den gleichen namen haben;Naming, Methods;-
+EJS-031;Naming;Use uppercase letters for each word and seperate each pair of words with an underscore when naming constants;Für Konstantennamen nur großbuchstaben verwenden und Wörter mit Unterstrichen trennen;Naming, Constants;-
+EJS-032;Documentation;Write documentation for those who must use your code and those who must maintain it;So dokumentieren, dass jemand dem der Code vollständig unbekannt ist ihn verstehen, wiederverwenden und erweitern kann;Comments;UNAUTOMATIC
+EJS-033;Documentation;Keep comments and code in sync;Bei Änderungen am Code auch Kommentare entsprechend ändern;Comments, Coding;UNAUTOMATIC
+EJS-034;Documentation;Use the active voice and omit needless words;Kommentare klar und präzise formulieren;Coding;UNAUTOMATIC
+EJS-035;Documentation;Use documentation comments to describe the programming interface;Javadoc-Kommentare für alle Klassen, Interfaces, Methoden, Klassenvariablen;Comments;-
+EJS-036;Documentation;Use standard comments to hide code without removing it;Blockkommentare zum (temporären) auskommentieren von Code verwenden;Comments;UNAUTOMATIC
+EJS-037;Documentation;Use one-line comments to explain implementation details;Zeilenkommentare zur Erklärung von Implementationsdetails verwenden;Comments;UNAUTOMATIC
+EJS-038;Documentation;Describe the programming interface before the code;Javadoc vor der Implementierung einer Klasse/Methode schreiben;Comments, Coding;UNAUTOMATIC
+EJS-039;Documentation;Document public, protected, package, and private members;Für alle Class-Members Javadoc-Kommentare schreiben, auch für private usw.;Comments;-
+EJS-040;Documentation;Provide a summary description and overview for each package;Package-Kommentar-Datei für alle Packages schreiben;Comments;-
+EJS-041;Documentation;Provide a summary description and overview for each application or group of packages;Overview-Kommentar-Datei für alle Package-Gruppen / Applikationen schreiben;Comments;-
+EJS-042;Documentation;Use a single consistent format and organization for all documentation comments;Javadoc-Kommentare konsistent nach SUN-Konventionen formatieren;Comments, Style;-
+EJS-043;Documentation;Wrap keywords, identifiers, and constants with <code>...</code> tags;Bezeichner, Schlüsselwörter und Konstanten in Javadoc-Kommentaren mit code-tag versehen;Comments, Style;-
+EJS-044;Documentation;Wrap code with <pre>...</pre> tags;Codeabschnitte in Javadoc-Kommentaren mit pre-tag versehen;Comments, Style;UNAUTOMATIC
+EJS-045;Documentation;Consider marking the first occurence of an identifier with a {@link} tag;Das erste Vorkommen von Bezeichnern in Javadoc-Kommentaren mit link-tag versehen;Comments, Style;-
+EJS-046;Documentation;Establish and use a fixed ordering for Javadoc tags;Feste Reihenfolge von Javadoc-tags verwenden gemäß SUN-Konvention;Comments, Style;-
+EJS-047;Documentation;Write in the third-person narrative form;Javadoc-Kommentare in der dritten Person schreiben;Comments, Style;UNAUTOMATIC
+EJS-048;Documentation;Write summary descriptions that stand alone;Der erste Satz in Javadoc-Kommentaren sollte alleinstehende Zusammenfassung sein;Comments;UNAUTOMATIC
+EJS-049;Documentation;Omit the subject in summary descriptions of actions or services;Das Subjekt sollte in der Javadoc-Zusammenfassung von Methoden oder Services weggelassen werden(=beschriebenes Objekt);Comments, Style;UNAUTOMATIC
+EJS-050;Documentation;Omit the subject and the verb in summary descriptions of things;Subjekt und Verb in Javadoc-Zusammenfassung für Klassen die Dinge represäntieren weglassen;Comments, Style;UNAUTOMATIC
+EJS-051;Documentation;Use "this" rather than "the" when referring to instances of the current class;In Javadoc-Kommentaren "this" anstatt "the" benutzen um aktuelle Klasse zu bezeichnen;Comments, Style;UNAUTOMATIC
+EJS-052;Documentation;Do not add parentheses to a method or constructor name unless you want to specify a particular signature;In Javadoc-Kommentaren nur Klammern an Methodennamen anfügen wenn spezielle Signatur überladener Methoden gemeint sind;Comments, Style;UNAUTOMATIC
+EJS-053;Documentation;Provide a summary description for each class, interface, field, and method;In Javadoc-Kommentaren jede Klasse, Methode, Interface und Klassenvariable zusammenfassend beschreiben;Comments;UNAUTOMATIC
+EJS-054;Documentation;Fully describe the signature of ach method;Volle Beschreibung von Methodensignaturen in Javadoc-Kommentaren - Alle Parameter, Rückgabewerte, Exceptions;Comments, Methods;-
+EJS-055;Documentation;Include examples;Beispiele in Javadoc-Kommentaren einbinden;Comments;UNAUTOMATIC
+EJS-056;Documentation;Document preconditions, postconditions, and invariant consitions;Vorbedingungen, Nachbedingungen und Invarianten für Methoden und Objekte in Javadoc-Kommentaren beschreiben;Comments;UNAUTOMATIC
+EJS-057;Documentation;Document known defects and deficiencies;Bekannte Probleme / Fehler mit Workarounds / Lösungsabsicht dokumentieren;Comments;UNAUTOMATIC
+EJS-058;Documentation;Document synchronization semantics;Synchronized-Semantik in Javadoc-Kommentar erläutern;Comments, Concurrency;UNAUTOMATIC
+EJS-059;Documentation;Add internal comments only if they will aid others in understanding your code;Zeilenkommentare nur einfügen wenn sie zum Verständnis hilfreich sind;Comments;UNAUTOMATIC
+EJS-060;Documentation;Describe why the code is doing what it does, not what it does;In Zeilenkommentaren erklären warum etwas gemacht wird, nicht was gemacht wird;Comments;UNAUTOMATIC
+EJS-061;Documentation;Avoid the use of end-line comments;Kommentare am Ende einer Code-Zeile außer bei Variablendeklarationen vermeiden;Comments, Style;-
+EJS-062;Documentation;Explain local variable declarations with an end-line comments;Deklarationen von lokalen Variablen mit Kommentar am Ende der Zeile erklären;Comments;-
+EJS-063;Documentation;Establish and use a set of keywords to flag unresolved issues;Ungelöste Probleme / Fehler mit Schlüsselwörtern in kommentaren markieren;Comments;UNAUTOMATIC
+EJS-064;Documentation;Label closing braces in highly nested control structures;In Tief verschachtelten Strukturen schließende Klammern mit Kommentar der öffnenden Klammer zuordnen;Comments, Conditionals;-
+EJS-065;Documentation;Add a "fall-through" comment between two case labels, if no break statement separates those labels;Wenn keine break-Anweisung am ende eines Switch-Case steht ein "fall-through"-Kommentar einfügen;Comments, Conditionals;-
+EJS-066;Documentation;Label empty statements;Leere Kontroll-Anweisungen (Schleifen...) mit Kommentar markieren;Comments, Conditionals;-
+EJS-067;Programming;Consider declaring fundamental data types as final;Klassen die fundamentale Datenstrukturen repräsentieren als final deklarieren;Classes, Datatypes;UNAUTOMATIC
+EJS-068;Programming;Build concrete types from native types and other concrete types;Datentypen sollten möglichst nur von primitiven Datentypen und nativen Java-Datentypen abhängig sein;Datatypes;UNAUTOMATIC
+EJS-069;Programming;Define small classes and small methods;Klassen und Methoden möglichst klein halten;Classes, Style;-
+EJS-070;Programming;Define subclasses so they may be used anywhere their superclasses may be used;Unterklassen sollten die Funktionen der Oberklasse nicht einschränken oder ändern;Inheritance;-
+EJS-071;Programming;Make all fields private;Alle Klassenvariablen als private deklarieren und über getter und setter zugreifen;Variables, Visibility;-
+EJS-072;Programming;Use polymorphism instead of instanceof;Geerbte Methoden überschreiben um unterklassenspezifisches Verhalten zu implementieren anstatt instanceof abfragen;Inheritance;-
+EJS-073;Programming;Wrap general-purpose classes that operate on java.lang.Object to provide static type checking;Typprüfung durch typ-spezifische Unterklassen die das Casting vornehmen;Inheritance, Datatypes;UNAUTOMATIC
+EJS-074;Programming;Encapsulate enumerations as classes;Enumerationen als Klassen kapseln;Enum, Classes;DEPRECATED
+EJS-075;Programming;Replace repeated nontrivial expressions with equivalent methods;Nicht-triviale duplizierte Codeblöcke durch entsprechende Methoden ersetzen;Methods;-
+EJS-076;Programming;Use block statements instead of expression statements in control flow constructs;Inhalt von kontrollfluss-Anweisungen in Blöcke schreiben;Conditionals;-
+EJS-077;Programming;Clarify the order of operations with parentheses;Reihenfolge in komplexen mathematischen Formeln durch Klammern verdeutlichen;Operators;-
+EJS-078;Programming;Always code a break statement in the last case of a switch statement;Der letzte case in einem switch muss durch ein break abgeschlossen werden;Conditionals;-
+EJS-079;Programming;Use equals(), not ==, to test for equality of objects;Die equals() Methode zum vergleichen von Objekten nutzen;Operators;-
+EJS-080;Programming;Always construct objects in a valid state;Objekte immer in validen Zustand initialisieren durch statische Methoden oder public Konstruktoren;Methods;UNAUTOMATIC
+EJS-081;Programming;Do not call nonfinal methods from within a constructor;In Konstruktoren nur final deklarierte Methoden aufrufen;Methods;-
+EJS-082;Programming;Use nested constructors to eliminate redundant code;Aufruf von allgemeineren Konstruktoren in speziellen Konstruktoren, anstatt redundanter Konstruktor-code;Methods;-
+EJS-083;Programming;Use unchecked, run-time exceptions to report serious unexpected errors that may indicate an error in the programs's logic;Run-time Exceptions nicht abfangen. Sie dienen zum erkennen von Fehlern im Programm;Exceptions;-
+EJS-084;Programming;Use checked exceptions to report errors that may occur, however rarely, under normal program operation;Exceptions abfangen, die unter normalen Bedingungen im Programm auftreten können;Exceptions;-
+EJS-085;Programming;Use return codes to report expected state changes;Für erwartete Statusänderungen Return-codes verwenden;Exceptions;-
+EJS-086;Programming;Only convert Exceptions to add information;Keine Exception-informationen entfernen, beim konvertieren nur informationen hinzufügen;Exceptions;-
+EJS-087;Programming;Do not silently absorb a run-time or error exception;Keine (leeren) Catch-Blöcke verwenden, die Exceptions verschlucken;Exceptions;-
+EJS-088;Programming;Use a finally block to release resources;Finally Block nutzen um Ressourcen freizugeben;Exceptions;DEPRECATED
+EJS-089;Programming;Program by contract;Für alle public-Methoden Vor- und Nachbedingungen definieren (= Vertrag);Methods, Coding;UNAUTOMATIC
+EJS-090;Programming;Use dead code elimination to implement assertions;Assertions mit final Variable an/aus schalten um dead code elimination des Compilers auszunutzen;Assertions;-
+EJS-091;Programming;Use assertions to catch logic errors in your code;Assertions verwenden um falsche Annahmen für Methoden zu entdecken;Assertions;UNAUTOMATIC
+EJS-092;Programming;Use assertions to test pre- and postconditions of a method;In allen public Methoden Vor- und Nachbedingungen mit Assertions prüfen (zuerst bzw. als letztes);Methods, Assertions;UNAUTOMATIC
+EJS-093;Programming;Use threads only where appropriate;Multithreading nur verwenden wenn wirklich nötig;Concurrency;UNAUTOMATIC
+EJS-094;Programming;Avoid Synchronization;So wenig wie möglich synchronisieren;Concurrency;UNAUTOMATIC
+EJS-095;Programming;Use synchronized wrappers to provide synchronized interfaces;Unterklassen als Synchronisiertes interface schreiben die geerbte Methoden synchronized überschreiben;Concurrency;-
+EJS-096;Programming;Do not synchronize an entire method if the method contains significant operations that do not need synchronization;Synchronisation minimieren indem synchronized blocks verwendet werden anstatt die ganze Methode zu synchronisieren wenn nicht der gesamte Inhalt der Methode dies benötigt;Concurrency;UNAUTOMATIC
+EJS-097;Programming;Avoid unnecessary synchronization when reading or writing instance variables;Weglassen überflüssiger Synchronisation atomarer Datenzugriffe;Concurrency;UNAUTOMATIC
+EJS-098;Programming;Consider using notify() instead of notifyAll();Wann immer möglich notify() anstatt notifyAll()verwenden;Concurrency;UNAUTOMATIC
+EJS-099;Programming;Use the double-check pattern for synchronized initialization;Double-Check pattern für synchronisierte Initialisierung verwenden;Concurrency;-
+EJS-100;Programming;Use lazy initialization;Objektinstanzen erst anlegen wenn sie gebraucht werden;Efficiency;-
+EJS-101;Programming;Avoid creating unnecessary objects;Keine überflüssigen Objektinstanzen anlegen;Efficiency;-
+EJS-102;Programming;Reinitialize and reuse objects to avoid new object construction;Objektinstanzen wiederverwenden und durch Factory managen;Efficiency;-
+EJS-103;Programming;Leave optimization for last;Optimierung erst zum Schluss und nur wenn unbedingt notwendig durchführen;Efficiency, Coding;UNAUTOMATIC
+EJS-104;Packaging;Place types that are commonly used, changed, and released together, or mutually dependent on each other, into the same package;Ähnliche oder zusammenhängende Klassen in gleiches package einordnen;Structure;UNAUTOMATIC
+EJS-105;Packaging;Isolate volatile classes and interfaces in seperate packages;Unbeständige Klassen in eigenen packages isolieren;Structure;UNAUTOMATIC
+EJS-106;Packaging;Avoid making packages that are difficult to change dependent on packages that are easy to change;Packages sollten nur von stabileren packages abhängen;Structure;UNAUTOMATIC
+EJS-107;Packaging;Maximize abstraction to maximize stability;Stabile Abstraktionen (Interfaces, abstrakte Klassen) in stabilen packages zusammenfassen;Structure;UNAUTOMATIC
+EJS-108;Packaging;Capture high-level design and architecture as stable abstractions organized into stable packages;Design und Architektur schnellstmöglich stabilisieren und in stabilen packages zusammenfassen;Structure, Coding;UNAUTOMATIC
