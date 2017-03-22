@@ -1,0 +1,67 @@
+ID;TAG;RULE;DESCRIPTION;CATEGORIES;COMMENT
+CLC-C01;Kommentare;Ungeeignete Information;Keine ungeeigneten Informationen in Kommentaren (z.B. Versionen in SVN);Comments;UNAUTOMATIC
+CLC-C02;Kommentare;Überholte Kommentare;Keine veralteten Kommentare im Code belassen;Comments;UNAUTOMATIC
+CLC-C03;Kommentare;Redundante Kommentare;Keine Kommentare mit Informationen die unmittelbar aus dem Code hervorgehen;Comments;UNAUTOMATIC
+CLC-C04;Kommentare;Schlecht geschriebene Kommentare;Kommentare gut verständlich und präzise schreiben;Comments;UNAUTOMATIC
+CLC-C05;Kommentare;Auskommentierter Code;Code nicht auskommentieren;Comments;UNAUTOMATIC
+CLC-E01;Umgebung;Ein Build erfordert mehr als einen Schritt;Der Build sollte durch eine einzelne triviale Operation erfolgen;Coding;UNAUTOMATIC
+CLC-E02;Umgebung;Tests erfordern mehr als einen Schritt;Alle Tests sollten sich mit Hilfe einer einzelnen trivialen Operation ausführen lassen;Tests, Coding;UNAUTOMATIC
+CLC-F01;Funktionen;Zu viele Argumente;So wenig Methodenparameter wie möglich, maximal 3;Methods;-
+CLC-F02;Funktionen;Output-Argumente;Keine Methodenparameter überschreiben (als Ergebnisvariable benutzen);Methods, Variables;-
+CLC-F03;Funktionen;Flag-Argumente;Keine Booealschen Methodenparameter;Methods;-
+CLC-F04;Funktionen;Tote Funktionen;Nicht verwendete Methoden entfernen;Methods, Unused;-
+CLC-G01;Allgemein;Mehrere Sprachen in einer Quelldatei;So wenig Sprachen (Programmiersprachen und natürliche Sprachen) wie möglich in einer Datei verwenden;Structure;UNAUTOMATIC
+CLC-G02;Allgemein;Offensichtliches Verhalten ist nicht implementiert;Methoden so implementieren wie man es erwarten würde (entsprechende Namen);Naming;UNAUTOMATIC
+CLC-G03;Allgemein;Falsches Verhalten an den Grenzen;Alle Grenzwerte und Sonderfälle für Parameter testen;Methods, Tests;UNAUTOMATIC
+CLC-G04;Allgemein;Übergangene Sicherungen;Fehlschlagende Tests, Exceptions und Warnungen nicht ignorieren;Tests, Exceptions;-
+CLC-G05;Allgemein;Duplizierung;Keine Code-Duplizierung - Auslagerung in Methoden;Methods;-
+CLC-G06;Allgemein;Auf der falschen Abstraktionsebene codieren;In jeder Methode / Klasse / Interface nur eine Abstraktionsebene betrachten;Classes, Methods;UNAUTOMATIC
+CLC-G07;Allgemein;Basisklasse hängt von abgeleiteten klassen ab;Keine Referenzen auf erbende Klassen in Oberklasse;Inheritance;-
+CLC-G08;Allgemein;Zu viele Informationen;Signaturen von Klassen(public Methoden) und Methoden(Parameter) klein halten;Classes, Methods;-
+CLC-G09;Allgemein;Toter Code;Nicht verwendeten Code entfernen;Unused;-
+CLC-G10;Allgemein;Vertikale Trennung;Lokale Variablen über erster Verwendung und private Methoden direkt unter erster Verwendung deklarieren;Style;-
+CLC-G11;Allgemein;Inkonsistenz;Ähnliche Klassen/Methoden/Variablennamen für gleichartige Konstrukte;Naming;UNAUTOMATIC
+CLC-G12;Allgemein;Müll;Alles überflüssige Entfernen;Style;UNAUTOMATIC
+CLC-G13;Allgemein;Künstliche Kopplung;Allgemeine Konstrukte nicht in speziellen Klassen deklarieren;Enums, Classes;UNAUTOMATIC
+CLC-G14;Allgemein;Funktionsneid;Möglichst nur die Variablen der eigenen Klasse manipulieren;Variables, Classes;-
+CLC-G15;Allgemein;Selektor-Argumente;Keine Booealschen Methodenparameter;Methods;-
+CLC-G16;Allgemein;Verdeckte Absicht;Absicht des Codes deutlich machen(sprechende Namen, keine Abkürzungen und magischen Zahlen);Naming;UNAUTOMATIC
+CLC-G17;Allgemein;Falsche zuständigkeit;Methoden und Variablen an der erwarteten Stelle deklarieren;Methods, Variables;UNAUTOMATIC
+CLC-G18;Allgemein;Fälschlich als statisch deklarierte Methoden;Keine polymorphen Methoden als static deklarieren;Methods;UNAUTOMATIC
+CLC-G19;Allgemein;Aussagekräftige Variablen verwenden;Zwischenergebnisse in gut benannten Variablen ablegen;Naming, Variables;UNAUTOMATIC
+CLC-G20;Allgemein;Funktionsname sollte die Aktion ausdrücken;Sprechende Namen für Methoden;Naming, Methods;UNAUTOMATIC
+CLC-G21;Allgemein;Den Algorithmus verstehen;Vor der Implementierung den Algorithmus wirklich verstehen;Coding;UNAUTOMATIC
+CLC-G22;Allgemein;Logische Abhängigkeiten in physische umwandeln;Implizite Abhängigkeiten explizit abbilden;Coding;UNAUTOMATIC
+CLC-G23;Allgemein;Polymorphismus statt If/Else oder Switch/Case verwenden;Methoden in Unterklassen polymorph Überschreiben anstatt switch-Anweisungen oder If/Else-Ketten;Conditionals, Inheritance;-
+CLC-G24;Allgemein;Konventionen beachten;Zuvor festgelegte Coding Conventions befolgen;Style, Coding;-
+CLC-G25;Allgemein;Magische Zahlen durch benannte Konstanten ersetzen;Keine magischen Zahlen verwenden;Constants;-
+CLC-G26;Allgemein;Präzise sein;Präzise Entscheidungen treffen und implementieren:oding;UNAUTOMATIC
+CLC-G27;Allgemein;Struktur ist wichtiger als Konvention;Design durch Struktur umsetzen, nicht durch konvention;Structure, Inheritance;UNAUTOMATIC
+CLC-G28;Allgemein;Bedingungen einkapseln;Nicht triviale Bedingungen in Methoden mit sprechendem Namen einkapseln;Conditionals, Naming;-
+CLC-G29;Allgemein;Negative Bedingungen vermeiden;Möglichst keine Negierung von Bedingungen;Conditionals;-
+CLC-G30;Allgemein;Eine Aufgabe pro Funktion!;Methoden möglichst kurz - nur eine Aufgabe;Methods;-
+CLC-G31;Allgemein;Verborgene zeitliche Kopplung;Erforderliche Reihenfolge von Methoden erzwingen (Parameter / private + aufrufende Methode);Methods;UNAUTOMATIC
+CLC-G32;Allgemein;Keine Willkür;Konsistente begründete Struktur und Benennung;Naming, Structure;UNAUTOMATIC
+CLC-G33;Allgemein;Grenzbedingung einkapseln;Inkrement / Dekrement einmalig in Variable ablegen;Variables;-
+CLC-G34;Allgemein;In Funktionen nur eine Abstraktionsebene tiefer gehen;In jeder Methode nur eine Abstraktionsebene betrachten;Methods;UNAUTOMATIC
+CLC-G35;Allgemein;Konfigurierbare Daten hoch ansiedeln;Konfigurationswerte auf hoher Abstraktionsebene definieren;Variables, Constants;UNAUTOMATIC
+CLC-G36;Allgemein;Transitive Navigation vermeiden;Konstrukte der Form object.methodCall().otherMethodCall() vermeiden;Methods;-
+CLC-J01;Java;Lange Importlisten durch Platzhalter vermeiden;Wildcard-Import verwenden bei mehr als 2 Klassen aus Package;Import;-
+CLC-J02;Java;Keine Konstanten Vererben;Statischer Import für Konstanten anstatt Vererbung;Constants, Inheritance;-
+CLC-J03;Java;Konstanten im Gegensatz zu Enums;Enums anstatt final static int variablen benutzen;Enums;-
+CLC-N01;Namen;Deskriptive Namen wählen;Alles mit sprechenden Namen deklarieren;Naming;UNAUTOMATIC
+CLC-N02;Namen;Namen sollten der Abstraktionsebene entsprechen;Benamung nach Sonderfällen vermeiden;Naming;UNAUTOMATIC
+CLC-N03;Namen;Möglichst Standardnomenklatur verwenden;Übliche Namenskonventionen befolgen - Je allgemeingültiger desto besser;Naming;UNAUTOMATIC
+CLC-N04;Namen;Eindeutige Namen;Namen sollten Zweck des Konstrukts eindeutig beschreiben;Naming;UNAUTOMATIC
+CLC-N05;Namen;Lange Namen für große Geltungsbereiche;Wegwerfvariablen mit kurzem Geltungsbereich dürfen kurze Namen haben;Naming;-
+CLC-N06;Namen;Codierungen vermeiden;Keine Typ- oder Geltungsbereich-Codes in Namen einbetten;Naming;UNAUTOMATIC
+CLC-N07;Namen;Namen sollten Nebeneffekte beschreiben;Alle Funktionen eines Konstrukts im Namen ausdrücken;Naming;UNAUTOMATIC
+CLC-T01;Tests;Unzureichende Tests;Alle Bedingungen mit Tests abdecken und Berechnungen validieren;Tests;-
+CLC-T02;Tests;Ein Coverage-Tool verwenden;testabdeckung automatisiert ermitteln;Tests, Coding;UNAUTOMATIC
+CLC-T03;Tests;Triviale Tests nicht überspringen;Auch triviale Tests schreiben;Tests;UNAUTOMATIC
+CLC-T04;Tests;Ein ignorierter Test zeigt eine Mehrdeutigkeit auf;Tests mit (noch) unklarem Ergebnis ignorieren;Tests;UNAUTOMATIC
+CLC-T05;Tests;Grenzbedingungen testen;Alle Grenzwerte und Sonderfälle mit Tests abdecken;Tests;UNAUTOMATIC
+CLC-T06;Tests;Bei Bugs die Nachbarschaft gründlich testen;Tritt ein fehler auf, weitere Tests für betroffene Funktion durchführen;Tests, Coding;UNAUTOMATIC
+CLC-T07;Tests;Das Muster des Scheiterns zur Diagnose nutzen;Muster der fehlschlagenden Tests als Hinweis auf Problem nutzen;Tests, Coding;UNAUTOMATIC
+CLC-T08;Tests;Hinweise durch Coverage-Patterns;Muster des durch Tests abgedeckten Codes als Hinweis auf Problem nutzen;Tests, Coding;UNAUTOMATIC
+CLC-T09;Tests;Tests sollten schnell sein;Tests bestmöglich beschleunigen;Tests, Coding;UNAUTOMATIC

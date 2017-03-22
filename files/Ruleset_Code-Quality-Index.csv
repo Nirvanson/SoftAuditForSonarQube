@@ -1,0 +1,10 @@
+ID;TAG;RULE;DESCRIPTION;CATEGORIES;COMMENT
+CQI-001;Design;Allgemeine Parameter;Casting von Methodenparametern vermeiden (außer bei Überschriebenen Methoden);Methods;-
+CQI-002;Design;Attributüberdeckung;Verwenden gleicher Variablennamen in Unterklassen vermeiden;Variables, Inheritance;-
+CQI-003;Design;Ausgeschlagenes Erbe - Implementierung;Methodenimplementierung von Oberklasse sollte von Mehrheit der Unterklassen nicht überschrieben werden;Methods, Inheritance;-
+CQI-004;Design;Ausgeschlagenes Erbe - Schnittstelle;Reduktion von Sichtbarkeiten in Unterklassen und Leer-Implementierung von Schnittstellen vermeiden;Inheritance;-
+CQi-005;Design;Datenkapselaufbruch;Keine public Klassenvariablen verwenden (außer Konstanten);Variables;-
+CQI-006;Technologie;Duplizierter Code;Duplizierten Code vermeiden (>40 aufeinander folgende Zeilen);Methods;-
+CQI-007;Technologie;Falsche Namenslänge;Namen <2 oder >50 Zeichen nicht verwenden;Naming;-
+CQI-008;Design;Generationskonflikt;Erbende Klassen sollten weniger als die Hälfte der Oberklasse überschreiben ohne die Oberklassenimplementierung zu benutzen;Inheritance;-
+
