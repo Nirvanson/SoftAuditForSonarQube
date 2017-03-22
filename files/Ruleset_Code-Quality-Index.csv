@@ -7,4 +7,47 @@ CQi-005;Design;Datenkapselaufbruch;Keine public Klassenvariablen verwenden (auß
 CQI-006;Technologie;Duplizierter Code;Duplizierten Code vermeiden (>40 aufeinander folgende Zeilen);Methods;-
 CQI-007;Technologie;Falsche Namenslänge;Namen <2 oder >50 Zeichen nicht verwenden;Naming;-
 CQI-008;Design;Generationskonflikt;Erbende Klassen sollten weniger als die Hälfte der Oberklasse überschreiben ohne die Oberklassenimplementierung zu benutzen;Inheritance;-
-
+CQI-009;Design;Gottdatei;Dateien sollten weniger als 2000 Zeilen enthalten;Structure;-
+CQI-010;Design;Gottklasse (Attribut);Klassen sollten weniger als 50 Klassenvariablen deklarieren (außer Konstanten);Classes, Variables;-
+CQI-011;Design;Gottklasse (Methode);Eine Klasse sollte weniger als 50 Methoden deklarieren;Classes, Methods;-
+CQI-012;Code;Gottmethode;Eine Methode sollte weniger als 200 Zeilen haben;Methods;-
+CQI-013;Architektur;Gottpaket;In einem package sollten höchstens 50 Klassen und Interfaces deklariert werden;Classes, Structure;-
+CQI-014;Design;Halbherzige Operationen;Klassen die equals() implementieren sollten auch die hashCode() implementieren;Methods, Inheritance;-
+CQI-015;Design;Heimliche Verwandschaft;public Methoden einer Oberklasse sollten nicht nur von erbenden Klassen verwendet werden;Methods, Inheritance;-
+CQI-016;Design;Identitätsspaltung;Klassen in einem System sollten nicht den gleichen Namen haben oder sich nur durch groß/kleinschreibung unterscheiden;Naming, Classes;-
+CQI-017;Code;Importchaos;Imports nicht doppelt, aus gleichem package, von java.lang oder als wildcard;Import;-
+CQI-018;Code;Importlüge;Unbenutzte Imports entfernen;Import, Unused;-
+CQI-019;Code;Informelle Dokumentation;Public Methoden müssen formal kommentiert werden (mit /*, z.B JavaDoc);Comments, Methods;-
+CQI-020;Design;Interface-Bypass;Implementation eines Methodeninterfaces sollten nicht direkt genutzt werden sondern über abstraktes Interface;Inheritance, Methods;-
+CQI-021;Design;Klässchen;Öffentlich sichtbare Klassen sollten mindestens 3 Methoden oder 3 Klassenvariablen haben;Classes;-
+CQI-022;Design;klasseninzest;Oberklassen dürfen keine Referenzen auf erbende Klassen enthalten;Inheritance;-
+CQI-023;Technologie;Konstantenregen;Namen von Konstanten sollten nur einmal im System vorkommen;Constants;-
+CQI-024;Code;Labyrinthmethode;Die McCabe-Komplexität einer Methode sollte nicht >10 sein;Conditionals, Methods;-
+CQI-025;Design;Lange Parameterliste;Methoden sollten nicht mehr als 7 Parameter haben;Methods;-
+CQI-026;Technologie;Maskierende Datei;Der Dateiname sollte in enthaltener Klasse vollständig vorkommen;Classes, Structure;-
+CQI-027;Technologie;Nachlässige Kommentierung;Je Codezeile möglichst eine Kommentarzeile - (Dateizeilen - 2*Kommentarzeilen) möglichst klein;Comments;-
+CQI-028;Technologie;Namensfehler;Standard-Java-Namenskonventionen sollten eingehalten werden;Naming;-
+CQI-029;Code;Objektplacebo (Attribut);Statische Attribute sollten nur über Objekttyp statisch referenziert werden;Variables;-
+CQI-030;Code;Objectplacebo (Methode);Statische Methoden sollten nur über Objekttyp statisch referenziert werden;Methods;-
+CQI-031;Architektur;Paketchen;Nichtleere Pakete sollten mindestens 3 öffentliche Klassen / Interfaces enthalten;Classes, Structure;-
+CQI-032;Architektur;Pakethierarchieaufbruch;Oberklassen sollten nicht in untergeordneten Paketen liegen, wenn erbende Klassen in übergeordneten Paketen liegen;Structure, Inheritance;-
+CQI-033;Design;Polymorphieplacebo;Statische Methoden der Oberklasse sollten nicht in erbenden Klassen überdeckt werden;Inheritance, Methods;-
+CQI-034;Design;Potenzielle Privatsphäre (Attribut);Sichtbarkeiten von Variablen sollten so weit wie möglich eingeschränkt werden;Variables;-
+CQI-035;Design;Potenzielle Privatsphäre (Methode);Methoden sollten nur protected deklariert werden wenn sie eine Methode der Oberklasse überschreiben oder von Unterklassen überschrieben werden;Methods, Inheritance;-
+CQI-036;Design;Pränatale Kommunikation;In Konstruktoren sollten keine virtuellen Methoden aufgerufen werden;Inheritance, Methods;-
+CQI-037;Code;Risikocode;Case-Anweisungen sollten mit break abgeschlossen werden, switch-Anweisungen sollten einen default-case enthalten und Catch-Anweisungen sollten nicht leer sein;Exceptions, Conditionals;-
+CQI-038;Design;Signaturähnliche Klassen;Nicht durch Vererbung zusammenhängende Klassen sollten weniger als 50% identische Methodensignaturen enthalten;Classes, Methods;-
+CQI-039;Code;Simulierte Polymorphie;Objekte sollten in einer Methode nicht auf mehrere Objekttypen überprüft werden (durch instanceof);Inheritance;-
+CQI-040;Design;Späte Abstraktion;Abstrakte Klassen sollten nicht von nicht-abstrakten Klassen erben;Inheritance;-
+CQI-041;Design;Tote Attribute;Ungenutzte private Variablen sollten entfernt werden;Unused, Variables;-
+CQI-042;Code;Tote Implementierung;Anweisungen die nie ausgeführt werden sollten netfernt werden;Unused;-
+CQI-043;Design;Tote Methoden;Ungenutzte private Methoden sollten entfernt werden;Methods, Unused;-
+CQI-044;Design;Überbuchte Datei;Eine Datei sollte nur eine übergeordnete public Klasse enthalten;Classes, Structure;-
+CQI-045;Code;Unfertiger Code;ToDo / FixMe / Hack - Kommentare sollten behoben werden;Comments;-
+CQI-046;Design;Unvollständige Vererbung (Attribut);Eine nicht-statische Variable sollte nicht in mehr als 50% (+ mehr als 2) der erbenden Klassen einer Oberklasse namensgleich vorkommen;Inheritance, Variables;-
+CQI-047;Design;Unvollständige Vererbung (Methode);Eine Methodensignatur sollte nicht in mehr als 50% (+ mehr als 2) der erbenden Klassen einer Oberklasse namensgleich vorkommen;Inheritance, Methods;-
+CQI-048;Design;Verbotene Dateiliebe;Zwei Dateien sollten nicht gegenseitig voneinander Abhängen;Structure, Import;-
+CQI-049;Design;Verbotene Klassenliebe;Zwei nicht durch Vererbung zusammenhängende Klassen sollten nicht gegenseitig voneinander abhängen;Classes;-
+CQI-050;Design;Verbotene Methodenliebe;Zwei Methoden sollten sich nicht gegenseitig aufrufen;Methods;-
+CQI-051;Architektur;Verbotene Paketliebe;Zwei Pakete sollten sich nicht gegenseitig zum kompilieren benötigen;Structure;-
+CQI-052;Design;Versteckte Konstantheit;Klassenvariablen die nach initialisierung nicht verändert werden sollten als final deklariert werden;Variables;-
