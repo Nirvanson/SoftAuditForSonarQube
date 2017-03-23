@@ -35,4 +35,42 @@ JCG-033;Defensive;Prefer user-defined exceptions over more general exception typ
 JCG-034;Defensive;Try to gracefully recover from system errors;Finally Blöcke und Try-With-Resources verwenden um Systemfehlern zu begegnen;Exceptions;-
 JCG-035;Defensive;Carefully design interfaces before releasing them;Interfaces nach veröffentlichung nicht mehr ändern - Erbende Interfaces;Inheritance, Coding;UNAUTOMATIC
 JCG-036;Defensive;Write garbage collection-firendly code;Immutable Objekte mit kurzer Lebensdauer, möglichst keine großen Objekte und keine expliziten Aufrufe des Garbage Collectors verwenden;Coding;-
-JCG-037;Reliability;
+JCG-037;Reliability;Do not shadow or obscure identifiers in subscopes;Bezeichner sollten nicht im gleichen Geltungsbereich Überdeckt werden;Variables;-
+JCG-038;Reliability;Do not declare more than one variable per declaration;Pro Deklarationsanweisung sollte nur eine Variable deklariert werden;Variables;-
+JCG-039;Reliability;Use meaningful symbolic constants to represent literal values in program logic;Literale sollten als Konstante Klassenvariablen deklariert werden;Variables, Constants;-
+JCG-040;Reliability;Properly encode relationships in constant definitions;Konstanten sollten nur voneinander Abhängen, wenn die Bedeutung auch voneinander abhängt;Constants;UNAUTOMATIC
+JCG-041;Reliability;Return an empty array or collection instead of a null value for methods that return an array or collection;Methoden sollten leere Arrays / Collections zurückgeben anstatt null;Methods, Collections;-
+JCG-042;Reliability;Use exceptions only for exceptionel conditions;Exceptions sollten nur für Fehler verwendet werden, nicht für normalen Kontrollfluss;Exceptions;UNAUTOMATIC
+JCG-043;Reliability;Use a try-with-resources statement to safely handle closeable resources;Für alle Resourcen die Closable implementieren try-with-resources verwenden;Exceptions, InOut;-
+JCG-044;Reliability;Do not use assertions to verify the absence of runtime errors;Runtime Exceptions dürfen nicht mit assertions überprüft werden;Exceptions, Assertions;-
+JCG-045;Reliability;Use the same type for the second and third operands in conditional expressions;Der zweite und dritte operand in conditional expressions sollten den gleichen typ haben (operand1 ? operand2 : operand3);Conditionals, Datatypes;-
+JCG-046;Reliability;Do not serialize direct handles to system resources;Keine Systemresourcen in Serializable Klassen verwenden;InOut;-
+JCG-047;Reliability;Prefer using iterators over enumerations;Wenn möglich Iterators statt Enums verwenden;Enums;UNAUTOMATIC
+JCG-048;Reliability;Do not use direct buffers for short-lived, infrequently used objects;Direct Buffers nicht für wenig / einmalig benutzte Objekte benutzen;Classes;-
+JCG-049;Reliability;Remove short-lived objects from long-lived container objects;Kurz benötigte Objekte nach verwendung aus langlebigen Containern entfernen;Collections;UNAUTOMATIC
+JCG-050;Understandability;Be careful using visually misleading identifiers and literals;Verwechselbare Zeichen nicht als alleinige Bezeichner oder einzigen Unterschied zwischen Bezeichnern verwenden;Naming;-
+JCG-051;Understandability;Avoid ambiguous overloading of variable arity methods;Methoden mit variablen Parameterlisten sollten nicht überladen werden;Methods;-
+JCG-052;Understandability;Avoid in-band error indicators;Rückgabewerte sollten keine Fehler repräsentieren;Exceptions;UNAUTOMATIC
+JCG-053;Understandability;Do not perform assignments in conditional expressions;In Bedingungen keine Wertzuweisung vornehmen;Variables, Conditionals;-
+JCG-054;Understandability;Use braces for the body of an if, for, or while statement;Für alle if, for und while anweisungen den inhalt in Klammern setzen;Conditionals, Style;-
+JCG-055;Understandability;Do not place a semicolon immediatly following an if, for or while condition;Nach Bedingungen von If, For oder While Anweisungen sollte kein Semikolon folgen;Conditionals, Style;-
+JCG-056;Understandability;Finish every set of statements associated with a case label with a break statement;Case-Anweisungen sollten mit immer mit break abgeschlossen werden;Conditionals;-
+JCG-057;Understandability;Avoid inadvertent wrapping of loop counters;Für Schleifen keine unereichbaren oder überspringbaren Abbruchbedingungen definieren;Conditionals;-
+JCG-058;Understandability;Use parentheses for precedence of operation;Nicht-triviale Operationen mit Klammern gliedern;Operators;UNAUTOMATIC
+JCG-059;Understandability;Do not make assumptions about file creation;Sichere Datei-erzeugung anwenden mit nio-packages;InOut;-
+JCG-060;Understandability;Convert integers to floating-point for floating-point operations;Integer vor verwendung in fließkommaoperationen in fließkommazahlen umwandeln;Datatypes;-
+JCG-061;Understandability;Ensure that the clone() method calls super.clone();Alle clone() Methoden müssen super.clone() aufrufen;Inheritance;-
+JCG-062;Understandability;Use comments consistently and in a readable fashion;Zeilen und Block-Kommentare nicht mischen und Konsistent benutzen;Comments;UNAUTOMATIC
+JCG-063;Understandability;Detect and remove superfluous code and values;Ungenutzer Code und Variablen, sowie Code ohne Effekte sollte entfernt werden;Unused, Variables;-
+JCG-064;Understandability;Strive for logical completeness;Alle möglichen Daten-Zustände sollten behandelt werden;Conditionals, Methods;-
+JCG-065;Understandability;Avoid ambiguous or confusing uses of overloading;Überladene Methoden die sich nur in Reihenfolge der Parametertypen unterscheiden vermeiden;Methods;-
+JCG-066;Misconception;Do not assume that declaring a reference volatile guarantees safe publication of the referenced object;Volatile Variablendeklarationen nicht für Thread-Sicherheit verwenden;Concurrency;-
+JCG-067;Misconception;Do not assume that the sleep(), yield(), or getState() methods provide synchronization semantics;Die sleep(), yield() und getState() Methoden nicht für Synchronisation benutzen;Concurrency;UNAUTOMATIC
+JCG-068;Misconception;Do not assume that the remainder operator always returns nonnegative result for integral operands;Modulo Operator (%) nicht für zwangsläufig positive Ergebnisse verwenden;Operators;NONAUTOMATIC
+JCG-069;Misconception;Do not confuse abstract object equality with reference equality;== und != nicht verwenden um Objektgleichheit zu prüfen;Operators;-
+JCG-070;Misconception;Understand the difference between bitwise and logical operators;Bitweise Operatoren nicht verwenden wenn zweiter Operator nicht immer evaluiert werden soll;Operators;UNAUTOMATIC
+JCG-071;Misconception;Understand how escape characters are interpreted when strings are loaded;SQL-Escapes müssen doppelt escaped werden;Datatypes;-
+JCG-072;Misconception;Do not use overloaded methods to differentiate between runtime types;Überladene Methoden nicht zum unterscheiden von Objekttypen benutzen;Methods;UNAUTOMATIC
+JCG-073;Misconception;Never confuse the immutability of a reference with that of the referenced object;Nicht nur die Referenz final deklarieren, wenn das referenzierte Objekt unveränderbar werden soll;Variables,UNAUTOMATIC
+JCG-074;Misconception;Use the serialization methods writeUnshared() and readUnshared() with care;Die writeUnshared() und readUnshared() Methoden nicht für round-trip-serialisierung verwenden;Concurrency, Methods;UNAUTOMATIC
+JCG-075;Misconception;Do not attempt to help the garbage collector by setting local reference variables to null;Referenzvariablen nicht auf null setzen wenn sie nicht mehr gebraucht werden;Variables;-
