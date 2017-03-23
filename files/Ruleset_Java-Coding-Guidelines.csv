@@ -1,0 +1,38 @@
+ID;TAG;RULE;DESCRIPTION;CATEGORIES;COMMENT
+JCG-001;Security;Limit the lifetime of sensitive data;Sicherheitskritische Daten nur so kurz wie möglich im Speicher halten;Security;UNAUTOMATIC
+JCG-002;Security;Do not store unencrypted sensitive information on the client side;Keine kritischen Daten (Wie Passwörter) unverschlüsselt auf Client-Seite (Cookie) halten;Security;-
+JCG-003;Security;Provide sensitive mutable classes with unmodifiable wrappers;Sicherheitskritische mutable Klassen sollten eingekapselt werden, sodass unerlaubte Schreiboperationen verhindert werden;Security;-
+JCG-004;Security;Ensure that security-sensitive methods are called with validated arguments;Argumente die an sicherheitskritische Methoden gegeben werden sollten vorher validiert werden;Security, Methods;-
+JCG-005;Security;Prevent arbitrary file upload;Uploads von beliebigen Dateitypen sollte verhindert werden;Security, InOut;-
+JCG-006;Security;Properly encode or escape output;Jeglicher Output sollte zuvor überprüft und normalisiert werden;Security, InOut;-
+JCG-007;Security;Prevent Code Injection;Jegliche Nutzereingaben sollten unmittelbar mittels Whitelists/Sandbox überprüft werden;Security, InOut;-
+JCG-008;Security;Prevent XPath injection;XML-Input via Whitelists/Patternmatcher überprüfen;Security, InOut;-
+JCG-009;Security;Prevent LDAP injection;Eingabe von Zeichen die für LDAP benutzt werden abfangen;Security, InOut;-
+JCG-010;Security;Do not use the clone() method to copy untrusted method parameters;Parameter nicht mittels clone() kopieren;Security, Methods;-
+JCG-011;Security;Do not use Object.equals() to compare cryptographic keys;Kryptographische Schlüssel nicht mittels equals() vergleichen;Security;-
+JCG-012;Security;Do not use insecure or weak cryptographic algorithms;Keine als unsicher eingestuften Verschlüsselungsalgorithmen verwenden;Security;-
+JCG-013;Security;Store passwords using a hash function;Passwörter sollten mittels Hash-Funktion als byte-array abgespeichert werden;Security;
+JCG-014;Security;Ensure that SecureRandom is properly seeded;Für SecureRandem den parameterlosen Konstruktor verwenden;Security;-
+JCG-015;Security;Do not rely on methods that can be overridden by untrusted code;Standardmethoden wie equals(), clone(), hashCode(), ... nur von final-Klassen verwenden;Security, Inheritance;-
+JCG-016;Security;Avoid granting excess privileges;Aufruf von doPrivileged() vermeiden;Security;-
+JCG-017;Security;Minimize privileged code;Aufrufe von doPrivileged() so klein wie möglich halten;Security;-
+JCG-018;Security;Do not expose methods that use reduced-security checks to untrusted code;Methodenaufrufe von methoden mit reduziertem Sicherheitscheck müssen gesichert werden;Security;-
+JCG-019;Security;Define custom security permissions for fine-grained security;Spezielle Berechtigungen definieren;Security;-
+JCG-020;Security;Create a secure sandbox using a security manager;SecurityManager verwenden;Security;-
+JCG-021;Security;Do not let untrusted code misuse privileges of callback methods;Callback sollten keine Daten von unsicherem Code akzeptieren;Security;-
+JCG-022;Defensive;Minimize the scope of variables;Der Geltungsbereich von Variablen sollte so klein wie möglich sein;Variables;-
+JCG-023;Defensive;Minimize the scope of the @SuppressWarnings annotation;Die SuppressWarnings-Annotation sollte möglichst nah am Code stehen, dessen Warnungen ignoriert werden sollen;Annotations;-
+JCG-024;Defensive;Minimize the accessibility of classes and their members;Die Sichtbarkeit aller Konstrukte sollte so gering wie möglich sein;Classes, Methods;-
+JCG-025;Defensive;Document thread-safety and use annotations where applicable;Beabsichtigte Thread-Sicherheit dokumentieren, wenn möglich mittels Annotationen;Concurrency, Annotations;-
+JCG-026;Defensive;Always provide feedback about the resulting value of a method;Methoden sollten Status anzeigende Rückgabewerte liefern, oder Exceptions werfen;Methods, Exceptions;-
+JCG-027;Defensive;Identify files using multiple file attributes;Bei Dateizugriff mehrere Identitäts-attribute prüfen;InOut;-
+JCG-028;Defensive;Do not attach significance to the ordinal associated with an enum;Der ordinal() Methode von Enums sollte keine implizite Bedeutung zugewiesen werden;Enums;-
+JCG-029;Defensive;Be aware of numeric promotion behavior;Implizites Casting bei Mischung von Datentypen in mathematischen Formeln beachten;Datatypes, Operators;-
+JCG-030;Defensive;Enable compile-time type checking of variable arity parameter types;Für variable Parameterlisten speziellst möglichen typ angeben;Methods, Datatypes;-
+JCG-031;Defensive;Do not apply public final to constants whose value might change in later releases;Konstanten die sich ändern könnten sollten nicht public final deklariert werden;Constants;NONAUTOMATIC
+JCG-032;Defensive;Avoid cyclic dependencies between packages;Packages sollten nicht gegenseitig voneinander abhängen;Structure;-
+JCG-033;Defensive;Prefer user-defined exceptions over more general exception types;Möglichst eigene Exception-Typen verwenden;Exceptions;-
+JCG-034;Defensive;Try to gracefully recover from system errors;Finally Blöcke und Try-With-Resources verwenden um Systemfehlern zu begegnen;Exceptions;-
+JCG-035;Defensive;Carefully design interfaces before releasing them;Interfaces nach veröffentlichung nicht mehr ändern - Erbende Interfaces;Inheritance, Coding;UNAUTOMATIC
+JCG-036;Defensive;Write garbage collection-firendly code;Immutable Objekte mit kurzer Lebensdauer, möglichst keine großen Objekte und keine expliziten Aufrufe des Garbage Collectors verwenden;Coding;-
+JCG-037;Reliability;
