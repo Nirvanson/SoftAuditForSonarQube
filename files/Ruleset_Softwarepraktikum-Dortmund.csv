@@ -1,0 +1,12 @@
+ID;TAG;RULE;DESCRIPTION;CATEGORIES;COMMENT
+SPD-001;Naming;Java Naming Conventions;Für alle Bezeichner Java Namenskonventionen einhalten;Naming;-
+SPD-002;Naming;Meaningful Names;Alle Bezeichner mindestens 4 Zeichen lang und sprechend;Naming;-
+SPD-003;Methods;Methodlength;Maximale Methodenlänge von 40 Zeilen nicht überschreiten;Methods;-
+SPD-004;Methods;Parameterlist length;Maximal 5 Parameter in Methodensignatur;Methods;-
+SPD-005;Methods;Cyclomatic Complexity;McCabe-Komplexität jeder Methode sollte höchstens 10 sein;Methods;-
+SPD-006;Classes;Classlength;Klassen sollten höchstens 400 Zeilen lang sein;Classes;-
+SPD-007;Classes;Dead Code;Ungenutzer Code sollte entfernt werden;Classes, Unused;-
+SPD-008;Classes;Godclass;Summe aller Methodenkomplexitäten (WMC) < 48, Zugriffe auf Variablen anderer Klassen (AFTD) < 6, Anteil über Variablenzugriffe zusammenhängende Methoden (TCC) > 0,32;Classes;-
+SPD-009;Other;Literals;Keine Verwendung von Literalen im Code - Konstanten;Constants;-
+SPD-010;Other;Deeply nested if statements;Maximale Verschachtelungstiefe von If Anweisungen = 3;Conditionals;-
+SPD-011;Other;Field declaration;???;Variables;-
