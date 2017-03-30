@@ -1,0 +1,57 @@
+ID;TAG;RULE;DESCRIPTION;CATEGORIES;COMMENT
+GSG-210;Basics;Filename;Dateiname = Top-Level-Klassenname + Endung .java;Naming, Class;-
+GSG-220;Basics;File encoding: UTF-8;Datei-Encoding in UTF-8;Structure;-
+GSG-231;Basics;Whitespace characters;Nur Standardleerzeichen verwenden (keine Tabs, in Literalen escaped);Style;-
+GSG-232;Basics;Special escape sequences;\b, \t, \n, \f, \r, \", \', \\ anstatt oktal/unicode-Repräsentation verwenden;Style;-
+GSG-233;Basics;Non-ASCII characters;Nicht-ASCII Zeichen nur innerhalb von String Literalen verwenden und wenn unicode-escape-sequenz benutzt kommentieren;Style, Comments;-
+GSG-300;FileStructure;Source file structure;Jede Datei soll folgende Struktur haben: Lizenz/Copyright-Info + Leerzeile + Package-Anweisung + Leerzeile + Import-Anweisungen + Leerzeile + EINE Top-Level-Klasse;Style;-
+GSG-310;FileStructure;License or copyright information;Wenn benötigt am Dateianfang, als Block-Kommentar;Comments;-
+GSG-320;FileStructure;Package Statement;Package-Anweisung immer in eine Zeile schreiben, egal wie lang;Style;-
+GSG-331;FileStructure;No wildcard imports;Keine wildcard imports verwenden;Imports;-
+GSG-332;FileStructure;No line-wrapping;Import-Anweisungen immer in eine Zeile schreiben, egal wie lang;Style, Imports;-
+GSG-333;FileStructure;Ordering and spacing;Erst alle statischen imports als Block, dann alle nicht statischen. Die Blöcke durch leerzeile getrennt und jeweils alphabetisch sortiert;Style, Imports;-
+GSG-334;FileStructure;No static import for classes;Statische Klassen nicht mit statischem import einbinden;Import;-
+GSG-341;FileStructure;Exactly one top-level class declaration;Genau eine top-level Klasse je Datei;Classes;-
+GSG-342;FileStructure;Ordering of class contents;Logische Ordnung in Klassen, Überladene Konstruktoren oder Methoden direkt aufeinanderfolgend;Style, Classes;-
+GSG-411;Formatting;Braces are used where optional;Alle optionalen geschweiften Klammern setzen (if, else, for, do, while);Conditionals, Style;-
+GSG-412;Formatting;Nonempty blocks: K&R Style;Nichtleere Blöcke mit öffnender Klammer an Zeilenende und schließender Klammer in eigener Zeile schreiben;Style;-
+GSG-413;Formatting;Empty blocks: may be concise;In Multi-Block-Anweisungen leere Blöcke mit Zeilenumbruch schreiben;Style;-
+GSG-420;Formatting;Block indentation: +2 spaces;Als Einrückung für Blockinhalt 2 Leerzeichen verwenden;Style;-
+GSG-430;Formatting;One statement per line;Nur eine Anweisung pro Zeile schreiben;Style;-
+GSG-440;Formatting;Column limit: 100;Maximale Zeilenlänge = 100 Zeichen, außer bei package und import Anweisungen und wenn nicht anders möglich;Style;-
+GSG-451;Formatting;Where to break;Anweisungen in mehreren Zeilen vermeiden und wenn nötig, dann möglichst lesbar;Style;UNAUTOMATIC
+GSG-452;Fommatting;Indent continuation lines at least +4 spaces;Einrückung bei Zeilenumbruch innerhalb von Anweisung mindestens 4 Leerzeichen einrücken;-
+GSG-461;Formatting;Vertical whitespace;Leerzeilen zwischen aufeinanderfolgenden "Class-Members" außer Variablen pflicht, überall anders optional zur Strukturierung;Style, Classes;-
+GSG-462;Formatting;Horizontal whitespace;Leerzeichen zwischen Schlüsselwörtern und Klammern, vor öffnenden geschweiften Klammern, vor und nach Operatoren und //, nach ,:; und schließender Klammer eines casts, zwischen Datentyp und Variablenname - sonst nirgends!;Style;-
+GSG-463;Formatting;Horizontal alignment: never required;Horizontale ausrichtung gleichartiger Anweisungen erlaubt, aber lieber nicht verwenden;Style;-
+GSG-470;Formatting;Grouping parentheses: recommended;Klammern zur Gruppierung komplexer Operationen verwenden;Style, Operators;UNAUTOMATIC
+GSG-481;Formatting;Enum classes;Enumwerte in einer Zeile, oder mit Zeilenumbruch nach jedem Komma;Style, Enums;-
+GSG-482;Formatting;Variable declarations;Nur eine Variable je Anweisung deklarieren und unmittelbar vor erster Verwendung;Variables;-
+GSG-483;Formmating;Arrays;Eckige Klammern immer am Typ und nicht am variablennamen;Variables, Arrays;-
+GSG-484;Formatting;Switch Statements;Jedes Switch muss default case haben, case anweisungen werden eingerückt und jeder fall through wird kommentiert;Conditionals, Comments;-
+GSG-485;Formatting;Annotations;Annotationen an Klassen, Methoden oder Konstruktoren hinter Javadoc, je eine Annotation pro Zeile;Annotations;-
+GSG-486;Formatting;Comments;Kommentare genauso einrücken wie umgebender Code;Comments, Style;-
+GSG-487;Formatting;Modifiers;Modifiers in folgender Reihenfolge: public protected private abstract default static final transient volatile synchronized native strictfp;Style;-
+GSG-488;Formatting;Numeric Literals;Literale vom Typ long mit groß geschriebenem L als Suffix;Style, Datatypes;-
+GSG-510;Naming;Nur ASCII Buchstaben und Zahlen in Namen verwenden;Naming;-
+GSG-521;Naming;Package names;Package namen komplett klein;Naming, Structure;-
+GSG-522;Naming;Class names;Klassennamen Anfang groß und jedes neue Wort anfangs groß;Naming, Classes;-
+GSG-523;Naming;Method names;Methodennamen Anfang klein und jedes neue Wort anfangs groß;Naming, Methods;-
+GSG-524;Naming;Constant names;Konstantennamen komplett groß mit Unterstrichen zwischen den Wörtern;Naming, Constants;-
+GSG-525;Naming;Non-constant field names;Globale Variablennamen Anfang klein und jedes neue Wort anfangs groß;Naming, Variables;-
+GSG-526;Naming;Parameter names;Parameternamen Anfang klein und jedes neue Wort anfangs groß;Naming, Methods;-
+GSG-527;Naming;Local variable names;Lokale Variablennamen Anfang klein und jedes neue Wort anfangs groß;Naming, Variables;-
+GSG-528;Naming;Type variable names;Typvariablen sind entweder einzelner großer Buchstabe (eventuell mit Ziffer) oder Klassenname + T;Naming;-
+GSG-530;Naming;Camel case: defined;Abkürzungen in CamelCase Bezeichnern nur mit erstem Buchstaben groß schreiben wie normales wort;Naming;-
+GSG-610;Programming;@Override: always used;Überschreibende Methoden mit @Override markieren;Annotations, Inheritance;-
+GSG-620;Programming;Caught exceptions: not ignored;Keine leeren Catch-Anweisungen, außer in Tests;Exceptions, Tests;-
+GSG-630;Programming;Static Members: qualified using class;Statische Methoden und variablen nur über Klassennamen referenzieren, nicht über Instanzen;Methods, Variables;-
+GSG-640;Programming;Finalizers: not used;finalize() Methode nicht überschreiben;Methods, Inheritance;-
+GSG-711;Javadoc;General form;Start und Ende von Javadoc Kommentar in eigene Zeile, oder alles in eine Zeile;Comments;-
+GSG-712;Javadoc;Paragraphs;Zwischen Absätzen in Javadoc eine Leerzeile nur mit *;Comments;-
+GSG-713;Javadoc;Block tags;Tags in Javadoc-Kommentaren in der Reihenfolge: @param, @return, @throws, @deprecated;Comments;-
+GSG-720;Javadoc;The summary fragmnet;Erste Zeile eines Javadoc Kommentars ist Zusammenfassung ohne Subject abgeschlossen mit einem .;Comments;-
+GSG-730;Javadoc;Where Javadoc is used;Javadoc mindestens an jeder öffentlichen Klasse und allen öffentlichen "Class-Members";Comments;-
+GSG-731;Javadoc;Exception: self-explanatory methods;Kein Javadoc an trivialen Methoden (getter / setter);Comments;-
+GSG-732;Javadoc;Exception: overrides;Überschriebene Methoden brauchen kein Javadoc wenn funktion nicht verändert wird;Comments;UNAUTOMATIC
+GSG-734;Javadoc;Non-required Javadoc;Nicht öffentliche Klassen und "Class-Members" dürfen Javadoc haben;Comments;- 
