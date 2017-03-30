@@ -1,0 +1,41 @@
+ID;TAG;RULE;DESCRIPTION;CATEGORIES;COMMENT
+SOC-001;Defensive;Warnungen;Warnstufe der IDE hoch stellen und jeder Warnung nachgehen;Coding;UNAUTOMATIC
+SOC-002;Defensive;Codeüberprüfung;Code Korrektur lesen, am besten durch zweite Person;Coding;UNAUTOMATIC
+SOC-003;Defensive;Softwaretest;Soviel Code wie möglich durch Tests abdecken ~90%;Coding, Tests;-
+SOC-004;Defensive;Selbstdokumentierender Code;Code möglichst so schreiben, dass er ohne Kommentare verständlich ist;Coding, Naming;UNAUTOMATIC
+SOC-005;Defensive;Namenskonventionen;Namenskonventionen im Team/Unternehmen festlegen und konsequent umsetzen;Naming;-
+SOC-006;Defensive;Pseudocode;Pseudocode zum skizzieren des Codes verwenden;Coding;UNAUTOMATIC
+SOC-007;Defensive;Kommentare;Alles was unverständlich/unklar sein könnte kommentieren;Comments;UNAUTOMATIC
+SOC-008;Defensive;Dokumentationskommentare;Mindestens alle öffentlichen Schnittstellen mit Doku-Kommentaren versehen;Comments;-
+SOC-009;Defensive;Klassen;Keine öffentlichen Felder in klassen;Classes;-
+SOC-010;Defensive;Zugriffsmodifizierer;Klassen und ihre Class-Members so restriktiv deklarieren wie möglich (Sichtbarkeit, modifizierbarkeit, ...);Classes;-
+SOC-011;Defensive;Schnittstellen;Trennung von Schnittstelle und Implementierung der Methoden;Methods;UNAUTOMATIC
+SOC-012;Defensive;Leerzeilen;Logische Zusammenhänge im Code mittels Leerzeilen optisch gruppieren;Style;UNAUTOMATIC
+SOC-013;Defensive;Parameter;Übergabeparameter zu Beginn einer Methode auf validität überprüfen;Methods;UNAUTOMATIC
+SOC-014;Defensive;Ergebniszustand;Nach Ausführung logischer Anweisungsblöcke Ergebniszustand der Variablen überprüfen;Variables;UNAUTOMATIC
+SOC-015;Defensive;Ausnahmen;Wann immer Möglich Ausnahmebehandlung statt Exceptions;Methods, Exceptions;UNAUTOMATIC
+SOC-016;Defensive;Void-Methoden;Keine void Methoden verwenden;Methods;-
+SOC-017;Defensive;Rückgabewerte;Rückgabewerte von Methoden immer überprüfen;Methods;-
+SOC-018;Defensive;Portieren;Beom Portieren von Code Zeigeralgorithmen in Referenzen umwandeln;Coding;UNAUTOMATIC
+SOC-019;Defensive;Unsafe Blöcke;Keine Unsafe-Blöcke verwenden;Security;UNAUTOMATIC
+SOC-020;Defensive;Literale;Keine Literale verwenden, stattdessen Konstanten;Constants;-
+SOC-021;Defensive;Default Case;Jede Switch-Anweisung sollte einen default-case haben;Conditionals;-
+SOC-022;Defensive;Allgemeine Exceptions;Keine Allgemeinen Exceptions abfangen;Exceptions;-
+SOC-023;Defensive;Exception Fallunterscheidung;In Catch-Blöcken keine Fallunterscheidung über Exception-Typ machen;Exceptions;-
+SOC-024;Defensive;Objecttyp;Object nicht als Datentyp verwenden;Datatypes;-
+SOC-025;Defensive;Duplikation;Codeduplikate in Methoden auslagern und wiederverwenden;Methods;-
+SOC-026;Defensive;Listen;Generische Listen verwenden;Datatypes;-
+SOC-027;Defensive;Arrays;Arrays gegenüber Listen bevorzugen;Datatypes;-
+SOC-028;Defensive;Native APIs;Verwendung von nativen APIs vermeiden;Coding;-
+SOC-029;Defensive;Schleifentypen;Wenn möglich For Schleifen anstatt while schleifen benutzen;Conditionals;-
+SOC-030;Defensive;Ungenutzte Objekte;Nicht verwendete Objekte auf null setzen;Variables;UNAUTOMATIC
+SOC-031;Defensive;Unnötige Komplexität;Code so simpel wie möglich schreiben;Coding;UNAUTOMATIC
+SOC-032;Defensive;Freiwillige Blöcke;Immer Blöcke schreiben wenn optional (if, while, ...);Conditionals;-
+SOC-033;Defensive;Komplexe Anweisungen;Komplexe Anweisungen aufteilen und in Zwischenergebnissen mit sprechenen Namen ablegen;Naming;UNAUTOMATIC
+SOC-034;Defensive;Klammern;Komplexe Operationen durch freiwillige Klammern strukturieren;Operations;UNAUTOMATIC
+SOC-035;Defensive;Groß/Kleinschreibung;Bezeichner dürfen sich nicht nur in Groß/Kleinschreibung unterscheiden;Naming;-
+SOC-036;Defensive;Maximalwerte;Minimal- und Maximalwerte der Datentypen zur Überprüfung der Ergebnisse nutzen;Datatypes;UNAUTOMATIC
+SOC-037;Defensive;Schleifeninhalt;Soviel Komplexität wie möglich aus Schleifenkörper entfernen;Conditionals;UNAUTOMATIC
+SOC-038;Defensive;Switchvariable;Als Switchvariable möglichst nur Enums verwenden;Conditionals, Enums;-
+SOC-039;Defensive;Rekursion;Rekursion möglichst vermeiden;Coding;UNAUTOMATIC
+SOC-040;Defensive;Entwurfsmuster;Wann immer möglich bewährte Entwurfsmuster verwenden;Coding;UNAUTOMATIC
