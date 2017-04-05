@@ -1,0 +1,384 @@
+Classification;Rule;3.14;3.7.1;SWP;Equivalent to;Part of;Contains;Opposite of;SonarQube-Tags
+blocker;".equals()" should not be used to test the values of "Atomic" classes;X;X;;;;;;Java, bug, multi-threading
+minor;"@Deprecated" code should not be used / Deprecated methods should not be used;X;X;X;;;;;Java, cert, cwe, obsolete / Java, cwe, obsolete, owasp-a9, security
+critical;"@NonNull" values should not be set to null;X;;;;;;;Java, bug
+major;"@Override" annotation should be used on any method overriding (since Java 5) or implementing (since Java 6) another one;X;X;;;;;;Java, bad-practice
+major;"action" mappings should not have too many "forward" entries;X;;;;;;;Java, brain-overload, struts
+major;"assert" should only be used with boolean variables;X;;;;;;;Java, cert, suspicious
+critical;"BigDecimal(double)" should not be used;X;X;;;;;;Java, bug, cert
+minor;"catch" clauses should do more than rethrow;X;;;;;;;Java, cert, clumsy, finding, unused
+minor;"CHECKSTYLE:OFF" suppression comments should not be used;X;X;;;;;;Java, bad-practice
+major;"clone" should not be overridden;X;X;;;;;;Java, suspicious
+critical;"Cloneables" should implement "clone";X;X;;;;;;Java, bug
+major;"compareTo" results should not be checked for specific values;X;X;;;;;;Java, unpredictable
+critical;"compareTo" should not return "Integer.MIN_VALUE";X;X;;;;;;Java, bug
+critical;"ConcurrentLinkedQueue.size()" should not be used;X;X;;;;;;Java, performance, security
+major;"DateUtils.truncate" from Apache Commons Lang library should not be used;X;X;;;;;;Java, java8, performance
+major;"deleteOnExit" should not be used;X;X;;;;;;Java, performance
+blocker;"Double.longBitsToDouble" should not be used for "int";X;X;;;;;;Java, bug
+major;"entrySet()" should be iterated when both the key and value are needed;X;X;;;;;;Java, performance
+critical;"enum" fields should not be publicly mutable;X;;;;;;;Java, bad-practice, security
+critical;"equals" methods should be symmetric and work for subclasses;X;X;;;;;;Java, bug, cert
+blocker;"equals(Object obj)" and "hashCode()" should be overridden in pairs;X;X;;;;;;Java, bug, cert, cwe
+critical;"equals(Object obj)" should be overridden along with the "compareTo(T obj)" method;X;X;;;;;;Java, bug
+blocker;"equals(Object obj)" should test argument type;X;X;;;;;;Java, bug
+critical;"Exception" should not be caught when not required by called methods;X;X;;;;;;Java, cwe, error-handling, security
+critical;"Externalizable" classes should have no-arguments constructors;X;;;;;;;Java, bug
+critical;"File.createTempFile" should not be used to create a directory;X;X;;;;;;Java, owasp-a9, security
+major;"final" classes should not have "protected" members;X;X;;;;;;Java, confusing
+major;"finalize" should not set fields to "null";X;X;;;;;;Java, clumsy, performance
+major;"FIXME" tags should be handled;X;X;X;;;;;Java
+major / critical;'"for" loop incrementers should modify the variable being tested in the loop''s stop condition';X;X;X;;;;;Java, suspicious
+major;"for" loop stop conditions should be invariant;X;X;;;;;;Java, misra, pitfall
+critical;"hashCode" and "toString" should not be called on array instances;X;X;;;;;;Java, bug
+critical;"HttpServletRequest.getRequestedSessionId()" should not be used;X;X;;;;;;Java, cwe, owasp-a2, sans-top25-porous, security
+major;"indexOf" checks should not be for positive numbers;X;X;;;;;;Java, suspicious
+major;"indexOf" checks should use a start position;X;X;;;;;;Java, confusing
+major;"instanceof" operators that always return "true" or "false" should be removed;X;X;;;;;;Java, cwe, suspicious
+critical;"InterruptedException" should not be ignored;X;;;;;;;Java, bug, cwe, multi-threading
+blocker;"Iterator.hasNext()" should not call "Iterator.next()";X;X;;;;;;Java, bug
+major;"Iterator.next()" methods should throw "NoSuchElementException";X;X;;;;;;Java, unpredictable
+minor;"java.lang.Error" should not be extended;X;X;;;;;;Java, error-handling
+blocker;"javax.crypto.NullCipher" should not be used for anything other than testing;X;X;;;;;;Java, cwe, owasp-a6, sans-top25-porous, security
+major;"Lock" objects should not be "synchronized";X;X;;;;;;Java, cert, clumsy, multi-threading
+critical;"main" should not "throw" anything;X;X;;;;;;Java, error-handling, security
+minor;"NOPMD" suppression comments should not be used;X;X;X;;;;;Java, bad-practice
+major;"NOSONAR" should not be used to switch off issues;X;X;X;;;;;Java, bad-practice
+critical;"notifyAll" should be used;X;X;;;;;EJS-098;Java, bug, cert, multi-threading
+major;"NullPointerException" should not be caught;X;X;X;;EJS-083;;;Java, cert, cwe, error-handling
+major;"NullPointerException" should not be explicitly thrown;X;X;X;;;;;Java, pitfall
+critical;"object == null" should be used instead of "object.equals(null)";X;X;;;;;;DEPRECATED, Java, bug
+major;"Object.finalize()" should remain protected (versus public) when overriding;X;X;;;;;;Java, cert, cwe, security
+critical;"Object.wait(...)" and "Condition.await(...)" should be called inside a "while" loop;X;X;;;;;;Java, bug, cert, multi-threading
+major;"Object.wait(...)" should never be called on objects that implement "java.util.concurrent.locks.Condition";X;X;;;;;;Java, suspicious
+blocker;"PreparedStatement" and "ResultSet" methods should be called with valid indices;X;X;;;;;;Java, bug, sql
+major;"private" methods called only by inner classes should be moved to those classes;X;X;;;;;;Java, confusing
+minor;'"private" methods that don''t access instance data should be "static"';X;;;;;;;Java, pitfall
+critical;"public static" fields should be constant;X;X;X;;;;;Java, cert, cwe, security
+blocker;"read" and "readLine" return values should be used;X;X;;;;;;Java, bug
+major;"readObject" should not be "synchronized";X;X;;;;;;Java, confusing
+major;"readResolve" methods should be inheritable;X;;;;;;;Java, pitfall
+major;"ResultSet.isLast()" should not be used;X;X;;;;;;Java, performance, pitfall, sql
+blocker;"runFinalizersOnExit" should not be called;X;X;;;;;;Java, bug, cert, security
+blocker;"ScheduledThreadPoolExecutor" should not have 0 core threads;X;X;;;;;;Java, bug
+major;"Serializable" classes should have a version id;X;X;;;;;;Java, cert, pitfall, serialization
+major;"Serializable" inner classes of "Serializable" classes should be static;X;X;;;;;;Java, cert, pitfall, serialization
+critical;"Serializable" inner classes of non-serializable classes should be "static";X;X;;;;;;Java, bug, cert, serialization
+critical;"SingleConnectionFactory" instances should be set to "reconnectOnException";X;;;;;;;Java, bug, spring
+critical;"static final" arrays should be "private";X;X;;;;;;DEPRECATED, Java, cwe, security
+major;"static" members should be accessed statically;X;X;;;;;;Java, pitfall
+major;"StringBuilder" and "StringBuffer" should not be instantiated with a character;X;X;;;;;;Java, pitfall
+major / minor;"switch case" clauses should not have too many lines;X;X;X;;;;;Java, brain-overload
+major;"switch" statements should end with "default" clauses;X;X;X;;;;;Java, cert, cwe, misra
+minor;"switch" statements should have at least 3 "case" clauses;X;X;X;;;;;Java, misra
+major;"switch" statements should not contain non-case labels;X;X;;;;;;Java, misra, suspicious
+major;"switch" statements should not have too many "case" clauses;X;X;;;;;;Java, brain-overload
+major;"Thread.sleep" should not be used in tests;X;X;;;;;;Java, bad-practice
+major;"Threads" should not be used where "Runnables" are expected;X;X;;;;;;Java, multi-threading, pitfall
+critical;"toArray" should be passed an array of the proper type;X;;;;;;;Java, bug
+info;"TODO" tags should be handled;X;X;X;;;;;Java
+critical;"toString()" and "clone()" methods should not return null;X;X;X;;;;;Java, bug, cwe
+minor;"toString()" should never be called on a String object;X;X;;;;;;Java, clumsy, finding
+major;"URL.hashCode" and "URL.equals" should be avoided;X;X;;;;;;Java, performance
+critical;"wait(...)" should be used instead of "Thread.sleep(...)" when a lock is held;X;X;;;;;;Java, cert, multi-threading, performance, security
+critical;"wait(...)", "notify()" and "notifyAll()" methods should only be called when a lock is obviously held on an object;X;X;;;;;;Java, bug, multi-threading
+major;@FunctionalInterface annotation should be used to flag Single Abstract Method interfaces;X;X;;;;;;Java, java8
+blocker;A "for" loop update clause should move the counter in the right direction;X;X;X;;;;;Java, bug, cert
+minor;A "while" loop should be used instead of a "for" loop;X;X;;;;;;Java, clumsy
+minor;A close curly brace should be located at the beginning of a line;X;X;X;;;;;Java, convention
+major;A field should not duplicate the name of its containing class;X;X;X;;;;;Java, brain-overload
+minor;Abstract class names should comply with a naming convention;X;X;;;;;;Java, convention
+major / minor;Abstract classes without fields should be converted to interfaces;X;X;X;;;;;Java, java8
+major;Abstract methods should not be redundant;X;;;;;;;Java, confusing
+minor;An abstract class should have both abstract and concrete methods;X;X;;;;;;Java, convention
+minor;An open curly brace should be located at the beginning of a line;X;X;;;;;;Java, convention
+minor / major;An open curly brace should be located at the end of a line;X;X;X;;;;;Java, convention
+minor;Annotation arguments should appear in the order in which they were declared;X;X;;;;;;Java, convention
+major;Annotation repetitions should not be wrapped;X;X;;;;;;Java, java8
+major;Anonymous inner classes containing only one method should become lambdas;X;X;;;;;;Java, java8
+minor;Array designators "[]" should be located after the type in method signatures;X;X;;;;;;Java, convention
+minor;Array designators "[]" should be on the type, not the variable;X;X;;;;;;Java, convention
+minor;Artifact ids should follow a naming convention;X;;;;;;;Java, convention, maven
+critical;Assertions should be complete;X;X;;;;;;Java, bug, tests
+major;Assignments should not be made from within sub-expressions;X;X;;;;;;Java, cert, cwe, misra, suspicious
+blocker;Blocks should be synchronized on "private final" fields;X;X;;;;;;Java, cert, cwe, multi-threading, security
+minor;Boolean checks should not be inverted;X;X;;;;;;Java, pitfall
+minor;Boolean literals should not be redundant;X;;;;;;;Java, clumsy
+major;Boxing and unboxing should not be immediately reversed;X;X;;;;;;Java, clumsy
+major;Branches should have sufficient coverage by unit tests;X;X;;;;;;Java, bad-practice
+major;Case insensitive string comparisons should be made without intermediate upper or lower casing;X;X;;;;;;Java, clumsy
+major;Catches should be combined;X;;;;;;;Java, clumsy
+major;Checked Exception should not be thrown;X;X;;;;;;Java, error-handling
+major;Child class fields should not shadow parent class fields;X;X;;;;;;Java, confusing
+major;Child class methods named for parent class methods should be overrides;X;;;;;;;Java, pitfall
+minor;Class names should comply with a naming convention;X;X;X;;EJS-018;;;Java, convention
+major;Class names should not shadow interfaces or superclasses;X;X;X;;;;;Java, pitfall
+major;Class variable fields should not have public accessibility;X;X;;;;;;Java, cwe
+major;Classes and enums with private members should have a constructor;X;X;;;;;;Java, pitfall
+major;Classes and methods that rely on the default system encoding should not be used;X;X;;;;;;Java, cert, unpredictable
+major;Classes extending java.lang.Thread should override the "run" method;X;X;;;;;;Java, multi-threading, pitfall
+major;Classes from "sun.*" packages should not be used;X;X;X;;;;;Java, lock-in, pitfall
+major;Classes named like "Exception" should extend "Exception" or a subclass;X;X;;;;;;Java, convention, pitfall
+critical;Classes should not be compared by name;X;X;;;;;;Java, bug, cert, cwe, security
+major;Classes should not be coupled to too many other classes (Single Responsibility Principle);X;X;;;;;;Java, brain-overload
+major;Classes should not be empty;X;X;X;;;;;Java, clumsy
+critical;Classes should not be loaded dynamically;X;X;;;;;;Java, cwe, owasp-a1, security
+major;Classes should not be too complex;X;X;X;;;;;Java, brain-overload
+major;Classes should not have too many methods;X;X;;;EJS-069;;;Java, brain-overload
+critical;'Classes that don''t define "hashCode()" should not be used in hashes';X;;;;;;;Java, bug
+major;Classes that override "clone" should be "Cloneable" and call "super.clone()";X;X;;;;;;Java, cert, cwe
+major;Classes with only "static" methods should not be instantiated;X;X;;;;;;Java, clumsy
+major;Classes without "public" constructors should be "final";X;X;;;;;;Java, design
+minor / major;Close curly brace and the next "else", "catch" and "finally" keywords should be located on the same line;X;X;X;;;;;Java, convention
+minor;Close curly brace and the next "else", "catch" and "finally" keywords should be on two different lines;X;X;;;;;;Java, convention
+major;Collapsible "if" statements should be merged;X;X;X;;;;;Java, clumsy
+major;Collection.isEmpty() should be used to test for emptiness;X;X;;;;;;Java, clumsy
+critical;Collections should not be passed as arguments to their own methods;X;X;X;;;;;Java, bug
+major;Collections.emptyList(), emptyMap() and emptySet() should be used instead of Collections.EMPTY_LIST, EMPTY_MAP and EMPTY_SET;X;X;;;;;;Java, obsolete, pitfall
+info;Comments should not be located at the end of lines of code;X;X;;;EJS-061;;EJS-062;Java, convention
+major;Comparators should be "Serializable";X;X;;;;;;Java, pitfall, serialization
+critical;Conditions should not unconditionally evaluate to "TRUE" or to "FALSE";X;X;;;;;;Java, bug, cert, cwe, misra
+minor;Constant names should comply with a naming convention;X;X;X;EJS-031;;;;Java, convention
+minor;Constants should not be defined in interfaces;X;X;;;;;;Java, bad-practice
+major;Constructor injection should be used instead of field injection;X;;;;;;;Java, design, pitfall
+major;Constructors should not be used to instantiate "String" and primitive-wrapper classes;X;;;;;;;Java, performance
+major;Constructors should only call non-overridable methods;X;X;;EJS-081;;;;Java, cert, pitfall
+major;Control flow statements "if", "for", "while", "switch" and "try" should not be nested too deeply;X;X;X;;;;;Java, brain-overload
+major / minor;Control structures should use curly braces;X;X;X;;;;;Java, cert, misra, pitfall
+critical;Cookies should be "secure";X;X;;;;;;Java, cwe, owasp-a2, owasp-a6, security
+blocker;Copyright and license headers should be defined;X;X;;;;;;Java
+critical;Credentials should not be hard-coded;X;X;X;;;;;Java, cert, cwe, owasp-a2, sans-top25-porous, security
+critical;Cryptographic RSA algorithms should always incorporate OAEP (Optimal Asymmetric Encryption Padding);X;X;;;;;;Java, cwe, owasp-a5, owasp-a6, sans-top25-porous, security
+critical;Custom serialization method signatures should meet requirements;X;X;;;;;;Java, bug, cert
+major;Cycles between packages should be removed;X;X;X;;;;;Java, design
+major;Dead stores should be removed;X;X;;;;;;Java, cert, cwe, suspicious, unused
+major;Declarations should use Java collection interfaces such as "List" rather than specific implementation classes such as "LinkedList";X;X;;;;;;Java, bad-practice
+blocker;Default EJB interceptors should be declared in "ejb-jar.xml";X;;;;;;;Java, bug
+major;Dependencies should not have "system" scope;X;;;;;;;Java, lock-in, maven
+major;Deprecated "${pom}" properties should not be used;X;;;;;;;Java, maven, obsolete
+major;Deprecated classes and interfaces should not be extended/implemented;X;X;;;;;;DEPRECATED, Java, cwe, obsolete
+info;Deprecated code should be removed eventually;X;X;;;;;;Java, obsolete
+major;Deprecated elements should have both the annotation and the Javadoc tag;X;X;;;;;;Java, bad-practice, obsolete
+critical;Dissimilar primitive wrappers should not be used with the ternary operator without explicit casting;X;X;;;;;;Java, bug
+major;EJB interceptor exclusions should be declared as annotations;X;;;;;;;Java, pitfall
+major;Empty arrays and collections should be returned instead of null;X;X;;;;;;Java, cert
+minor;Empty statements should be removed;X;X;;;;;;Java, cert, misra, unused
+major;Enumeration should not be implemented;X;X;;;;;;Java, obsolete
+major / critical;Equality operators should not be used in "for" loop termination conditions / Relational operators should be used in "for" loop termination conditions;X;X;;;;;;Java, cert, cwe, misra, suspicious / Java, bug, cert, cwe, misra
+major;Escaped Unicode characters should not be used;X;X;;;;;;Java, confusing
+major;Exception classes should be immutable;X;X;;;;;;Java, error-handling
+major;Exception handlers should preserve the original exceptions;X;X;;EJS-086;;;;Java, cert, error-handling, suspicious
+major;Exception types should not be tested using "instanceof" in catch blocks;X;X;;;;;;Java, cert, error-handling
+critical;Exceptions should not be thrown from servlet methods;X;X;;;;;;Java, cert, cwe, error-handling, owasp-a6, security
+major;Exceptions should not be thrown in finally blocks;X;X;;;;;;Java, cert, error-handling, suspicious
+major;Execution of the Garbage Collector should be triggered only by the JVM;X;X;;;;;;Java, bad-practice, unpredictable
+major;Exit methods should not be called;X;X;;;;;;Java, cert, cwe, suspicious
+major;Expressions should not be too complex;X;X;X;;;;;Java, brain-overload
+minor;Extensions and implementations should not be redundant;X;X;;;;;;Java, clumsy
+major;Failed unit tests should be fixed;X;X;;;;;;Java, bug
+minor;Field names should comply with a naming convention;X;X;X;;EJS-025;;;Java, convention
+major;Fields and methods should not have conflicting names;X;X;;;;;;DEPRECATED, Java, brain-overload
+critical;Fields in a "Serializable" class should either be transient or serializable;X;X;;;;;;Java, bug, cwe, serialization
+minor;Fields in non-serializable classes should not be "transient";X;X;;;;;;Java, serialization, unused
+minor;Fields should not be initialized to default values;X;X;;;;;;Java, convention, finding
+minor;Files should contain an empty new line at the end;X;X;;;;;;Java, convention
+major;Files should contain only one top-level class or interface each;X;X;;;;;;Java, brain-overload
+major;Files should not be empty;X;X;;;;;;Java, unused
+major;Files should not have too many lines;X;X;;;;;;Java, brain-overload
+critical;Floating point numbers should not be tested for equality;X;X;X;;;;;Java, bug, misra
+info;Functions should not be defined with a variable number of arguments;X;;;;;;;Java, cert, misra, pitfall
+major;Future keywords should not be used as names;X;X;;;;;;Java, obsolete, pitfall
+critical / major;Generic exceptions should never be thrown;X;X;X;;;;;Java, cert, cwe, error-handling, security
+major;Generic wildcard types should not be used in return parameters;X;X;;;;;;Java, pitfall
+critical;Getters and setters should be synchronized in pairs;X;;;;;;;Java, bug, cert, multi-threading
+minor;Group ids should follow a naming convention;X;;;;;;;Java, convention, maven
+critical;HTTP referers should not be relied on;X;X;;;;;;Java, cwe, owasp-a2, sans-top25-porous, security
+critical;Identical expressions should not be used on both sides of a binary operator;X;X;;;;;;Java, bug, cert
+critical;IllegalMonitorStateException should not be caught;X;X;;;;;;Java, bug, multi-threading
+critical;Inappropriate "Collection" calls should not be made;X;X;X;;;;;Java, bug, cert
+critical;Inappropriate regular expressions should not be used;X;;;;;;;Java, bug
+major;Increment (++) and decrement (--) operators should not be used in a method call or mixed with other operators in an expression;X;X;X;;;;;Java, cert, misra
+major;Inheritance tree of classes should not be too deep;X;X;;;;;;Java, design
+major;Inner class calls to super class methods should be unambiguous;X;X;;;;;;Java, pitfall
+major;Inner classes should not have too many lines;X;X;;;EJS-069;;;Java, brain-overload
+major;Inner classes which do not reference their owning classes should be "static";X;X;;;;;;Java, performance
+critical;Instance methods should not write to "static" fields;X;X;;;;;;Java, bug, multi-threading
+minor;Interface names should comply with a naming convention;X;X;;;EJS-018;;;Java, convention
+critical;Ints and longs should not be shifted by zero or more than their number of bits-1;X;X;;;;;;Java, bug, cert
+critical;Invalid "Date" values should not be used;X;X;X;;;;;Java, bug
+critical;IP addresses should not be hardcoded;X;X;;;;;;Java, cert, security
+major;Java parser failure;X;X;;;;;;Java, suspicious
+blocker;Jump statements should not occur in "finally" blocks / "return" statements should not occur in "finally" blocks;X;X;X;;;;;Java, bug, cert, cwe, error-handling / Java, bug, cwe, error-handling
+major;JUnit assertions should include messages;X;X;;;;;;Java, tests
+critical;JUnit assertions should not be used in "run" methods;X;X;;;;;;Java, bug, tests
+critical;JUnit framework methods should be declared properly;X;X;;;;;;Java, bug, tests
+major;JUnit rules should be used;X;X;;;;;;Java, tests, unused
+critical;JUnit test cases should call super methods;X;X;;;;;;Java, bug, tests
+major;Labels should not be used;X;X;;;;;;Java, confusing
+major;Lambdas and anonymous classes should not have too many lines;X;X;;;;;;Java, java8
+minor;Lambdas should be replaced with method references;X;X;;;;;;Java, java8
+major;Lamdbas containing only one statement should not nest this statement in a block;X;X;;;;;;Java, java8
+critical;Lazy initialization of "static" fields should be "synchronized";X;X;;;;;;Java, bug, multi-threading
+major;Limited dependence should be placed on operator precedence rules in expressions;X;X;;;;;;Java, cert, cwe, misra
+major;Lines should have sufficient coverage by unit tests;X;X;;;;;;Java, bad-practice
+minor;Lines should not be too long;X;X;X;EJS-006;;;;Java, convention
+major;Literal boolean values should not be used in assertions;X;X;;;;;;Java, junit
+minor;Literal suffixes should be upper case;X;X;;;;;;Java, cert, convention, misra, pitfall
+minor;Local variable and method parameter names should comply with a naming convention;X;X;;;EJS-025;;;Java, convention
+minor;Local Variables should not be declared and then immediately returned or thrown;X;X;;;;;;Java, clumsy
+major;Local variables should not shadow class fields;X;X;;;;;;Java, cert, pitfall
+major;Locale should be used in String operations;X;;;;;;;Java, cert, unpredictable
+critical;Locks should be released;X;X;;;;;;Java, bug, cwe, multi-threading
+minor;Loggers should be "private static final" and should share a naming convention;X;X;;;;;;Java, convention
+minor;Long suffix "L" should be upper case;X;X;;;;;;DEPRECATED, Java, convention
+critical;Loop conditions should be true at least once;X;X;X;;;;;Java, bug
+blocker;Loops should not be infinite;X;;;;;;;Java, bug, cert
+major;Loops should not contain more than a single "break" or "continue" statement;X;X;;;;;;Java, brain-overload
+minor;Magic numbers should not be used;X;X;X;;;;;Java, brain-overload
+major;Maps with keys that are enum values should be replaced with EnumMap;X;X;;;;;;Java, performance
+critical / major;Math operands should be cast before assignment;X;X;X;;;;;Java, bug, cert, cwe, sans-top25-risky
+critical;Math should not be performed on floats;X;X;;;;;;Java, bug, cert
+critical / major;Member variable visibility should be specified;X;X;X;;;;;Java, security
+minor;Method names should comply with a naming convention;X;X;;EJS-022;;;;Java, convention
+major;Method overrides should not change contracts;X;;;;EJS-070;;;Java, suspicious
+major;Method parameters, caught exceptions and foreach variables should not be reassigned;X;X;X;;;;;Java, misra, pitfall
+blocker;Methods "wait(...)", "notify()" and "notifyAll()" should not be called on Thread instances;X;X;;;;;;Java, bug, multi-threading
+major;Methods and field names should not be the same or differ only by capitalization;X;X;;EJS-014;;;;Java, confusing
+major;Methods named "equals" should override Object.equals(Object);X;X;;;;;;Java, suspicious
+major;Methods of "Random" that return floating point values should not be used in random integer generation;X;;;;;;;Java, clumsy
+major;Methods should not be empty;X;X;X;;;;;Java, suspicious
+critical;Methods should not be named "hashcode" or "equal";X;X;;;;;;Java, bug, pitfall
+major;Methods should not be too complex;X;X;;;;;;Java, brain-overload
+major;Methods should not have too many lines;X;X;;;EJS-069;;;Java, brain-overload
+major;Methods should not have too many parameters;X;X;;;;;;Java, brain-overload
+major;Methods should not have too many return statements;X;X;X;;;;;Java, brain-overload
+major;Methods should not return constants;X;;;;;;;Java, confusing
+minor;Modifiers should be declared in the correct order;X;X;;;;;;Java, convention, psr2
+major;Modulus results should not be checked for direct equality;X;X;;;;;;Java, cert, suspicious
+critical;Multiline blocks should be enclosed in curly braces;X;X;;;;;;Java, bug, cert, cwe
+major;Multiple loops over the same set should be combined;X;X;;;;;;Java, performance
+minor;Multiple variables should not be declared on the same line;X;X;;;;;;Java, cert, convention, misra
+critical;Mutable fields should not be "public static";X;X;;;;;;Java, cert, cwe, security, unpredictable
+critical;Mutable members should not be stored or returned directly;X;X;;;;;;Java, cert, cwe, security, unpredictable
+critical;Neither "Math.abs" nor negation should be used on numbers that could be "MIN_VALUE";X;X;;;;;;Java, bug
+critical;Neither DES (Data Encryption Standard) nor DESede (3DES) should be used;X;X;;;;;;Java, cert, cwe, owasp-a6, sans-top25-porous, security
+major;Nested "enum"s should not be declared static;X;X;;;;;;Java, clumsy
+major;Nested blocks of code should not be left empty;X;X;X;;;;;Java, suspicious
+major;Nested code blocks should not be used;X;X;;;;;;Java, bad-practice
+major;Non-constructor methods should not have the same name as the enclosing class;X;X;;;;;;Java, pitfall
+critical;Non-public methods should not be "@Transactional";X;X;;;;;;Java, bug, spring
+critical;Non-serializable classes should not be written;X;X;;;;;;Java, bug, serialization
+critical;Non-serializable objects should not be stored in "HttpSession" objects;X;X;;;;;;Java, bug, cwe
+critical;Non-thread-safe fields should not be static / "Calendars" and "DateFormats" should not be static;X;X;;;;;;Java, bug, multi-threading / Java, bug, multi-threading
+blocker;Null pointers should not be dereferenced;X;X;;;;;;Java, bug, cert, cwe, owasp-a1, owasp-a2, owasp-a6, security
+major;Null should not be returned from a "Boolean" method;X;X;;;;;;Java, pitfall
+major;Objects should be compared with "equals()";X;X;;EJS-079;;;;Java, cert, cwe
+major;Objects should not be created only to "getClass";X;X;;;EJS-101;;;Java, performance
+critical;Objects should not be created to be dropped immediately without being used;X;X;X;;EJS-101;;;DEPRECATED, Java, bug
+major;Octal values should not be used;X;X;;;;;;Java, cert, misra, pitfall
+blocker;Only standard cryptographic algorithms should be used;X;X;;;;;;Java, cwe, owasp-a6, sans-top25-porous, security
+major;Only static class initializers should be used;X;X;;;;;;Java, pitfall
+minor;Overriding methods should do more than simply call the same method in the super class;X;X;;;;;;Java, clumsy
+major;Package declaration should match source file directory;X;X;X;;;;;Java, pitfall
+minor;Package names should comply with a naming convention;X;X;;EJS-016;;;;Java, convention
+minor;'Packages should have a javadoc file ''package-info.java''';X;X;;EJS-040;;;;Java, convention
+minor;Parentheses should be removed from a single lambda input parameter when its type is inferred;X;X;;;;;;Java, java8
+major;Parsing should be used to convert "Strings" to primitives;X;X;;;;;;Java, performance
+minor;pom elements should be in the recommended order;X;;;;;;;Java, convention, maven
+major;Primitive wrappers should not be instantiated only for "toString" or "compareTo" calls;X;X;;;;;;Java, clumsy
+major;Primitives should not be boxed just for "String" conversion;X;X;;;;;;Java, performance
+critical;Printf-style format strings should not lead to unexpected behavior at runtime;X;X;;;;;;Java, bug, cert, pitfall
+critical;Pseudorandom number generators (PRNGs) should not be used in secure contexts;X;X;;;;;;Java, cert, cwe, owasp-a6, security
+minor;Public constants and fields initialized at declaration should be "static final" rather than merely "final";X;X;;;;;;Java, convention
+major;Public methods should not contain selector arguments;X;X;;;;;;Java, design
+major;Public methods should throw at most one checked exception;X;X;;;;;;Java, error-handling
+minor;Public types, methods and fields (API) should be documented with Javadoc;X;X;;;EJS-035, EJS-039;EJS-042, EJS-054;;Java, convention
+critical;Raw byte values should not be used in bitwise operations in combination with shifts;X;;;;;;;Java, bug, cert
+minor;Redundant casts should not be used;X;X;X;;;;;Java, clumsy
+minor;Redundant modifiers should not be used;X;X;;;;;;Java, clumsy, finding
+blocker;Reflection should not be used to check non-runtime annotations;X;X;;;;;;Java, bug
+critical;Related "if/else if" statements should not have the same condition;X;X;X;;;;;Java, bug, cert, pitfall, unused
+blocker;Resources should be closed;X;X;;;;;;Java, bug, cert, cwe, denial-of-service, leak, security
+minor;Return of boolean expressions should not be wrapped into an "if-then-else" statement;X;X;;;;;;Java, clumsy
+critical / major;'Return values should not be ignored when function calls don''t have any side effects';X;X;X;;;;;Java, bug, cert, misra
+critical;Return values should not be ignored when they contain the operation status code;X;;;;;;;Java, cert, cwe, error-handling, misra, security
+major;Sections of code should not be "commented out";X;X;;;;;EJS-036;Java, misra, unused
+critical;Security constraints should be defined;X;;;;;;;Java, cwe, jee, owasp-a7, security, websphere
+critical;Servlets should not have mutable instance fields;X;X;;;;;;Java, bug, cert, multi-threading, struts
+major;Sets with elements that are enum values should be replaced with EnumSet;X;;;;;;;Java, performance
+critical;SHA-1 and Message-Digest hash algorithms should not be used;X;X;;;;;;Java, cwe, owasp-a6, sans-top25-porous, security
+critical;Short-circuit logic should be used in boolean contexts;X;X;;;;;;Java, bug, cert
+blocker;Short-circuit logic should be used to prevent null pointer dereferences in conditionals;X;X;;;;;;Java, bug
+major;Silly bit operations should not be performed;X;X;;;;;;Java, suspicious
+critical;Silly equality checks should not be made;X;X;;;;;;Java, bug, cert, unused
+major;Silly math should not be performed;X;X;;;;;;Java, clumsy
+major;Skipped unit tests should be either removed or fixed;X;X;;;;;;Java, pitfall
+minor;Source code should be indented consistently;X;X;;EJS-005;;;;Java, convention
+major;Source files should have a sufficient density of comment lines;X;X;;;;EJS-037;;Java, convention
+major;Source files should not have any duplicated blocks;X;X;;EJS-075;;;;Java, pitfall
+major;Standard outputs should not be used directly to log anything;X;X;;;;;;Java, bad-practice, cert
+minor;Statements should be on separate lines;X;X;X;;;;;Java, convention
+minor;Static non-final field names should comply with a naming convention;X;X;;;;;;Java, convention
+minor;String function use should be optimized for single characters;X;;;;;;;Java, clumsy, performance
+minor;String literals should not be duplicated;X;X;;;;;;Java, design
+minor;String.valueOf() should not be appended to a String;X;X;;;;;;Java, clumsy
+major;Strings literals should be placed on the left side when checking for equality;X;X;;;;;;Java, bad-practice
+critical / major;Strings should be compared using "equals()";X;X;X;;;;;DEPRECATED, Java, bug, cwe
+major;'Strings should not be concatenated using ''+'' in a loop';X;X;;;;;;Java, performance
+critical;Struts validation forms should have unique names;X;;;;;;;Java, bug, cwe, struts
+major;Subclasses that add fields should override "equals";X;X;;;;;;Java, suspicious
+blocker;super.finalize() should be called at the end of Object.finalize() implementations;X;X;;;;;;Java, bug, cert, cwe
+major;Switch cases should end with an unconditional "break" statement;X;X;;;;EJS-078;;Java, cert, cwe, misra, suspicious
+blocker;Synchronization should not be based on Strings or boxed primitives;X;X;;;;;;Java, bug, cert, multi-threading
+major;Synchronized classes Vector, Hashtable, Stack and StringBuffer should not be used;X;X;;;;;;Java, multi-threading, performance
+minor;Tabulation characters should not be used;X;X;;EJS-008;;;;Java, convention
+major;TestCases should contain tests;X;X;;;;;;Java, confusing, tests, unused
+critical;Tests should include assertions;X;X;;;;;;Java, tests
+major;Tests should not be ignored;X;;;;;;;Java, suspicious, tests
+info;The @SuppressWarnings annotation should not be used;X;X;;;;;;Java
+critical;The Array.equals(Object obj) method should not be used;X;X;;;;;;DEPRECATED, Java, bug
+minor;The default unnamed package should not be used;X;X;X;;;;;Java, convention
+major;The diamond operator ("<>") should be used;X;X;;;;;;Java, clumsy
+minor;The members of an interface declaration or class should appear in a pre-defined order;X;X;;;;;;Java, convention
+critical;The non-serializable super class of a "Serializable" class should have a no-argument constructor;X;X;;;;;;Java, bug, serialization
+critical;The Object.finalize() method should not be called;X;X;;;;;;Java, cert, cwe, security
+major;The Object.finalize() method should not be overriden;X;X;;;;;;Java, cert, unpredictable
+major;The signature of "finalize()" should match that of "Object.finalize()";X;X;;;;;;Java, pitfall
+major;The ternary operator should not be used;X;X;;;;;;Java, brain-overload
+blocker;The value returned from a stream read should be checked;X;X;;;;;;Java, bug, cert
+critical;Thread.run() should not be called directly;X;X;;;;;;Java, bug, cert, cwe, multi-threading
+major;Threads should not be started in constructors;X;X;;;;;;Java, multi-threading, pitfall
+blocker;Throwable and Error should not be caught;X;X;;;;;;Java, cert, cwe, error-handling, security
+critical;Throwable.printStackTrace(...) should not be called;X;X;;;;;;Java, error-handling, security
+minor;Throws declarations should not be superfluous;X;X;;;;;;Java, clumsy, unused
+major;Try-catch blocks should not be nested;X;X;;;;;;Java, confusing
+major;Try-with-resources should be used;X;;;;;;;Java, cert, pitfall
+major;Two branches in the same conditional structure should not have exactly the same implementation;X;X;;;;;;Java, design, suspicious
+minor;Type parameter names should comply with a naming convention;X;X;;;;;;Java, convention
+critical;Untrusted data should not be stored in sessions;X;X;;;;;;Java, cwe, security
+major;Unused "private" fields should be removed;X;X;;;;;;Java, cert, unused
+major;Unused "private" methods should be removed;X;X;;;;;;Java, cert, unused
+major;Unused labels should be removed;X;X;;;;;;Java, cert, misra, unused
+major;Unused local variables should be removed;X;X;;;;;;Java, unused
+major;Unused method parameters should be removed;X;X;X;;;;;Java, cert, misra, unused
+major;Unused protected methods should be removed;X;X;;;;;;Java, unused
+major;Unused type parameters should be removed;X;X;;;;;;Java, cert, unused
+major;Useless "if(true) {...}" and "if(false){...}" blocks should be removed;X;X;X;;;;;Java, bug, cwe, misra, security
+minor;Useless imports should be removed;X;X;;;;;;Java, unused
+major;Useless parentheses around expressions should be removed to prevent any misunderstanding;X;X;;;;;;Java, confusing
+major;Utility classes should not have public constructors;X;X;;;;;;Java, design
+critical;Values passed to LDAP queries should be sanitized;X;X;;;;;;Java, cert, cwe, owasp-a1, security
+critical;Values passed to OS commands should be sanitized;X;X;;;;;;Java, cwe, owasp-a1, sans-top25-insecure, security
+critical;Values passed to SQL commands should be sanitized;X;X;X;;;;;Java, cert, cwe, hibernate, owasp-a1, sans-top25-insecure, security, sql
+critical;Values should not be uselessly incremented;X;X;;;;;;Java, bug
+major;Variables should not be declared before they are relevant;X;X;;;;;;Java, brain-overload
+critical / major;Variables should not be self-assigned;X;X;X;;;;;Java, bug, cert
+critical;Web applications should not have a "main" method;X;X;;;;;;Java, cert, cwe, jee, security
+critical;Web applications should use validation filters;X;;;;;;;Java, injection, owasp-a1, security
+major;Wildcard imports should not be used;X;X;;;;;;Java, pitfall
+major;Disallowed methods should not be used;(X);X;;;;;;Java
+major;Architectural constraints should be followed;(X);X;;;;;;Java
+major;Comments matching a regular expression should be handled;(X);;;;;;;Java
+critical;Custom resources should be closed;(X);;;;;;;Java, denial-of-service, security
+major;Disallowed dependencies should not be used;(X);;;;;;;Java, maven
+minor;Literal boolean values should not be used in condition expressions;;X;;;;;;Java, clumsy
