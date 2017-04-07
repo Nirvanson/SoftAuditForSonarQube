@@ -1,0 +1,81 @@
+ID;TAG;RULE;DESCRIPTION;CATEGORIES;COMMENT
+SOA-001;PROB;IO Operations must be contained be in a try block;IO-Operationen immer in try-block;InOut;-
+SOA-002;PROB;Two Dimensional Arrays conflict with 1. Normal Form;???;DataTypes;-
+SOA-003;PROB;Data Redefinitions conflict with 2. Normal Form;???;Variables;-
+SOA-004;PROB;Data Casting should be avoided;Casting nicht verwenden;Variables;-
+SOA-005;SECU;Constructor Methods should not be duplicated;Konstruktoren nicht überladen;Methods;-
+SOA-006;PROB;Synchronization should be avoided;Synchronized nicht verwenden;Concurrency;-
+SOA-007;PROB;Method Invocation with array of objects should be in try block;Methodenaufruf mit Objektliste immer in try-Block;Methods;-
+SOA-008;SECU;Return Value is not controlled after method invocation;Rückgabewerte von Methoden überprüfen;Methods;-
+SOA-009;PROB;Conditions should not contain an Assignment;Keine Wertzuweisung in Bedingungen;Conditionals, Operators;-
+SOA-010;PROB;Break is missing in switch Statement;Jede case-Anweisung soll mit break abgeschlossen werden;Conditionals;-
+SOA-011;PROB;Default is missing in switch Statement;Jede Switch-Anweisung sollte default-case haben;Conditionals;-
+SOA-012;PROB;Control logic exceeds maximum Nesting Level;Maximale Verschachtelungstiefe von 5;Conditionals;-
+SOA-013;PROB;More than one Statement on a Line;Nur eine Anweisung je Zeile;Style;-
+SOA-014;SECU;Class Variables should never be declared public;Keine öffentlichen klassenvariablen;Variables;-
+SOA-015;PROB;instanceof should not be used;instanceof nicht benutzen;Operators;-
+SOA-016;PROB;External Method Invocation should have a Class Reference;???;Methods;-
+SOA-017;SECU;Return Values should be checked;Rückgabewerte überprüfen;Methods;-
+SOA-018;SECU;Derived class is not declared as final;Erbende Klassen als final deklarieren;Classes, Inheritance;-
+SOA-019;PROB;Class should not contain labels;Keine labels in Klassen verwenden;Classes;-
+SOA-020;PROB;Class attribute names should be qualified;Sichtbarkeit von klassenvariablen angeben;Variables;-
+SOA-021;PROB;equals should be used to compare objects;Equals zum vergleichen von Objekten verwenden;Operators;-
+SOA-022;PROB;Interface definition should be in a separate source file;Interfaces in eigene Quelldatei schreiben;Structure;-
+SOA-023;SECU;Input Parameters of a Public Method should be checked;Eingabeparameter in öffentlichen Methoden überprüfen;Methods;-
+SOA-024;PROB;Returning a function may cause an endless loop;Keine Methoden zurückgeben;Methods;-
+SOA-025;PROB;Number of catches does not match number of tries;Nur 1 Catch je Try;Exceptions;-
+SOA-026;DEFI;Source module exceeds maximum size limit;Quelldateien maximal 1000 Zeilen lang;Style;-
+SOA-027;DEFI;Source module has more than maximum allowed Statements;Quelldateien maximal 500 Anweisungen;Style;-
+SOA-028;DEFI;Source module has more than maximum allowed Imports;Maximal 10 imports je Quelldatei;Style;-
+SOA-029;DEFI;Source module has more than maximum allowed Variables;Maximal 100 Variablen je Klasse;Style;-
+SOA-030;DEFI;Source module has more than maximum allowed Interfaces;Maximal 4 "Dateninterfaces" je Klasse;Style;-
+SOA-031;DEFI;Source module has more than maximum allowed Classes;Maximal 10 Klassen je package (?);Structure;-
+SOA-032;DEFI;Source module has more than maximum allowed Methods;Maximal 20 Methoden je Klasse;Style;-
+SOA-033;DEFI;Class exceeds maximum size limit;Klassen nicht zu groß;Classes;-
+SOA-034;DEFI;Method exceeds maximum size limit;Methoden nicht zu groß;Methods;-
+SOA-035;DEFI;Method has more than maximum allowed Parameters;Maximal 7 Parameter je Methode;Methods;-
+SOA-036;DEFI;Module references too many foreign Methods;Maximal 20 Fremdmethodenaufrufe je Klasse;Classes, Methods;-
+SOA-037;DEFI;Package should have a documentation header;package.info Datei für jedes package;Structure, Comments;-
+SOA-038;DEFI;Interface should have a documentation header;Javadoc für interfaces;Comments;-
+SOA-039;DEFI;Class should have a documentation header;Javadoc für Klassen;Comments;-
+SOA-040;DEFI;Method should have a documentation header;Javadoc für Methoden;Comments;-
+SOA-041;DEFI;Compound Condition has more than two condition clauses;Bedingungen nicht aus mehr als 2 Komponenten zusammen setzen;Conditionals;-
+SOA-042;DEDI;? Operation should not be used in Expressions;Terniären Operator nicht verwenden;Operators;-
+SOA-043;DEFI;Documentation header should include a code tag;Code tag in Javadoc;Comments;-
+SOA-044;DEFI;Methods without Return value should be void;Methoden ohne Rückgabewert sollten void sein;Methods;-
+SOA-045;DEFI;String Vectors should be avoided;String-Vektoren nicht verwenden;DataTypes;-
+SOA-046;DEFI;Constants in procedural statements are forbidden;Keine Magic Numbers;Constants;-
+SOA-047;DEFI;Literals in procedural statements are forbidden;keine STring Literale;Constants;-
+SOA-048;SECU;Embedded SQL functions should be avoided;Keine eingebetteten SQL-Anweisungen;InOut;-
+SOA-049;SECU;SQL Statement strings in code are vulnerable;Keine eingebetteten SQL-Anweisungen;InOut;-
+SOA-050;WARN;Imports should proceed all other statements;Import Anweisungen vor allen anderen;Style;-
+SOA-051;WARN;Database Accesses are restricted to access classes;DB-Zugriffe in eigener Klasse kapseln;InOut;-
+SOA-052;WARN;Nested Code should be indented by at least two columns;Einrückung;Style;-
+SOA-053;WARN;Code Line should not exceed maximum length of 120 Characters;Zeilenlänge maximal 120;Style;-
+SOA-054;WARN;Data Declaration should be followed by a Comment //;Variablendeklaration durch Kommentar in gleicher Zeile erklären;Comments;-
+SOA-055;WARN;Structure & union declarations should be proceeded by a comment;Struktur / Vereinigung durch Kommentar erklären;Comments;-
+SOA-056;WARN;End Bracket should be followed by a Comment //;Schließenden Block durch Kommentar in gleicher Zeile erklären;Comments;-
+SOA-057;WARN;Control Command should be on a separate line;Kontrollanweisungen in eigener Zeile;Style;-
+SOA-058;WARN;Numeric constants should not start with a decimal point;Numerische Konstanten nicht mit . anfangen;Constants;-
+SOA-059;WARN;{ Open Block Bracket should be on a separate line;Öffnende geschweifte Klammer in eigener Zeile;Style;-
+SOA-060;WARN;} Close Block Bracket should be on a separate line;Scließende geschweifte Klammer in eigener Zeile;Style;-
+SOA-061;WARN;Left Parenthesis ( should be proceeded by a space;Leerzeichen nach öffnender Klammer;Style;-
+SOA-062;WARN;Right Parenthesis ) should be followed by a space or Semicolon;Semikolon oder Leerzeichen nach schließender Klammer;Style;-
+SOA-063;WARN;Arithmetic Operator should be delimited by spaces;Links und Rechts von mathematischen Operatoren Leerzeichen;Style;-
+SOA-064;WARN;Logical Operator should be delimited by spaces;Links und Rechts von logischen Operatoren Leerzeichen;Style;-
+SOA-065;WARN;Else Clause should be on a seperate line;Else-Anweisung in eigener Zeile beginnen;Style;-
+SOA-066;WARN;Method names should begin with a small letter;Methodennamen klein beginnend;Naming;-
+SOA-067;WARN;Method names should have at least four characters;Methodennamen mindestens 4 Zeichen Lang;Naming;-
+SOA-068;WARN;Method/Class/interface names should not exceed 40 characters;Methoden, Klassen, Interface-Namen maximal 40 Zeichen;Naming;-
+SOA-069;WARN;Data names should be at least four characters long;Varuiablennamen mindestens 4 Zeichen lang;Naming;-
+SOA-070;WARN;Data names should begin with a capital letter;Variablennamen groß beginnen;Naming;-
+SOA-071;WARN;Data names should not exceed 36 characters;Variablennamen maximal 36 Zeichen lang;Naming;-
+SOA-072;WARN;Class names should begin with a capital letter;Klassennamen groß beginnen;Naming;-
+SOA-073;WARN;Collection names should match class name;Dateiname = Klassenname (?);Naming;-
+SOA-074;WARN;Package names should not exceed 8 characters;package namen maximal 8 zeichen lang;Naming;-
+SOA-075;WARN;Package name should be given in source file;package anweisung in Quelldatei angeben;Structure;-
+SOA-076;WARN;Multiple classes in a single source not allowed;Nur eine Klasse je Quelldatei;Structure, Classes;-
+SOA-077;WARN;Objects should never be compared with != null;!= null nicht verwenden;Operators;-
+SOA-078;SECU;Objects should never be compared with a literal;Objekte nicht mit literalen vergleichen;Operators;-
+SOA-079;SECU;Classes should never be serializeable;Nicht von Serializable erben;Inheritance;-
+SOA-080;SECU;Classes should never be cloneable;Nicht von Clonable erben;Inheritance;-
