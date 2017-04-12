@@ -37,8 +37,43 @@
 	\chapter{Einleitung}
   		schreib es auf
     
-	\chapter{Kapitel}
-		
+	\chapter{Das Regelwerk}
+		Eine der Säulen für ein (teil-)automatisiertes Bewertungssystem für das Softwarepraktikum ist zwangsläufig die Festlegung eines geeigneten Regelwerks, dass in SonarQube konfiguriert werden muss und als Basis für diverse Berechnungen zur Beurteilung der abgelieferten Softwarequalität dient. Zum einen fließt die Zahl der Regelverletzungen in mehrere Metriken ein und zum anderen sind einige dieser Regeln, oder Kombinationen mehrerer Regeln gleichzeitig Qualitätsindikatoren des für das Softwarepraktikum angepassten Code-Quality-Index. In diesem Kapitel soll zunächst auf die Notwendigkeit eines Regelwerks eingegangen, einige in der Industrie und Literatur propagierte Regelwerke vorgestellt und letztlich die getroffene Auswahl begründet und erklärt werden.
+		\section{Warum Programmierregeln?}
+			Grundsätzlich entsteht die Notwendigkeit für Programmierregeln und "`StyleGuides"' aus zwei für alle Programmiersprachen und Kontexte der Softwareentwicklung gleichen Gegebenheiten: 
+			\begin{itemize}
+				\item Die Möglichkeiten und Freiheiten die Programmiersprachen bieten gehen weit über das hinaus, was man tun sollte. Für jedes Problem gibt es mehrere Wege zum Ziel von denen viele aber massiv problematisch sind, weil sie beispielsweise sehr Fehleranfällig sind, gefährliche Sicherheitslücken aufweisen oder die Performanz der Software negativ beeinflussen. Die Idee hinter vielen Programmierregeln ist daher ungünstige Konstrukte zu vermeiden ("`Antipattern"') oder bewährte Varianten zu nutzen ("`Best Practices"')
+				\item Die meiste Zeit verwendet der Programmierer aufs Code Lesen, nicht fürs Code Schreiben \cite{CleanCode} TODO???. Dies gilt selbst für kleine allein bearbeitete Projekte da auch der selbst geschriebene Code immer wieder gelesen werden muss um ihn zu erweitern. Der Effekt verstärkt sich bei größeren Projekten die in Teams bewältigt werden da nun Code anderer Programmierer gelesen werden muss um den eigenen Code anbinden zu können und wird noch einmal stärker wenn es um die Wartung und Erweiterung von bestehenden Softwaresystemen geht. Daher ist eine gute Lesbarkeit des Codes notwendig um Effizient und Effektiv zu Programmieren. 
+			\end{itemize}
+			Beiden Sachverhalten lässt sich am geeignetsten durch ein Regelwerk begegnen, an dass sich alle am Projekt beteiligten Programmierer halten, um so möglichst vielen Fehlerquellen von vorne herein aus dem Weg zu gehen und möglichst gut lesbaren, konsistenten Code zu erhalten der leicht verstanden und damit erweitert werden kann.
+			Leider gibt es kein allgemeingültiges Regelwerk das sich für beliebige Projekte anwenden lässt und somit für gute Code-Qualität sorgt. Recht einfach zu erkennen ist, dass zumindest für jede Programmiersprache ein eigenes Regelwerk notwendig ist, da jede Sprache ihre Eigenheiten und speziellen Stolperfallen besitzt. Doch auch innerhalb einer festgelegten Programmiersprache wie im Beispiel des Softwarepraktikums "`Java"' gibt es eine erstaunliche Vielfalt von zum Teil widersprüchlichen Regeln die auf verschiedenste Art und Weise zu Regelwerken zusammengefasst werden können. Dies lässt sich durch sehr verschiedene Anforderungsprofile der Projekte begründen, aber auch persönliche Vorlieben und Erfahrungen spielen eine große Rolle \cite{JavaQualityAssurance}. Im Folgenden einige konkrete Ursachen, die ein allgemeingültiges Regelwerk als nicht sinnvoll, wenn nicht sogar unmöglich erscheinen lassen:
+			\begin{labeling}{\textbf{Erfahrung}}
+				\item [\textbf{Relevanz}] Manche Regeln sind im Kontext eines speziellen Projekts einfach nicht Relevant. Wenn es sich um eine reine Desktop-PC-Anwendung ohne Internetzugriff handelt sind Regeln die auf sichere Verschlüsselung oder Schutz vor Angriffen abzielen einfach unwichtig. Auch Performanzbezogene Regeln spielen an vielen Stellen eine untergeordnete Rolle. 
+				\item [\textbf{Zeit}] Programmiersprachen und Techniken verändern sich mit der Zeit. Es ist nur logisch, dass auch die zugehörigen Programmierregeln einer ständigen Überarbeitung und damit Veränderung unterliegen. Die Einführung von "`try-with-resources"' mit Java 1.7 ist ein Beispiel dafür. Gab es zuvor Regeln, die vorgaben geöffnete Resourcen in einem "`finally"'-Block freizugeben wird nun von den meisten Autoren empfohlen das neue Sprach-Konstrukt zu verwenden.
+				\item [\textbf{Erfahrung}] Die Auswahl der Regeln hängt in beträchtlichem Maß von den persönlichen Erfahrungen der verantwortlichen Entwickler ab. Ein Entwickler, der in einem früheren Projekt massive Probleme mit dem "`casten"' von Variablen auf speziellere Datentypen hatte wird eher auf eine Regel bestehen, die genau das verbietet als jemand dem diese Probleme noch nicht begegnet sind, oder an Programmen gearbeitet hat in dem dies sogar notwendig war um die gewünschte Funktionalität umzusetzen. Auch sollte das Regelwerk sich gerade im Lehrumfeld am geringen Erfahrungsstand der Studenten oder Schüler orientieren. Ein kleines, leicht zu verstehendes Regelwerk dass umgesetzt wird ist hier viel wirksamer, als ein möglichst Vollumfängliches, dass die Beteiligten überfordert und eher ignoriert wird \cite{CleanCodeImPraktikum}.
+				  \item [\textbf{Vorlieben}] Insbesondere mit Blick auf die Lesbarkeit des Codes spielen die Vorlieben der Entscheider über das Regelwerk eine sehr große Rolle. Es lässt sich nicht entscheiden, welcher Stil der beste ist. Wichtig ist allerdings, dass für das Projekt entsprechende Regeln festgelegt, und konsistent umgesetzt werden. 
+				  \item [\textbf{Kontext}] Viele Regeln sind auch vom Projektkontext abhängig. Programme die in einem Kontext betrieben werden von dem Menschenleben abhängen erfordern beispielsweise eine sehr viel höhere Testabdeckung als ein Computerspiel. Eine Software die langfristig betrieben werden soll erfordert strengere Regeln für Lesbarkeit und Wartbarkeit als ein Prototyp.  
+				  \item [\textbf{Ziel}] Neben dem Ziel ein praktikables Regelwerk für ein konkretes Projekt zu entwerfen kann das Ziel eines Regelwerks auch sein einen groben Rahmen für alle Projekte in einem Unternehmen zu schaffen wodurch die Regelauswahl sehr viel allgemeiner ausfallen wird. Ähnlich ist es wenn möglichst allgemeingültige Regeln für eine Veröffentlichung in Form eines Buches zusammen getragen werden, oder Studenten die Grundbegriffe von Softwarequalität vermittelt werden sollen.
+			\end{labeling}
+			Zusammenfassend lässt sich also feststellen, dass für eine hohe Softwarequalität ein für den konkreten Fall zusammengestelltes und angepasstes Regelwerk erforderlich ist, dass darüber hinaus gut und vollständig kommuniziert werden muss damit es auch Anwendung findet und die gewünschten Effekte bringt \cite{ImproveCodeQuality}.
+		\section{Regelwerke}
+			Im Rahmen der vorliegenden Arbeit wurde eine Reihe von Regelwerken ausgewertet um für die Anwendung im Softwarepraktikum eine Schnittmenge zu finden die möglichst wichtige und weit verbreitete Regeln beinhaltet. Im Folgenden sollen diese kurz vorgestellt und in Bezug auf die Relevanz für das Softwarepraktikum eingeordnet werden.
+			\subsection{Clean Code von Robert Martin}
+				bla \cite{CleanCode}
+			\subsection{Solid Code von Marshall und Bruno}
+				bla \cite{SolidCode}
+			\subsection{Elements of Java Style von Vermeulen et. Al.}
+				bla \cite{ElementsOfJavaStyle}
+			\subsection{Code-Quality-Management von Simon et. Al.}
+				bla \cite{CodeQualityManagement}
+			\subsection{Java Coding Guidelines von Long et. Al.}
+				bla \cite{JavaCodingGuidelines}
+			\subsection{Softwarepraktikum an der TU Dortmund}
+				bla \cite{ImproveCodeQuality} + \cite{CleanCodeImPraktikum}
+			\subsection{Google Styleguide}
+				bla \cite{GoogleStyleGuide}
+			\subsection{SoftAudit von Harry Sneed}
+				bla \cite{SoftAuditDoku}
   	% Notwendig für korrekte Nummerierung der Anlagen
   	\backmatter
   
