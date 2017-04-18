@@ -265,7 +265,122 @@ Projekte im Softwarepraktikum}
   					\end{longtabu}   
   				\end{center}
 			\subsection{Code-Quality-Management von Simon et al.}
-				bla \cite{CodeQualityManagement}
+				Im Buch "`Code-Quality-Management"' beschreiben Frank Simon et Al. kein Regelwerk im eigentlichen Sinne \cite{CodeQualityManagement}. Stattdessen werden 52 Qualitätsindikatoren aufgeführt, die jeweils aus einem Problemmuster, vier Schwellwertstufen bezüglich der Häufigkeit des Problemmusters im untersuchten Programm im Vergleich zu Anderen in einer Datenbasis, einer Zuordnung zu einem oder mehreren Qualitätsmerkmalen und einer Beurteilung bezüglich Kosten und Unmittelbarkeit der Wirkung einer Behebung des Problemmusters bestehen. Diese Indikatoren werden benutzt um das zu untersuchende Programm einem Benchmark-Level zuzuordnen, der eine stark vereinfachte Qualitätsbeurteilung der Software darstellt. Dieses Verfahren wird als Code-Quality-Index bezeichnet und ist eine gute Alternative zur Bewertung der Code-Qualität im Vergleich zu den von Harry Sneed und anderen Autoren vorgeschlagenen Metriken \cite{SoftwareInZahlen}. \newline
+				Der Code-Quality-Index wurde bereits im dieser Arbeit vorangegangenem Großen Beleg untersucht \cite{grosserBeleg} und soll in abgewandelter Form im zu erweiternden SonarQube-Plugin für das Bewertungssystem umgesetzt werden (siehe \ref{indexchapter}). Als Grundlage wurden für das Regelwerk daher alle Problemmuster der 52 Indikatoren als Regeln mit aufgenommen, dargestellt in Tabelle~\ref{indexrules}. Eine Anpassung der Regeln für das Softwarepraktikum ist notwendig, da die Regeln und insbesondere die verwendeten Grenzwerte auf größere Projekte zugeschnitten sind und nicht auf die verhältnismäßig kleinen Studentenprojekte im Rahmen des Praktikums. 
+				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Regel} & \textbf{Kurzbeschreibung}\\
+  						\hline
+						Allgemeine Parameter & Casting von Methodenparametern vermeiden \\
+						\hline
+						Attributüberdeckung & Verwenden gleicher Variablennamen in Unterklassen vermeiden \\
+						\hline
+						Ausgeschlagenes Erbe & Methodenimplementierung von Oberklasse sollte von \\ - Implementierung & Mehrheit der Unterklassen nicht überschrieben werden \\
+						\hline
+						Ausgeschlagenes Erbe & Reduktion von Sichtbarkeiten in Unterklassen und \\ - Schnittstelle & Leer-Implementierung von Schnittstellen vermeiden \\
+						\hline
+						Datenkapselaufbruch & Keine öffentlichen Klassenvariablen verwenden \\
+						\hline
+						Duplizierter Code & Duplizierten Code vermeiden (>40 aufeinander folgende Zeilen) \\
+						\hline
+						Falsche Namenslänge & Bezeichner zwischen 2 und 50 Zeichen verwenden \\
+						\hline
+						Generationskonflikt & Erbende Klassen sollten höchstens die Hälfte der Oberklasse \\ & überschreiben ohne Oberklassenimplementierung zu nutzen \\
+						\hline
+						Gottdatei & Dateien sollten weniger als 2000 Zeilen enthalten \\
+						\hline
+						Gottklasse (Attribut) & Klassen sollten weniger als 50 Klassenvariablen deklarieren \\
+						\hline
+						Gottklasse (Methode) & Eine Klasse sollte weniger als 50 Methoden deklarieren \\
+						\hline
+						Gottmethode & Eine Methode sollte weniger als 200 Zeilen haben \\
+						\hline
+						Gottpaket & Ein "`package"' sollten höchstens 50 Klassen enthalten \\
+						\hline
+						Halbherzige Operationen & Klassen die equals() implementieren sollten auch \\ &  hashCode() implementieren \\
+						\hline
+						Heimliche Verwandschaft & Öffentliche Methoden einer Oberklasse sollten nicht nur \\ & von erbenden Klassen verwendet werden \\
+						\hline
+						Identitätsspaltung & Klassen sollten nicht den gleichen Namen haben \\ & oder sich nur durch Groß-/Kleinschreibung unterscheiden \\
+						\hline
+						Importchaos & Imports nicht doppelt, aus gleichem package, \\ & von java.lang oder als "`Wildcard"' \\
+						\hline
+						Importlüge & Unbenutzte Imports entfernen \\
+						\hline
+						Informelle & Öffentliche Methoden müssen formal kommentiert werden \\ Dokumentation & \\
+						\hline
+						Interface-Bypass & Implementation eines Methodeninterfaces sollten nicht \\ & direkt genutzt werden sondern über abstraktes Interface \\
+						\hline
+						Klässchen & Öffentliche Klassen sollten mindestens drei \\ & Methoden oder Klassenvariablen haben \\
+						\hline
+						Klasseninzest & Klassen dürfen keine Referenzen auf erbende Klassen haben \\
+						\hline
+						Konstantenregen & Namen von Konstanten sollten nur \\ &  einmal im System vorkommen \\
+						\hline
+						Labyrinthmethode & Die McCabe-Komplexität einer Methode sollte nicht >10 sein \\
+						\hline
+						Lange Parameterliste & Methoden sollten nicht mehr als 7 Parameter haben \\
+						\hline
+						Maskierende Datei & Dateiname sollte in enthaltener Klasse vollständig vorkommen \\
+						\hline
+						Nachlässige & (Dateizeilen - 2 * Kommentarzeilen) möglichst klein \\ Kommentierung & (Eine Kommentarzeile je Codezeile) \\
+						\hline
+						Namensfehler & Standard-Java-Namenskonventionen einhalten \\
+						\hline
+						Objektplacebo (Attribut) & Statische Attribute sollten nur statisch referenziert werden \\
+						\hline
+						Objectplacebo (Methode) & Statische Methoden sollten nur statisch referenziert werden \\
+						\hline
+						Paketchen & Pakete sollten mindestens drei öffentliche Klassen enthalten \\
+						\hline
+						Pakethierarchieaufbruch & Oberklassen sollten nicht in untergeordneten Paketen liegen, \\ & wenn erbende Klassen in übergeordneten Paketen liegen \\
+						\hline
+						Polymorphieplacebo & Statische Methoden der Oberklasse sollten nicht in \\ & erbenden Klassen überdeckt werden \\
+						\hline
+						Potenzielle Privatsphäre & Sichtbarkeiten von Variablen sollten so weit \\ (Attribut) & wie möglich eingeschränkt werden \\
+\hline
+						Potenzielle Privatsphäre & Methoden sollten nur protected deklariert werden wenn \\ (Methode) & sie eine Methode überschreiben oder überschrieben werden \\
+						\hline
+						Pränatale Kommunikation & In Konstruktoren nur "`finale"' Methoden aufrufen \\
+						\hline
+						Risikocode & Case-Anweisungen sollten mit break abgeschlossen werden, \\ & switch-Anweisungen sollten einen default-case enthalten \\ & und Catch-Anweisungen sollten nicht leer sein \\
+						\hline
+						Signaturähnliche Klassen & Höchstens 50\% identische Methodensignaturen zweier Klassen \\
+						\hline
+						Simulierte Polymorphie & Objekte sollten in einer Methode nicht auf mehrere \\ & Objekttypen überprüft werden (durch "`instanceof"') \\
+						\hline
+						Späte Abstraktion & Abstrakte Klassen sollten nicht von Nicht-Abstrakten erben \\
+						\hline
+						Tote Attribute & Ungenutzte private Variablen sollten entfernt werden \\
+						\hline
+						Tote Implementierung & Anweisungen die nie ausgeführt werden entfernen \\
+						\hline
+						Tote Methoden & Ungenutzte private Methoden sollten entfernt werden \\
+						\hline
+						Überbuchte Datei & Pro Datei nur eine übergeordnete öffentliche Klasse \\
+						\hline
+						Unfertiger Code & "`ToDo"' / "`FixMe"' / "`Hack"' -  sollte behoben werden \\
+						\hline
+						Unvollständige Vererbung & Eine nicht-statische Variable sollte nicht in mehr als 50\% \\ (Attribut) & der erbenden Klassen einer Oberklasse vorkommen \\
+						\hline
+						Unvollständige Vererbung & Eine Methodensignatur sollte nicht in mehr als 50\% \\ (Methode) & der erbenden Klassen einer Oberklasse vorkommen \\
+						\hline
+						Verbotene Dateiliebe & Zwei Dateien sollten nicht gegenseitig voneinander Abhängen \\
+						\hline
+						Verbotene Klassenliebe & Zwei nicht durch Vererbung zusammenhängende Klassen \\ & sollten nicht gegenseitig voneinander abhängen \\
+						\hline
+						Verbotene Methodenliebe & Zwei Methoden sollten sich nicht gegenseitig aufrufen \\
+						\hline
+						Verbotene Paketliebe & "`packages"' sollten nicht gegenseitig voneinander abhängen \\
+						\hline
+						Versteckte Konstantheit & Klassenvariablen die nach initialisierung nicht verändert \\ & werden sollten als "`final"' deklariert werden \\
+  						\hline
+  						\caption{Regeln aus "`Code-Quality-Management"' von Simon et Al. \cite{CodeQualityManagement}}
+						\label{indexrules}
+  					\end{longtabu}   
+  				\end{center}
 			\subsection{Java Coding Guidelines von Long et al.}
 				bla \cite{JavaCodingGuidelines}
 			\subsection{Softwarepraktikum an der TU Dortmund}
@@ -276,6 +391,7 @@ Projekte im Softwarepraktikum}
 				bla \cite{SoftAuditDoku}
 			\subsection{Gemeinsamkeiten und Unterschiede}
 				Dabei wird deutlich, dass die Regelwerke zum einen durch den Unterschiedlichen Fokus der beiden Bücher und zum anderen durch Sprachunterschiede recht wenig Überschneidung aufweisen. Allerdings kristallisieren sich bereits hier 2 Grundlegende Regeln heraus, die in verschiedenen Ausprägungen in fast allen untersuchten Regelwerken Erwähnung finden, und anscheinend auch universell bezüglich der verwendeten Programmiersprache eingehalten werden sollten: Das Festhalten an Namenskonventionen und die Vermeidung von Code-Duplikaten.
+	\chapter{Der Code-Quality-Index für das Softwarepraktikum} \label{indexchapter}
   	% Notwendig für korrekte Nummerierung der Anlagen
   	\backmatter
   
