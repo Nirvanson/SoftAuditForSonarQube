@@ -11,7 +11,9 @@
 \usepackage{listings}
 
 % Titel
-\title{Erstellung eines (teil-)automatisierten Bewertungssystems für studentische Projekte im Softwarepraktikum}
+\title{Erstellung eines (teil-)automatisierten \newline
+Bewertungssystems für studentische \newline
+Projekte im Softwarepraktikum}
 % Author
 \author{Jan Rucks}
 % Datum Abgabedatum
@@ -38,20 +40,20 @@
   		schreib es auf
     
 	\chapter{Das Regelwerk}
-		Eine der Säulen für ein (teil-)automatisiertes Bewertungssystem für das Softwarepraktikum ist zwangsläufig die Festlegung eines geeigneten Regelwerks, dass in SonarQube konfiguriert werden muss und als Basis für diverse Berechnungen zur Beurteilung der abgelieferten Softwarequalität dient. Zum einen fließt die Zahl der Regelverletzungen in mehrere Metriken ein und zum anderen sind einige dieser Regeln, oder Kombinationen mehrerer Regeln gleichzeitig Qualitätsindikatoren des für das Softwarepraktikum angepassten Code-Quality-Index. In diesem Kapitel soll zunächst auf die Notwendigkeit eines Regelwerks eingegangen, einige in der Industrie und Literatur propagierte Regelwerke vorgestellt und letztlich die getroffene Auswahl begründet und erklärt werden.
+		Eine der Säulen für ein (teil-)automatisiertes Bewertungssystem für das Softwarepraktikum ist zwangsläufig die Festlegung eines geeigneten Regelwerks, dass in SonarQube konfiguriert werden muss und als Basis für diverse Berechnungen zur Beurteilung der abgelieferten Softwarequalität dient. Zum einen fließt die Zahl der Regelverletzungen in mehrere Metriken ein und zum anderen sind einige dieser Regeln, oder Kombinationen mehrerer Regeln gleichzeitig Qualitätsindikatoren des für das Softwarepraktikum angepassten Code-Quality-Index. In diesem Kapitel soll zunächst auf die Notwendigkeit eines Regelwerks eingegangen, einige in der Industrie und Literatur vorgeschlagene Regelwerke vorgestellt und letztlich die getroffene Auswahl begründet und erklärt werden.
 		\section{Warum Programmierregeln?}
 			Grundsätzlich entsteht die Notwendigkeit für Programmierregeln und "`StyleGuides"' aus zwei für alle Programmiersprachen und Kontexte der Softwareentwicklung gleichen Gegebenheiten: 
 			\begin{itemize}
 				\item Die Möglichkeiten und Freiheiten die Programmiersprachen bieten gehen weit über das hinaus, was man tun sollte. Für jedes Problem gibt es mehrere Wege zum Ziel von denen viele aber massiv problematisch sind, weil sie beispielsweise sehr Fehleranfällig sind, gefährliche Sicherheitslücken aufweisen oder die Performanz der Software negativ beeinflussen. Die Idee hinter vielen Programmierregeln ist daher ungünstige Konstrukte zu vermeiden ("`Antipattern"') oder bewährte Varianten zu nutzen ("`Best Practices"')
-				\item Die meiste Zeit verwendet der Programmierer aufs Code Lesen, nicht fürs Code Schreiben \cite{CleanCode} TODO???. Dies gilt selbst für kleine allein bearbeitete Projekte da auch der selbst geschriebene Code immer wieder gelesen werden muss um ihn zu erweitern. Der Effekt verstärkt sich bei größeren Projekten die in Teams bewältigt werden da nun Code anderer Programmierer gelesen werden muss um den eigenen Code anbinden zu können und wird noch einmal stärker wenn es um die Wartung und Erweiterung von bestehenden Softwaresystemen geht. Daher ist eine gute Lesbarkeit des Codes notwendig um Effizient und Effektiv zu Programmieren. 
+				\item Die meiste Zeit verwendet der Programmierer auf das Lesen von Code, nicht für das eigentliche Schreiben \cite{CleanCode}. Dies gilt selbst für kleine allein bearbeitete Projekte da auch der selbst geschriebene Code immer wieder gelesen werden muss um ihn zu erweitern. Der Effekt verstärkt sich bei größeren Projekten die in Teams bewältigt werden da nun Code anderer Programmierer gelesen werden muss um den eigenen Code anbinden zu können und wird noch einmal stärker wenn es um die Wartung und Erweiterung von bestehenden Softwaresystemen geht. Daher ist eine gute Lesbarkeit des Codes notwendig um Effizient und Effektiv zu Programmieren. 
 			\end{itemize}
 			Beiden Sachverhalten lässt sich am geeignetsten durch ein Regelwerk begegnen, an dass sich alle am Projekt beteiligten Programmierer halten, um so möglichst vielen Fehlerquellen von vorne herein aus dem Weg zu gehen und möglichst gut lesbaren, konsistenten Code zu erhalten der leicht verstanden und damit erweitert werden kann.
 			Leider gibt es kein allgemeingültiges Regelwerk das sich für beliebige Projekte anwenden lässt und somit für gute Code-Qualität sorgt. Recht einfach zu erkennen ist, dass zumindest für jede Programmiersprache ein eigenes Regelwerk notwendig ist, da jede Sprache ihre Eigenheiten und speziellen Stolperfallen besitzt. Doch auch innerhalb einer festgelegten Programmiersprache wie im Beispiel des Softwarepraktikums "`Java"' gibt es eine erstaunliche Vielfalt von zum Teil widersprüchlichen Regeln die auf verschiedenste Art und Weise zu Regelwerken zusammengefasst werden können. Dies lässt sich durch sehr verschiedene Anforderungsprofile der Projekte begründen, aber auch persönliche Vorlieben und Erfahrungen spielen eine große Rolle \cite{JavaQualityAssurance}. Im Folgenden einige konkrete Ursachen, die ein allgemeingültiges Regelwerk als nicht sinnvoll, wenn nicht sogar unmöglich erscheinen lassen:
 			\begin{labeling}{\textbf{Erfahrung}}
 				\item [\textbf{Relevanz}] Manche Regeln sind im Kontext eines speziellen Projekts einfach nicht Relevant. Wenn es sich um eine reine Desktop-PC-Anwendung ohne Internetzugriff handelt sind Regeln die auf sichere Verschlüsselung oder Schutz vor Angriffen abzielen einfach unwichtig. Auch Performanzbezogene Regeln spielen an vielen Stellen eine untergeordnete Rolle. 
-				\item [\textbf{Zeit}] Programmiersprachen und Techniken verändern sich mit der Zeit. Es ist nur logisch, dass auch die zugehörigen Programmierregeln einer ständigen Überarbeitung und damit Veränderung unterliegen. Die Einführung von "`try-with-resources"' mit Java 1.7 ist ein Beispiel dafür. Gab es zuvor Regeln, die vorgaben geöffnete Resourcen in einem "`finally"'-Block freizugeben wird nun von den meisten Autoren empfohlen das neue Sprach-Konstrukt zu verwenden.
-				\item [\textbf{Erfahrung}] Die Auswahl der Regeln hängt in beträchtlichem Maß von den persönlichen Erfahrungen der verantwortlichen Entwickler ab. Ein Entwickler, der in einem früheren Projekt massive Probleme mit dem "`casten"' von Variablen auf speziellere Datentypen hatte wird eher auf eine Regel bestehen, die genau das verbietet als jemand dem diese Probleme noch nicht begegnet sind, oder an Programmen gearbeitet hat in dem dies sogar notwendig war um die gewünschte Funktionalität umzusetzen. Auch sollte das Regelwerk sich gerade im Lehrumfeld am geringen Erfahrungsstand der Studenten oder Schüler orientieren. Ein kleines, leicht zu verstehendes Regelwerk dass umgesetzt wird ist hier viel wirksamer, als ein möglichst Vollumfängliches, dass die Beteiligten überfordert und eher ignoriert wird \cite{CleanCodeImPraktikum}.
-				  \item [\textbf{Vorlieben}] Insbesondere mit Blick auf die Lesbarkeit des Codes spielen die Vorlieben der Entscheider über das Regelwerk eine sehr große Rolle. Es lässt sich nicht entscheiden, welcher Stil der beste ist. Wichtig ist allerdings, dass für das Projekt entsprechende Regeln festgelegt, und konsistent umgesetzt werden. 
+				\item [\textbf{Zeit}] Programmiersprachen und Techniken verändern sich mit der Zeit. Es ist nur logisch, dass auch die zugehörigen Programmierregeln einer ständigen Überarbeitung und damit Veränderung unterliegen. Die Einführung von "`try-with-resources"' mit Java 1.7 ist ein Beispiel dafür. Gab es zuvor Regeln, die vorgaben geöffnete Resourcen in einem "`finally"'-Block freizugeben \cite{ElementsOfJavaStyle} wird nun von den meisten Autoren empfohlen das neue Sprach-Konstrukt zu verwenden, da so die geöffneten Resourcen automatisch geschlossen werden \cite{JavaCodingGuidelines}.
+				\item [\textbf{Erfahrung}] Die Auswahl der Regeln hängt in beträchtlichem Maß von den persönlichen Erfahrungen der verantwortlichen Entwickler ab. Ein Entwickler, der in einem früheren Projekt massive Probleme mit dem "`casten"' von Variablen auf speziellere Datentypen hatte wird eher auf eine Regel bestehen, die genau das verbietet als jemand dem diese Probleme noch nicht begegnet sind, oder an Programmen gearbeitet hat in dem dies sogar notwendig war um die gewünschte Funktionalität umzusetzen \cite{JavaQualityAssurance}. Auch sollte das Regelwerk sich gerade im Lehrumfeld am geringen Erfahrungsstand der Studenten oder Schüler orientieren. Ein kleines, leicht zu verstehendes Regelwerk dass umgesetzt wird ist hier viel wirksamer, als ein möglichst Vollumfängliches, dass die Beteiligten überfordert und eher ignoriert wird \cite{CleanCodeImPraktikum}.
+				  \item [\textbf{Vorlieben}] Insbesondere mit Blick auf die Lesbarkeit des Codes spielen die Vorlieben der Entscheider über das Regelwerk eine sehr große Rolle. Es lässt sich nicht festlegen, welcher Stil der beste ist. Wichtig ist allerdings, dass für das Projekt entsprechende Regeln möglichst genau definiert, und konsistent umgesetzt werden. 
 				  \item [\textbf{Kontext}] Viele Regeln sind auch vom Projektkontext abhängig. Programme die in einem Kontext betrieben werden von dem Menschenleben abhängen erfordern beispielsweise eine sehr viel höhere Testabdeckung als ein Computerspiel. Eine Software die langfristig betrieben werden soll erfordert strengere Regeln für Lesbarkeit und Wartbarkeit als ein Prototyp.  
 				  \item [\textbf{Ziel}] Neben dem Ziel ein praktikables Regelwerk für ein konkretes Projekt zu entwerfen kann das Ziel eines Regelwerks auch sein einen groben Rahmen für alle Projekte in einem Unternehmen zu schaffen wodurch die Regelauswahl sehr viel allgemeiner ausfallen wird. Ähnlich ist es wenn möglichst allgemeingültige Regeln für eine Veröffentlichung in Form eines Buches zusammen getragen werden, oder Studenten die Grundbegriffe von Softwarequalität vermittelt werden sollen.
 			\end{labeling}
@@ -59,14 +61,212 @@
 		\section{Regelwerke}
 			Im Rahmen der vorliegenden Arbeit wurde eine Reihe von Regelwerken ausgewertet um für die Anwendung im Softwarepraktikum eine Schnittmenge zu finden die möglichst wichtige und weit verbreitete Regeln beinhaltet. Im Folgenden sollen diese kurz vorgestellt und in Bezug auf die Relevanz für das Softwarepraktikum eingeordnet werden.
 			\subsection{Clean Code von Robert Martin}
-				bla \cite{CleanCode}
+				Robert Martin legt den Fokus seines Buches "`Clean Code"' auf das erstellen von gut lesbarem Code \cite{CleanCode}. Dies ist im Kontext dieser Arbeit nur ein Teilaspekt von Code-Qualität, aber speziell für die Lehre eine gute Grundlage um ein Bewusstsein für guten Code zu vermitteln. Dies wird darüber hinaus noch dadurch vereinfacht, dass es in mehreren Sprachen, darunter auch Deutsch, erschienen ist. \newline
+				Neben einer ganzen Reihe von Techniken zum Schreiben von sauberem Code gibt der Autor auch viele Hinweise zur Durchführung von Refactorings, also der Transformation von chaotischem Code zu gut Lesbarem. Diese Techniken sind aus seiner Sicht essentiell, da es keinen Softwareentwickler gibt, der im ersten Wurf perfekten Code schreiben kann. Der Code wächst nach und nach, und viele Entscheidungen für die Platzierung von Code-Bausteinen stellen sich im Laufe der Entwicklung als ungünstig heraus. Die Verwendung der Variablen und Methoden ändert sich und die zuvor gewählten Namen passen nicht mehr. Methoden und Klassen wachsen über das sinnvolle Maß hinaus und müssen aufgeteilt werden. So wird es schnell erforderlich den gerade geschriebenen Code zu Überarbeiten um das gewachsene Chaos zu beseitigen und am Ende guten, sauberen Code abzuliefern. \newline
+				Die für das Softwarepraktikum auszuwählenden Regeln sollen allerdings nicht den Prozess des Code Schreibens und der Überarbeitung betrachten sondern die statische Bewertung des Endergebnisses. Trotzdem finden sich in den von Martin aufgelisteten Regeln neben den nicht maschinell messbaren Prozessbezogenen Regeln viele "`Best Practices"' deren Einhaltung sich im Endergebnis messen lassen und damit potenziell Verwendung finden können. In Tabelle~\ref{cleancoderules} finden sich die 25 von insgesamt 66 Regeln aus "`Clean Code"' deren Einhaltung sich durch statische Code-Analyse messen lassen. \newline
+				Zwei übergeordnete Prinzipien die Martin vorschlägt seien an dieser Stelle explizit erwähnt, da sie in keinem der anderen Regelwerke in dieser Form auftauchen:
+				\begin{itemize}
+					\item Extreme Kürze der Code-Bausteine, insbesondere Methoden  
+					\item Vermeidung von Kommentaren durch selbsterklärenden Code
+				\end{itemize}
+				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Regel} & \textbf{Kurzbeschreibung}\\
+  						\hline
+  						Auskommentierter Code & Code sollte nicht auskommentiert werden, Versionsverwaltung \\ & übernimmt Erhaltung von verworfenem Code \\
+  						\hline
+  						Zu viele Argumente & Maximal 3 Methodenparameter verwenden\\
+  						\hline
+  						Output-Argumente & Methodenparameter nicht überschreiben und als \\ & "`Ergebnisvariable"' benutzen \\
+  						\hline
+  						Flag-Argumente & Keine Booleschen Methodenparameter verwenden \\
+  						\hline
+  						Tote Funktionen & Nicht verwendete Methoden löschen \\
+  						\hline
+  						Übergangene Sicherungen & IDE-Warnungen, Exceptions und fehlschlagende Tests \\ & nicht Ignorieren \\
+  						\hline 
+  						Duplizierung & Duplizierte Code-Abschnitte in eigene Methoden auslagern \\ & und wiederverwenden \\
+  						\hline
+  						Falsche Vererbung & Keine Referenzen auf erbende Klassen in Basisklasse \\
+  						\hline
+  						Zu viele Informationen & Klassensignaturen (Anzahl öffentlicher Methoden) klein halten \\
+  						\hline
+  						Toter Code & Nicht verwendeten / erreichbaren Code entfernen \\
+  						\hline
+  						Vertikale Trennung & Lokale Variablen direkt über erster Verwendung, \\ & private Methoden direkt unter erster Verwendung deklarieren \\
+  						\hline
+  						Funktionsneid & Nur Variablen der eigenen Klasse manipulieren \\
+  						\hline
+  						Polymorphismus & Polymorphe Überschreibung von Methoden in Unterklassen \\ anstatt Switch & gegenüber Fallunterscheidung mit "`switch"' bevorzugen \\
+  						\hline
+  						Konventionen beachten & Im Team festgelegte Code-Konventionen einhalten \\
+  						\hline
+  						Magic Numbers & Konstante numerische Werte im Code durch sprechend \\ & benannte Konstanten ersetzen \\
+  						\hline
+  						Bedingungen einkapseln & Nicht triviale Bedingungen für Kontrollfluss-Anweisungen \\ & in eigene Methoden mit sprechendem Namen auslagern \\  
+  						\hline
+  						Negative Bedingungen & Keine negierten Bedingungen in Kontrollfluss-Anweisungen \\
+  						\hline
+  						Eine Aufgabe pro Funktion & Methoden sehr kurz halten (4 Anweisungen) \\
+  						\hline
+  						Grenzbedingungen kapseln & Öfter verwendete In-/Dekremente in Variablen ablegen \\
+  						\hline
+  						Transitive Navigation & Keine transitiven Methodenaufrufs-Ketten \\
+  						\hline
+  						Lange Importlisten & Bei Verwendung von mehr als 2 Klassen aus einem "`package"' \\ & "`Wildcard-Import"' benutzen \\
+  						\hline
+  						Konstanten-Vererbung & Konstanten nicht vererben, sondern statisch importieren \\
+  						\hline
+  						Enum statt Konstanten & Anstatt "`final static int"' Variablen lieber Enums verwenden \\
+  						\hline
+  						Kurze Namen & Nur "`Wegwerfvariablen"' (z.B. "`i"' in Schleife) dürfen kurz, \\ & nicht-sprechend benannt werden \\
+  						\hline  
+  						Unzureichende Tests & Alle Bedingungen durch Tests abdecken \\
+  						\hline   
+  						\caption{Regeln aus "`Clean Code"' von Robert Martin deren Einhaltung zumindest Teilweise durch statische Code-Analyse ermittelbar ist \cite{CleanCode}}
+						\label{cleancoderules}
+  					\end{longtabu}   
+  				\end{center}
 			\subsection{Solid Code von Marshall und Bruno}
-				bla \cite{SolidCode}
-			\subsection{Elements of Java Style von Vermeulen et. Al.}
-				bla \cite{ElementsOfJavaStyle}
-			\subsection{Code-Quality-Management von Simon et. Al.}
+				Das Buch "`Solid Code"' von Donis Marshall und John Bruno betrachtet umfassend den gesamten Prozess der Softwareentwicklung \cite{SolidCode}. \newline
+				Dadurch ist der Aspekt Code-Qualität nur ein verhältnismäßig kleiner Teil des Buches neben Agilen Methoden, Entwurfs- und Design-Techniken, Performanz-Betrachtungen, Debugging und Prozessanalyse. Aus dem Kapitel zur defensiven Programmierung lassen sich allerdings einige, recht allgemeine Regeln ableiten die, obwohl im Buch "`C\#"' als Programmiersprache verwendet wird auch für das Softwarepraktikum mit "`Java"' Anwendung finden können. In Tabelle~\ref{solidcoderules} sind die 15 messbaren Regeln der 40 aus dem Kapitel zur Defensiven Programmierung Abgeleiteten aufgelistet, die nicht als "`C\#"'-spezifisch eingestuft werden.
+				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Regel} & \textbf{Kurzbeschreibung}\\
+  						\hline
+  						Softwaretest & Testabdeckung der Anweisungen von mindestens 90\% \\ 
+  						\hline   
+  						Namenskonventionen & Namenskonventionen für Team festlegen und umsetzen \\
+  						\hline
+  						Dokumentationskommentare & Mindestens alle öffentlichen Code-Elemente mit \\ & Dokumentationskommentaren (z.B. Javadoc) versehen \\
+  						\hline
+  						Klassen & Keine öffentlichen Variablen in Klassen verwenden \\
+  						\hline
+  						Zugriffsmodifizierer & Klassen und "`Class-Members"' so restriktiv wie möglich \\ & deklarieren (Sichtbarkeit, Modifizierbarkeit, ...) \\
+  						\hline
+  						Rückgabewerte & Rückgabewerte von Methoden immer überprüfen \\
+  						\hline
+  						Literale & Anstatt Literalen im Code sprechend benannte \\ &  Konstanten verwenden \\
+  						\hline
+  						Default Case & Jede "`switch"'-Anweisung sollte einen "`default"'-Case haben \\
+  						\hline
+  						Allgemeine Exceptions & Allgemeine "`Exceptions"' sollten nicht abgefangen werden \\
+  						\hline
+  						Fallunterscheidung & In "`catch"'-Blöcken sollte keine Fallunterscheidung \\ für Exceptions & Anhand des "`Exception"'-Typs erfolgen \\
+  						\hline
+  						Duplizierung & Duplizierte Code-Abschnitte in eigene Methoden auslagern \\ & und wiederverwenden \\
+  						\hline
+  						Schleifentypen & "`for"'-Schleifen gegenüber "`whlie"'-Schleifen bevorzugen \\
+  						\hline
+  						Freiwillige Blöcke & Optionale geschweifte Klammern immer verwenden \\ & (in If-/While-/For-Anweisungen) \\
+  						\hline
+  						Groß-/Kleinschreibung & Bezeichner dürfen nicht nur durch Groß-/Klein- \\ & Schreibung unterschieden werden \\
+  						\hline
+  						Switchvariable & Als "`switch"'-Variable nur Enums verwenden \\
+  						\hline
+  						\caption{Regeln aus dem Kapitel "`Defensive Programmierung"' im Buch "`Solid Code"' von Marshall und Bruno die auf Java übertragbar sind und deren Einhaltung zumindest Teilweise durch statische Code-Analyse ermittelbar ist \cite{SolidCode}}
+						\label{solidcoderules}
+  					\end{longtabu}   
+  				\end{center}
+			\subsection{Elements of Java Style von Vermeulen et al.}
+				Das älteste der ausgewerteten Regelwerke ist das Buch "`The Elements of Java Style"' von Allan Vermeulen et al. \cite{ElementsOfJavaStyle} aus dem Jahr 2000. Dabei handelt es sich vorrangig um eine Unternehmensrichtline für das Schreiben von Java-Code bei "`Rogue Wave\textsuperscript{\textregistered} Software"', angereichert mit Regeln weiterer, unternehmensfremder Autoren. Trotz des Alters dieses Regelwerks sind nur sehr wenige Regeln als veraltet zu betrachten wie beispielsweise das Freigeben von Resourcen mittels "`finally"'-Block anstatt dem mittlerweile üblichen "`try-with-resources"' oder die händische Kapselung von Enumerationen in Klassen. \newline
+				Das Buch konzentriert sich ausschließlich auf das Schreiben von möglichst verständlichem, wartbaren Java-Code. Trotzdem ist die Einhaltung vieler der angeführten Regeln nicht durch statische Codeanalyse messbar. In Tabelle~\ref{elementsrules} sind daher wiederum nur die Regeln aufgeführt die diese Bedingung erfüllen und darüber hinaus nicht veraltet sind. Dies sind 39 der 108 im Buch aufgeführten Regeln. \newline
+				Allerdings kommt die im Softwarepraktikum irrelevante Sicht des Software-Lebenszyklus hinzu. So gibt es einige Regeln die sich auf die Erweiterung und Wartung von Software über mehrere Versionen hinweg beziehen. Darüber hinaus fällt auf, dass sehr großen Wert auf ausführliche Kommentierung des Codes gelegt wird obwohl selbsterklärender Code als vorrangiges Ziel genannt wird, was laut anderen Autoren eine Ausführliche Kommentierung überflüssig macht und sogar als potenzielles Problem eingestuft wird, da die Kommentare mit gepflegt werden müssen und veraltete und damit falsche Kommentare schlimmer sind als gar keine, da sie in die Irre führen können \cite{CleanCode}.
+				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Regel} & \textbf{Kurzbeschreibung}\\
+  						\hline
+  						Indent nested code & Konsistente Einrückung \\
+  						\hline
+  						Long lines & Maximale Zeilenlänge festlegen und einhalten \\
+  						\hline
+  						White space & Leerzeichen vor/nach Klammern und Operatoren, Leerzeilen \\ & zwischen Klassen, "`Class-Members"' und logischen Abschnitten \\
+  						\hline 
+  						No tabs & Nur Leerzeichen, keine Tabs verwenden \\
+  						\hline
+  						Long names & Keine zu langen Bezeichner verwenden \\
+  						\hline
+  						Names different & Bezeichner dürfen nicht nur durch Groß-/Klein- \\ in case & Schreibung unterschieden werden \\
+  						\hline
+  						Package name & Einzelnes, klein geschriebenes Wort für "`package"'-Namen \\
+  						\hline
+  						Class Name & Klassennamen in "`Upper CamelCase"' \\  							\hline
+  						Method Name & Methodennamen in "`Lower CamelCase"' \\ 
+  						\hline
+  						Java Bean conventions & "`JavaBeans"' Namenskonventionen für \\ & "`getter"' und "`setter"' verwenden \\
+  						\hline
+  						Variable names & Variablennamen in "`Lower CamelCase"' \\ 
+  						\hline
+  						Qualify field variables & Klassenvariablen immer mit "`this"' referenzieren \\
+  						\hline
+  						Assign parameters & Methoden-/Konstruktor-Parameter die Klassenvariablen \\ to fields & zugewiesen werden sollten den gleichen Namen haben \\
+  						\hline
+  						Constant Name & Für Konstantennamen nur Großbuchstaben verwenden \\
+  						\hline
+  						Javadoc & Javadoc für alle Klassen, Interfaces, Methoden, Klassenvariablen \\
+  						\hline
+  						Package documentation & Für alle "`packages"' Kommentardatei schreiben \\
+  						\hline
+  						Javadoc style & Alle Javadoc-Kommentare nach SUN-Konventionen formatieren \\
+  						\hline
+  						Javadoc code tag & Bezeichner, Schlüsselwörter und Konstanten in \\ & Javadoc-Kommentaren mit "`code"'-Tag versehen \\
+  						\hline 
+  						Method Javadoc & Methodensignatur vollständig in Javadoc beschreiben \\
+  						\hline
+  						End line comments & Keine Kommentare an Zeilenende (außer Variablendeklaration) \\
+  						\hline
+  						Variable comment & Deklaration lokaler Variablen am Zeilenende kommentieren \\
+  						\hline
+  						Nested block comment & Bei tiefer Verschachtelung schließende Klammer \\ & mit Kommentar versehen \\
+  						\hline
+  						Fall through comment & Wenn "`switch-case"' nicht durch "`break"'-Anweisung \\ & abgeschlossen wird, durch "`fall-through"' Kommentar abschließen \\
+  						\hline
+  						Empty block comment & Leere Blöcke kommentieren \\
+  						\hline
+  						Small classes/methods & Klassen und Methoden möglichst klein halten \\
+  						\hline
+  						Private fields & Alle Klassenvariablen als privat deklarieren \\
+  						\hline
+  						Polymorphism & Polymorphe Methoden-Implementation anstatt \\ & "`instanceof"' verwenden \\
+  						\hline
+  						Duplicated blocks & Duplizierte Code-Abschnitte in eigene Methoden auslagern \\ & und wiederverwenden \\
+  						\hline
+  						Block statements & Optionale geschweifte Klammern immer verwenden \\ & (in If-/While-/For-Anweisungen) \\
+  						\hline
+  						Last case & Der letzte "`case"' in einem "`switch"' muss durch \\ & "`break"'-Anweisungen abgeschlossen werden \\
+  						\hline
+  						Compare Objects & Objekte mittels "`equals"'-Methode vergleichen \\
+  						\hline
+  						Construction final & In Konstruktoren nur Methoden aufrufen \\ & die als "`funal"' deklariert sind \\
+  						\hline
+  						Nested constructors & Allgemeine Konstruktoren in speziellen aufrufen \\
+  						\hline
+  						Runtime exceptions & "`Runtime-Exceptions"` nicht abfangen \\
+  						\hline
+  						Exception forwarding & Beim weiterleiten von "`Exceptions"' keine \\ & Informationen entfernen, lediglich anreichern \\
+  						\hline   
+  						Empty catch & Keine leeren "`catch"'-Blöcke verwenden \\
+  						\hline
+  						Object instances & Objektinstanzen erst erzeugen wenn sie gebraucht werden \\
+  						\hline
+  						Unnecessary objects & Keine unnötigen Objektinstanzen anlegen \\
+  						\hline
+  						Object factory & "'Factory"' zur Verwaltung von wiederverwendbaren \\ & Objektinstanzen nutzen \\
+  						\hline
+  						
+  						\caption{Regeln aus "`The Elements of Java Style"' von Vermeulen et Al. die noch Gültigkeit haben und deren Einhaltung zumindest Teilweise durch statische Code-Analyse ermittelbar ist \cite{ElementsOfJavaStyle}}
+						\label{elementsrules}
+  					\end{longtabu}   
+  				\end{center}
+			\subsection{Code-Quality-Management von Simon et al.}
 				bla \cite{CodeQualityManagement}
-			\subsection{Java Coding Guidelines von Long et. Al.}
+			\subsection{Java Coding Guidelines von Long et al.}
 				bla \cite{JavaCodingGuidelines}
 			\subsection{Softwarepraktikum an der TU Dortmund}
 				bla \cite{ImproveCodeQuality} + \cite{CleanCodeImPraktikum}
@@ -74,6 +274,8 @@
 				bla \cite{GoogleStyleGuide}
 			\subsection{SoftAudit von Harry Sneed}
 				bla \cite{SoftAuditDoku}
+			\subsection{Gemeinsamkeiten und Unterschiede}
+				Dabei wird deutlich, dass die Regelwerke zum einen durch den Unterschiedlichen Fokus der beiden Bücher und zum anderen durch Sprachunterschiede recht wenig Überschneidung aufweisen. Allerdings kristallisieren sich bereits hier 2 Grundlegende Regeln heraus, die in verschiedenen Ausprägungen in fast allen untersuchten Regelwerken Erwähnung finden, und anscheinend auch universell bezüglich der verwendeten Programmiersprache eingehalten werden sollten: Das Festhalten an Namenskonventionen und die Vermeidung von Code-Duplikaten.
   	% Notwendig für korrekte Nummerierung der Anlagen
   	\backmatter
   
