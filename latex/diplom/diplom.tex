@@ -60,7 +60,7 @@ Projekte im Softwarepraktikum}
 			Zusammenfassend lässt sich also feststellen, dass für eine hohe Softwarequalität ein für den konkreten Fall zusammengestelltes und angepasstes Regelwerk erforderlich ist, dass darüber hinaus gut und vollständig kommuniziert werden muss damit es auch Anwendung findet und die gewünschten Effekte bringt \cite{ImproveCodeQuality}.
 		\section{Regelwerke}
 			Im Rahmen der vorliegenden Arbeit wurde eine Reihe von Regelwerken ausgewertet um für die Anwendung im Softwarepraktikum eine Schnittmenge zu finden die möglichst wichtige und weit verbreitete Regeln beinhaltet. Im Folgenden sollen diese kurz vorgestellt und in Bezug auf die Relevanz für das Softwarepraktikum eingeordnet werden.
-			\subsection{Clean Code von Robert Martin}
+			\subsection{Clean Code von Robert Martin} \label{cleancodechapter}
 				Robert Martin legt den Fokus seines Buches "`Clean Code"' auf das erstellen von gut lesbarem Code \cite{CleanCode}. Dies ist im Kontext dieser Arbeit nur ein Teilaspekt von Code-Qualität, aber speziell für die Lehre eine gute Grundlage um ein Bewusstsein für guten Code zu vermitteln. Dies wird darüber hinaus noch dadurch vereinfacht, dass es in mehreren Sprachen, darunter auch Deutsch, erschienen ist. \newline
 				Neben einer ganzen Reihe von Techniken zum Schreiben von sauberem Code gibt der Autor auch viele Hinweise zur Durchführung von Refactorings, also der Transformation von chaotischem Code zu gut Lesbarem. Diese Techniken sind aus seiner Sicht essentiell, da es keinen Softwareentwickler gibt, der im ersten Wurf perfekten Code schreiben kann. Der Code wächst nach und nach, und viele Entscheidungen für die Platzierung von Code-Bausteinen stellen sich im Laufe der Entwicklung als ungünstig heraus. Die Verwendung der Variablen und Methoden ändert sich und die zuvor gewählten Namen passen nicht mehr. Methoden und Klassen wachsen über das sinnvolle Maß hinaus und müssen aufgeteilt werden. So wird es schnell erforderlich den gerade geschriebenen Code zu Überarbeiten um das gewachsene Chaos zu beseitigen und am Ende guten, sauberen Code abzuliefern. \newline
 				Die für das Softwarepraktikum auszuwählenden Regeln sollen allerdings nicht den Prozess des Code Schreibens und der Überarbeitung betrachten sondern die statische Bewertung des Endergebnisses. Trotzdem finden sich in den von Martin aufgelisteten Regeln neben den nicht maschinell messbaren Prozessbezogenen Regeln viele "`Best Practices"' deren Einhaltung sich im Endergebnis messen lassen und damit potenziell Verwendung finden können. In Tabelle~\ref{cleancoderules} finden sich die 25 von insgesamt 66 Regeln aus "`Clean Code"' deren Einhaltung sich durch statische Code-Analyse messen lassen. \newline
@@ -266,7 +266,7 @@ Projekte im Softwarepraktikum}
   				\end{center}
 			\subsection{Code-Quality-Management von Simon et al.}
 				Im Buch "`Code-Quality-Management"' beschreiben Frank Simon et Al. kein Regelwerk im eigentlichen Sinne \cite{CodeQualityManagement}. Stattdessen werden 52 Qualitätsindikatoren aufgeführt, die jeweils aus einem Problemmuster, vier Schwellwertstufen bezüglich der Häufigkeit des Problemmusters im untersuchten Programm im Vergleich zu Anderen in einer Datenbasis, einer Zuordnung zu einem oder mehreren Qualitätsmerkmalen und einer Beurteilung bezüglich Kosten und Unmittelbarkeit der Wirkung einer Behebung des Problemmusters bestehen. Diese Indikatoren werden benutzt um das zu untersuchende Programm einem Benchmark-Level zuzuordnen, der eine stark vereinfachte Qualitätsbeurteilung der Software darstellt. Dieses Verfahren wird als Code-Quality-Index bezeichnet und ist eine gute Alternative zur Bewertung der Code-Qualität im Vergleich zu den von Harry Sneed und anderen Autoren vorgeschlagenen Metriken \cite{SoftwareInZahlen}. \newline
-				Der Code-Quality-Index wurde bereits im dieser Arbeit vorangegangenem Großen Beleg untersucht \cite{grosserBeleg} und soll in abgewandelter Form im zu erweiternden SonarQube-Plugin für das Bewertungssystem umgesetzt werden (siehe \ref{indexchapter}). Als Grundlage wurden für das Regelwerk daher alle Problemmuster der 52 Indikatoren als Regeln mit aufgenommen, dargestellt in Tabelle~\ref{indexrules}. Eine Anpassung der Regeln für das Softwarepraktikum ist notwendig, da die Regeln und insbesondere die verwendeten Grenzwerte auf größere Projekte zugeschnitten sind und nicht auf die verhältnismäßig kleinen Studentenprojekte im Rahmen des Praktikums. 
+				Der Code-Quality-Index wurde bereits im dieser Arbeit vorangegangenem Großen Beleg untersucht \cite{grosserBeleg} und soll in abgewandelter Form im zu erweiternden SonarQube-Plugin für das Bewertungssystem umgesetzt werden (siehe Kapitel \ref{indexchapter}). Als Grundlage wurden für das Regelwerk daher alle Problemmuster der 52 Indikatoren als Regeln mit aufgenommen, dargestellt in Tabelle~\ref{indexrules}. Eine Anpassung der Regeln für das Softwarepraktikum ist notwendig, da die Regeln und insbesondere die verwendeten Grenzwerte auf größere Projekte zugeschnitten sind und nicht auf die verhältnismäßig kleinen Studentenprojekte im Rahmen des Praktikums. 
 				\begin{center}
 					\tabulinesep=1.5mm
 					\begin{longtabu}{|c|c|}
@@ -382,15 +382,408 @@ Projekte im Softwarepraktikum}
   					\end{longtabu}   
   				\end{center}
 			\subsection{Java Coding Guidelines von Long et al.}
-				bla \cite{JavaCodingGuidelines}
-			\subsection{Softwarepraktikum an der TU Dortmund}
-				bla \cite{ImproveCodeQuality} + \cite{CleanCodeImPraktikum}
-			\subsection{Google Styleguide}
-				bla \cite{GoogleStyleGuide}
+				Das Buch "`Java Coding Guidelines"' von Fred long et Al. konzentriert sich vornehmlich auf die Entwicklung sicherer und zuverlässiger Web-Anwendungen mit Java \cite{JavaCodingGuidelines}. Es basiert auf dem Buch "`The CERT Oracle Secure Coding Standard for Java"' von den gleichen Autoren \cite{SecureCodingStandard} und ist im Rahmen dieser Arbeit nur bedingt relevant, da eine ganze Reihe der vorgeschlagenen Regeln nicht die Java-Programmierung selbst betrachten sondern auf Sicherheitsaspekte abzielen, wie die Speicherung von Passwörtern und Ähnlichem. Trotzdem verbleiben 21 der 75 Regeln, die grundsätzliche Aspekte beinhalten und daher auch für das Softwarepraktikum betrachtet werden sollen (siehe Tabelle~\ref{guidelinesrules}). Diese Regeln sind ebenso für die Sicherheit und Zuverlässigkeit einer Web-Anwendung relevant, als auch unter dem allgemeineren Blickwinkel der Software-Qualität interessant. 
+				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Regel} & \textbf{Kurzbeschreibung}\\
+  						\hline
+  						Variable scope & Geltungsbereich von Variablen so klein wie möglich halten\\
+						\hline
+						Accessibility & Sichtbarkeit aller Konstrukte so gering wie möglich halten\\
+						\hline
+						Cyclic packages & Packages sollten nicht gegenseitig voneinander abhängen \\
+						\hline
+						Exception types & Möglichst eigene Exception-Typen verwenden \\
+						\hline
+						Garbage Collection & Möglichst kleine Objekte und \\ & keine expliziten Aufrufe des Garbage Collectors verwenden \\
+						\hline
+						Shadow identifiers & Bezeichner sollten nicht überdeckt werden \\
+						\hline
+						Declaration & Nur eine Variable pro Deklarationsanweisung \\
+						\hline
+						Constants & Literale als konstante Klassenvariablen deklarieren \\
+						\hline
+						Return empty & Leere Collections zurückgeben anstatt null \\
+						\hline
+						Try-with-resources & Wenn möglich try-with-resources verwenden \\
+						\hline
+						Visually misleading & Verwechselbare Zeichen nicht als alleinige Bezeichner oder \\ & einzigen Unterschied zwischen Bezeichnern verwenden \\
+						\hline
+						Overload variable & Methoden mit variablen Parameterlisten nicht überladen \\
+						\hline
+						Assignments & In Bedingungen keine Wertzuweisung vornehmen \\
+						\hline
+						Optional braces & Für alle if, for und while Anweisungen Klammern setzen \\
+						\hline
+						Empty conditionals & Keine leeren Kontrollflussanweisungen verwenden \\ & (nur Semikolon direkt hinter der Bedingung) \\
+						\hline
+						Break case & Case-Anweisungen immer mit break abschließen \\
+						\hline
+						Loop counters & Für Schleifen keine unereichbaren oder überspringbaren \\ & Abbruchbedingungen definieren \\
+						\hline
+						Clone & Alle clone() Methoden müssen super.clone() aufrufen \\
+						\hline
+						Unused & Ungenutzten Code, sowie Code ohne Effekte entfernen \\
+						\hline
+						Confusing overload & Überladene Methoden nicht nur in Reihenfolge der \\ & Parametertypen unterscheiden \\
+						\hline
+						Object equality & Objekte mit equals vergleichen \\
+  						\hline
+  						\caption{Regeln aus "`Java Coding Guidelines"' sich auf grundsätzliche Java-Programmierung beziehen und deren Einhaltung zumindest Teilweise durch statische Code-Analyse ermittelbar ist \cite{JavaCodingGuidelines}}
+						\label{guidelinesrules}
+  					\end{longtabu}   
+  				\end{center}
+			\subsection{Google Style Guide}
+				Der "`Google Java Style Guide"' stellt eine vollständige Definition der von Google angesetzten Programmierregeln für die Sprache Java dar und wird bei allen für Google entwickelten Projekte in dieser Sprache angewendet  \cite{GoogleStyleGuide}. Ähnliche Regelwerke gibt es bei Google auch für viele andere gängige Programmiersprachen. Dieses Online verfügbare Dokument wird fortlaufend überarbeitet und weiterentwickelt. Im Rahmen dieser Arbeit wird der Stand von März 2017 betrachtet. Ein Anspruch des Regelwerks ist es, dass alle Regeln so klar sind, dass sie bereits in einer Entwicklungsumgebung erzwungen werden können. Regeln und Hinweise die Interpretationsspielraum lassen und subjektiv vom Betrachter abhängen wie zum Beispiel, das Vergeben sprechender Bezeichner, sind daher nicht aufgeführt. \newline
+				Da es sich um eine Unternehmensrichtlinie handelt sind die Regeln auch auf eine spezielle Art der Formatierung festgelegt und nicht auf die allgemeine Forderung nach Konsistenz beschränkt. Für das Softwarepraktikum muss nicht zwangsläufig die gleiche Formatierung gewählt werden und einige Größenbeschränkungen sollten an die kleineren Studentenprojekte angepasst werden, aber der Style Guide liefert eine gute Zusammenfassung, an welchen Stellen die Formatierung einheitlich sein sollte und was in der Industriellen Praxis üblich ist. Außerdem ist es mit Abstand das aktuellste der ausgewerteten Regelwerke. Die 55 extrahierten Regeln sind in Tabelle~\ref{googlerules} aufgelistet.
+				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Regel} & \textbf{Kurzbeschreibung}\\
+  						\hline
+  												\hline
+						Filename & Dateiname = Top-Level-Klassenname + Endung .java \\
+						\hline
+						File encoding & Datei-Encoding in UTF-8 \\
+						\hline
+						Whitespace & Nur Standardleerzeichen verwenden (keine Tabs) \\
+						\hline
+						Escape sequences & Spezielle Escape-Sequenzen anstatt Unicode-Repräsentation \\
+						\hline
+						Non-ASCII characters & Nicht-ASCII Zeichen nur innerhalb von String Literalen \\
+						\hline
+						Source file structure & Jede Datei soll folgende Struktur haben: \\ & Lizenz-Info + Package-Anweisung + Import-Anweisungen \\ &  + EINE Top-Level-Klasse \\
+						\hline
+						License information & Wenn benötigt am Dateianfang, als Block-Kommentar \\
+						\hline
+						Package Statement & Package-Anweisung immer in eine Zeile schreiben \\
+						\hline
+						No wildcard imports & Keine wildcard imports verwenden \\
+						\hline
+						No line-wrapping & Import-Anweisungen immer in eine Zeile schreiben \\
+						\hline
+						Ordering and spacing & Erst alle statischen imports als Block, dann alle anderen. \\ & Die Blöcke getrennt und alphabetisch sortiert \\
+						\hline
+						No static import& Statische Klassen nicht mit statischem import einbinden \\
+						\hline
+						One top-level class& Genau eine Top-Level Klasse je Datei \\
+						\hline
+						Class contents & Logische Ordnung in Klassen, \\ & Überladene  Methoden direkt aufeinanderfolgend \\
+						\hline
+						Optional Braces & Alle optionalen geschweiften Klammern setzen \\
+						\hline
+						Nonempty blocks & Nichtleere Blöcke mit öffnender Klammer an Zeilenende und \\ & schließender Klammer in eigener Zeile schreiben \\
+						\hline
+						Empty blocks & In Multi-Block-Anweisungen leere Blöcke mit Zeilenumbruch \\
+						\hline
+						Block indentation & Als Einrückung für Blockinhalt 2 Leerzeichen verwenden \\
+						\hline
+						Statements per line & Nur eine Anweisung pro Zeile schreiben \\
+						\hline
+						Column limit & Maximale Zeilenlänge = 100 Zeichen \\
+						\hline
+						Where to break & Anweisungen in mehreren Zeilen vermeiden \\
+						\hline
+						Indent continuation & Einrückung bei Zeilenumbruch innerhalb von Anweisung \\ & mindestens 4 Leerzeichen einrücken \\
+						\hline
+						Vertical whitespace & Leerzeilen zwischen "Class-Members" außer Variablen \\
+						\hline
+						Horizontal whitespace & Genau definiert, siehe Style-Guide  \\
+						\hline
+						Horizontal alignment & Horizontale Ausrichtung nicht verwenden \\
+						\hline
+						Grouping parentheses & Klammern zur Gruppierung komplexer Operationen verwenden \\
+						\hline
+						Enum classes & Enumwerte in einer Zeile, oder mit Zeilenumbruch nach Komma \\
+						\hline
+						Variable declarations & Nur eine Variable je Anweisung deklarieren \\
+						\hline
+						Arrays & Eckige Klammern immer am Typ und nicht am variablennamen \\
+						\hline
+						Switch Statements & Jedes Switch muss default case haben  \\
+						\hline
+						Annotations & Annotationen an Klassen, Methoden oder Konstruktoren \\ & hinter Javadoc, je eine Annotation pro Zeile \\
+						\hline
+						Comments & Kommentare genauso einrücken wie umgebender Code \\
+						\hline
+						Modifiers & Modifiers in fester Reihenfolge \\
+						\hline
+						Numeric Literals & Literale vom Typ long mit groß geschriebenem L \\
+						\hline
+						Zeichensatz & Nur ASCII Buchstaben und Zahlen in Namen verwenden \\
+						\hline
+						Package names & Package Namen komplett klein \\
+						\hline
+						Class names & Klassennamen in Upper CamelCase \\
+						\hline
+						Method names & Methodennamen in Lower CamelCase \\
+						\hline
+						Constant names & Konstantennamen komplett groß \\
+						\hline
+						Field names & Globale Variablennamen in Lower CamelCase \\
+						\hline
+						Parameter names & Parameternamen in Lower CamelCase \\
+						\hline
+						Variable names & Lokale Variablennamen in Lower CamelCase \\
+						\hline
+						Type names & Typvariablen sind entweder einzelner großer Buchstabe \\
+						\hline
+						Camel case & Abkürzungen in CamelCase nur mit erstem Buchstaben groß \\
+						\hline
+						@Override & Überschreibende Methoden mit @Override markieren \\
+						\hline
+						Caught exceptions & Keine leeren Catch-Anweisungen, außer in Tests \\
+						\hline
+						Static Members & Statische Methoden und variablen nur über Klassennamen \\ & referenzieren, nicht über Instanzen \\
+						\hline
+						Finalizers & finalize() Methode nicht überschreiben \\
+						\hline
+						General form & Start und Ende von Javadoc Kommentar in eigene Zeile \\
+						\hline
+						Paragraphs & Zwischen Absätzen in Javadoc eine Leerzeile nur mit * \\
+						\hline
+						Block tags & Tags in Javadoc-Kommentaren in fester Reihenfolge \\
+						\hline
+						Summary fragmnet & Erste Zeile eines Javadoc Kommentars ist Zusammenfassung \\ & ohne Subject abgeschlossen mit einem . \\
+						\hline
+						Where Javadoc & Javadoc an öffentlichen Klassen und "Class-Members" \\
+						\hline
+						Self-explanatory & Kein Javadoc an trivialen Methoden (getter / setter) \\
+						\hline
+						Overrides & Überschriebene Methoden brauchen kein Javadoc \\
+						\hline
+  						\caption{Regeln des "`Google Java Style Guide"'  \cite{GoogleStyleGuide}}
+						\label{googlerules}
+  					\end{longtabu}   
+  				\end{center}
 			\subsection{SoftAudit von Harry Sneed}
-				bla \cite{SoftAuditDoku}
-			\subsection{Gemeinsamkeiten und Unterschiede}
-				Dabei wird deutlich, dass die Regelwerke zum einen durch den Unterschiedlichen Fokus der beiden Bücher und zum anderen durch Sprachunterschiede recht wenig Überschneidung aufweisen. Allerdings kristallisieren sich bereits hier 2 Grundlegende Regeln heraus, die in verschiedenen Ausprägungen in fast allen untersuchten Regelwerken Erwähnung finden, und anscheinend auch universell bezüglich der verwendeten Programmiersprache eingehalten werden sollten: Das Festhalten an Namenskonventionen und die Vermeidung von Code-Duplikaten.
+				Harry Sneed verwendet in seinem Software-Analyse-Werkzeug "`SoftAudit"' 80 Regeln um Fehlerberichte von Java-Programmen zu erstellen. Darüber hinaus geht die Anzahl der gefundenen Regelverletzungen in mehreren Metriken die auch im vorangegangenen Großen Beleg umgesetzt wurden \cite{grosserBeleg} mit in die Berechnung ein. Da es sich hierbei allerdings um eine Anwendung und keine Literatur-Quelle handelt sind die Regeln nicht detailliert erklärt \cite{SoftAuditDoku}. Im Gegensatz zu allen anderen Quellen nimmt Harry Sneed allerdings eine Abstufung der Regeln nach Fehlergewichtung vor. Er teilt die verwendeten Regeln in die vier Klassen "`Security"' (Sicherheitskritisch), "`Deficiency"' (Schwerwiegendes Problem), "`Problem"' (Möglicher Fehler) und "`Warning"' (Hinweise auf schlechten Stil), die sich in ähnlicher Form auch in der Zielplattform SonarQube wiederfinden und einen Anhaltspunkt für eine mögliche Klassifizierung der letztendlich ausgewählten Regeln bieten. In Tabelle~\ref{softauditrules} sind die Regeln daher in der Originalformulierung zusammen mit der Einstufung, aber ohne zusammenfassende Erklärung aufgeführt.
+				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Einstufung} & \textbf{Regel}\\
+  						\hline
+						Problem & IO Operations must be contained be in a try block \\
+						\hline
+						Problem & Two Dimensional Arrays conflict with 1. Normal Form \\
+						\hline
+						Problem & Data Redefinitions conflict with 2. Normal Form \\
+						\hline
+						Problem & Data Casting should be avoided \\
+						\hline
+						Security & Constructor Methods should not be duplicated \\
+						\hline
+						Problem & Synchronization should be avoided \\
+						\hline
+						Problem & Method Invocation with array of objects should be in try block \\
+						\hline
+						Security & Return Value is not controlled after method invocation \\
+						\hline
+						Problem & Conditions should not contain an Assignment \\
+						\hline
+						Problem & Break is missing in switch Statement \\
+						\hline
+						Problem & Default is missing in switch Statement \\
+						\hline
+						Problem & Control logic exceeds maximum Nesting Level \\
+						\hline
+						Problem & More than one Statement on a Line \\
+						\hline
+						Security & Class Variables should never be declared public \\
+						\hline
+						Problem & instanceof should not be used \\
+						\hline
+						Problem & External Method Invocation should have a Class Reference \\
+						\hline
+						Security & Return Values should be checked \\
+						\hline
+						Security & Derived class is not declared as final \\
+						\hline
+						Problem & Class should not contain labels \\
+						\hline
+						Problem & Class attribute names should be qualified \\
+						\hline
+						Problem & equals should be used to compare objects \\
+						\hline
+						Problem & Interface definition should be in a separate source file \\
+						\hline
+						Security & Input Parameters of a Public Method should be checked \\
+						\hline
+						Problem & Returning a function may cause an endless loop \\
+						\hline
+						Problem & Number of catches does not match number of tries \\
+						\hline
+						Deficiency & Source module exceeds maximum size limit \\
+						\hline
+						Deficiency & Source module has more than maximum allowed Statements \\
+						\hline
+						Deficiency & Source module has more than maximum allowed Imports \\
+						\hline
+						Deficiency & Source module has more than maximum allowed Variables \\
+						\hline
+						Deficiency & Source module has more than maximum allowed Interfaces \\
+						\hline
+						Deficiency & Source module has more than maximum allowed Classes \\
+						\hline
+						Deficiency & Source module has more than maximum allowed Methods \\
+						\hline
+						Deficiency & Class exceeds maximum size limit \\
+						\hline
+						Deficiency & Method exceeds maximum size limit \\
+						\hline
+						Deficiency & Method has more than maximum allowed Parameters \\
+						\hline
+						Deficiency & Module references too many foreign Methods \\
+						\hline
+						Deficiency & Package should have a documentation header \\
+						\hline
+						Deficiency & Interface should have a documentation header \\
+						\hline
+						Deficiency & Class should have a documentation header \\
+						\hline
+						Deficiency & Method should have a documentation header \\
+						\hline
+						Deficiency & Compound Condition has more than two condition clauses \\
+						\hline
+						Deficiency & ? Operation should not be used in Expressions \\
+						\hline
+						Deficiency & Documentation header should include a code tag \\
+						\hline
+						Deficiency & Methods without Return value should be void \\
+						\hline
+						Deficiency & String Vectors should be avoided \\
+						\hline
+						Deficiency & Constants in procedural statements are forbidden \\
+						\hline
+						Deficiency & Literals in procedural statements are forbidden \\
+						\hline
+						Security & Embedded SQL functions should be avoided \\
+						\hline
+						Security & SQL Statement strings in code are vulnerable \\
+						\hline
+						Warning & Imports should proceed all other statements \\
+						\hline
+						Warning & Database Accesses are restricted to access classes \\
+						\hline
+						Warning & Nested Code should be indented by at least two columns \\
+						\hline
+						Warning & Code Line should not exceed maximum length of 120 Characters \\
+						\hline
+						Warning & Data Declaration should be followed by a Comment \\
+						\hline
+						Warning & Structure and union declarations should be proceeded by a comment \\
+						\hline
+						Warning & End Bracket should be followed by a Comment \\
+						\hline
+						Warning & Control Command should be on a separate line \\
+						\hline
+						Warning & Numeric constants should not start with a decimal point \\
+						\hline
+						Warning & Open Block Bracket should be on a separate line \\
+						\hline
+						Warning & Close Block Bracket should be on a separate line \\
+						\hline
+						Warning & Left Parenthesis should be proceeded by a space \\
+						\hline
+						Warning & Right Parenthesis should be followed by a space or Semicolon \\
+						\hline
+						Warning & Arithmetic Operator should be delimited by spaces \\
+						\hline
+						Warning & Logical Operator should be delimited by spaces \\
+						\hline
+						Warning & Else Clause should be on a seperate line \\
+						\hline
+						Warning & Method names should begin with a small letter \\
+						\hline
+						Warning & Method names should have at least four characters \\
+						\hline
+						Warning & Method/Class/interface names should not exceed 40 characters \\
+						\hline
+						Warning & Data names should be at least four characters long \\
+						\hline
+						Warning & Data names should begin with a capital letter \\
+						\hline
+						Warning & Data names should not exceed 36 characters \\
+						\hline
+						Warning & Class names should begin with a capital letter \\
+						\hline
+						Warning & Collection names should match class name \\
+						\hline
+						Warning & Package names should not exceed 8 characters \\
+						\hline
+						Warning & Package name should be given in source file \\
+						\hline
+						Warning & Multiple classes in a single source not allowed \\
+						\hline
+						Warning & Objects should never be compared with != null \\
+						\hline
+						Security & Objects should never be compared with a literal \\
+						\hline
+						Security & Classes should never be serializeable \\
+						\hline
+						Security & Classes should never be cloneable \\
+  						\hline
+  						\caption{Regeln für Java aus SoftAudit von Harry Sneed \cite{SoftAuditDoku}}
+						\label{softauditrules}
+  					\end{longtabu}   
+  				\end{center}
+			\subsection{Softwarepraktikum an der TU Dortmund}
+				Von besonderem Interesse sind im Rahmen dieser Arbeit die Versuche von Doris Schmedding et Al. die an der Technischen Universität Dortmund Code-Qualität den Studenten vermitteln und im dortigen Softwarepraktikum (kurz SoPra) messbar machen wollten \cite{CleanCodeImPraktikum}. Sie beschränkten sich dabei auf die Einhaltung von Programmierregeln, die sie auf Basis des in Kapitel~\ref{cleancodechapter} genannten Buches "`Clean Code"' von Robert Martin auswählten. Dabei wurde gezielt eine sehr kleine Anzahl von einfachen Regeln zusammengestellt um den zumeist unerfahrenen Praktikumsteilnehmern den Einstieg in die Thematik zu erleichtern und somit die Einhaltung der Regeln zu ermöglichen. In den folgenden Jahrgängen wurden die Regeln erprobt und zusammen mit einer kontinuierlichen Kommunikation der Regeln und der Bedeutung von Softwarequalität eine deutliche Qualitätsverbesserung der Praktikumsprojekte erzielt \cite{ImproveCodeQuality}. \newline
+				Mit Blick auf das angestrebte automatisierte Bewertungssystem ist die getroffene Regelauswahl zu klein um angemessen zu Bewerten und auch nicht vollständig automatisierbar, allerdings können die Regeln (siehe Tabelle~\ref{soprarules}) als gut evaluierte Grundlage gesehen werden. Insbesondere die vorgenommene Anpassung der Grenzwerte, bezogen auf kleine studentische Projekte passen auch in diesem Kontext. \newline
+				Aus den gewählten Regeln sticht die "`Gottklasse"' als sehr viel komplexer heraus und die Autoren merken an, dass dieses Konzept nur schwer zu vermitteln ist. Allerdings sind alle diese Klassen auch zu lang, sodass hier hauptsächlich ein einzelnes Problems in zwei Regeln verpackt wird und eine Suche nach besonders großen Klassen ausreichend ist.\newline \newline
+				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Regel} & \textbf{Kurzbeschreibung}\\
+  						\hline
+  						Naming Conventions & Für alle Bezeichner Java Namenskonventionen einhalten \\
+  						\hline
+						Meaningful Names & Alle Bezeichner mindestens 4 Zeichen lang und sprechend \\
+						\hline
+						Methodlength & Maximale Methodenlänge von 40 Zeilen nicht überschreiten \\
+						\hline
+						Parameterlist length & Maximal 5 Parameter in Methodensignatur \\
+						\hline
+						Cyclomatic Complexity & McCabe-Komplexität jeder Methode sollte höchstens 10 sein \\
+						\hline
+						Classlength & Klassen sollten höchstens 400 Zeilen lang sein \\
+						\hline
+						Dead Code & Ungenutzer Code sollte entfernt werden \\
+						\hline
+						Godclass  & Summe aller Methodenkomplexitäten (WMC) kleiner 48, \\ & Zugriffe auf Variablen anderer Klassen (AFTD) kleiner 6, \\ & Anteil zusammenhängende Methoden (TCC) größer 0,32 \\
+						\hline
+						Literals & Keine Verwendung von Literalen im Code - Konstanten \\
+						\hline
+						Deeply nested & Maximale Verschachtelungstiefe von If Anweisungen = 3 \\
+						\hline
+						Field declaration & Keine öffentlichen Klassenvariablen \\
+  						\hline
+  						\caption{Regeln die im Softwarepraktikum der TU-Dortmund von Vasileva und Schmedding verwendet wurden \cite{ImproveCodeQuality}}
+						\label{soprarules}
+  					\end{longtabu}   
+  				\end{center}
+		\section{Regelauswahl}
+			Hinter allen ausgewerteten Regelwerken steht eine bestimmte Absicht und wie Anfangs bereits erwähnt kann keines davon allgemeingültig sein und ohne Anpassung für den neuen Kontext des automatisierten Bewertungssystems für das Softwarepraktikum übernommen werden. Selbst das thematisch sehr nah gelegene Regelwerk der TU Dortmund ist dafür nicht geeignet. Um eine Regelauswahl vorzunehmen wurde als Basis nach den Gemeinsamkeiten der verschiedenen Regelwerke gesucht und deren speziellere Absichten ausgeklammert um diese dann in Zusammenarbeit mit den Lehrstuhlmitarbeitern und in Abgleich zu den Möglichkeiten die SonarQube bietet zu einem stimmigen und praktikablen Regelwerk zu Formen.
+			\subsection{Der kleinste gemeinsame Nenner}
+			Trotz der enormen Bandbreite der gefundenen Regeln zeichnen sich doch eine ganze Reihe Gemeinsamkeiten ab. Zum einen gibt es ein paar spezielle zu vermeidende Konstrukte oder anzustrebende Pattern die immer wieder genannt werden wie beispielsweise die Verwendung der "`equals"'-Methode für den Objektvergleich oder das setzen freiwilliger Klammern. Daneben zeichnen sich auch einige Grundlegende übergeordnete Regeln ab, die in allen, oder zumindest einem Großteil der Quellen in diversen Ausprägungen enthalten sind. Dieser "`kleinste gemeinsame Nenner"' soll im Folgenden kurz dargestellt werden. \newline
+				\begin{labeling}{\textbf{Formatierung}}
+					\item [\textbf{Namen}] Bezeichner und Namen aller Art spielen eine entscheidende Rolle für die Verständ- lichkeit des Codes. Sie sollten üblichen Namenskonventionen folgen, nicht zu kurz oder lang sein und möglichst genau Beschreiben was sich hinter dem benannten Code-Konstrukt verbirgt. Bis auf den letzten Aspekt lässt sich dies einfach vermitteln, einhalten und messen.
+					\item [\textbf{Formatierung}] Konsistente Formatierung des Codes, also Einrückung, Reihenfolgen, Klammern-Setzung und ähnliches trägt ebenso zur guten Lesbarkeit bei und sollte zumindest mit grundlegenden Aspekten berücksichtigt werden.  
+					\item [\textbf{Duplikate}] Jegliche Duplikate im Code erschweren die Wartbarkeit einer Software extrem und sollten daher vermieden werden. 
+					\item [\textbf{Größe}] Alle Code-Konstrukte sollten nicht zu groß werden. wenige große Klassen, Interfaces oder Methoden sind sehr viel schwerer zu verstehen, als etwas mehr Kleinere. Der Spielraum der angesetzten Grenzwerte ist dabei allerdings sehr groß und eine Orientierung ist am ehesten beim Softwarepraktikum in Dortmund sinnvoll, da dort ähnliche Projekte vermessen und gute Erfahrungen gemacht wurden.
+					\item [\textbf{Komplexität}] Eng verknüpft mit der Größe der Code-Konstrukte ist deren Komplexität. Die Komplexität einer Methode kann am einfachsten durch die Zyklomatische Komplexität nach McCabe \cite{AComplexityMeasure} oder die Verschachtelungstiefe der Kontrollflussanweisungen beschrieben werden. Darüber hinaus können auch Verknüpfungen zu anderen Klassen oder Methoden mit einbezogen werden.
+					\item [\textbf{Überflüssiges}] Alles Überflüssige sollte aus dem Code entfernt werden. So zum Beispiel Nichtssagende Kommentare, Nie ausgeführter Code oder ungenutzte Variablen und Methoden. 
+					\item [\textbf{Literale}] Literale und insbesondere "`Magic Numbers"' (Numerische Literale im Code - Magische, da unerklärte Zahlen deren Ursprung sich zumeist nicht erschließt) erschweren das Lesen und Warten des Codes. Daher sollten alle Literale in gut benannten konstanten Variablen abgelegt werden.	
+					\item [\textbf{Kommentare}]	Zumindest die öffentlichen Schnittstellen sollten durch Dokumentationskommentare beschrieben werden. Darüber hinaus ist selbstdokumentierender Code anzustreben und mit ausreichend Kommentaren zu unterstützen. Wichtig, aber nicht messbar ist dabei, dass die Kommentare korrekt und aktuell gehalten werden.			
+				\end{labeling}
+			\subsection{Regeln in SonarQube}
+			\subsection{Die Auswahl für das Softwarepraktikum}
+				
 	\chapter{Der Code-Quality-Index für das Softwarepraktikum} \label{indexchapter}
   	% Notwendig für korrekte Nummerierung der Anlagen
   	\backmatter
