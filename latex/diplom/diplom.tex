@@ -32,7 +32,17 @@ Projekte im Softwarepraktikum}
 \begin{document}
 	\maketitle 
 	\chapter*{Aufgabenstellung}
-		schreib es auf
+		Das derzeitige Softwarepraktikumskonzept basiert auf einem einheitlichen Vorgehensmodell, welches die Plattform GitHub, Continuous Integration und eine statische Programmanalyse mit SonarQube einschließt. \newline \newline
+		Die Nutzung dieser technischen Möglichkeiten erlaubt eine zumindest teilweise automatische Bewertung von Softwareprojekten. \newline \newline
+		Für eine Bewertung des entstandenen Anwendungscodes können derzeit folgende Sichten auf den Code einbezogen werden:
+		\begin{itemize}
+			\item Codemetriken
+			\item Einhaltung von Java Coding Regeln
+			\item die Höhe der technischen Schulden
+			\item Test Coverage
+		\end{itemize} 
+		Das Standard SonarQube-Plugin wurde bereits um die Ermittlung von Umfangs-, Komplexitäts- und Qualitätsmetriken zur statischen Programmanalyse im Großen Beleg von Jan Rucks erweitert. \newline \newline
+		Das Ziel der Arbeit ist es, auf Basis empirischer Analysen von Projekten mindestens des letzten Jahres ein weitgehend automatisiertes Bewertungssystem für studentische Projekte für nachfolgende Softwarepraktika zu entwickeln.
 		
 	\tableofcontents
   
@@ -792,11 +802,16 @@ Projekte im Softwarepraktikum}
 			SonarQube bietet eine sehr große Zahl feingranularer Regeln, die beliebig zu "`Quality Profiles"' Zusammengestellt werden können. Für viele dieser Regeln die auf bestimmten Grenzwerten (Wie zum Beispiel Methodengröße) oder Pattern (Wie zum Beispiel Namenskonventionen) beruhen ist es darüber hinaus möglich die Regeln den persönlichen Vorlieben oder Projektbedingungen entsprechend zu konfigurieren. Außerdem gibt es die Option die Regeln frei zu Klassifizieren. \newline
 			SonarQube bietet dabei folgende Stufen \cite{SonarRuleSeverities}: 
 			\begin{itemize}
-				\item "`Blocker"' - Probleme die sehr wahrscheinlich zu ernsten Fehlern führen
-				\item "`Critical"' - Probleme die möglicherweise zu ernsten Fehlern führen
-				\item "`Major"' - Probleme die sehr wahrscheinlich zu leichten Fehlern führen 
-				\item "`Minor"' - Probleme die möglicherweise zu leichten Fehlern führen 
-				\item "`Info"' - Hinweise auf schlechten Stil
+				\item "`Blocker"' - Probleme die sehr wahrscheinlich zu ernsten Fehlern führen \newline
+				Beispielsweise sollten überschriebene "`equals"'-Methoden den Typ des übergebenen Objekts prüfen, da die Methode alle Objekte als Eingabeparameter akzeptiert und sonst nicht sichergestellt werden kann, dass die in der Methode durchzuführenden Vergleiche überhaupt möglich sind, und unvorhergesehene Fehler entstehen.
+				\item "`Critical"' - Probleme die möglicherweise zu ernsten Fehlern führen \newline
+				Eine Regel die von SonarQube so eingestuft wird ist die Vorgabe, dass Unit-Tests Assertions enthalten sollten, da der Testfall sonst lediglich sicherstellt, dass keine "`Exceptions"' geworfen werden, über das Verhalten der zu testenden Methode aber nichts aussagt und potentielle Fehler so nicht gefunden werden können. 
+				\item "`Major"' - Probleme die sehr wahrscheinlich zu leichten Fehlern führen \newline
+				Als Beispiel sei hier genannt, dass Klassenvariablen nicht öffentlich deklariert werden sollten, da so nicht steuerbare Zugriffe von außen ermöglicht werden und Fehlverhalten resultieren kann.
+				\item "`Minor"' - Probleme die möglicherweise zu leichten Fehlern führen \newline
+				In diese Kategorie fallen die Regeln bezüglich der Namenskonventionen, da deren Nicht-Einhaltung zu Missverständnissen und Irrtümern zwischen den Teammitgliedern führen kann.
+				\item "`Info"' - Hinweise auf problematische Konstrukte oder offene Aufgaben \newline
+				Hier wird zum Beispiel aufgeführt, dass "`TODO"'-Tags behandelt werden sollten, oder Kommentare zur besseren Lesbarkeit nicht am Ende einer Zeile platziert werden sollten.
 			\end{itemize}
 			Die am Lehrstuhl für Softwaretechnik betriebene SonarQube-Installation in der Version 5.1.2 mit dem Java-Plugin in der Version 3.7.1 bietet 337 Regeln, neuere Versionen sogar noch deutlich mehr. Aufgrund der Fülle an kleinteiligen Regeln sei hier auf eine Auflistung verzichtet. Es wird allerdings schnell klar, dass die Aktivierung sämtlicher Regeln nicht sinnvoll sein kann, da ein solches Regelwerk nicht mehr zu überblicken ist und insbesondere Programmieranfängern nicht vermittelt werden kann. Außerdem schließen sich einige Regeln sogar gegenseitig aus. So gibt es Beispielsweise jeweils eine Regel für die zwei üblichen Varianten der Positionierung der geöffneten geschweiften Klammern von Code-Blöcken. Entweder am Ende der Zeile der zugehörigen Anweisung oder in einer eigenen Zeile. Offensichtlich kann hier nur eine Regel erfüllt werden. Neben den Regeln die sich den aus den verschiedenen Regelwerken extrahierten Kategorien zuordnen lassen gibt es hier vor allem eine große Anzahl von Regeln, die die Verwendung bestimmter Methoden oder ähnlichem verbieten. Da dies vor allem Spezialfälle sind die im Rahmen des Softwarepraktikums keine Relevanz haben können sie weitestgehend ignoriert werden. Stattdessen wurde sich darauf konzentriert die in der Literatur häufig genannten Regeln auf die von SonarQube bereitgestellten abzubilden, entsprechend den in Kapitel \ref{kleinernennerchapter} genannten Kategorien zu sortieren und so eine Vorauswahl zu generieren die immer noch 84 Regeln enthält, wobei allein elf Regeln auf die Anwendung von Namenskonventionen entfallen. Bis auf die Kategorie "`Duplikate"', die nur von einer Regel abgedeckt wird können allen anderen Kategorien mehrere Regeln zugeordnet werden. \newline
 			\subsection{Die Auswahl für das Softwarepraktikum}
