@@ -2,3 +2,12 @@
 /plugin/.settings/
 .classpath
 .project
+latex/diplom/diplom.aux
+latex/diplom/diplom.bbl
+latex/diplom/diplom.blg
+latex/diplom/diplom.log
+latex/diplom/diplom.out
+latex/diplom/diplom.pdf
+latex/diplom/diplom.synctex.gz
+latex/diplom/diplom.toc
+latex/diplom/texput.log
