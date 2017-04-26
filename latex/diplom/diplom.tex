@@ -50,7 +50,7 @@ Projekte im Softwarepraktikum}
   		schreib es auf
     
 	\chapter{Das Regelwerk}
-		Eine der Säulen für ein (teil-)automatisiertes Bewertungssystem für das Softwarepraktikum ist zwangsläufig die Festlegung eines geeigneten Regelwerks, dass in SonarQube konfiguriert werden muss und als Basis für diverse Berechnungen zur Beurteilung der abgelieferten Softwarequalität dient. Zum einen fließt die Zahl der Regelverletzungen in mehrere Metriken ein und zum anderen sind einige dieser Regeln, oder Kombinationen mehrerer Regeln gleichzeitig Qualitätsindikatoren des für das Softwarepraktikum angepassten Code-Quality-Index. In diesem Kapitel soll zunächst auf die Notwendigkeit eines Regelwerks eingegangen, einige in der Industrie und Literatur vorgeschlagene Regelwerke vorgestellt und letztlich die getroffene Auswahl begründet und erklärt werden.
+		Eine der Säulen für ein (teil-)automatisiertes Bewertungssystem für das Softwarepraktikum ist zwangsläufig die Festlegung eines geeigneten Regelwerks, dass in SonarQube konfiguriert werden muss und als Basis für diverse Berechnungen zur Beurteilung der abgelieferten Softwarequalität dient. Zum einen fließt die Zahl der Regelverletzungen in mehrere Metriken ein und zum anderen sind diese Regeln, oder Kombinationen mehrerer Regeln gleichzeitig Qualitätsindikatoren des für das Softwarepraktikum angepassten Code-Quality-Index. In diesem Kapitel soll zunächst auf die Notwendigkeit eines Regelwerks eingegangen, einige in der Industrie und Literatur vorgeschlagene Regelwerke vorgestellt und letztlich die getroffene Auswahl begründet und erklärt werden.
 		\section{Warum Programmierregeln?}
 			Grundsätzlich entsteht die Notwendigkeit für Programmierregeln und "`StyleGuides"' aus zwei für alle Programmiersprachen und Kontexte der Softwareentwicklung gleichen Gegebenheiten: 
 			\begin{itemize}
@@ -447,7 +447,7 @@ Projekte im Softwarepraktikum}
   				\end{center}
 			\subsection{Google Style Guide}
 				Der "`Google Java Style Guide"' stellt eine vollständige Definition der von Google angesetzten Programmierregeln für die Sprache Java dar und wird bei allen für Google entwickelten Projekte in dieser Sprache angewendet  \cite{GoogleStyleGuide}. Ähnliche Regelwerke gibt es bei Google auch für viele andere gängige Programmiersprachen. Dieses Online verfügbare Dokument wird fortlaufend überarbeitet und weiterentwickelt. Im Rahmen dieser Arbeit wird der Stand von März 2017 betrachtet. Ein Anspruch des Regelwerks ist es, dass alle Regeln so klar sind, dass sie bereits in einer Entwicklungsumgebung erzwungen werden können. Regeln und Hinweise die Interpretationsspielraum lassen und subjektiv vom Betrachter abhängen wie zum Beispiel, das Vergeben sprechender Bezeichner, sind daher nicht aufgeführt. \newline
-				Da es sich um eine Unternehmensrichtlinie handelt sind die Regeln auch auf eine spezielle Art der Formatierung festgelegt und nicht auf die allgemeine Forderung nach Konsistenz beschränkt. Für das Softwarepraktikum muss nicht zwangsläufig die gleiche Formatierung gewählt werden und einige Größenbeschränkungen sollten an die kleineren Studentenprojekte angepasst werden, aber der Style Guide liefert eine gute Zusammenfassung, an welchen Stellen die Formatierung einheitlich sein sollte und was in der Industriellen Praxis üblich ist. Außerdem ist es mit Abstand das aktuellste der ausgewerteten Regelwerke. Die 55 extrahierten Regeln sind in Tabelle~\ref{googlerules} aufgelistet.
+				Da es sich um eine Unternehmensrichtlinie handelt sind die Regeln auch auf eine spezielle Art der Formatierung festgelegt und nicht auf die allgemeine Forderung nach Konsistenz beschränkt. Für das Softwarepraktikum muss nicht zwangsläufig die gleiche Formatierung gewählt, aber der Style Guide liefert eine gute Zusammenfassung, an welchen Stellen die Formatierung einheitlich sein sollte und was in der Industriellen Praxis üblich ist. Außerdem ist es mit Abstand das aktuellste der ausgewerteten Regelwerke. Die 55 extrahierten Regeln sind in Tabelle~\ref{googlerules} aufgelistet. Diese sind aufgrund der anderen Herangehensweise deutlich detaillierter als in den zuvor genannten Büchern.
 				\begin{center}
 					\tabulinesep=1.5mm
 					\begin{longtabu}{|c|c|}
@@ -813,9 +813,111 @@ Projekte im Softwarepraktikum}
 				\item "`Info"' - Hinweise auf problematische Konstrukte oder offene Aufgaben \newline
 				Hier wird zum Beispiel aufgeführt, dass "`TODO"'-Tags behandelt werden sollten, oder Kommentare zur besseren Lesbarkeit nicht am Ende einer Zeile platziert werden sollten.
 			\end{itemize}
-			Die am Lehrstuhl für Softwaretechnik betriebene SonarQube-Installation in der Version 5.1.2 mit dem Java-Plugin in der Version 3.7.1 bietet 337 Regeln, neuere Versionen sogar noch deutlich mehr. Aufgrund der Fülle an kleinteiligen Regeln sei hier auf eine Auflistung verzichtet. Es wird allerdings schnell klar, dass die Aktivierung sämtlicher Regeln nicht sinnvoll sein kann, da ein solches Regelwerk nicht mehr zu überblicken ist und insbesondere Programmieranfängern nicht vermittelt werden kann. Außerdem schließen sich einige Regeln sogar gegenseitig aus. So gibt es Beispielsweise jeweils eine Regel für die zwei üblichen Varianten der Positionierung der geöffneten geschweiften Klammern von Code-Blöcken. Entweder am Ende der Zeile der zugehörigen Anweisung oder in einer eigenen Zeile. Offensichtlich kann hier nur eine Regel erfüllt werden. Neben den Regeln die sich den aus den verschiedenen Regelwerken extrahierten Kategorien zuordnen lassen gibt es hier vor allem eine große Anzahl von Regeln, die die Verwendung bestimmter Methoden oder ähnlichem verbieten. Da dies vor allem Spezialfälle sind die im Rahmen des Softwarepraktikums keine Relevanz haben können sie weitestgehend ignoriert werden. Stattdessen wurde sich darauf konzentriert die in der Literatur häufig genannten Regeln auf die von SonarQube bereitgestellten abzubilden, entsprechend den in Kapitel \ref{kleinernennerchapter} genannten Kategorien zu sortieren und so eine Vorauswahl zu generieren die immer noch 84 Regeln enthält, wobei allein elf Regeln auf die Anwendung von Namenskonventionen entfallen. Bis auf die Kategorie "`Duplikate"', die nur von einer Regel abgedeckt wird können allen anderen Kategorien mehrere Regeln zugeordnet werden. \newline
+			Die am Lehrstuhl für Softwaretechnik betriebene SonarQube-Installation in der Version 5.1.2 mit dem Java-Plugin in der Version 3.7.1 bietet 337 Regeln, neuere Versionen sogar noch deutlich mehr. Aufgrund der Fülle an kleinteiligen Regeln sei hier auf eine Auflistung verzichtet. Es wird allerdings schnell klar, dass die Aktivierung sämtlicher Regeln nicht sinnvoll sein kann, da ein solches Regelwerk nicht mehr zu überblicken ist und insbesondere Programmieranfängern nicht vermittelt werden kann. Außerdem schließen sich einige Regeln sogar gegenseitig aus. So gibt es Beispielsweise jeweils eine Regel für die zwei üblichen Varianten der Positionierung der geöffneten geschweiften Klammern von Code-Blöcken. Entweder am Ende der Zeile der zugehörigen Anweisung oder in einer eigenen Zeile. Offensichtlich kann hier nur eine Regel erfüllt werden. Neben den Regeln die sich den aus den verschiedenen Regelwerken extrahierten Kategorien zuordnen lassen gibt es hier vor allem eine große Anzahl von Regeln, die die Verwendung bestimmter Methoden oder ähnlichem verbieten. Da dies vor allem Spezialfälle sind die im Rahmen des Softwarepraktikums keine Relevanz haben können sie weitestgehend ignoriert werden. \newline
+			Stattdessen wurde sich darauf konzentriert die in der Literatur genannten Regeln auf die von SonarQube bereitgestellten abzubilden, entsprechend den in Kapitel \ref{kleinernennerchapter} genannten Kategorien zu sortieren und so eine Vorauswahl zu generieren die immer noch 84 Regeln enthält, wobei allein elf Regeln auf die Anwendung von Namenskonventionen entfallen. Bis auf die Kategorien "`Duplikate"' und "`Literale"', die jeweils nur mit einer Regel abgedeckt sind, können allen anderen Kategorien mehrere Regeln zugeordnet werden. Darüber hinaus verbleiben 32 Regeln die sich nicht zuordnen lassen und weitestgehend für sich allein stehen, wobei die meisten davon lediglich in einer der untersuchten Quellen genannt sind.\newline
 			\subsection{Die Auswahl für das Softwarepraktikum}
-				
+				Für das letztlich anzuwendende Regelwerk (siehe Tabelle~\ref{ruleset}) wurde auf Basis der 84 Regeln in der durch die Abbildung der Regeln aus der Literatur auf die SonarQube-Regeln entstandenen Vorauswahl folgende Schrittweise Auswahl, Eingrenzung und Bewertung vorgenommen:
+				\begin{enumerate}
+					\item Den Grundstock für das Regelwerk bilden alle 45 in mehreren der untersuchten Quellen explizit genannten Regeln.
+					\item Die mehrfach genannten Regeln wurden hinsichtlich ihrer Relevanz für das Softwarepraktikum untersucht, wobei zwei der Regeln in Absprache mit dem Lehrstuhl aus dem Regelwerk entfernt wurden. Im Einzelnen sind dies die Forderung nach einer "`package-info"'-Datei für jedes Paket, da diese übergreifende Form der Dokumentation für die verhältnismäßig kleinen Softwarepraktikumsprojekte nicht erforderlich ist, und die Forderung nach einer "`ausreichenden"' Menge an Kommentarzeilen, da hier der Argumentation von Bob Martin \cite{CleanCode} gefolgt wird, dass Selbstdokumentierender Code zu bevorzugen ist und über die quantitative Messung der Kommentarzeilen keinerlei Aussage über die Qualität der Kommentierung getroffen werden kann.
+					\item Zur besseren Übersichtlichkeit der Regeln und mit Blick auf den im Folgenden zu erstellenden Code-Quality-Index für das Softwarepraktikum wurden die bis zu diesem Punkt ausgewählten 43 Regeln thematisch sortiert und 18 Kategorien zugeordnet.
+					\item Um die Auswahl zu komplettieren wurden die in den Regellisten nur einmalig auftretenden Regeln hinsichtlich ihrer Zugehörigkeit zu einer der erstellten Kategorien überprüft und zwölf Regeln der Zusammenstellung hinzugefügt.
+					\item Die verbliebenen einmalig genannten Regeln wurden außerdem hinsichtlich besonderer Relevanz für das Softwarepraktikum untersucht, wodurch zwei weitere Regeln zusammengefasst als 19. Kategorie hinzugekommen sind. Dabei handelt es sich um die Kategorie "`unfertiger Code"' der sich zum einen an im Code belassenen "`TODO"'-Kommentaren und zum zweiten an auskommentiertem Code erkennen lässt. Diese Regeln deuten darauf hin, dass der Programmcode vor der Abgabe nicht "`aufgeräumt"' wurde, was aber im Zuge der Einführung von Codequalität als explizites Bewertungskriterium erfolgen sollte um eine entsprechend gute Bewertung zu erreichen.
+					\item Zur Konkretisierung der getroffenen Auswahl von 57 Regeln wurden die konfigurierbaren Parameter festgelegt. Dabei wurde sich soweit wie möglich an den im Softwarepraktikum in Dortmund verwendeten Werten orientiert \cite{ImproveCodeQuality} und ansonsten vornehmlich die Standard-SonarQube-Einstellung übernommen.
+					\item Abschließend wurden die Regeln gemäß den fünf möglichen Schweregraden eingestuft. Dabei wurde diesen jeweils eine neue vereinfachte Bedeutung zugeordnet: 
+						\begin{itemize}
+							\item "`Blocker"' - Fast überall genannt, Bestandteil der Lehrveranstaltung
+							\item "`Critical"' - Häufig genannt, grundlegender Code-Qualitäts-Aspekt
+							\item "`Major"' - Häufig genannt, aber im Kontext geringere Bedeutung
+							\item "`Minor"' - Mehrfach genannt, aber eher ergänzender Charakter
+				\item "`Info"' - Nur einmalig genannt, aber im Kontext von Bedeutung
+						\end{itemize}						 
+				\end{enumerate}
+				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|c|c|}
+						\hline
+  						\textbf{Kategorie} & \textbf{Regel} & \textbf{Konfiguration} & \textbf{Einstufung}\\
+  						\hline 
+  						Duplizierter Code & Keine duplizierten Code-Blöcke & - & Blocker \\
+  						\hline
+						Literale & Keine Magic Numbers & außer 1, 0, -1 & Blocker \\
+  						\hline
+  						Datenkapselung & Keine öffentlichen Variablen & - & Blocker \\
+  						\hline 
+  						Überbuchung & Nur eine Top-Level Klasse je Datei & - & Critical \\
+  						\hline
+  						Testabdeckung & Hohe Zeilenabdeckung durch Tests & 80\% & Critical \\
+  						\hline
+  						Dokumentation & Javadoc für alles öffentliche & alle Dateien & Critical \\
+  						\hline
+  						Kopplung & Klassenkopplung begrenzen & 4 & Critical \\
+  						& Keine zyklischen Paketabhängigkeiten & - & \\
+  						\hline
+  						Gottkonstrukte & Wenige Methoden pro Klasse & 10 & Critical \\
+  						& Zeilenbegrenzung für Dateien & 400 & \\
+  						& Zeilenbegrenzung für Methoden & 40 & \\
+  						& Zeilenbegrenzung für innere Klassen & 25 & \\
+  						\hline
+  						Bezeichner & Namen: Abstrakte Klassen & RegEx & Critical \\
+  						& Namen: Klassen & RegEx & \\
+  						& Namen: Konstanten & RegEx & \\
+  						& Namen: Felder & RegEx & \\
+  						& Namen: Interfaces & RegEx & \\
+  						& Namen: Variablen / Parameter & RegEx & \\
+  						& Namen: Methoden & RegEx & \\
+  						& Namen: Packages & RegEx & \\
+  						& Namen: Non-final Felder & RegEx & \\
+  						& Namen: Typ-Parameter & RegEx & \\
+  						\hline
+  						Komplexität & Wenige Methodenparameter & 5 & Major \\
+  						& Geringe Verschachtelung & 3 & \\
+  						& Geringe Methodenkomplexität & McCabe 10 & \\
+  						& Geringe Klassenkomplexität & McCabe 40 & \\
+  						\hline 
+  						Formatierung & "`\{"' am Zeilenende & - & Major \\
+  						& "`\}"' in eigener Zeile & - & \\
+  						& Freiwillige Blöcke setzen & - & \\
+  						& Einheitliche Einrückung & 2 & \\
+  						& Keine Tabulator-Zeichen & - & \\
+  						& Eine Anweisung je Zeile & - & \\
+  						& Maximale Zeilenlänge & 120 & \\
+  						\hline
+  						Verwechslung & Feldnamen nicht überdecken & - & Major \\
+  						& Klassennamen nicht überdecken & - & \\
+  						& Variablennamen nicht überdecken & - & \\
+  						& Namen nicht fast gleich (groß/klein) & - & \\
+  						& Long-Literale mit "`L"' statt "`l"' & - & \\
+  						\hline
+  						Statisch & Nur statisch referenzieren & - & Minor \\
+  						\hline
+  						Vergleich & Objekte mit "`equals()"' & - & Minor \\
+  						\hline
+  						Risko Code & default-case in jedem switch & - & Minor \\
+  						& break in jedem case & - & \\
+  						\hline
+  						Import & Keine ungenutzen Imports & - & Minor \\
+  						& Keine wildcard-imports & - & \\
+  						\hline
+  						Deklaration & Eine Variable pro Zeile & - & Minor \\
+  						& Erst wenn benötigt & - & \\
+  						& Sichtbarkeit spezifizieren & - & \\
+  						\hline
+  						Toter Code & ungenutzte private Felder weg & - & Minor \\
+  						& ungenutzte private Methoden weg & - & \\
+  						& ungenutzte protected Methoden weg & - & \\ 
+  						& ungenutzte Label weg & - & \\
+  						& ungenutzte Variablen weg & - & \\
+  						& ungenutzte Methodenparameter weg & - & \\
+  						& ungenutzte Typparameter weg & - & \\
+  						\hline
+  						Unfertiger Code & keine "`TODO"' Tags & - & Info \\
+  						& Kein auskommentierter Code & - & \\
+  						\hline
+  						\caption{Für das Softwarepraktikum ausgewählte Regeln unterteilt nach Kategorien mit Konfiguration und sortiert nach Einstufung}
+						\label{ruleset}
+  					\end{longtabu}   
+  				\end{center}
 	\chapter{Der Code-Quality-Index für das Softwarepraktikum} \label{indexchapter}
   	% Notwendig für korrekte Nummerierung der Anlagen
   	\backmatter
