@@ -274,7 +274,7 @@ Projekte im Softwarepraktikum}
 						\label{elementsrules}
   					\end{longtabu}   
   				\end{center}
-			\subsection{Code-Quality-Management von Simon et al.}
+			\subsection{Code-Quality-Management von Simon et al.} \label{cqirules}
 				Im Buch "`Code-Quality-Management"' beschreiben Frank Simon et Al. kein Regelwerk im eigentlichen Sinne \cite{CodeQualityManagement}. Stattdessen werden 52 Qualitätsindikatoren aufgeführt, die jeweils aus einem Problemmuster, vier Schwellwertstufen bezüglich der Häufigkeit des Problemmusters im untersuchten Programm im Vergleich zu Anderen in einer Datenbasis, einer Zuordnung zu einem oder mehreren Qualitätsmerkmalen und einer Beurteilung bezüglich Kosten und Unmittelbarkeit der Wirkung einer Behebung des Problemmusters bestehen. Diese Indikatoren werden benutzt um das zu untersuchende Programm einem Benchmark-Level zuzuordnen, der eine stark vereinfachte Qualitätsbeurteilung der Software darstellt. Dieses Verfahren wird als Code-Quality-Index bezeichnet und ist eine gute Alternative zur Bewertung der Code-Qualität im Vergleich zu den von Harry Sneed und anderen Autoren vorgeschlagenen Metriken \cite{SoftwareInZahlen}. \newline
 				Der Code-Quality-Index wurde bereits im dieser Arbeit vorangegangenem Großen Beleg untersucht \cite{grosserBeleg} und soll in abgewandelter Form im zu erweiternden SonarQube-Plugin für das Bewertungssystem umgesetzt werden (siehe Kapitel \ref{indexchapter}). Als Grundlage wurden für das Regelwerk daher alle Problemmuster der 52 Indikatoren als Regeln mit aufgenommen, dargestellt in Tabelle~\ref{indexrules}. Eine Anpassung der Regeln für das Softwarepraktikum ist notwendig, da die Regeln und insbesondere die verwendeten Grenzwerte auf größere Projekte zugeschnitten sind und nicht auf die verhältnismäßig kleinen Studentenprojekte im Rahmen des Praktikums. 
 				\begin{center}
@@ -445,7 +445,7 @@ Projekte im Softwarepraktikum}
 						\label{guidelinesrules}
   					\end{longtabu}   
   				\end{center}
-			\subsection{Google Style Guide}
+			\subsection{Google Java Style Guide}
 				Der "`Google Java Style Guide"' stellt eine vollständige Definition der von Google angesetzten Programmierregeln für die Sprache Java dar und wird bei allen für Google entwickelten Projekte in dieser Sprache angewendet  \cite{GoogleStyleGuide}. Ähnliche Regelwerke gibt es bei Google auch für viele andere gängige Programmiersprachen. Dieses Online verfügbare Dokument wird fortlaufend überarbeitet und weiterentwickelt. Im Rahmen dieser Arbeit wird der Stand von März 2017 betrachtet. Ein Anspruch des Regelwerks ist es, dass alle Regeln so klar sind, dass sie bereits in einer Entwicklungsumgebung erzwungen werden können. Regeln und Hinweise die Interpretationsspielraum lassen und subjektiv vom Betrachter abhängen wie zum Beispiel, das Vergeben sprechender Bezeichner, sind daher nicht aufgeführt. \newline
 				Da es sich um eine Unternehmensrichtlinie handelt sind die Regeln auch auf eine spezielle Art der Formatierung festgelegt und nicht auf die allgemeine Forderung nach Konsistenz beschränkt. Für das Softwarepraktikum muss nicht zwangsläufig die gleiche Formatierung gewählt, aber der Style Guide liefert eine gute Zusammenfassung, an welchen Stellen die Formatierung einheitlich sein sollte und was in der Industriellen Praxis üblich ist. Außerdem ist es mit Abstand das aktuellste der ausgewerteten Regelwerke. Die 55 extrahierten Regeln sind in Tabelle~\ref{googlerules} aufgelistet. Diese sind aufgrund der anderen Herangehensweise deutlich detaillierter als in den zuvor genannten Büchern.
 				\begin{center}
@@ -878,7 +878,7 @@ Projekte im Softwarepraktikum}
   						Formatierung & "`\{"' am Zeilenende & - & Major \\
   						& "`\}"' in eigener Zeile & - & \\
   						& Freiwillige Blöcke setzen & - & \\
-  						& Einheitliche Einrückung & 2 & \\
+  						& Einheitliche Einrückung & 4 & \\
   						& Keine Tabulator-Zeichen & - & \\
   						& Eine Anweisung je Zeile & - & \\
   						& Maximale Zeilenlänge & 120 & \\
@@ -918,8 +918,170 @@ Projekte im Softwarepraktikum}
 						\label{ruleset}
   					\end{longtabu}   
   				\end{center}
-	\chapter{Der Code-Quality-Index für das Softwarepraktikum} \label{indexchapter}
-  	% Notwendig für korrekte Nummerierung der Anlagen
+  				Das Ergebnis-Regelwerk wurde mit dem Lehrstuhl abgestimmt und soll den am Softwarepraktikum teilnehmenden Studenten im Vorfeld innerhalb einer Lehrveranstaltung vermittelt werden. Auch innerhalb des Softwarepraktikums erscheint eine weiterführende Erwähnung und im Bedarfsfall auch Erklärung der Regeln durch die Gruppenbetreuer sinnvoll um die Studenten zur Einhaltung anzuhalten. Über die 19 Kategorien erfolgte darüber hinaus eine Neudefinition des "`Code-Quality-Index"' die im folgenden Kapitel~\ref{indexchapter} beschrieben wird und die Regeln aus Tabelle~\ref{ruleset} inhaltlich ausführlicher beleuchtet.
+	\chapter{Der Code-Quality-Index} \label{indexchapter}
+		Trotz der Erwähnung in Abschnitt~\ref{cqirules} und der oberflächlichen Beleuchtung des "`Code-Quality-Index"' im vorangegangenen Großen Beleg \cite{grosserBeleg} soll zur besseren Verständlichkeit im folgenden die grundsätzliche Funktionsweise nochmals erläutert und beispielhaft verdeutlicht werden. Darüber hinaus soll eine Bewertung des Index hinsichtlich seiner praktischen Verwendung in Industrie und Forschung erfolgen und die Anpassung und Umsetzung für das Softwarepraktikum dargelegt werden. 
+		\section{Funktionsweise}
+			Die Basis für den Code-Quality-Index von Simon et Al. bildet ein bidirektionales Qualitätsmodell für das von der einen Seite die hierarchische Gliederung der Qualitätseigenschaften nach ISO 9126 als Vorbild diente und von der anderen Seite nach Anomalien bezüglich Qualitätsmerkmalen in Java und C++ gesucht wurde die sofern sie negativen Einfluss auf die Code-Qualität haben als Problemmuster definiert wurden. Unter Qualitätsmerkmalen wird hierbei eine messbare Größe im Code verstanden wie beispielsweise die Größe von Methoden in Codezeilen. Die Problemmuster entsprechen im wesentlichen den Verletzungen von in dieser Arbeit gesammelten Programmierregeln. Die Kombination der beiden Herangehensweisen bildet die gewichtete Abbildung der Problemmuster auf die beeinflussten Qualitätseigenschaften mittels der 52 definierten "`Qualitätsindikatoren"', die das Kernelement des Index sind \cite{CodeQualityManagement}. In Abbildung~\ref{qualitymodel} ist ein Ausschnitt des verwendeten Qualitätsmodells dargestellt. \newline 
+			\begin{figure} [h]
+				\centering
+				\includegraphics [width=\textwidth] {model.png}
+				\caption{Ausschnitt des für den Code-Quality-Index verwendeten Qualitätsmodells mit Qualitätseigenschaften, Qualitätsindikatoren, Problemmustern und Qualitätsmerkmalen (von links nach rechts)}
+				\label{qualitymodel}
+			\end{figure}
+			\subsection{Qualitätsindikatoren}
+				Die 52 Qualitätsindikatoren aus denen sich der Index zusammensetzt enthalten also jeweils ein zugeordnetes Problemmuster als Definition, und die gewichtete Abbildung auf die Qualitätseigenschaften von null bis einhundert Prozent, wobei die Abstufung jeweils in 25 Prozent Schritten erfolgt. Darüber hinaus wurde für alle Indikatoren analysiert wie hoch der Aufwand zur Behebung des Problemmusters ist ("`Kostenzuwachs"') und wie unmittelbar sich eine Behebung positiv auswirkt. Beides wurde analog zur Skala für die Qualitätseigenschaften eingestuft. Abschließend wurden über 120 Industrieprojekte hinsichtlich der Problemmuster vermessen und die Ergebnisse in einer Datenbank abgelegt. Dabei wurden die Fehlerhäufigkeiten jeweils mittels der Anzahl der Codezeilen des vermessenen Systems normiert um vergleichbare Werte zu erhalten und so aufbereitet, dass sich ein neu zu untersuchendes System im Vergleich zu dieser Datenbasis einordnen lässt. Dafür wurde erneut auf die Abstufung in 25 Prozent Schritten zurückgegriffen, sodass sich bezüglich jedes Indikators aussagen lässt, ob das vermessene Programm besser als 25, 50, 75 oder 100 Prozent der Programme in der Datenbasis ist. Diese Grenzen werden als "`Schwellwerte"' bezeichnet. \newline
+			Als Beispiel sei hier der Qualitätsindikator "`duplizierter Code"' aufgeführt, der folgendermaßen definiert ist \cite{CodeQualityManagement}:
+				\begin{quote}
+  					"`Duplizierter Code liegt vor, wenn mindestens 40 aufeinander folgende Codezeilen (inkl. Leerzeilen und Kommentarzeilen) innerhalb des Quellcodes in identischer Form mehrmals auftreten."'
+  				\end{quote}
+  				\begin{figure} [h]
+					\centering
+					\includegraphics [width=0.6\textwidth] {indexeigenschaften.png}
+					\caption{Zuordnung des Problemmusters "`duplizierter Code"' zu den Qualitätseigenschaften \cite{CodeQualityManagement}}
+					\label{indexeigen}
+				\end{figure}
+				Die Zuordnung zu den Qualitätseigenschaften wird mittels Kiviatdiagramm dargestellt (siehe Abbildung~\ref{indexeigen}). Der Kostenzuwachs wurde mit 50 Prozent bewertet, die Unmittelbarkeit mit 75 Prozent. Abbildung~\ref{indexschwell} beinhaltet die Häufigkeit des Problemmusters in der Datenbasis (für Java-Programme). \newline
+				\begin{figure} [h]
+					\centering
+					\includegraphics [width=\textwidth] {indexschwellwerte.png}
+					\caption{Anzahl duplizierter Codezeilen je 1000 Zeilen Code in Datenbasis \cite{CodeQualityManagement}}
+					\label{indexschwell}
+				\end{figure}
+			\subsection{Index-Definition}
+				Um anhand der Messergebnisse für die Indikatoren eine Gesamteinstufung in Form eines einfachen Indexes zu ermöglichen wurden fünf Quality-Benchmark-Level (QBL) definiert (siehe Tabelle~\ref{indexlevel}) deren Erreichbarkeit über zwei Mechanismen gesteuert wird:
+				\begin{itemize}
+					\item \textbf{Indikatorzuwachs} Mit jedem Level kommen weitere Indikatoren hinzu, abhängig davon welche Qualitätseigenschaften sie beeinflussen. Je nach Kostenzuwachs und Unmittelbarkeit können Indikatoren darüber hinaus vorgezogen oder in höhere Level verschoben werden (unmittelbar wirkende, schnell zu korrigierende Indikatoren werden bevorzugt).
+					\item \textbf{Schwellwerttunnel} Je höher der zu erreichende Level, desto besser muss das vermessene Programm im Vergleich zur Datenbasis für die relevanten Indikatoren abschneiden (25\% für QBL 2 bis 100\% für QBL 5). 
+				\end{itemize}
+				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|c|c|}
+						\hline
+  						\textbf{Level} & \textbf{Bezeichnung} & \textbf{Beschreibung} & \textbf{Eigenschaften} \\
+  						\hline 
+						QBL 1 & Rudimentary & komplierfähiges, ausführbares Programm & - \\  						
+  						\hline
+  						QBL 2 & Basic & Minimum an Code-Qualität für & Analysierbarkeit \\ & & wirtschaftliche Anpassbarkeit & Stabilität \\
+  						\hline
+  						QBL 3 & Extended & gute technische Qualität, & Zeitverhalten \\ & & technisch Zukunftsfähig & Verbrauchsverhalten \\
+  						\hline
+  						QBL 4 & Advanced & hervorragende Qualität, explizite & Prüfbarkeit \\ & & Struktur für Weiterentwicklung & Modifizierbarkeit \\
+  						\hline
+  						QBL 5 & Complete & perfekte Qualität, Struktur für & Austauschbarkeit \\ & & Weiterentwicklung und Wiederverwendung & \\
+  						\hline
+  						\caption{Für den Code-Quality-Index definierte Level \cite{CodeQualityManagement}}
+						\label{indexlevel}
+  					\end{longtabu}   
+  				\end{center}
+  				\newpage
+		\section{Verwendung und Bewertung in der Praxis}
+			Vorab lässt sich sagen, dass der Code-Quality-Index in dieser Form weder zu einem weitreichend akzeptiertem Standard geworden ist, noch vielfältige Anwendung in der Wirtschaft gefunden hat. Auch die von den Autoren angestrebte Fortführung der angefangenen Datenbasis ist anscheinend nicht langfristig durchgeführt worden. Der im Buch genannte Webauftritt ist nicht mehr erreichbar. \newline
+			Allerdings gab es mindestens eine Umsetzung für ein produktives System. Für die IT-Infrastruktur der Dresdener Bank, also die Bereitstellung von Online-Funktionen und Informationen für Endkunden und Mitarbeiter innerhalb einer J2EE-Architektur wurde Code-Quality-Management in Form des beschriebenen Indexes durch die SQS AG etabliert und damit zufriedenstellende Ergebnisse erreicht \cite{DresdnerBank}. Allerdings wurde hierbei festgestellt, dass die Auswahl und konkrete Ausprägung der Indikatoren für den Kontext angepasst werden müssen. Die 52 Indikatoren von Frank Simon et Al. können nicht als allgemeingültig betrachtet werden. \newline
+			Eine weniger praxisnahe aber vollständige Umsetzung des Code-Quality-Index erfolgte im Rahmen der Diplomarbeit von Torsten Möllenbeck an der Universität Bremen \cite{DAIndexUmsetzung}. Diese zeigt, dass es auf jeden Fall möglich ist, den Index vollständig automatisiert zu ermitteln, auch wenn leider nur Ergebnisse von C++ Programmen ausgewertet wurden. Allerdings werden einige Kritikpunkte an der Konzeption des Indexes angebracht, die ihre Berechtigung haben:
+			\begin{itemize}
+				\item Die dynamischen Schwellwerte abhängig von der Datenbasis können dazu führen, dass Systeme nachträglich anders eingestuft würden, wenn weitere besonders gute oder besonders schlechte Programme hinzugefügt werden. Mit Blick auf das Softwarepraktikum bedeutet dies, dass die Datenbasis zumindest über den Verlauf eines Softwarepraktikums konstant gehalten werden muss um eine gerechte und stabile Bewertung vorzunehmen und darüber hinaus die Entwicklung der Qualität im Verlauf des Praktikums zu untersuchen.
+				\item Der Aufbau des Indexes kann dazu führen, dass ein System das bezüglich fast aller Indikatoren eine hervorragende Qualität aufweist aber in einem einzigen Indikator sehr schlecht ist, beziehungsweise bewusst von einer Regel abweicht auf dem untersten Level eingestuft wird. Es erscheint daher sinnvoll den Index Kontextspezifisch anzupassen wenn die Notwendigkeit besteht.
+				\item Auch wenn die Problemmuster durch die Autoren gut belegt sind erscheinen einige der gewählten Grenzwerte recht willkürlich und damit auch fragwürdig. Als Beispiel sei hier der Indikator "`falsche Namenslänge"' genannt, bei dem es sicher verschiedene Meinungen zu der Frage gibt ob 50 Zeichen wirklich eine sinnvolle Grenze sind. Auch hier bietet sich eine spezifische Anpassung für das zu bewertende System an.
+			\end{itemize}
+			Trotz dieser Schwächen und dem nicht erfüllten Universalitätsanspruch finden sich einige Umsetzungen ähnlicher Bewertungssysteme. So wurde durch Ana Dragomir und Horst Lichter an der Universität Aachen ein Index für die Beurteilung von Softwarearchitekturen vorgeschlagen \cite{ArchitectureIndex}. \newline
+			Ein sehr ähnliches vorgehen wie beim Code-Quality-Index verfolgen Baggen et Al. mit ihrem Code-Benchmark \cite{CodeBenchmark}. Es werden ebenso Indikatoren gebildet und auf beeinflusste Qualitätseigenschaften abgebildet, allerdings werden hier sehr viel weniger und allgemeinere Indikatoren verwendet. Ein etwas neuerer Ansatz aus der Wirtschaft stammt von der Firma TIOBE die mit ihrem TIOBE Quality Indicator ebenfalls weniger Indikatoren definieren als im Code-Quality-Index \cite{TIOBEIndex}. Allerdings werden für die erreichbaren Stufen keine Indikatoren ausgewählt sondern es werden immer alle vermessen. Unterschiedlich ist dabei dann lediglich der zu erreichende Schwellwert. Für die Gesamtbewertung wurde darüber hinaus noch eine Wichtung der Indikatoren vorgenommen. Als hervorstechendes Merkmal sei hier die ansprechende Präsentation des Ergebnisses genannt, dass an die Energieeffizienz-Plaketten von elektrischen Geräten erinnert (Siehe Abbildung~\ref{TIOBElabel}). \newline
+			\begin{figure} [h]
+				\centering
+				\includegraphics [width=0.4\textwidth] {tiobe.png}
+				\caption{TIOBE Quality Indicator Ergebnisdarstellung \cite{TIOBEIndex}}
+				\label{TIOBElabel}
+			\end{figure}
+		\section{Anpassung für das Softwarepraktikum}
+			Die Anwendung des Code-Quality-Index in anderen Projekten und vergleichbare Ansätze machen ebenso deutlich wie die vom Indikatorkatalog abweichende Regelwerkdefinition, dass für das Softwarepraktikum der Code-Quality-Index nicht einfach übernommen werden kann, sondern entsprechend den speziellen Anforderungen und Möglichkeiten in diesem Rahmen angepasst werden muss. \newline
+			Zunächst fällt auf, dass sich die gewählten Regeln nicht ohne weiteres auf das bidirektionale Qualitätsmodell von Simon et Al. abbilden lassen. Es müsste für die im Original nicht verwendeten Regeln aufwendig neu erforscht werden. Außerdem ist dieses Modell für die einführende Lehrveranstaltung zu komplex um es den Studenten erschöpfend zu vermitteln. Die Zuordnung der Regeln beziehungsweise Indikatoren als Mengen von Regeln zu einem Benchmark-Level muss daher über einen anderen Mechanismus erfolgen. Die einfachste und naheliegende Möglichkeit dafür bilden die Einstufungen der Regeln nach Schweregrad, sodass "`Blocker"'-Regeln bereits für den Level zwei und "`Info"'-Regeln erst für den Level vierf relevant sind. Die Verschiebung der Regeln je nach Unmittelbarkeit und Kostenzuwachs entfällt in diesem Kontext vollständig, da dies ebenso neu ermittelt werden müsste und im Kontext des Softwarepraktikums mit dem gewählten Regelwerk ohnehin keine große Rolle spielt. \newline
+			Eine weitere Anpassung betrifft die Schwellwerte. Da es in der Lehre nicht üblich ist für die beste Note 100 Prozent zu verlangen erscheint dies auch für den Code-Quality-Index als zu strenge Forderung. Daher wird zusätzlich der Schwellwert "`Besser als 90\%"' eingeführt um eine adäquate Bewertung vorzunehmen. Tabelle~\ref{indexdef} enthält die mit dem Lehrstuhl abgestimmte Neudefinition der Benchmark-Level für das Softwarepraktikum. Sollten sich die gewählten Grenzwerte als ungeeignet herausstellen können diese nachjustiert werden. \newline 
+			Darüber hinaus wurden die Qualitätsindikatoren dem Regelwerk entsprechend neu definiert. Diese sollen im folgenden kurz vorgestellt werden. Sofern dies möglich war wurden die Bezeichnungen des Originals wiederverwendet. Die genannten SonarQube-Regeln finden sich in der Dokumentation des Java-Plugins \cite{JavaPlugin}. \newline
+			\begin{center}
+				\tabulinesep=1.5mm
+				\begin{longtabu}{|c|c|c|c|}
+					\hline
+  					\textbf{Level} & \textbf{Bezeichnung} & \textbf{Beschreibung} \\
+  					\hline 
+					QBL 1 & Mangelhaft & komplierfähiges, ausführbares Programm \\  						\hline
+  					QBL 2 & Ausreichend & 50\% Blocker, 25\% Critical \\ 
+  					\hline
+  					QBL 3 & Befriedigend & 75\% Blocker, 50\% Critical, 50\% Major, 25\% Minor \\
+  					\hline
+  					QBL 4 & Gut & 90\% Blocker, 75\% Critical, 75\% Major, 50\% Minor, 50\% Info \\
+  					\hline
+  					QBL 5 & Sehr Gut & 100\% Blocker, 100\% Critical, 90\% Major, 90\% Minor, 90\% Info \\
+  					\hline
+  					\caption{Neudefinition der Benchmark-Level für das Softwarepraktikum}
+					\label{indexdef}
+  				\end{longtabu}   
+  			\end{center}
+  			\subsection{Indikator Duplizierter Code}
+  				Klasse: "`Blocker"' \newline
+  				Entspricht der SonarQube-Regel "`Source files should not have any duplicated blocks"' wobei im Gegensatz zum Original-Index die Anzahl der duplizierten Code-Blöcke gezählt wird und nicht die Anzahl der darin enthaltenen Zeilen.
+  			\subsection{Indikator Magic Numbers}
+  				Klasse: "`Blocker"' \newline
+  				Entspricht der SonarQube-Regel "`Magic numbers should not be used"' und hat im Original-Index keine Entsprechung. Aufgrund der im Softwarepraktikum verwendeten Daten-Initialisierung durch eine Klasse mit dem Prefix "`DataInitializer"' in der sehr viele Zahlen im Code stehen ohne das dies ein Problem darstellt werden die Regelverletzungen in diesen Klassen für den Index ignoriert.
+  			\subsection{Indikator Datenkapselaufbruch}
+  				Klasse: "`Blocker"' \newline
+  				Entspricht der SonarQube-Regel "`Class variable fields should not have public accessibility"' und ist in seiner Bedeutung identisch zum Original.
+  			\subsection{Indikator Überbuchte Datei}
+  				Klasse: "`Critical"' \newline
+  				Entspricht der SonarQube-Regel "`Files should contain only one top-level class or interface each"' und ist in seiner Bedeutung identisch zum Original.
+  			\subsection{Indikator Unzureichende Tests}
+  				Klasse: "`Critical"' \newline
+  				Entspricht der SonarQube-Regel "`Lines should have sufficient coverage by unit tests"' und hat im Original-Index keine Entsprechung. Als ausreichende Testabdeckung wird im Kontext des Softwarepraktikums 80\% festgelegt. Dieser Grenzwert bewegt sich im Mittelfeld der in der Literatur genannten Werte und wurde vom Lehrstuhl so festgelegt.
+  			\subsection{Indikator Informelle Dokumentation}
+  				Klasse: "`Critical"' \newline
+  				Entspricht der SonarQube-Regel "`Public types, methods and fields (API) should be documented with Javadoc"' und ist in seiner Bedeutung identisch zum Original.
+  			\subsection{Indikator Zu enge Kopplung}
+  				Klasse: "`Critical"' \newline
+  				Enthält die beiden SonarQube-Regeln "`Classes should not be coupled to too many other classes (Single Responsibility Principle)"' und "`Cycles between packages should be removed"', wobei letztere dem Indikator "`Verbotene Paketliebe"' entspricht. Die enge thematische Zusammengehörigkeit führte zur Zusammenlegung.
+  			\subsection{Indikator Gottkonstrukt}
+  				Klasse: "`Critical"' \newline
+  				Enthält vier SonarQube-Regeln, die die Größe von Dateien, Klassen, Methoden und Inneren Klassen betreffen. Bis auf die Größe von inneren Klassen finden sich für alle Regeln entsprechende Qualitätsindikatoren. Da das übergeordnete Prinzip Code-Elemente klein und übersichtlich zu halten adressiert werden soll wurden diese zusammengelegt. Die Grenzwerte orientieren sich am Softwarepraktikum in Dortmund \cite{CleanCodeImPraktikum}.
+  			\subsection{Indikator Namensfehler} 
+  				Klasse: "`Critical"' \newline
+  				Enthält alle SonarQube-Regeln bezüglich Namenskonventionen und entspricht im wesentlichen dem Original. Die Standard-Java-Pattern wurden um die Größenbeschränkung gemäß dem Original-Indikator "`Falsche Namenslänge"' erweitert. Eine separate Messung dieses Indikators ist mit den vordefinierten Java-Regeln in SonarQube nicht möglich.
+  			\subsection{Indikator Zu Komplex}
+  				Klasse: "`Major"' \newline
+  				Enthält SonarQube-Regeln zur Verschachtelungstiefe von Kontrollflussanweisungen, Parameteranzahl von Methoden sowie die McCabe-Komplexität für Methoden und Klassen. Die Original-Indikatoren "`Labyrinthmethode"' und "`Lange Parameterliste"' sind Teil dieses Indikators.
+  			\subsection{Indikator Verwechslungsgefahr}
+  				Klasse: "`Major"' \newline
+  				Enthält alle SonarQube-Regeln, die die Überdeckung von Bezeichnern in untergeordneten Geltungsbereichen verbieten, sowie die Forderung, dass sich Bezeichner nicht nur in Groß- und Kleinschreibung unterscheiden dürfen und dass ein Datentyp-Suffix wie "`L"' für Long groß geschrieben werden soll. All diese Regeln haben zum Ziel Verwechslungen zu vermeiden. Eine der genannten Regeln entspricht dem Original-Indikator "`Attributüberdeckung"'.
+  			\subsection{Indikator Formatierungsfehler}
+  				Klasse: "`Major"' \newline
+  				Enthält SonarQube-Regeln bezüglich der Setzung von geschweiften Klammern, Einrückung und Zeilenlänge. Keine der ausgewählten Regeln hat eine Entsprechung im Original Index.
+  			\subsection{Indikator Objektplacebo}
+  				Klasse: "`Minor"' \newline
+  				Entspricht der SonarQube-Regel "`"static" members should be accessed statically"' und ist in seiner Bedeutung identisch zum Original.
+  			\subsection{Indikator Objektvergleich}
+  				Klasse: "`Minor"' \newline
+  				Entspricht der SonarQube-Regel "`Objects should be compared with equals()"' und hat im Original-Index keine Entsprechung.
+  			\subsection{Indikator Risikocode}
+  				Klasse: "`Minor"' \newline
+  				Enthält die beiden SonarQube-Regeln "`switch statements should end with default clauses"' und "`Switch cases should end with an unconditional break statement"'. Damit werden zwei drittel des Original-Indikators abgedeckt.
+  			\subsection{Indikator Importfehler}
+  				Klasse: "`Minor"' \newline
+  				Enthält die beiden SonarQube-Regeln "`Useless imports should be removed
+"' und "`Wildcard imports should not be used"'. Damit stellt dieser Indikator eine Mischung, aber nicht vollständige Abdeckung der Original-Indikatoren "`Importlüge"' und "`Importchaos"' dar.
+			\subsection{Indikator Deklarationsfehler}
+				Klasse: "`Minor"' \newline
+				Enthält die Forderungen nach expliziter Deklaration der Sichtbarkeit, Deklaration so spät wie möglich und nur einer Variablendeklaration pro Anweisung. Es gibt keine Entsprechung im Original-Index.
+			\subsection{Indikator Toter Code}
+				Klasse: "`Minor"' \newline
+				Enthält alle SonarQube-Regeln die das entfernen von ungenutzten Code-Elementen fordern und schließt damit die Original-Indikatoren "`Tote Attribute"', "`Tote Implementierung"' und "`Tote Methoden"' mit ein.
+			\subsection{Indikator Unfertiger Code}
+				Klasse: "`Info"' \newline
+				Enthält neben der Forderung des Original-Indikators "`TODO"'-Tags zu entfernen zusätzlich die SonarQube-Regel "`Sections of code should not be commented out"', da dies ebenso ein Zeichen für unfertigen Code ist.
+		\section{Umsetzung in SonarQube}
+			Die ursprüngliche Idee, den Index mittels der in der SonarQube-Web-Oberfläche definierbaren Quality-Gates abzubilden lies sich leider nicht umsetzen. Die Quality-Gates bieten zwar die Möglichkeit die Projekte hinsichtlich eines Maximalwertes für die Verletzung von Regeln der verschiedenen Stufen separat zu überprüfen \cite{QualityGates}, allerdings ist die Umsetzung des Indexes damit trotzdem nicht sinnvoll:
+			\begin{itemize}
+				\item Die Grenzwerte müssten fest angegeben werden und können nicht dynamisch aus einer Datenbasis generiert oder übernommen werden. Damit müsste die ermittelte Datenbasis manuell übertragen, und für die folgenden Jahre auch manuell angepasst werden.
+				\item Ein Projekt lässt sich nur hinsichtlich eines Quality-Gates vermessen. Es müsste also pro Benchmark-Level jedes Projekt mit dem dazu passenden Quality-Gate vermessen werden um die erreichte Stufe manuell daraus abzuleiten.
+			\end{itemize}
+			Beide Umstände führen zu einer deutlichen Reduktion der angestrebten Automatisierung, sodass von dieser Idee abgerückt wurde und eine Umsetzung innerhalb des zu erweiternden Plugins erfolgte.
+			
   	\backmatter
   
   	\appendix
