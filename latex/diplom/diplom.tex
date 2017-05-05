@@ -996,7 +996,7 @@ Projekte im Softwarepraktikum}
 			Die Anwendung des Code-Quality-Index in anderen Projekten und vergleichbare Ansätze machen ebenso deutlich wie die vom Indikatorkatalog abweichende Regelwerkdefinition, dass für das Softwarepraktikum der Code-Quality-Index nicht einfach übernommen werden kann, sondern entsprechend den speziellen Anforderungen und Möglichkeiten in diesem Rahmen angepasst werden muss. \newline
 			Zunächst fällt auf, dass sich die gewählten Regeln nicht ohne weiteres auf das bidirektionale Qualitätsmodell von Simon et Al. abbilden lassen. Es müsste für die im Original nicht verwendeten Regeln aufwendig neu erforscht werden. Außerdem ist dieses Modell für die einführende Lehrveranstaltung zu komplex um es den Studenten erschöpfend zu vermitteln. Die Zuordnung der Regeln beziehungsweise Indikatoren als Mengen von Regeln zu einem Benchmark-Level muss daher über einen anderen Mechanismus erfolgen. Die einfachste und naheliegende Möglichkeit dafür bilden die Einstufungen der Regeln nach Schweregrad, sodass "`Blocker"'-Regeln bereits für den Level zwei und "`Info"'-Regeln erst für den Level vierf relevant sind. Die Verschiebung der Regeln je nach Unmittelbarkeit und Kostenzuwachs entfällt in diesem Kontext vollständig, da dies ebenso neu ermittelt werden müsste und im Kontext des Softwarepraktikums mit dem gewählten Regelwerk ohnehin keine große Rolle spielt. \newline
 			Eine weitere Anpassung betrifft die Schwellwerte. Da es in der Lehre nicht üblich ist für die beste Note 100 Prozent zu verlangen erscheint dies auch für den Code-Quality-Index als zu strenge Forderung. Daher wird zusätzlich der Schwellwert "`Besser als 90\%"' eingeführt um eine adäquate Bewertung vorzunehmen. Tabelle~\ref{indexdef} enthält die mit dem Lehrstuhl abgestimmte Neudefinition der Benchmark-Level für das Softwarepraktikum. Sollten sich die gewählten Grenzwerte als ungeeignet herausstellen können diese nachjustiert werden. \newline 
-			Darüber hinaus wurden die Qualitätsindikatoren dem Regelwerk entsprechend neu definiert. Diese sollen im folgenden kurz vorgestellt werden. Sofern dies möglich war wurden die Bezeichnungen des Originals wiederverwendet. Die genannten SonarQube-Regeln finden sich in der Dokumentation des Java-Plugins \cite{JavaPlugin}. \newline
+			Darüber hinaus wurden die Qualitätsindikatoren dem Regelwerk entsprechend neu definiert und mit den Softwarepraktikumsprojekten der vergangenen Jahre eine Datenbasis aufgebaut. Diese sollen im folgenden kurz vorgestellt werden. Sofern dies möglich war wurden die Bezeichnungen des Originals wiederverwendet. Die genannten SonarQube-Regeln finden sich in der Dokumentation des Java-Plugins \cite{JavaPlugin}. \newline
 			\begin{center}
 				\tabulinesep=1.5mm
 				\begin{longtabu}{|c|c|c|c|}
@@ -1016,71 +1016,459 @@ Projekte im Softwarepraktikum}
 					\label{indexdef}
   				\end{longtabu}   
   			\end{center}
+  			\newpage
   			\subsection{Indikator Duplizierter Code}
   				Klasse: "`Blocker"' \newline
-  				Entspricht der SonarQube-Regel "`Source files should not have any duplicated blocks"' wobei im Gegensatz zum Original-Index die Anzahl der duplizierten Code-Blöcke gezählt wird und nicht die Anzahl der darin enthaltenen Zeilen.
+  				Entspricht der SonarQube-Regel "`Source files should not have any duplicated blocks"' wobei im Gegensatz zum Original-Index die Anzahl der duplizierten Code-Blöcke gezählt wird und nicht die Anzahl der darin enthaltenen Zeilen. 
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Besser als} & \textbf{Ermittelte Häufigkeit je 1000 LOC} \\
+  						\hline 
+						0\% (Maximum) & 6 \\  						
+						\hline
+  						25\% (oberes Quartil) & 5 \\  											\hline
+  						50\% (Median) & 4 \\  						
+						\hline
+						75\% (unteres Quartil) & 3 \\  	
+						\hline
+						90\% & 2 \\  						
+						\hline
+						100\% (Minimum) & 1 \\  						
+						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Duplizierter Code}
+  					\end{longtabu}   
+  				\end{center}
   			\subsection{Indikator Magic Numbers}
   				Klasse: "`Blocker"' \newline
   				Entspricht der SonarQube-Regel "`Magic numbers should not be used"' und hat im Original-Index keine Entsprechung. Aufgrund der im Softwarepraktikum verwendeten Daten-Initialisierung durch eine Klasse mit dem Prefix "`DataInitializer"' in der sehr viele Zahlen im Code stehen ohne das dies ein Problem darstellt werden die Regelverletzungen in diesen Klassen für den Index ignoriert.
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Besser als} & \textbf{Ermittelte Häufigkeit je 1000 LOC} \\
+  						\hline 
+						0\% (Maximum) & 6 \\  						
+						\hline
+  						25\% (oberes Quartil) & 5 \\  											\hline
+  						50\% (Median) & 4 \\  						
+						\hline
+						75\% (unteres Quartil) & 3 \\  	
+						\hline
+						90\% & 2 \\  						
+						\hline
+						100\% (Minimum) & 1 \\  						
+						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Magic Numbers}
+  					\end{longtabu}   
+  				\end{center}
+  				\newpage
   			\subsection{Indikator Datenkapselaufbruch}
   				Klasse: "`Blocker"' \newline
   				Entspricht der SonarQube-Regel "`Class variable fields should not have public accessibility"' und ist in seiner Bedeutung identisch zum Original.
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Besser als} & \textbf{Ermittelte Häufigkeit je 1000 LOC} \\
+  						\hline 
+						0\% (Maximum) & 6 \\  						
+						\hline
+  						25\% (oberes Quartil) & 5 \\  											\hline
+  						50\% (Median) & 4 \\  						
+						\hline
+						75\% (unteres Quartil) & 3 \\  	
+						\hline
+						90\% & 2 \\  						
+						\hline
+						100\% (Minimum) & 1 \\  						
+						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Datenkapselaufbruch}
+  					\end{longtabu}   
+  				\end{center}
   			\subsection{Indikator Überbuchte Datei}
   				Klasse: "`Critical"' \newline
   				Entspricht der SonarQube-Regel "`Files should contain only one top-level class or interface each"' und ist in seiner Bedeutung identisch zum Original.
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Besser als} & \textbf{Ermittelte Häufigkeit je 1000 LOC} \\
+  						\hline 
+						0\% (Maximum) & 6 \\  						
+						\hline
+  						25\% (oberes Quartil) & 5 \\  											\hline
+  						50\% (Median) & 4 \\  						
+						\hline
+						75\% (unteres Quartil) & 3 \\  	
+						\hline
+						90\% & 2 \\  						
+						\hline
+						100\% (Minimum) & 1 \\  						
+						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Überbuchte Datei}
+  					\end{longtabu}   
+  				\end{center}
+  				\newpage
   			\subsection{Indikator Unzureichende Tests}
   				Klasse: "`Critical"' \newline
-  				Entspricht der SonarQube-Regel "`Lines should have sufficient coverage by unit tests"' und hat im Original-Index keine Entsprechung. Als ausreichende Testabdeckung wird im Kontext des Softwarepraktikums 80\% festgelegt. Dieser Grenzwert bewegt sich im Mittelfeld der in der Literatur genannten Werte und wurde vom Lehrstuhl so festgelegt.
+  				Entspricht der SonarQube-Regel "`Lines should have sufficient coverage by unit tests"' und hat im Original-Index keine Entsprechung. Als ausreichende Testabdeckung wird im Kontext des Softwarepraktikums 80\% festgelegt. Dieser Grenzwert bewegt sich im Mittelfeld der in der Literatur genannten Werte und wurde vom Lehrstuhl so festgelegt. 
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Besser als} & \textbf{Ermittelte Häufigkeit je 1000 LOC} \\
+  						\hline 
+						0\% (Maximum) & 6 \\  						
+						\hline
+  						25\% (oberes Quartil) & 5 \\  											\hline
+  						50\% (Median) & 4 \\  						
+						\hline
+						75\% (unteres Quartil) & 3 \\  	
+						\hline
+						90\% & 2 \\  						
+						\hline
+						100\% (Minimum) & 1 \\  						
+						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Unzureichende Tests}
+  					\end{longtabu}   
+  				\end{center}
   			\subsection{Indikator Informelle Dokumentation}
   				Klasse: "`Critical"' \newline
   				Entspricht der SonarQube-Regel "`Public types, methods and fields (API) should be documented with Javadoc"' und ist in seiner Bedeutung identisch zum Original.
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Besser als} & \textbf{Ermittelte Häufigkeit je 1000 LOC} \\
+  						\hline 
+						0\% (Maximum) & 6 \\  						
+						\hline
+  						25\% (oberes Quartil) & 5 \\  											\hline
+  						50\% (Median) & 4 \\  						
+						\hline
+						75\% (unteres Quartil) & 3 \\  	
+						\hline
+						90\% & 2 \\  						
+						\hline
+						100\% (Minimum) & 1 \\  						
+						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Informelle Dokumentation}
+  					\end{longtabu}   
+  				\end{center}
+  				\newpage
   			\subsection{Indikator Zu enge Kopplung}
   				Klasse: "`Critical"' \newline
-  				Enthält die beiden SonarQube-Regeln "`Classes should not be coupled to too many other classes (Single Responsibility Principle)"' und "`Cycles between packages should be removed"', wobei letztere dem Indikator "`Verbotene Paketliebe"' entspricht. Die enge thematische Zusammengehörigkeit führte zur Zusammenlegung.
+  				Enthält die beiden SonarQube-Regeln "`Classes should not be coupled to too many other classes (Single Responsibility Principle)"' und "`Cycles between packages should be removed"', wobei letztere dem Indikator "`Verbotene Paketliebe"' entspricht. Die enge thematische Zusammengehörigkeit führte zur Zusammenlegung. 
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Besser als} & \textbf{Ermittelte Häufigkeit je 1000 LOC} \\
+  						\hline 
+						0\% (Maximum) & 6 \\  						
+						\hline
+  						25\% (oberes Quartil) & 5 \\  											\hline
+  						50\% (Median) & 4 \\  						
+						\hline
+						75\% (unteres Quartil) & 3 \\  	
+						\hline
+						90\% & 2 \\  						
+						\hline
+						100\% (Minimum) & 1 \\  						
+						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Zu enge Kopplung}
+  					\end{longtabu}   
+  				\end{center}
   			\subsection{Indikator Gottkonstrukt}
   				Klasse: "`Critical"' \newline
   				Enthält vier SonarQube-Regeln, die die Größe von Dateien, Klassen, Methoden und Inneren Klassen betreffen. Bis auf die Größe von inneren Klassen finden sich für alle Regeln entsprechende Qualitätsindikatoren. Da das übergeordnete Prinzip Code-Elemente klein und übersichtlich zu halten adressiert werden soll wurden diese zusammengelegt. Die Grenzwerte orientieren sich am Softwarepraktikum in Dortmund \cite{CleanCodeImPraktikum}.
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Besser als} & \textbf{Ermittelte Häufigkeit je 1000 LOC} \\
+  						\hline 
+						0\% (Maximum) & 6 \\  						
+						\hline
+  						25\% (oberes Quartil) & 5 \\  											\hline
+  						50\% (Median) & 4 \\  						
+						\hline
+						75\% (unteres Quartil) & 3 \\  	
+						\hline
+						90\% & 2 \\  						
+						\hline
+						100\% (Minimum) & 1 \\  						
+						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Gottkonstrukt}
+  					\end{longtabu}   
+  				\end{center}
+  				\newpage
   			\subsection{Indikator Namensfehler} 
   				Klasse: "`Critical"' \newline
-  				Enthält alle SonarQube-Regeln bezüglich Namenskonventionen und entspricht im wesentlichen dem Original. Die Standard-Java-Pattern wurden um die Größenbeschränkung gemäß dem Original-Indikator "`Falsche Namenslänge"' erweitert. Eine separate Messung dieses Indikators ist mit den vordefinierten Java-Regeln in SonarQube nicht möglich.
+  				Enthält alle SonarQube-Regeln bezüglich Namenskonventionen und entspricht im wesentlichen dem Original. Die Standard-Java-Pattern wurden um die Größenbeschränkung gemäß dem Original-Indikator "`Falsche Namenslänge"' erweitert. Eine separate Messung dieses Indikators ist mit den vordefinierten Java-Regeln in SonarQube nicht möglich. 
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Besser als} & \textbf{Ermittelte Häufigkeit je 1000 LOC} \\
+  						\hline 
+						0\% (Maximum) & 6 \\  						
+						\hline
+  						25\% (oberes Quartil) & 5 \\  											\hline
+  						50\% (Median) & 4 \\  						
+						\hline
+						75\% (unteres Quartil) & 3 \\  	
+						\hline
+						90\% & 2 \\  						
+						\hline
+						100\% (Minimum) & 1 \\  						
+						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Namensfehler}
+  					\end{longtabu}   
+  				\end{center}
   			\subsection{Indikator Zu Komplex}
   				Klasse: "`Major"' \newline
   				Enthält SonarQube-Regeln zur Verschachtelungstiefe von Kontrollflussanweisungen, Parameteranzahl von Methoden sowie die McCabe-Komplexität für Methoden und Klassen. Die Original-Indikatoren "`Labyrinthmethode"' und "`Lange Parameterliste"' sind Teil dieses Indikators.
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Besser als} & \textbf{Ermittelte Häufigkeit je 1000 LOC} \\
+  						\hline 
+						0\% (Maximum) & 6 \\  						
+						\hline
+  						25\% (oberes Quartil) & 5 \\  											\hline
+  						50\% (Median) & 4 \\  						
+						\hline
+						75\% (unteres Quartil) & 3 \\  	
+						\hline
+						90\% & 2 \\  						
+						\hline
+						100\% (Minimum) & 1 \\  						
+						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Zu Komplex}
+  					\end{longtabu}   
+  				\end{center}
+  				\newpage
   			\subsection{Indikator Verwechslungsgefahr}
   				Klasse: "`Major"' \newline
   				Enthält alle SonarQube-Regeln, die die Überdeckung von Bezeichnern in untergeordneten Geltungsbereichen verbieten, sowie die Forderung, dass sich Bezeichner nicht nur in Groß- und Kleinschreibung unterscheiden dürfen und dass ein Datentyp-Suffix wie "`L"' für Long groß geschrieben werden soll. All diese Regeln haben zum Ziel Verwechslungen zu vermeiden. Eine der genannten Regeln entspricht dem Original-Indikator "`Attributüberdeckung"'.
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Besser als} & \textbf{Ermittelte Häufigkeit je 1000 LOC} \\
+  						\hline 
+						0\% (Maximum) & 6 \\  						
+						\hline
+  						25\% (oberes Quartil) & 5 \\  											\hline
+  						50\% (Median) & 4 \\  						
+						\hline
+						75\% (unteres Quartil) & 3 \\  	
+						\hline
+						90\% & 2 \\  						
+						\hline
+						100\% (Minimum) & 1 \\  						
+						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Verwechslungsgefahr}
+  					\end{longtabu}   
+  				\end{center}
   			\subsection{Indikator Formatierungsfehler}
   				Klasse: "`Major"' \newline
   				Enthält SonarQube-Regeln bezüglich der Setzung von geschweiften Klammern, Einrückung und Zeilenlänge. Keine der ausgewählten Regeln hat eine Entsprechung im Original Index.
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Besser als} & \textbf{Ermittelte Häufigkeit je 1000 LOC} \\
+  						\hline 
+						0\% (Maximum) & 6 \\  						
+						\hline
+  						25\% (oberes Quartil) & 5 \\  											\hline
+  						50\% (Median) & 4 \\  						
+						\hline
+						75\% (unteres Quartil) & 3 \\  	
+						\hline
+						90\% & 2 \\  						
+						\hline
+						100\% (Minimum) & 1 \\  						
+						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Formatierungsfehler}
+  					\end{longtabu}   
+  				\end{center}
+  				\newpage
   			\subsection{Indikator Objektplacebo}
   				Klasse: "`Minor"' \newline
-  				Entspricht der SonarQube-Regel "`"static" members should be accessed statically"' und ist in seiner Bedeutung identisch zum Original.
+  				Entspricht der SonarQube-Regel "`"static" members should be accessed statically"' und ist in seiner Bedeutung identisch zum Original.\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Besser als} & \textbf{Ermittelte Häufigkeit je 1000 LOC} \\
+  						\hline 
+						0\% (Maximum) & 6 \\  						
+						\hline
+  						25\% (oberes Quartil) & 5 \\  											\hline
+  						50\% (Median) & 4 \\  						
+						\hline
+						75\% (unteres Quartil) & 3 \\  	
+						\hline
+						90\% & 2 \\  						
+						\hline
+						100\% (Minimum) & 1 \\  						
+						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Objektplacebo}
+  					\end{longtabu}   
+  				\end{center}
   			\subsection{Indikator Objektvergleich}
   				Klasse: "`Minor"' \newline
   				Entspricht der SonarQube-Regel "`Objects should be compared with equals()"' und hat im Original-Index keine Entsprechung.
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Besser als} & \textbf{Ermittelte Häufigkeit je 1000 LOC} \\
+  						\hline 
+						0\% (Maximum) & 6 \\  						
+						\hline
+  						25\% (oberes Quartil) & 5 \\  											\hline
+  						50\% (Median) & 4 \\  						
+						\hline
+						75\% (unteres Quartil) & 3 \\  	
+						\hline
+						90\% & 2 \\  						
+						\hline
+						100\% (Minimum) & 1 \\  						
+						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Objektvergleich}
+  					\end{longtabu}   
+  				\end{center}
+  				\newpage
   			\subsection{Indikator Risikocode}
   				Klasse: "`Minor"' \newline
   				Enthält die beiden SonarQube-Regeln "`switch statements should end with default clauses"' und "`Switch cases should end with an unconditional break statement"'. Damit werden zwei drittel des Original-Indikators abgedeckt.
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Besser als} & \textbf{Ermittelte Häufigkeit je 1000 LOC} \\
+  						\hline 
+						0\% (Maximum) & 6 \\  						
+						\hline
+  						25\% (oberes Quartil) & 5 \\  											\hline
+  						50\% (Median) & 4 \\  						
+						\hline
+						75\% (unteres Quartil) & 3 \\  	
+						\hline
+						90\% & 2 \\  						
+						\hline
+						100\% (Minimum) & 1 \\  						
+						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Risikocode}
+  					\end{longtabu}   
+  				\end{center}
   			\subsection{Indikator Importfehler}
   				Klasse: "`Minor"' \newline
-  				Enthält die beiden SonarQube-Regeln "`Useless imports should be removed
-"' und "`Wildcard imports should not be used"'. Damit stellt dieser Indikator eine Mischung, aber nicht vollständige Abdeckung der Original-Indikatoren "`Importlüge"' und "`Importchaos"' dar.
+  				Enthält die beiden SonarQube-Regeln "`Useless imports should be removed"' und "`Wildcard imports should not be used"'. Damit stellt dieser Indikator eine Mischung, aber nicht vollständige Abdeckung der Original-Indikatoren "`Importlüge"' und "`Importchaos"' dar.
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Besser als} & \textbf{Ermittelte Häufigkeit je 1000 LOC} \\
+  						\hline 
+						0\% (Maximum) & 6 \\  						
+						\hline
+  						25\% (oberes Quartil) & 5 \\  											\hline
+  						50\% (Median) & 4 \\  						
+						\hline
+						75\% (unteres Quartil) & 3 \\  	
+						\hline
+						90\% & 2 \\  						
+						\hline
+						100\% (Minimum) & 1 \\  						
+						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Importfehler}
+  					\end{longtabu}   
+  				\end{center}
+  				\newpage
 			\subsection{Indikator Deklarationsfehler}
 				Klasse: "`Minor"' \newline
 				Enthält die Forderungen nach expliziter Deklaration der Sichtbarkeit, Deklaration so spät wie möglich und nur einer Variablendeklaration pro Anweisung. Es gibt keine Entsprechung im Original-Index.
+				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Besser als} & \textbf{Ermittelte Häufigkeit je 1000 LOC} \\
+  						\hline 
+						0\% (Maximum) & 6 \\  						
+						\hline
+  						25\% (oberes Quartil) & 5 \\  											\hline
+  						50\% (Median) & 4 \\  						
+						\hline
+						75\% (unteres Quartil) & 3 \\  	
+						\hline
+						90\% & 2 \\  						
+						\hline
+						100\% (Minimum) & 1 \\  						
+						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Deklarationsfehler}
+  					\end{longtabu}   
+  				\end{center}
 			\subsection{Indikator Toter Code}
 				Klasse: "`Minor"' \newline
 				Enthält alle SonarQube-Regeln die das entfernen von ungenutzten Code-Elementen fordern und schließt damit die Original-Indikatoren "`Tote Attribute"', "`Tote Implementierung"' und "`Tote Methoden"' mit ein.
+				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Besser als} & \textbf{Ermittelte Häufigkeit je 1000 LOC} \\
+  						\hline 
+						0\% (Maximum) & 6 \\  						
+						\hline
+  						25\% (oberes Quartil) & 5 \\  											\hline
+  						50\% (Median) & 4 \\  						
+						\hline
+						75\% (unteres Quartil) & 3 \\  	
+						\hline
+						90\% & 2 \\  						
+						\hline
+						100\% (Minimum) & 1 \\  						
+						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Toter Code}
+  					\end{longtabu}   
+  				\end{center}
+  				\newpage
 			\subsection{Indikator Unfertiger Code}
 				Klasse: "`Info"' \newline
 				Enthält neben der Forderung des Original-Indikators "`TODO"'-Tags zu entfernen zusätzlich die SonarQube-Regel "`Sections of code should not be commented out"', da dies ebenso ein Zeichen für unfertigen Code ist.
+				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|c|c|}
+						\hline
+  						\textbf{Besser als} & \textbf{Ermittelte Häufigkeit je 1000 LOC} \\
+  						\hline 
+						0\% (Maximum) & 6 \\  						
+						\hline
+  						25\% (oberes Quartil) & 5 \\  											\hline
+  						50\% (Median) & 4 \\  						
+						\hline
+						75\% (unteres Quartil) & 3 \\  	
+						\hline
+						90\% & 2 \\  						
+						\hline
+						100\% (Minimum) & 1 \\  						
+						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Unfertiger Code}
+  					\end{longtabu}   
+  				\end{center}
 		\section{Umsetzung in SonarQube}
 			Die ursprüngliche Idee, den Index mittels der in der SonarQube-Web-Oberfläche definierbaren Quality-Gates abzubilden lies sich leider nicht umsetzen. Die Quality-Gates bieten zwar die Möglichkeit die Projekte hinsichtlich eines Maximalwertes für die Verletzung von Regeln der verschiedenen Stufen separat zu überprüfen \cite{QualityGates}, allerdings ist die Umsetzung des Indexes damit trotzdem nicht sinnvoll:
 			\begin{itemize}
 				\item Die Grenzwerte müssten fest angegeben werden und können nicht dynamisch aus einer Datenbasis generiert oder übernommen werden. Damit müsste die ermittelte Datenbasis manuell übertragen, und für die folgenden Jahre auch manuell angepasst werden.
 				\item Ein Projekt lässt sich nur hinsichtlich eines Quality-Gates vermessen. Es müsste also pro Benchmark-Level jedes Projekt mit dem dazu passenden Quality-Gate vermessen werden um die erreichte Stufe manuell daraus abzuleiten.
 			\end{itemize}
-			Beide Umstände führen zu einer deutlichen Reduktion der angestrebten Automatisierung, sodass von dieser Idee abgerückt wurde und eine Umsetzung innerhalb des zu erweiternden Plugins erfolgte.
+			Beide Umstände führen zu einer deutlichen Reduktion der angestrebten Automatisierung, sodass von dieser Idee abgerückt wurde und eine Umsetzung innerhalb des zu erweiternden Plugins erfolgte. Dafür wurde eine weitere Implementierung der SonarQube-Schnittstelle "`Decorator"' genutzt, in der Zugriff auf die ermittelten Fehlerzahlen besteht.
 			
   	\backmatter
   
