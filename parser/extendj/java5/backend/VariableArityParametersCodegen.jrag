@@ -1,0 +1,132 @@
+/* Copyright (c) 2005-2008, Torbjorn Ekman
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+aspect VariableArityParametersCodegen {
+  /* Invocations of a variable arity method may contain more actual argument
+  expressions than formal parameters. All the actual argument expressions that do
+  not correspond to the formal parameters preceding the variable arity parameter
+  will be evaluated and the results stored into an array that will be passed to
+  the method invocation (§15.12.4.2)*/
+  refine Transformations public void MethodAccess.transformation() {
+    if (decl().isVariableArity() && !invokesVariableArityAsArray()) {
+      // arguments to normal parameters
+      List list = new List();
+      for (int i = 0; i < decl().getNumParameter() - 1; i++) {
+        list.add(getArg(i).treeCopyNoTransform());
+      }
+      // arguments to variable arity parameters
+      List last = new List();
+      for (int i = decl().getNumParameter() - 1; i < getNumArg(); i++) {
+        last.add(getArg(i).treeCopyNoTransform());
+      }
+      // build an array holding arguments
+      Access typeAccess = decl().lastParameter().type().elementType().createQualifiedAccess();
+      for (int i = 0; i < decl().lastParameter().type().dimension(); i++) {
+        typeAccess = new ArrayTypeAccess(typeAccess);
+      }
+      list.add(new ArrayCreationExpr(typeAccess, new Opt(new ArrayInit(last))));
+      // replace argument list with augemented argument list
+      setArgList(list);
+    }
+    refined();
+  }
+
+  refine Transformations public void ClassInstanceExpr.transformation() {
+    if (decl().isVariableArity() && !invokesVariableArityAsArray()) {
+      // arguments to normal parameters
+      List list = new List();
+      for (int i = 0; i < decl().getNumParameter() - 1; i++) {
+        list.add(getArg(i).treeCopyNoTransform());
+      }
+      // arguments to variable arity parameters
+      List last = new List();
+      for (int i = decl().getNumParameter() - 1; i < getNumArg(); i++) {
+        last.add(getArg(i).treeCopyNoTransform());
+      }
+      // build an array holding arguments
+      Access typeAccess = decl().lastParameter().type().elementType().createQualifiedAccess();
+      for (int i = 0; i < decl().lastParameter().type().dimension(); i++) {
+        typeAccess = new ArrayTypeAccess(typeAccess);
+      }
+      list.add(new ArrayCreationExpr(typeAccess, new Opt(new ArrayInit(last))));
+      // replace argument list with augemented argument list
+      setArgList(list);
+    }
+    refined();
+  }
+
+  refine Transformations public void ConstructorAccess.transformation() {
+    if (decl().isVariableArity() && !invokesVariableArityAsArray()) {
+      // arguments to normal parameters
+      List list = new List();
+      for (int i = 0; i < decl().getNumParameter() - 1; i++) {
+        list.add(getArg(i).treeCopyNoTransform());
+      }
+      // arguments to variable arity parameters
+      List last = new List();
+      for (int i = decl().getNumParameter() - 1; i < getNumArg(); i++) {
+        last.add(getArg(i).treeCopyNoTransform());
+      }
+      // build an array holding arguments
+      Access typeAccess = decl().lastParameter().type().elementType().createQualifiedAccess();
+      for (int i = 0; i < decl().lastParameter().type().dimension(); i++) {
+        typeAccess = new ArrayTypeAccess(typeAccess);
+      }
+      list.add(new ArrayCreationExpr(typeAccess, new Opt(new ArrayInit(last))));
+      // replace argument list with augemented argument list
+      setArgList(list);
+    }
+    refined();
+  }
+
+  public static final int Modifiers.ACC_VARARGS = 0x0080;
+
+  /**
+   * Add the ACC_VARARGS flag for variable arity methods.
+   */
+  refine Flags eq MethodDecl.flags() {
+    int res = refined();
+    if (isVariableArity()) {
+      res |= Modifiers.ACC_VARARGS;
+    }
+    return res;
+  }
+
+  /**
+   * Add the ACC_VARARGS flag for variable arity constructors.
+   */
+  refine Flags eq ConstructorDecl.flags() {
+    int res = refined();
+    if (isVariableArity()) {
+      res |= Modifiers.ACC_VARARGS;
+    }
+    return res;
+  }
+}

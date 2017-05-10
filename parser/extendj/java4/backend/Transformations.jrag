@@ -1,0 +1,215 @@
+/* Copyright (c) 2005-2008, Torbjorn Ekman
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+aspect Transformations {
+  // generic traversal of the tree
+  public void ASTNode.transformation() {
+    for (int i = 0; i < getNumChild(); i++) {
+        getChild(i).transformation();
+    }
+  }
+
+  public void CompilationUnit.transformation() {
+    if (fromSource()) {
+      for (int i = 0; i < getNumTypeDecl(); i++) {
+        getTypeDecl(i).transformation();
+      }
+    }
+  }
+
+  // remote collection
+  public void TypeDecl.transformation() {
+    addEnclosingVariables();
+    super.transformation();
+    if (isNestedType()) {
+      enclosingType().addNestedType(this);
+    }
+  }
+
+  public void ClassDecl.transformation() {
+    super.transformation();
+    if (hasImplicitConstructor()) {
+      getImplicitConstructor().transformation();
+    }
+  }
+
+  // remote collection
+  public void TypeAccess.transformation() {
+    super.transformation();
+    if (type().elementType().isNestedType() && hostType() != null) {
+      hostType().addUsedNestedType(type().elementType());
+    }
+  }
+
+  // remote collection / demand driven creation of accessor
+  public void MethodAccess.transformation() {
+    MethodDecl m = decl();
+
+    if (requiresAccessor()) {
+      /* Access to private methods in enclosing types:
+      The original MethodAccess is replaced with an access to an accessor method
+      built by createAccessor(). This method is built lazily and differs from
+      normal MethodDeclarations in the following ways:
+      1) The method in the class file should always be static and the signature
+         is thus changed to include a possible this reference as the first argument.
+      2) The method is always invoked using INVOKESTATIC
+      3) The flags must indicate that the method is static and package private
+      */
+      super.transformation();
+      this.replaceWith(decl().createAccessor(methodQualifierType()).createBoundAccess(getArgList()));
+      return;
+    } else if (!m.isStatic() && isQualified() && prevExpr().isSuperAccess() && !hostType().instanceOf(prevExpr().type())) {
+      decl().createSuperAccessor(superAccessorTarget());
+    }
+    super.transformation();
+  }
+
+  // remote collection / demand driven creation of accessor
+  public void VarAccess.transformation() {
+    Variable v = decl();
+    if (v instanceof FieldDeclaration) {
+      FieldDeclaration f = (FieldDeclaration) v;
+      if (requiresAccessor()) {
+        TypeDecl typeDecl = fieldQualifierType();
+        if (isSource()) {
+          f.createAccessor(typeDecl);
+        }
+        if (isDest()) {
+          f.createAccessorWrite(typeDecl);
+        }
+      }
+    }
+    super.transformation();
+  }
+
+
+  public void ConstructorDecl.transformation() {
+    // this$val as fields and constructor parameters
+    addEnclosingVariables();
+    super.transformation();
+  }
+
+
+  // remote collection / demand driven creation of accessor
+  public void ClassInstanceExpr.transformation() {
+    // this$val
+    addEnclosingVariables();
+    // touch accessorIndex go force creation of private constructorAccessor
+    if (decl().isPrivate() && type() != hostType()) {
+      decl().createAccessor();
+    }
+    super.transformation();
+  }
+
+  // remote collection / demand driven creation of accessor
+  public void ConstructorAccess.transformation() {
+    // this$val
+    addEnclosingVariables();
+    // touch accessorIndex go force creation of private constructorAccessor
+    if (decl().isPrivate() && decl().hostType() != hostType()) {
+      decl().createAccessor();
+    }
+    super.transformation();
+  }
+
+  // remote collection / demand driven creation of accessor
+  public void SuperConstructorAccess.transformation() {
+    // this$val
+    addEnclosingVariables();
+    // touch accessorIndex to force creation of private constructorAccessor
+    if (decl().isPrivate() && decl().hostType() != hostType()) {
+      decl().createAccessor();
+    }
+    super.transformation();
+  }
+
+  // remote collection / demand driven creation of accessor
+  public void ClassAccess.transformation() {
+    super.transformation();
+    // touch static class method before any accessors to make it first in method
+    if (isQualified() && qualifier().type().isReferenceType()) {
+      hostType().topLevelType().createStaticClassMethod();
+      FieldDeclaration f = hostType().topLevelType().createStaticClassField(prevExpr().type().referenceClassFieldName());
+    }
+
+  }
+
+  public void AssertStmt.transformation() {
+    super.transformation();
+    // add field to hold cached result as a side-effect
+    FieldDeclaration f = hostType().topLevelType().createStaticClassField(hostType().topLevelType().referenceClassFieldName());
+    FieldDeclaration assertionsDisabled = hostType().createAssertionsDisabled();
+    Expr condition = (Expr) getCondition().treeCopyNoTransform();
+    List args = new List();
+    if (hasMessage()) {
+      if (getMessage().type().isString()) {
+        args.add(new CastExpr(new TypeAccess("java.lang", "Object"), (Expr) getMessage().treeCopyNoTransform()));
+      } else {
+        args.add(getMessage().treeCopyNoTransform());
+      }
+    }
+    Stmt stmt = new IfStmt(
+        new LogNotExpr(
+          new ParExpr(
+            new OrLogicalExpr(
+              new BoundFieldAccess(assertionsDisabled),
+              condition
+            )
+          )
+        ),
+        new ThrowStmt(
+          new ClassInstanceExpr(
+            lookupType("java.lang", "AssertionError").createQualifiedAccess(),
+            args,
+            new Opt()
+          )
+        ),
+        new Opt()
+      );
+
+    this.replaceWith(stmt);
+    stmt.transformation();
+  }
+
+  /** Imperative transformation of the AST
+   * This should be removed.
+   *
+   * Usage: this.replaceWith(replacement)
+   *
+   * @param replacement node to replace this node with
+   * @return the new node
+   * @deprecated
+   */
+  @Deprecated
+  protected void ASTNode.replaceWith(ASTNode replacement) {
+	  int replacePos = getParent().getIndexOfChild(this);
+	  getParent().setChild(replacement, replacePos);
+  }
+}
