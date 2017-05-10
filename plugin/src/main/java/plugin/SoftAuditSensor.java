@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.extendj.ExtensionMain;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.FileSystem;
@@ -50,7 +52,7 @@ public class SoftAuditSensor implements Sensor {
      * @param filename - for the log-file-writer
      */
     protected SoftAuditSensor(String filename) {
-        this.fileSystem = null;
+    	this.fileSystem = null;
         try {
             SoftAuditLogger.getLogger(filename, 5);
         } catch (IOException e) {
@@ -103,7 +105,7 @@ public class SoftAuditSensor implements Sensor {
             LOGGER.warn("Initializing SoftAudit-Logger failed!");
             optimalModuleSize = 200.0;
         }
-
+        
         // do analyze
         Map<Metric<?>, Double> measures = doAnalyze(fileSystem.files(fileSystem.predicates().hasLanguage("java")),
                 optimalModuleSize);

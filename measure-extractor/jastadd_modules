@@ -1,0 +1,19 @@
+include("extendj/jastadd_modules")
+
+module "measure-extractor", {
+
+	imports "java8 frontend"
+
+	java {
+		basedir "src/java/"
+		include "**/*.java"
+	}
+
+	jastadd {
+		basedir "src/jastadd/"
+		include "**/*.ast"
+		include "**/*.jadd"
+		include "**/*.jrag"
+	}
+}
+

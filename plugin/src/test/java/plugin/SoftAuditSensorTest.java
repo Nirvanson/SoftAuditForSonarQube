@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.extendj.ExtensionMain;
 import org.junit.Test;
 import org.sonar.api.measures.Metric;
 
@@ -43,6 +44,9 @@ public class SoftAuditSensorTest {
     @Test
     public void testSelfScan(){
         List<File> input = new ArrayList<File>();
+    	String[] filforpar = {"C:/Develop/Diplom/git_repo/plugin/src/main/java/plugin/model/JavaFileContent.java", "C:/Develop/Diplom/git_repo/plugin/src/main/java/plugin/model/WordInFile.java", "C:/Develop/Diplom/git_repo/plugin/src/main/java/plugin/model/KeyWord.java"};
+        int code = new ExtensionMain().run(filforpar);
+        System.out.println("parsercode: "+ code);
         listf("src/main/java", input);
         File file = new File("./target/logs/SelfScan.log");
         if (file.exists()){
