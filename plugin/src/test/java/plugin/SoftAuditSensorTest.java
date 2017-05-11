@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.extendj.ExtensionMain;
+import org.extendj.MeasureExtractor;
 import org.junit.Test;
 import org.sonar.api.measures.Metric;
 
@@ -21,6 +21,17 @@ public class SoftAuditSensorTest {
         (new File("target/logs")).mkdirs();
     }
    
+    @Test
+    public void testMeasureExtractor(){
+    	List<File> input = new ArrayList<File>();
+        listf("src/main/java", input);
+        System.out.println("files in input: " + input.size());
+        MeasureExtractor extractor = new MeasureExtractor();
+        Map<String, Integer> result = extractor.extractMeasures(input);
+        System.out.println("resultset: " + result.keySet());
+        System.out.println("files in result: " + result.get("File"));
+    }
+    
     @Test
     public void testSingleFileAnalyse(){
         String filename = "ParsingHorror";
@@ -44,9 +55,6 @@ public class SoftAuditSensorTest {
     @Test
     public void testSelfScan(){
         List<File> input = new ArrayList<File>();
-    	String[] filforpar = {"C:/Develop/Diplom/git_repo/plugin/src/main/java/plugin/model/JavaFileContent.java", "C:/Develop/Diplom/git_repo/plugin/src/main/java/plugin/model/WordInFile.java", "C:/Develop/Diplom/git_repo/plugin/src/main/java/plugin/model/KeyWord.java"};
-        int code = new ExtensionMain().run(filforpar);
-        System.out.println("parsercode: "+ code);
         listf("src/main/java", input);
         File file = new File("./target/logs/SelfScan.log");
         if (file.exists()){

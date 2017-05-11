@@ -38,7 +38,7 @@ sourceSets.main {
 	}
 }
 
-jar.manifest.attributes 'Main-Class': 'org.extendj.ExtensionMain'
+jar.manifest.attributes 'Main-Class': 'org.extendj.MeasureExtractor'
 jar.destinationDir = projectDir
 
 sourceCompatibility = '1.7'
