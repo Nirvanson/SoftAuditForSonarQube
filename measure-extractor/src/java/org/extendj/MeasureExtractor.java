@@ -11,7 +11,6 @@ import org.extendj.ast.CompilationUnit;
 public class MeasureExtractor extends JavaChecker {
 	
 	private Map<String, Integer> resultMap;
-	private int nodecount = 0;
   
   	public Map<String, Integer> extractMeasures(List<File> files) {
   		resultMap = new HashMap<String, Integer>();
@@ -27,15 +26,22 @@ public class MeasureExtractor extends JavaChecker {
 
   	@Override
   	protected int processCompilationUnit(CompilationUnit unit) throws Error {
-  		resultMap = includeSubResult(resultMap, traverseNodes(unit));
-  		return 0;
+  		try {
+  			// only scan source-files
+  			if (unit.fromSource()) {
+  				resultMap = includeSubResult(resultMap, traverseNodes(unit));
+  			}
+  			return 0;
+  		} catch (Exception e) {
+  			System.err.println("Exception while scanning sourcefile: " + e);
+  			return 1;
+  		}
   	}
   	
-  	private Map<String, Integer> traverseNodes(ASTNode node) {
-  		Map<String, Integer> nodeResult = new HashMap<String, Integer>();
-  		nodecount++;
-  		System.out.println("I found node number " + nodecount + " of type " + node.getClass());
-  		//TODO: nodeResult = countNode
+  	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private Map<String, Integer> traverseNodes(ASTNode node) {
+  		Map<String, Integer> nodeResult = node.countNode();
+  		
   		for (int i=0; i<node.getNumChild(); i++) {
   			nodeResult = includeSubResult(nodeResult, traverseNodes(node.getChild(i)));
   		}

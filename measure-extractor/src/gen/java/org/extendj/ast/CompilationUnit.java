@@ -107,12 +107,15 @@ public class CompilationUnit extends ASTNode<ASTNode> implements Cloneable {
    */
   protected Collection<Problem> parseErrors = new ArrayList<Problem>();
   /**
-   * @aspect ExtensionBase
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\ExtensionBase.jrag:3
+   * @aspect NodeCounter
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:13
    */
-  public void process() {
-    System.out.println(pathName() + " contained no failures");
-  }
+  @Override
+	public Map<String, Integer> countNode() {
+		Map<String, Integer> nodeResult = new HashMap<String, Integer>();
+		nodeResult.put("File", 1);
+		return nodeResult;
+	}
   /**
    * @declaredat ASTNode:1
    */

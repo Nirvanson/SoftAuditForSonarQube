@@ -1,0 +1,20 @@
+aspect NodeCounter {
+
+	/**
+	 * Scans AST-node for relevant values.
+	 * 
+	 * @return result-Map with counted values
+	 */
+	public Map<String, Integer> ASTNode.countNode() {
+		// Default node contains no counted values. Overwrite for each relevant node-type
+		return new HashMap<String, Integer>();
+	}
+  
+	@Override
+	public Map<String, Integer> CompilationUnit.countNode() {
+		Map<String, Integer> nodeResult = new HashMap<String, Integer>();
+		nodeResult.put("File", 1);
+		return nodeResult;
+	}
+
+}

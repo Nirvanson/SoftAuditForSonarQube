@@ -499,6 +499,17 @@ public class ASTNode<T extends ASTNode> extends beaver.Symbol implements Cloneab
     }
   }
   /**
+   * Scans AST-node for relevant values.
+   * 
+   * @return result-Map with counted values
+   * @aspect NodeCounter
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:8
+   */
+  public Map<String, Integer> countNode() {
+		// Default node contains no counted values. Overwrite for each relevant node-type
+		return new HashMap<String, Integer>();
+	}
+  /**
    * @declaredat ASTNode:1
    */
   public ASTNode() {
