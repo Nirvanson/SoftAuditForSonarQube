@@ -51,6 +51,11 @@
     </build>
 
     <dependencies>
+    	<dependency>
+  			<groupId>org.extendj</groupId>
+  			<artifactId>measure-extractor</artifactId>
+  			<version>0.1</version>
+		</dependency>
         <dependency>
             <groupId>org.codehaus.sonar</groupId>
             <artifactId>sonar-plugin-api</artifactId>

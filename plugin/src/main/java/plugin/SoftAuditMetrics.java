@@ -17,6 +17,10 @@ public class SoftAuditMetrics implements Metrics {
 
     // SonarQube provided measures
 
+	public static final Metric<Integer> TEST = new Metric.Builder("sonar_test", "Files from extendJ",
+            Metric.ValueType.INT).setDescription("Files from extendJ.").setDirection(Metric.DIRECTION_NONE)
+                    .setQualitative(false).setDomain(CoreMetrics.DOMAIN_GENERAL).create();
+	
     /**
      * Major Deficiencies (Rule violations).
      */
@@ -361,7 +365,7 @@ public class SoftAuditMetrics implements Metrics {
      */
     @SuppressWarnings("rawtypes")
     public List<Metric> getMetrics() {
-        return Arrays.asList(ARG, BRA, CAS, CLA, CON, IFS, INT, LIT, LOP, MAD, MED, MET, MID, PAR, PRE, REF, RET, SED,
+        return Arrays.asList(TEST, ARG, BRA, CAS, CLA, CON, IFS, INT, LIT, LOP, MAD, MED, MET, MID, PAR, PRE, REF, RET, SED,
                 STM, SWI, VAR, DTY, FFC, FUC, IMP, RUM, SRC, SST, STY, OMS, OBP, DCO, DFC, CFC, COC, ICO, BRC, LCM, ACM,
                 TST, FLE, COF, MOD, REU, SEC, MAM, AQM, PME, GVA);
 

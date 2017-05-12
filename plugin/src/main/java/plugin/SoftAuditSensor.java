@@ -129,7 +129,21 @@ public class SoftAuditSensor implements Sensor {
      * @return map with results for measures
      */
     protected Map<Metric<?>, Double> doAnalyze(Iterable<File> files, double omsvalue) {
-        Map<Metric<?>, Double> result = new HashMap<Metric<?>, Double>();
+    	Map<Metric<?>, Double> result = new HashMap<Metric<?>, Double>();
+    	
+    	// sample for measure extractor
+    	List<File> input = new ArrayList<File>();
+    	for (File fil: files) {
+    		input.add(fil);
+    	}
+    	try {
+    		org.extendj.MeasureExtractor extractor = new org.extendj.MeasureExtractor();
+    		Map<String, Integer> extractorresult = extractor.extractMeasures(input);
+    		result.put(SoftAuditMetrics.TEST, (double) extractorresult.get("File"));
+    	} catch (Exception e) {
+    		LOGGER.warn("measure extractor failed");
+    	}
+    	
         // add all measures from metrics list (metrics with keys like base_xyz) with start-value 0
         for (Metric<?> metric : new SoftAuditMetrics().getMetrics()) {
             if (metric.getKey().startsWith("base")) {
