@@ -13,7 +13,7 @@ Build current plugin-version 1.0 with measure-extractor 0.1:
 * run "gradle jar"
 * run "mvn org.apache.maven.plugins:maven-install-plugin:2.3.1:install-file -Dfile={Git-Directory}/measure-extractor/measure-extractor.jar -DgroupId=org.extendj -DartifactId=measure-extractor -Dversion=0.1 -Dpackaging=jar"
 * navigate to Git-Directory/plugin
-* run "mvn clean install -DskipTests"
+* run "mvn clean install"
 * copy Git-Directory/plugin/target/sonar-softaudit-plugin-1.0.jar to SQ-Directory/extensions/plugins
 
 Run SonarQube for measuring the plugin:
