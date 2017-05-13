@@ -26,8 +26,12 @@ public class SoftAuditSensorTest {
     	List<File> input = new ArrayList<File>();
         listf("src/main/java", input);
         System.out.println("files in input: " + input.size());
+        String[] filenames = new String[input.size()];
+        for (int i=0; i<input.size(); i++) {
+        	filenames[i] = input.get(i).getAbsolutePath();
+        }
         MeasureExtractor extractor = new MeasureExtractor();
-        Map<String, Integer> result = extractor.extractMeasures(input);
+        Map<String, Integer> result = extractor.extractMeasures(filenames);
         System.out.println("resultset: " + result.keySet());
         System.out.println("files in result: " + result.get("File"));
     }

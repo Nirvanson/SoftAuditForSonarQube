@@ -375,4 +375,20 @@ public abstract class Case extends Stmt implements Cloneable {
   public boolean canRewrite() {
     return false;
   }
+  protected void collect_contributors_Program_extractedSwitchCases(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:24
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_Program_extractedSwitchCases(_root, _map);
+  }
+  protected void contributeTo_Program_extractedSwitchCases(java.util.Collection<Case> collection) {
+    super.contributeTo_Program_extractedSwitchCases(collection);
+    collection.add(this);
+  }
 }

@@ -601,11 +601,27 @@ public class IfStmt extends Stmt implements Cloneable {
     }
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
+  protected void collect_contributors_Program_extractedIfStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:12
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_Program_extractedIfStatements(_root, _map);
+  }
   protected void contributeTo_CompilationUnit_problems(LinkedList<Problem> collection) {
     super.contributeTo_CompilationUnit_problems(collection);
     if (!getCondition().type().isBoolean()) {
       collection.add(errorf("the type of \"%s\" is %s which is not boolean",
                 getCondition().prettyPrint(), getCondition().type().name()));
     }
+  }
+  protected void contributeTo_Program_extractedIfStatements(java.util.Collection<IfStmt> collection) {
+    super.contributeTo_Program_extractedIfStatements(collection);
+    collection.add(this);
   }
 }

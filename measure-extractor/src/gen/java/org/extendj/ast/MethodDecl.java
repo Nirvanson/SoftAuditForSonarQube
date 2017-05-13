@@ -2463,6 +2463,34 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
     }
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
+  protected void collect_contributors_Program_extractedMethodDeclarations(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:6
+    if (!this.isPrivate()) {
+      {
+        java.util.Set<ASTNode> contributors = _map.get(_root);
+        if (contributors == null) {
+          contributors = new java.util.LinkedHashSet<ASTNode>();
+          _map.put((ASTNode) _root, contributors);
+        }
+        contributors.add(this);
+      }
+    }
+    super.collect_contributors_Program_extractedMethodDeclarations(_root, _map);
+  }
+  protected void collect_contributors_Program_extractedPrivateMethodDeclarations(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:9
+    if (this.isPrivate()) {
+      {
+        java.util.Set<ASTNode> contributors = _map.get(_root);
+        if (contributors == null) {
+          contributors = new java.util.LinkedHashSet<ASTNode>();
+          _map.put((ASTNode) _root, contributors);
+        }
+        contributors.add(this);
+      }
+    }
+    super.collect_contributors_Program_extractedPrivateMethodDeclarations(_root, _map);
+  }
   protected void contributeTo_CompilationUnit_problems(LinkedList<Problem> collection) {
     super.contributeTo_CompilationUnit_problems(collection);
     for (Problem value : modifierProblems()) {
@@ -2479,6 +2507,18 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
               && isVariableArity()
               && !getParameter(getNumParameter()-1).type().isReifiable()) {
       collection.add(warning("possible heap pollution for variable arity parameter"));
+    }
+  }
+  protected void contributeTo_Program_extractedMethodDeclarations(java.util.Collection<MethodDecl> collection) {
+    super.contributeTo_Program_extractedMethodDeclarations(collection);
+    if (!this.isPrivate()) {
+      collection.add(this);
+    }
+  }
+  protected void contributeTo_Program_extractedPrivateMethodDeclarations(java.util.Collection<MethodDecl> collection) {
+    super.contributeTo_Program_extractedPrivateMethodDeclarations(collection);
+    if (this.isPrivate()) {
+      collection.add(this);
     }
   }
 }

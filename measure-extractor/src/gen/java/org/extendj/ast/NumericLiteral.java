@@ -592,6 +592,22 @@ public class NumericLiteral extends Literal implements Cloneable {
     }
     return false;
   }
+  protected void collect_contributors_Program_extractedNumericLiterals(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:30
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_Program_extractedNumericLiterals(_root, _map);
+  }
+  protected void contributeTo_Program_extractedNumericLiterals(java.util.Collection<NumericLiteral> collection) {
+    super.contributeTo_Program_extractedNumericLiterals(collection);
+    collection.add(this);
+  }
   /** @apilevel internal */
   private void rewrittenNode_reset() {
     rewrittenNode_computed = false;

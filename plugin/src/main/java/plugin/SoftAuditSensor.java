@@ -137,8 +137,12 @@ public class SoftAuditSensor implements Sensor {
     		input.add(fil);
     	}
     	try {
+    		String[] filenames = new String[input.size()];
+            for (int i=0; i<input.size(); i++) {
+            	filenames[i] = input.get(i).getAbsolutePath();
+            }
     		org.extendj.MeasureExtractor extractor = new org.extendj.MeasureExtractor();
-    		Map<String, Integer> extractorresult = extractor.extractMeasures(input);
+    		Map<String, Integer> extractorresult = extractor.extractMeasures(filenames);
     		result.put(SoftAuditMetrics.TEST, (double) extractorresult.get("File"));
     	} catch (Exception e) {
     		LOGGER.warn("measure extractor failed");

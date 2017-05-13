@@ -865,10 +865,26 @@ public class EnhancedForStmt extends BranchTargetStmt implements Cloneable, Vari
     }
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
+  protected void collect_contributors_Program_extractedLoopStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:18
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_Program_extractedLoopStatements(_root, _map);
+  }
   protected void contributeTo_CompilationUnit_problems(LinkedList<Problem> collection) {
     super.contributeTo_CompilationUnit_problems(collection);
     for (Problem value : typeProblems()) {
       collection.add(value);
     }
+  }
+  protected void contributeTo_Program_extractedLoopStatements(java.util.Collection<BranchTargetStmt> collection) {
+    super.contributeTo_Program_extractedLoopStatements(collection);
+    collection.add(this);
   }
 }
