@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -31,9 +32,11 @@ public class SoftAuditSensorTest {
         	filenames[i] = input.get(i).getAbsolutePath();
         }
         MeasureExtractor extractor = new MeasureExtractor();
-        Map<String, Integer> result = extractor.extractMeasures(filenames);
+        Map<String, Collection<String>> result = extractor.extractNodes(filenames);
         System.out.println("resultset: " + result.keySet());
-        System.out.println("files in result: " + result.get("File"));
+        for (String key : result.keySet()) {
+        	System.out.println(key + ": " + result.get(key).size());
+        }
     }
     
     @Test

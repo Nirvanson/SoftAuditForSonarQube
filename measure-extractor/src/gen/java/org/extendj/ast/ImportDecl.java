@@ -443,7 +443,7 @@ public abstract class ImportDecl extends ASTNode<ASTNode> implements Cloneable {
     return false;
   }
   protected void collect_contributors_Program_extractedImports(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:48
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:64
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -454,8 +454,8 @@ public abstract class ImportDecl extends ASTNode<ASTNode> implements Cloneable {
     }
     super.collect_contributors_Program_extractedImports(_root, _map);
   }
-  protected void contributeTo_Program_extractedImports(java.util.Collection<ASTNode> collection) {
+  protected void contributeTo_Program_extractedImports(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedImports(collection);
-    collection.add(this);
+    collection.add(("IMP" + this.compilationUnit().pathName() + ";" + this.location() + ";Import"));
   }
 }

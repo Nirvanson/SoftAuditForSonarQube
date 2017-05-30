@@ -1412,8 +1412,8 @@ public class CompilationUnit extends ASTNode<ASTNode> implements Cloneable {
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
   protected void collect_contributors_Program_extractedSourceFiles(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:3
-    if (this.fromSource()) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:4
+    if ((this.fromSource())) {
       {
         java.util.Set<ASTNode> contributors = _map.get(_root);
         if (contributors == null) {
@@ -1426,8 +1426,8 @@ public class CompilationUnit extends ASTNode<ASTNode> implements Cloneable {
     super.collect_contributors_Program_extractedSourceFiles(_root, _map);
   }
   protected void collect_contributors_Program_extractedImports(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:49
-    if (this.hasPackageDecl()) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:65
+    if ((this.hasPackageDecl())) {
       {
         java.util.Set<ASTNode> contributors = _map.get(_root);
         if (contributors == null) {
@@ -1445,16 +1445,16 @@ public class CompilationUnit extends ASTNode<ASTNode> implements Cloneable {
       collection.add(value);
     }
   }
-  protected void contributeTo_Program_extractedSourceFiles(java.util.Collection<CompilationUnit> collection) {
+  protected void contributeTo_Program_extractedSourceFiles(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedSourceFiles(collection);
-    if (this.fromSource()) {
-      collection.add(this);
+    if ((this.fromSource())) {
+      collection.add(("SOF;" + this.pathName() + ";;"));
     }
   }
-  protected void contributeTo_Program_extractedImports(java.util.Collection<ASTNode> collection) {
+  protected void contributeTo_Program_extractedImports(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedImports(collection);
-    if (this.hasPackageDecl()) {
-      collection.add(this);
+    if ((this.hasPackageDecl())) {
+      collection.add(("IMP" + this.pathName() + ";;Package"));
     }
   }
 }

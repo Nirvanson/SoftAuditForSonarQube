@@ -390,4 +390,20 @@ public abstract class CatchClause extends ASTNode<ASTNode> implements Cloneable,
   public boolean canRewrite() {
     return false;
   }
+  protected void collect_contributors_Program_extractedBranches(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:81
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_Program_extractedBranches(_root, _map);
+  }
+  protected void contributeTo_Program_extractedBranches(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedBranches(collection);
+    collection.add(("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";Catch-Branch"));
+  }
 }

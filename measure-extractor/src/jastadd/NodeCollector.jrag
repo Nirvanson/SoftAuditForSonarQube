@@ -1,0 +1,119 @@
+aspect NodeCollector {
+	// SOF - Scanned source-files
+	coll java.util.Collection<String> Program.extractedSourceFiles() [new java.util.ArrayList<String>()] with add root Program;
+	CompilationUnit contributes ("SOF;" + this.pathName() + ";;") when (this.fromSource()) to Program.extractedSourceFiles();
+	
+	// PUM - Non private method declarations TODO: count constructors? exclude getter/setter?
+	coll java.util.Collection<String> Program.extractedPublicMethodDeclarations() [new java.util.ArrayList<String>()] with add root Program;
+	MethodDecl contributes ("PUM;" + this.compilationUnit().pathName() + ";" + this.location() + ";") when (!this.isPrivate()) to Program.extractedPublicMethodDeclarations();
+	
+	// PRM - Private method declarations TODO: count constructors?
+	coll java.util.Collection<String> Program.extractedPrivateMethodDeclarations() [new java.util.ArrayList<String>()] with add root Program;
+	MethodDecl contributes ("PRM;" + this.compilationUnit().pathName() + ";" + this.location() + ";") when (this.isPrivate()) to Program.extractedPrivateMethodDeclarations();
+	
+	// IFS - If-statements (and Try-statements)
+	coll java.util.Collection<String> Program.extractedIfStatements() [new java.util.ArrayList<String>()] with add root Program;
+	IfStmt contributes ("IFS" + this.compilationUnit().pathName() + ";" + this.location() + ";If") to Program.extractedIfStatements();
+	TryStmt contributes ("IFS" + this.compilationUnit().pathName() + ";" + this.location() + ";Try") to Program.extractedIfStatements();
+	
+	// LOS - Loop-statements (DoWhile, While, For, EnhancedFor)
+	coll java.util.Collection<String> Program.extractedLoopStatements() [new java.util.ArrayList<String>()] with add root Program;
+	DoStmt contributes ("LOS" + this.compilationUnit().pathName() + ";" + this.location() + ";DoWhile") to Program.extractedLoopStatements();
+	WhileStmt contributes ("LOS" + this.compilationUnit().pathName() + ";" + this.location() + ";While") to Program.extractedLoopStatements();
+	ForStmt contributes ("LOS" + this.compilationUnit().pathName() + ";" + this.location() + ";For") to Program.extractedLoopStatements();
+	EnhancedForStmt contributes ("LOS" + this.compilationUnit().pathName() + ";" + this.location() + ";EnhancedFor") to Program.extractedLoopStatements();
+	
+	// SWS - Switch-statements
+	coll java.util.Collection<String> Program.extractedSwitchStatements() [new java.util.ArrayList<String>()] with add root Program;
+	SwitchStmt contributes ("SWS" + this.compilationUnit().pathName() + ";" + this.location() + ";") to Program.extractedSwitchStatements();
+	
+	// SWC - Switch-cases
+	coll java.util.Collection<String> Program.extractedSwitchCases() [new java.util.ArrayList<String>()] with add root Program;
+	Case contributes ("SWC" + this.compilationUnit().pathName() + ";" + this.location() + ";") to Program.extractedSwitchCases();
+	
+	// CLA - Class declarations TODO: inner/anonymous classes?
+	coll java.util.Collection<String> Program.extractedClassDeclarations() [new java.util.ArrayList<String>()] with add root Program;
+	ClassDecl contributes ("CLA" + this.compilationUnit().pathName() + ";" + this.location() + ";") to Program.extractedClassDeclarations();
+	
+	// NUL - Numeric literals TODO: exclude 0, 1, -1
+	coll java.util.Collection<String> Program.extractedNumericLiterals() [new java.util.ArrayList<String>()] with add root Program;
+	NumericLiteral contributes ("NUL" + this.compilationUnit().pathName() + ";" + this.location() + ";") to Program.extractedNumericLiterals();
+	
+	// INT - Interface declarations
+	coll java.util.Collection<String> Program.extractedInterfaceDeclarations() [new java.util.ArrayList<String>()] with add root Program;
+	InterfaceDecl contributes ("INT" + this.compilationUnit().pathName() + ";" + this.location() + ";") to Program.extractedInterfaceDeclarations();
+	
+	// STL - String literals
+	coll java.util.Collection<String> Program.extractedStringLiterals() [new java.util.ArrayList<String>()] with add root Program;
+	StringLiteral contributes ("STL" + this.compilationUnit().pathName() + ";" + this.location() + ";") to Program.extractedStringLiterals();
+	
+	// MPA - Method parameters
+	coll java.util.Collection<String> Program.extractedParameters() [new java.util.ArrayList<String>()] with add root Program;
+	ParameterDeclaration contributes ("MPA" + this.compilationUnit().pathName() + ";" + this.location() + ";") when (!this.isExceptionHandlerParameter()) to Program.extractedParameters();
+	
+	// RES - Return statements
+	coll java.util.Collection<String> Program.extractedReturnStatements() [new java.util.ArrayList<String>()] with add root Program;
+	ReturnStmt contributes ("RES" + this.compilationUnit().pathName() + ";" + this.location() + ";") to Program.extractedReturnStatements();
+	
+	// STA - Statements TODO: count declarations, imports, ...
+	coll java.util.Collection<String> Program.extractedStatements() [new java.util.ArrayList<String>()] with add root Program;
+	Stmt contributes ("STA" + this.compilationUnit().pathName() + ";" + this.location() + ";") to Program.extractedStatements();
+	
+	// IMP - Imports (including package declaration)
+	coll java.util.Collection<String> Program.extractedImports() [new java.util.ArrayList<String>()] with add root Program;
+	ImportDecl contributes ("IMP" + this.compilationUnit().pathName() + ";" + this.location() + ";Import") to Program.extractedImports();
+	CompilationUnit contributes ("IMP" + this.pathName() + ";;Package") when (this.hasPackageDecl()) to Program.extractedImports();
+	
+	// BRA - Branches (2 for each loop, if and try; 1 for each case, catch and return)
+	coll java.util.Collection<String> Program.extractedBranches() [new java.util.ArrayList<String>()] with add root Program;
+	IfStmt contributes ("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";If-True-Branch") to Program.extractedBranches();
+	IfStmt contributes ("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";If-False-Branch") to Program.extractedBranches();
+	DoStmt contributes ("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";Do-True-Branch") to Program.extractedBranches();
+	WhileStmt contributes ("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";While-True-Branch") to Program.extractedBranches();
+	ForStmt contributes ("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";For-True-Branch") to Program.extractedBranches();
+	EnhancedForStmt contributes ("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";EnhancedFor-True-Branch") to Program.extractedBranches();
+	DoStmt contributes ("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";Do-False-Branch") to Program.extractedBranches();
+	WhileStmt contributes ("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";While-False-Branch") to Program.extractedBranches();
+	ForStmt contributes ("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";For-False-Branch") to Program.extractedBranches();
+	EnhancedForStmt contributes ("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";EnhancedFor-False-Branch") to Program.extractedBranches();
+	TryStmt contributes ("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";Try-Success-Branch") to Program.extractedBranches();
+	TryStmt contributes ("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";Try-Failed-Branch") to Program.extractedBranches();
+	CatchClause contributes ("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";Catch-Branch") to Program.extractedBranches();
+	ReturnStmt contributes ("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";Return-Branch") to Program.extractedBranches();
+	Case contributes ("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";Case-Branch") to Program.extractedBranches();
+	
+	// MEC - Method calls
+	coll java.util.Collection<String> Program.extractedMethodCalls() [new java.util.ArrayList<String>()] with add root Program;
+	MethodAccess contributes ("MEC" + this.compilationUnit().pathName() + ";" + this.location() + ";") to Program.extractedMethodCalls();
+	
+	// FMC - Foreign method calls (not standard java and not in measured program)
+	coll java.util.Collection<String> Program.extractedForeignMethodCalls() [new java.util.ArrayList<String>()] with add root Program;
+	MethodAccess contributes ("FMC" + this.compilationUnit().pathName() + ";" + this.location() + ";") when (this.decl().name().equals("unknown")) to Program.extractedForeignMethodCalls();
+		
+	// GVA - Global variable declarations (fields) TODO: check if correct
+	coll java.util.Collection<String> Program.extractedGlobalVariables() [new java.util.ArrayList<String>()] with add root Program;
+	FieldDeclarator contributes ("GVA" + this.compilationUnit().pathName() + ";" + this.location() + ";") to Program.extractedGlobalVariables();
+	
+	// VAR - Variable declarations (fields and local variables) TODO: check if correct
+	coll java.util.Collection<String> Program.extractedVariables() [new java.util.ArrayList<String>()] with add root Program;
+	VariableDeclarator contributes ("VAR" + this.compilationUnit().pathName() + ";" + this.location() + ";Local") when (this.isLocalVariable()) to Program.extractedVariables();
+	FieldDeclarator contributes ("VAR" + this.compilationUnit().pathName() + ";" + this.location() + ";Field") to Program.extractedVariables();
+	
+	// VRE - Variable references TODO: check if correct
+	coll java.util.Collection<String> Program.extractedVariableReferences() [new java.util.ArrayList<String>()] with add root Program;
+	VarAccess contributes ("VRE" + this.compilationUnit().pathName() + ";" + this.location() + ";") to Program.extractedVariableReferences();
+	
+	// ARG - Arguments (variable references in loop/if-conditions) TODO
+	
+	// NAR - Non-argument-references TODO
+	
+	// RUM - Reusable methods TODO
+	
+	// DTY - Data types (HashSet) TODO: check if correct
+	coll java.util.Collection<String> Program.extractedDataTypes() [new java.util.HashSet<String>()] with add root Program;
+	TypeDecl contributes ("DTY;" + this.name()) to Program.extractedDataTypes();
+	
+	// STY - Statement types (HashSet) TODO: add all the statement types
+	coll java.util.Collection<String> Program.extractedStatementTypes() [new java.util.HashSet<String>()] with add root Program;
+	IfStmt contributes ("STY;If-Statement") to Program.extractedStatementTypes();
+}

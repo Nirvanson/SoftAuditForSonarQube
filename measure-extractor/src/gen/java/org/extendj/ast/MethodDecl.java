@@ -2463,9 +2463,9 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
     }
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
-  protected void collect_contributors_Program_extractedMethodDeclarations(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:6
-    if (!this.isPrivate()) {
+  protected void collect_contributors_Program_extractedPublicMethodDeclarations(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:8
+    if ((!this.isPrivate())) {
       {
         java.util.Set<ASTNode> contributors = _map.get(_root);
         if (contributors == null) {
@@ -2475,11 +2475,11 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
         contributors.add(this);
       }
     }
-    super.collect_contributors_Program_extractedMethodDeclarations(_root, _map);
+    super.collect_contributors_Program_extractedPublicMethodDeclarations(_root, _map);
   }
   protected void collect_contributors_Program_extractedPrivateMethodDeclarations(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:9
-    if (this.isPrivate()) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:12
+    if ((this.isPrivate())) {
       {
         java.util.Set<ASTNode> contributors = _map.get(_root);
         if (contributors == null) {
@@ -2509,16 +2509,16 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
       collection.add(warning("possible heap pollution for variable arity parameter"));
     }
   }
-  protected void contributeTo_Program_extractedMethodDeclarations(java.util.Collection<MethodDecl> collection) {
-    super.contributeTo_Program_extractedMethodDeclarations(collection);
-    if (!this.isPrivate()) {
-      collection.add(this);
+  protected void contributeTo_Program_extractedPublicMethodDeclarations(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedPublicMethodDeclarations(collection);
+    if ((!this.isPrivate())) {
+      collection.add(("PUM;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
     }
   }
-  protected void contributeTo_Program_extractedPrivateMethodDeclarations(java.util.Collection<MethodDecl> collection) {
+  protected void contributeTo_Program_extractedPrivateMethodDeclarations(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedPrivateMethodDeclarations(collection);
-    if (this.isPrivate()) {
-      collection.add(this);
+    if ((this.isPrivate())) {
+      collection.add(("PRM;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
     }
   }
 }

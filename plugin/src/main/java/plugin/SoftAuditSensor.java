@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -142,8 +143,8 @@ public class SoftAuditSensor implements Sensor {
             	filenames[i] = input.get(i).getAbsolutePath();
             }
     		org.extendj.MeasureExtractor extractor = new org.extendj.MeasureExtractor();
-    		Map<String, Integer> extractorresult = extractor.extractMeasures(filenames);
-    		result.put(SoftAuditMetrics.TEST, (double) extractorresult.get("File"));
+    		Map<String, Collection<String>> extractorresult = extractor.extractNodes(filenames);
+    		result.put(SoftAuditMetrics.TEST, (double) extractorresult.get("Source-Files").size());
     	} catch (Exception e) {
     		LOGGER.warn("measure extractor failed");
     	}

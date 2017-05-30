@@ -602,7 +602,7 @@ public class IfStmt extends Stmt implements Cloneable {
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
   protected void collect_contributors_Program_extractedIfStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:12
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:16
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -613,6 +613,39 @@ public class IfStmt extends Stmt implements Cloneable {
     }
     super.collect_contributors_Program_extractedIfStatements(_root, _map);
   }
+  protected void collect_contributors_Program_extractedBranches(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:69
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:70
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_Program_extractedBranches(_root, _map);
+  }
+  protected void collect_contributors_Program_extractedStatementTypes(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:118
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_Program_extractedStatementTypes(_root, _map);
+  }
   protected void contributeTo_CompilationUnit_problems(LinkedList<Problem> collection) {
     super.contributeTo_CompilationUnit_problems(collection);
     if (!getCondition().type().isBoolean()) {
@@ -620,8 +653,17 @@ public class IfStmt extends Stmt implements Cloneable {
                 getCondition().prettyPrint(), getCondition().type().name()));
     }
   }
-  protected void contributeTo_Program_extractedIfStatements(java.util.Collection<IfStmt> collection) {
+  protected void contributeTo_Program_extractedIfStatements(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedIfStatements(collection);
-    collection.add(this);
+    collection.add(("IFS" + this.compilationUnit().pathName() + ";" + this.location() + ";If"));
+  }
+  protected void contributeTo_Program_extractedBranches(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedBranches(collection);
+    collection.add(("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";If-True-Branch"));
+    collection.add(("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";If-False-Branch"));
+  }
+  protected void contributeTo_Program_extractedStatementTypes(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedStatementTypes(collection);
+    collection.add(("STY;If-Statement"));
   }
 }

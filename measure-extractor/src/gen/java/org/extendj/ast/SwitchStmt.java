@@ -802,7 +802,7 @@ public class SwitchStmt extends BranchTargetStmt implements Cloneable {
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
   protected void collect_contributors_Program_extractedSwitchStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:21
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:28
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -819,8 +819,8 @@ public class SwitchStmt extends BranchTargetStmt implements Cloneable {
       collection.add(value);
     }
   }
-  protected void contributeTo_Program_extractedSwitchStatements(java.util.Collection<SwitchStmt> collection) {
+  protected void contributeTo_Program_extractedSwitchStatements(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedSwitchStatements(collection);
-    collection.add(this);
+    collection.add(("SWS" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
   }
 }

@@ -971,6 +971,18 @@ protected ASTNode$State.Cycle isConstant_cycle = null;
     }
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
+  protected void collect_contributors_Program_extractedVariableReferences(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:104
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_Program_extractedVariableReferences(_root, _map);
+  }
   protected void contributeTo_CompilationUnit_problems(LinkedList<Problem> collection) {
     super.contributeTo_CompilationUnit_problems(collection);
     for (Problem value : definiteAssignmentProblems()) {
@@ -992,5 +1004,9 @@ protected ASTNode$State.Cycle isConstant_cycle = null;
               && inEnumInitializer()) {
       collection.add(error("may not reference a static field of an enum type from here"));
     }
+  }
+  protected void contributeTo_Program_extractedVariableReferences(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedVariableReferences(collection);
+    collection.add(("VRE" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
   }
 }

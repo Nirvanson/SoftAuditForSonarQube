@@ -904,182 +904,278 @@ public class ASTNode<T extends ASTNode> extends beaver.Symbol implements Cloneab
   }
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:2
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:3
    */
     protected void collect_contributors_Program_extractedSourceFiles(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
     for (int i = 0; i < getNumChild(); i++) {
       getChild(i).collect_contributors_Program_extractedSourceFiles(_root, _map);
     }
   }
-  protected void contributeTo_Program_extractedSourceFiles(java.util.Collection<CompilationUnit> collection) {
+  protected void contributeTo_Program_extractedSourceFiles(java.util.Collection<String> collection) {
   }
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:5
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:7
    */
-    protected void collect_contributors_Program_extractedMethodDeclarations(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    protected void collect_contributors_Program_extractedPublicMethodDeclarations(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
     for (int i = 0; i < getNumChild(); i++) {
-      getChild(i).collect_contributors_Program_extractedMethodDeclarations(_root, _map);
+      getChild(i).collect_contributors_Program_extractedPublicMethodDeclarations(_root, _map);
     }
   }
-  protected void contributeTo_Program_extractedMethodDeclarations(java.util.Collection<MethodDecl> collection) {
+  protected void contributeTo_Program_extractedPublicMethodDeclarations(java.util.Collection<String> collection) {
   }
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:8
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:11
    */
     protected void collect_contributors_Program_extractedPrivateMethodDeclarations(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
     for (int i = 0; i < getNumChild(); i++) {
       getChild(i).collect_contributors_Program_extractedPrivateMethodDeclarations(_root, _map);
     }
   }
-  protected void contributeTo_Program_extractedPrivateMethodDeclarations(java.util.Collection<MethodDecl> collection) {
+  protected void contributeTo_Program_extractedPrivateMethodDeclarations(java.util.Collection<String> collection) {
   }
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:11
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:15
    */
     protected void collect_contributors_Program_extractedIfStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
     for (int i = 0; i < getNumChild(); i++) {
       getChild(i).collect_contributors_Program_extractedIfStatements(_root, _map);
     }
   }
-  protected void contributeTo_Program_extractedIfStatements(java.util.Collection<IfStmt> collection) {
+  protected void contributeTo_Program_extractedIfStatements(java.util.Collection<String> collection) {
   }
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:14
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:20
    */
     protected void collect_contributors_Program_extractedLoopStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
     for (int i = 0; i < getNumChild(); i++) {
       getChild(i).collect_contributors_Program_extractedLoopStatements(_root, _map);
     }
   }
-  protected void contributeTo_Program_extractedLoopStatements(java.util.Collection<BranchTargetStmt> collection) {
+  protected void contributeTo_Program_extractedLoopStatements(java.util.Collection<String> collection) {
   }
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:20
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:27
    */
     protected void collect_contributors_Program_extractedSwitchStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
     for (int i = 0; i < getNumChild(); i++) {
       getChild(i).collect_contributors_Program_extractedSwitchStatements(_root, _map);
     }
   }
-  protected void contributeTo_Program_extractedSwitchStatements(java.util.Collection<SwitchStmt> collection) {
+  protected void contributeTo_Program_extractedSwitchStatements(java.util.Collection<String> collection) {
   }
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:23
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:31
    */
     protected void collect_contributors_Program_extractedSwitchCases(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
     for (int i = 0; i < getNumChild(); i++) {
       getChild(i).collect_contributors_Program_extractedSwitchCases(_root, _map);
     }
   }
-  protected void contributeTo_Program_extractedSwitchCases(java.util.Collection<Case> collection) {
+  protected void contributeTo_Program_extractedSwitchCases(java.util.Collection<String> collection) {
   }
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:26
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:35
    */
     protected void collect_contributors_Program_extractedClassDeclarations(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
     for (int i = 0; i < getNumChild(); i++) {
       getChild(i).collect_contributors_Program_extractedClassDeclarations(_root, _map);
     }
   }
-  protected void contributeTo_Program_extractedClassDeclarations(java.util.Collection<ClassDecl> collection) {
+  protected void contributeTo_Program_extractedClassDeclarations(java.util.Collection<String> collection) {
   }
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:29
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:39
    */
     protected void collect_contributors_Program_extractedNumericLiterals(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
     for (int i = 0; i < getNumChild(); i++) {
       getChild(i).collect_contributors_Program_extractedNumericLiterals(_root, _map);
     }
   }
-  protected void contributeTo_Program_extractedNumericLiterals(java.util.Collection<NumericLiteral> collection) {
+  protected void contributeTo_Program_extractedNumericLiterals(java.util.Collection<String> collection) {
   }
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:32
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:43
    */
     protected void collect_contributors_Program_extractedInterfaceDeclarations(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
     for (int i = 0; i < getNumChild(); i++) {
       getChild(i).collect_contributors_Program_extractedInterfaceDeclarations(_root, _map);
     }
   }
-  protected void contributeTo_Program_extractedInterfaceDeclarations(java.util.Collection<InterfaceDecl> collection) {
+  protected void contributeTo_Program_extractedInterfaceDeclarations(java.util.Collection<String> collection) {
   }
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:35
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:47
    */
     protected void collect_contributors_Program_extractedStringLiterals(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
     for (int i = 0; i < getNumChild(); i++) {
       getChild(i).collect_contributors_Program_extractedStringLiterals(_root, _map);
     }
   }
-  protected void contributeTo_Program_extractedStringLiterals(java.util.Collection<StringLiteral> collection) {
+  protected void contributeTo_Program_extractedStringLiterals(java.util.Collection<String> collection) {
   }
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:38
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:51
    */
     protected void collect_contributors_Program_extractedParameters(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
     for (int i = 0; i < getNumChild(); i++) {
       getChild(i).collect_contributors_Program_extractedParameters(_root, _map);
     }
   }
-  protected void contributeTo_Program_extractedParameters(java.util.Collection<ParameterDeclaration> collection) {
+  protected void contributeTo_Program_extractedParameters(java.util.Collection<String> collection) {
   }
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:41
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:55
    */
     protected void collect_contributors_Program_extractedReturnStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
     for (int i = 0; i < getNumChild(); i++) {
       getChild(i).collect_contributors_Program_extractedReturnStatements(_root, _map);
     }
   }
-  protected void contributeTo_Program_extractedReturnStatements(java.util.Collection<ReturnStmt> collection) {
+  protected void contributeTo_Program_extractedReturnStatements(java.util.Collection<String> collection) {
   }
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:44
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:59
    */
     protected void collect_contributors_Program_extractedStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
     for (int i = 0; i < getNumChild(); i++) {
       getChild(i).collect_contributors_Program_extractedStatements(_root, _map);
     }
   }
-  protected void contributeTo_Program_extractedStatements(java.util.Collection<Stmt> collection) {
+  protected void contributeTo_Program_extractedStatements(java.util.Collection<String> collection) {
   }
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:47
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:63
    */
     protected void collect_contributors_Program_extractedImports(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
     for (int i = 0; i < getNumChild(); i++) {
       getChild(i).collect_contributors_Program_extractedImports(_root, _map);
     }
   }
-  protected void contributeTo_Program_extractedImports(java.util.Collection<ASTNode> collection) {
+  protected void contributeTo_Program_extractedImports(java.util.Collection<String> collection) {
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:68
+   */
+    protected void collect_contributors_Program_extractedBranches(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    for (int i = 0; i < getNumChild(); i++) {
+      getChild(i).collect_contributors_Program_extractedBranches(_root, _map);
+    }
+  }
+  protected void contributeTo_Program_extractedBranches(java.util.Collection<String> collection) {
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:86
+   */
+    protected void collect_contributors_Program_extractedMethodCalls(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    for (int i = 0; i < getNumChild(); i++) {
+      getChild(i).collect_contributors_Program_extractedMethodCalls(_root, _map);
+    }
+  }
+  protected void contributeTo_Program_extractedMethodCalls(java.util.Collection<String> collection) {
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:90
+   */
+    protected void collect_contributors_Program_extractedForeignMethodCalls(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    for (int i = 0; i < getNumChild(); i++) {
+      getChild(i).collect_contributors_Program_extractedForeignMethodCalls(_root, _map);
+    }
+  }
+  protected void contributeTo_Program_extractedForeignMethodCalls(java.util.Collection<String> collection) {
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:94
+   */
+    protected void collect_contributors_Program_extractedGlobalVariables(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    for (int i = 0; i < getNumChild(); i++) {
+      getChild(i).collect_contributors_Program_extractedGlobalVariables(_root, _map);
+    }
+  }
+  protected void contributeTo_Program_extractedGlobalVariables(java.util.Collection<String> collection) {
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:98
+   */
+    protected void collect_contributors_Program_extractedVariables(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    for (int i = 0; i < getNumChild(); i++) {
+      getChild(i).collect_contributors_Program_extractedVariables(_root, _map);
+    }
+  }
+  protected void contributeTo_Program_extractedVariables(java.util.Collection<String> collection) {
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:103
+   */
+    protected void collect_contributors_Program_extractedVariableReferences(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    for (int i = 0; i < getNumChild(); i++) {
+      getChild(i).collect_contributors_Program_extractedVariableReferences(_root, _map);
+    }
+  }
+  protected void contributeTo_Program_extractedVariableReferences(java.util.Collection<String> collection) {
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:113
+   */
+    protected void collect_contributors_Program_extractedDataTypes(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    for (int i = 0; i < getNumChild(); i++) {
+      getChild(i).collect_contributors_Program_extractedDataTypes(_root, _map);
+    }
+  }
+  protected void contributeTo_Program_extractedDataTypes(java.util.Collection<String> collection) {
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:117
+   */
+    protected void collect_contributors_Program_extractedStatementTypes(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    for (int i = 0; i < getNumChild(); i++) {
+      getChild(i).collect_contributors_Program_extractedStatementTypes(_root, _map);
+    }
+  }
+  protected void contributeTo_Program_extractedStatementTypes(java.util.Collection<String> collection) {
   }
 
   /**

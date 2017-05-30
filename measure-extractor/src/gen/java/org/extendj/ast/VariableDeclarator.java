@@ -823,6 +823,20 @@ public class VariableDeclarator extends Declarator implements Cloneable {
     }
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
+  protected void collect_contributors_Program_extractedVariables(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:99
+    if ((this.isLocalVariable())) {
+      {
+        java.util.Set<ASTNode> contributors = _map.get(_root);
+        if (contributors == null) {
+          contributors = new java.util.LinkedHashSet<ASTNode>();
+          _map.put((ASTNode) _root, contributors);
+        }
+        contributors.add(this);
+      }
+    }
+    super.collect_contributors_Program_extractedVariables(_root, _map);
+  }
   protected void contributeTo_CompilationUnit_problems(LinkedList<Problem> collection) {
     super.contributeTo_CompilationUnit_problems(collection);
     for (Problem value : nameProblems()) {
@@ -831,6 +845,12 @@ public class VariableDeclarator extends Declarator implements Cloneable {
     if (hasInit() && !getInit().type().assignConversionTo(type(), getInit())) {
       collection.add(errorf("can not assign variable %s of type %s a value of type %s",
                 name(), type().typeName(), getInit().type().typeName()));
+    }
+  }
+  protected void contributeTo_Program_extractedVariables(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedVariables(collection);
+    if ((this.isLocalVariable())) {
+      collection.add(("VAR" + this.compilationUnit().pathName() + ";" + this.location() + ";Local"));
     }
   }
 }

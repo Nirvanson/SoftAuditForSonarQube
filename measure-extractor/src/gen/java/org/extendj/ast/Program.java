@@ -473,8 +473,8 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     super.flushCollectionCache();
     Program_extractedSourceFiles_computed = null;
     Program_extractedSourceFiles_value = null;
-    Program_extractedMethodDeclarations_computed = null;
-    Program_extractedMethodDeclarations_value = null;
+    Program_extractedPublicMethodDeclarations_computed = null;
+    Program_extractedPublicMethodDeclarations_value = null;
     Program_extractedPrivateMethodDeclarations_computed = null;
     Program_extractedPrivateMethodDeclarations_value = null;
     Program_extractedIfStatements_computed = null;
@@ -501,8 +501,24 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     Program_extractedStatements_value = null;
     Program_extractedImports_computed = null;
     Program_extractedImports_value = null;
+    Program_extractedBranches_computed = null;
+    Program_extractedBranches_value = null;
+    Program_extractedMethodCalls_computed = null;
+    Program_extractedMethodCalls_value = null;
+    Program_extractedForeignMethodCalls_computed = null;
+    Program_extractedForeignMethodCalls_value = null;
+    Program_extractedGlobalVariables_computed = null;
+    Program_extractedGlobalVariables_value = null;
+    Program_extractedVariables_computed = null;
+    Program_extractedVariables_value = null;
+    Program_extractedVariableReferences_computed = null;
+    Program_extractedVariableReferences_value = null;
+    Program_extractedDataTypes_computed = null;
+    Program_extractedDataTypes_value = null;
+    Program_extractedStatementTypes_computed = null;
+    Program_extractedStatementTypes_value = null;
     contributorMap_Program_extractedSourceFiles = null;
-    contributorMap_Program_extractedMethodDeclarations = null;
+    contributorMap_Program_extractedPublicMethodDeclarations = null;
     contributorMap_Program_extractedPrivateMethodDeclarations = null;
     contributorMap_Program_extractedIfStatements = null;
     contributorMap_Program_extractedLoopStatements = null;
@@ -516,17 +532,25 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     contributorMap_Program_extractedReturnStatements = null;
     contributorMap_Program_extractedStatements = null;
     contributorMap_Program_extractedImports = null;
+    contributorMap_Program_extractedBranches = null;
+    contributorMap_Program_extractedMethodCalls = null;
+    contributorMap_Program_extractedForeignMethodCalls = null;
+    contributorMap_Program_extractedGlobalVariables = null;
+    contributorMap_Program_extractedVariables = null;
+    contributorMap_Program_extractedVariableReferences = null;
+    contributorMap_Program_extractedDataTypes = null;
+    contributorMap_Program_extractedStatementTypes = null;
     contributorMap_BlockLambdaBody_lambdaReturns = null;
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:105
+   * @declaredat ASTNode:129
    */
   public Program clone() throws CloneNotSupportedException {
     Program node = (Program) super.clone();
     return node;
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:110
+   * @declaredat ASTNode:134
    */
   public Program copy() {
     try {
@@ -546,7 +570,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
    * @deprecated Please use treeCopy or treeCopyNoTransform instead
-   * @declaredat ASTNode:129
+   * @declaredat ASTNode:153
    */
   @Deprecated
   public Program fullCopy() {
@@ -557,7 +581,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
    * The copy is dangling, i.e. has no parent.
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
-   * @declaredat ASTNode:139
+   * @declaredat ASTNode:163
    */
   public Program treeCopyNoTransform() {
     Program tree = (Program) copy();
@@ -578,7 +602,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
    * The copy is dangling, i.e. has no parent.
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
-   * @declaredat ASTNode:159
+   * @declaredat ASTNode:183
    */
   public Program treeCopy() {
     Program tree = (Program) copy();
@@ -594,7 +618,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     return tree;
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:173
+   * @declaredat ASTNode:197
    */
   protected boolean is$Equal(ASTNode node) {
     return super.is$Equal(node);    
@@ -711,7 +735,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   }
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:2
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:3
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedSourceFiles = null;
 
@@ -724,20 +748,20 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:5
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:7
    */
-  protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedMethodDeclarations = null;
+  protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedPublicMethodDeclarations = null;
 
-  protected void survey_Program_extractedMethodDeclarations() {
-    if (contributorMap_Program_extractedMethodDeclarations == null) {
-      contributorMap_Program_extractedMethodDeclarations = new java.util.IdentityHashMap<ASTNode, java.util.Set<ASTNode>>();
-      collect_contributors_Program_extractedMethodDeclarations(this, contributorMap_Program_extractedMethodDeclarations);
+  protected void survey_Program_extractedPublicMethodDeclarations() {
+    if (contributorMap_Program_extractedPublicMethodDeclarations == null) {
+      contributorMap_Program_extractedPublicMethodDeclarations = new java.util.IdentityHashMap<ASTNode, java.util.Set<ASTNode>>();
+      collect_contributors_Program_extractedPublicMethodDeclarations(this, contributorMap_Program_extractedPublicMethodDeclarations);
     }
   }
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:8
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:11
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedPrivateMethodDeclarations = null;
 
@@ -750,7 +774,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:11
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:15
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedIfStatements = null;
 
@@ -763,7 +787,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:14
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:20
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedLoopStatements = null;
 
@@ -776,7 +800,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:20
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:27
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedSwitchStatements = null;
 
@@ -789,7 +813,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:23
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:31
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedSwitchCases = null;
 
@@ -802,7 +826,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:26
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:35
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedClassDeclarations = null;
 
@@ -815,7 +839,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:29
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:39
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedNumericLiterals = null;
 
@@ -828,7 +852,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:32
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:43
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedInterfaceDeclarations = null;
 
@@ -841,7 +865,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:35
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:47
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedStringLiterals = null;
 
@@ -854,7 +878,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:38
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:51
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedParameters = null;
 
@@ -867,7 +891,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:41
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:55
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedReturnStatements = null;
 
@@ -880,7 +904,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:44
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:59
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedStatements = null;
 
@@ -893,7 +917,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:47
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:63
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedImports = null;
 
@@ -901,6 +925,110 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     if (contributorMap_Program_extractedImports == null) {
       contributorMap_Program_extractedImports = new java.util.IdentityHashMap<ASTNode, java.util.Set<ASTNode>>();
       collect_contributors_Program_extractedImports(this, contributorMap_Program_extractedImports);
+    }
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:68
+   */
+  protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedBranches = null;
+
+  protected void survey_Program_extractedBranches() {
+    if (contributorMap_Program_extractedBranches == null) {
+      contributorMap_Program_extractedBranches = new java.util.IdentityHashMap<ASTNode, java.util.Set<ASTNode>>();
+      collect_contributors_Program_extractedBranches(this, contributorMap_Program_extractedBranches);
+    }
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:86
+   */
+  protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedMethodCalls = null;
+
+  protected void survey_Program_extractedMethodCalls() {
+    if (contributorMap_Program_extractedMethodCalls == null) {
+      contributorMap_Program_extractedMethodCalls = new java.util.IdentityHashMap<ASTNode, java.util.Set<ASTNode>>();
+      collect_contributors_Program_extractedMethodCalls(this, contributorMap_Program_extractedMethodCalls);
+    }
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:90
+   */
+  protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedForeignMethodCalls = null;
+
+  protected void survey_Program_extractedForeignMethodCalls() {
+    if (contributorMap_Program_extractedForeignMethodCalls == null) {
+      contributorMap_Program_extractedForeignMethodCalls = new java.util.IdentityHashMap<ASTNode, java.util.Set<ASTNode>>();
+      collect_contributors_Program_extractedForeignMethodCalls(this, contributorMap_Program_extractedForeignMethodCalls);
+    }
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:94
+   */
+  protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedGlobalVariables = null;
+
+  protected void survey_Program_extractedGlobalVariables() {
+    if (contributorMap_Program_extractedGlobalVariables == null) {
+      contributorMap_Program_extractedGlobalVariables = new java.util.IdentityHashMap<ASTNode, java.util.Set<ASTNode>>();
+      collect_contributors_Program_extractedGlobalVariables(this, contributorMap_Program_extractedGlobalVariables);
+    }
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:98
+   */
+  protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedVariables = null;
+
+  protected void survey_Program_extractedVariables() {
+    if (contributorMap_Program_extractedVariables == null) {
+      contributorMap_Program_extractedVariables = new java.util.IdentityHashMap<ASTNode, java.util.Set<ASTNode>>();
+      collect_contributors_Program_extractedVariables(this, contributorMap_Program_extractedVariables);
+    }
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:103
+   */
+  protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedVariableReferences = null;
+
+  protected void survey_Program_extractedVariableReferences() {
+    if (contributorMap_Program_extractedVariableReferences == null) {
+      contributorMap_Program_extractedVariableReferences = new java.util.IdentityHashMap<ASTNode, java.util.Set<ASTNode>>();
+      collect_contributors_Program_extractedVariableReferences(this, contributorMap_Program_extractedVariableReferences);
+    }
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:113
+   */
+  protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedDataTypes = null;
+
+  protected void survey_Program_extractedDataTypes() {
+    if (contributorMap_Program_extractedDataTypes == null) {
+      contributorMap_Program_extractedDataTypes = new java.util.IdentityHashMap<ASTNode, java.util.Set<ASTNode>>();
+      collect_contributors_Program_extractedDataTypes(this, contributorMap_Program_extractedDataTypes);
+    }
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:117
+   */
+  protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedStatementTypes = null;
+
+  protected void survey_Program_extractedStatementTypes() {
+    if (contributorMap_Program_extractedStatementTypes == null) {
+      contributorMap_Program_extractedStatementTypes = new java.util.IdentityHashMap<ASTNode, java.util.Set<ASTNode>>();
+      collect_contributors_Program_extractedStatementTypes(this, contributorMap_Program_extractedStatementTypes);
     }
   }
 
@@ -2863,12 +2991,12 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   }
   /**
    * @attribute coll
-   * @aspect NodeCounter
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:2
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:3
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCounter", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:2")
-  public java.util.Collection<CompilationUnit> extractedSourceFiles() {
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:3")
+  public java.util.Collection<String> extractedSourceFiles() {
     ASTNode$State state = state();
     if (Program_extractedSourceFiles_computed == ASTNode$State.NON_CYCLE || Program_extractedSourceFiles_computed == state().cycle()) {
       return Program_extractedSourceFiles_value;
@@ -2884,14 +3012,14 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     return Program_extractedSourceFiles_value;
   }
   /** @apilevel internal */
-  private java.util.Collection<CompilationUnit> extractedSourceFiles_compute() {
+  private java.util.Collection<String> extractedSourceFiles_compute() {
     ASTNode node = this;
     while (node != null && !(node instanceof Program)) {
       node = node.getParent();
     }
     Program root = (Program) node;
     root.survey_Program_extractedSourceFiles();
-    java.util.Collection<CompilationUnit> _computedValue = new java.util.ArrayList<CompilationUnit>();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
     if (root.contributorMap_Program_extractedSourceFiles.containsKey(this)) {
       for (ASTNode contributor : root.contributorMap_Program_extractedSourceFiles.get(this)) {
         contributor.contributeTo_Program_extractedSourceFiles(_computedValue);
@@ -2903,60 +3031,60 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   protected ASTNode$State.Cycle Program_extractedSourceFiles_computed = null;
 
   /** @apilevel internal */
-  protected java.util.Collection<CompilationUnit> Program_extractedSourceFiles_value;
+  protected java.util.Collection<String> Program_extractedSourceFiles_value;
 
   /**
    * @attribute coll
-   * @aspect NodeCounter
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:5
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:7
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCounter", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:5")
-  public java.util.Collection<MethodDecl> extractedMethodDeclarations() {
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:7")
+  public java.util.Collection<String> extractedPublicMethodDeclarations() {
     ASTNode$State state = state();
-    if (Program_extractedMethodDeclarations_computed == ASTNode$State.NON_CYCLE || Program_extractedMethodDeclarations_computed == state().cycle()) {
-      return Program_extractedMethodDeclarations_value;
+    if (Program_extractedPublicMethodDeclarations_computed == ASTNode$State.NON_CYCLE || Program_extractedPublicMethodDeclarations_computed == state().cycle()) {
+      return Program_extractedPublicMethodDeclarations_value;
     }
-    Program_extractedMethodDeclarations_value = extractedMethodDeclarations_compute();
+    Program_extractedPublicMethodDeclarations_value = extractedPublicMethodDeclarations_compute();
     if (state().inCircle()) {
-      Program_extractedMethodDeclarations_computed = state().cycle();
+      Program_extractedPublicMethodDeclarations_computed = state().cycle();
     
     } else {
-      Program_extractedMethodDeclarations_computed = ASTNode$State.NON_CYCLE;
+      Program_extractedPublicMethodDeclarations_computed = ASTNode$State.NON_CYCLE;
     
     }
-    return Program_extractedMethodDeclarations_value;
+    return Program_extractedPublicMethodDeclarations_value;
   }
   /** @apilevel internal */
-  private java.util.Collection<MethodDecl> extractedMethodDeclarations_compute() {
+  private java.util.Collection<String> extractedPublicMethodDeclarations_compute() {
     ASTNode node = this;
     while (node != null && !(node instanceof Program)) {
       node = node.getParent();
     }
     Program root = (Program) node;
-    root.survey_Program_extractedMethodDeclarations();
-    java.util.Collection<MethodDecl> _computedValue = new java.util.ArrayList<MethodDecl>();
-    if (root.contributorMap_Program_extractedMethodDeclarations.containsKey(this)) {
-      for (ASTNode contributor : root.contributorMap_Program_extractedMethodDeclarations.get(this)) {
-        contributor.contributeTo_Program_extractedMethodDeclarations(_computedValue);
+    root.survey_Program_extractedPublicMethodDeclarations();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
+    if (root.contributorMap_Program_extractedPublicMethodDeclarations.containsKey(this)) {
+      for (ASTNode contributor : root.contributorMap_Program_extractedPublicMethodDeclarations.get(this)) {
+        contributor.contributeTo_Program_extractedPublicMethodDeclarations(_computedValue);
       }
     }
     return _computedValue;
   }
   /** @apilevel internal */
-  protected ASTNode$State.Cycle Program_extractedMethodDeclarations_computed = null;
+  protected ASTNode$State.Cycle Program_extractedPublicMethodDeclarations_computed = null;
 
   /** @apilevel internal */
-  protected java.util.Collection<MethodDecl> Program_extractedMethodDeclarations_value;
+  protected java.util.Collection<String> Program_extractedPublicMethodDeclarations_value;
 
   /**
    * @attribute coll
-   * @aspect NodeCounter
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:8
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:11
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCounter", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:8")
-  public java.util.Collection<MethodDecl> extractedPrivateMethodDeclarations() {
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:11")
+  public java.util.Collection<String> extractedPrivateMethodDeclarations() {
     ASTNode$State state = state();
     if (Program_extractedPrivateMethodDeclarations_computed == ASTNode$State.NON_CYCLE || Program_extractedPrivateMethodDeclarations_computed == state().cycle()) {
       return Program_extractedPrivateMethodDeclarations_value;
@@ -2972,14 +3100,14 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     return Program_extractedPrivateMethodDeclarations_value;
   }
   /** @apilevel internal */
-  private java.util.Collection<MethodDecl> extractedPrivateMethodDeclarations_compute() {
+  private java.util.Collection<String> extractedPrivateMethodDeclarations_compute() {
     ASTNode node = this;
     while (node != null && !(node instanceof Program)) {
       node = node.getParent();
     }
     Program root = (Program) node;
     root.survey_Program_extractedPrivateMethodDeclarations();
-    java.util.Collection<MethodDecl> _computedValue = new java.util.ArrayList<MethodDecl>();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
     if (root.contributorMap_Program_extractedPrivateMethodDeclarations.containsKey(this)) {
       for (ASTNode contributor : root.contributorMap_Program_extractedPrivateMethodDeclarations.get(this)) {
         contributor.contributeTo_Program_extractedPrivateMethodDeclarations(_computedValue);
@@ -2991,16 +3119,16 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   protected ASTNode$State.Cycle Program_extractedPrivateMethodDeclarations_computed = null;
 
   /** @apilevel internal */
-  protected java.util.Collection<MethodDecl> Program_extractedPrivateMethodDeclarations_value;
+  protected java.util.Collection<String> Program_extractedPrivateMethodDeclarations_value;
 
   /**
    * @attribute coll
-   * @aspect NodeCounter
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:11
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:15
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCounter", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:11")
-  public java.util.Collection<IfStmt> extractedIfStatements() {
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:15")
+  public java.util.Collection<String> extractedIfStatements() {
     ASTNode$State state = state();
     if (Program_extractedIfStatements_computed == ASTNode$State.NON_CYCLE || Program_extractedIfStatements_computed == state().cycle()) {
       return Program_extractedIfStatements_value;
@@ -3016,14 +3144,14 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     return Program_extractedIfStatements_value;
   }
   /** @apilevel internal */
-  private java.util.Collection<IfStmt> extractedIfStatements_compute() {
+  private java.util.Collection<String> extractedIfStatements_compute() {
     ASTNode node = this;
     while (node != null && !(node instanceof Program)) {
       node = node.getParent();
     }
     Program root = (Program) node;
     root.survey_Program_extractedIfStatements();
-    java.util.Collection<IfStmt> _computedValue = new java.util.ArrayList<IfStmt>();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
     if (root.contributorMap_Program_extractedIfStatements.containsKey(this)) {
       for (ASTNode contributor : root.contributorMap_Program_extractedIfStatements.get(this)) {
         contributor.contributeTo_Program_extractedIfStatements(_computedValue);
@@ -3035,16 +3163,16 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   protected ASTNode$State.Cycle Program_extractedIfStatements_computed = null;
 
   /** @apilevel internal */
-  protected java.util.Collection<IfStmt> Program_extractedIfStatements_value;
+  protected java.util.Collection<String> Program_extractedIfStatements_value;
 
   /**
    * @attribute coll
-   * @aspect NodeCounter
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:14
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:20
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCounter", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:14")
-  public java.util.Collection<BranchTargetStmt> extractedLoopStatements() {
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:20")
+  public java.util.Collection<String> extractedLoopStatements() {
     ASTNode$State state = state();
     if (Program_extractedLoopStatements_computed == ASTNode$State.NON_CYCLE || Program_extractedLoopStatements_computed == state().cycle()) {
       return Program_extractedLoopStatements_value;
@@ -3060,14 +3188,14 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     return Program_extractedLoopStatements_value;
   }
   /** @apilevel internal */
-  private java.util.Collection<BranchTargetStmt> extractedLoopStatements_compute() {
+  private java.util.Collection<String> extractedLoopStatements_compute() {
     ASTNode node = this;
     while (node != null && !(node instanceof Program)) {
       node = node.getParent();
     }
     Program root = (Program) node;
     root.survey_Program_extractedLoopStatements();
-    java.util.Collection<BranchTargetStmt> _computedValue = new java.util.ArrayList<BranchTargetStmt>();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
     if (root.contributorMap_Program_extractedLoopStatements.containsKey(this)) {
       for (ASTNode contributor : root.contributorMap_Program_extractedLoopStatements.get(this)) {
         contributor.contributeTo_Program_extractedLoopStatements(_computedValue);
@@ -3079,16 +3207,16 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   protected ASTNode$State.Cycle Program_extractedLoopStatements_computed = null;
 
   /** @apilevel internal */
-  protected java.util.Collection<BranchTargetStmt> Program_extractedLoopStatements_value;
+  protected java.util.Collection<String> Program_extractedLoopStatements_value;
 
   /**
    * @attribute coll
-   * @aspect NodeCounter
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:20
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:27
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCounter", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:20")
-  public java.util.Collection<SwitchStmt> extractedSwitchStatements() {
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:27")
+  public java.util.Collection<String> extractedSwitchStatements() {
     ASTNode$State state = state();
     if (Program_extractedSwitchStatements_computed == ASTNode$State.NON_CYCLE || Program_extractedSwitchStatements_computed == state().cycle()) {
       return Program_extractedSwitchStatements_value;
@@ -3104,14 +3232,14 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     return Program_extractedSwitchStatements_value;
   }
   /** @apilevel internal */
-  private java.util.Collection<SwitchStmt> extractedSwitchStatements_compute() {
+  private java.util.Collection<String> extractedSwitchStatements_compute() {
     ASTNode node = this;
     while (node != null && !(node instanceof Program)) {
       node = node.getParent();
     }
     Program root = (Program) node;
     root.survey_Program_extractedSwitchStatements();
-    java.util.Collection<SwitchStmt> _computedValue = new java.util.ArrayList<SwitchStmt>();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
     if (root.contributorMap_Program_extractedSwitchStatements.containsKey(this)) {
       for (ASTNode contributor : root.contributorMap_Program_extractedSwitchStatements.get(this)) {
         contributor.contributeTo_Program_extractedSwitchStatements(_computedValue);
@@ -3123,16 +3251,16 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   protected ASTNode$State.Cycle Program_extractedSwitchStatements_computed = null;
 
   /** @apilevel internal */
-  protected java.util.Collection<SwitchStmt> Program_extractedSwitchStatements_value;
+  protected java.util.Collection<String> Program_extractedSwitchStatements_value;
 
   /**
    * @attribute coll
-   * @aspect NodeCounter
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:23
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:31
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCounter", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:23")
-  public java.util.Collection<Case> extractedSwitchCases() {
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:31")
+  public java.util.Collection<String> extractedSwitchCases() {
     ASTNode$State state = state();
     if (Program_extractedSwitchCases_computed == ASTNode$State.NON_CYCLE || Program_extractedSwitchCases_computed == state().cycle()) {
       return Program_extractedSwitchCases_value;
@@ -3148,14 +3276,14 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     return Program_extractedSwitchCases_value;
   }
   /** @apilevel internal */
-  private java.util.Collection<Case> extractedSwitchCases_compute() {
+  private java.util.Collection<String> extractedSwitchCases_compute() {
     ASTNode node = this;
     while (node != null && !(node instanceof Program)) {
       node = node.getParent();
     }
     Program root = (Program) node;
     root.survey_Program_extractedSwitchCases();
-    java.util.Collection<Case> _computedValue = new java.util.ArrayList<Case>();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
     if (root.contributorMap_Program_extractedSwitchCases.containsKey(this)) {
       for (ASTNode contributor : root.contributorMap_Program_extractedSwitchCases.get(this)) {
         contributor.contributeTo_Program_extractedSwitchCases(_computedValue);
@@ -3167,16 +3295,16 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   protected ASTNode$State.Cycle Program_extractedSwitchCases_computed = null;
 
   /** @apilevel internal */
-  protected java.util.Collection<Case> Program_extractedSwitchCases_value;
+  protected java.util.Collection<String> Program_extractedSwitchCases_value;
 
   /**
    * @attribute coll
-   * @aspect NodeCounter
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:26
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:35
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCounter", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:26")
-  public java.util.Collection<ClassDecl> extractedClassDeclarations() {
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:35")
+  public java.util.Collection<String> extractedClassDeclarations() {
     ASTNode$State state = state();
     if (Program_extractedClassDeclarations_computed == ASTNode$State.NON_CYCLE || Program_extractedClassDeclarations_computed == state().cycle()) {
       return Program_extractedClassDeclarations_value;
@@ -3192,14 +3320,14 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     return Program_extractedClassDeclarations_value;
   }
   /** @apilevel internal */
-  private java.util.Collection<ClassDecl> extractedClassDeclarations_compute() {
+  private java.util.Collection<String> extractedClassDeclarations_compute() {
     ASTNode node = this;
     while (node != null && !(node instanceof Program)) {
       node = node.getParent();
     }
     Program root = (Program) node;
     root.survey_Program_extractedClassDeclarations();
-    java.util.Collection<ClassDecl> _computedValue = new java.util.ArrayList<ClassDecl>();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
     if (root.contributorMap_Program_extractedClassDeclarations.containsKey(this)) {
       for (ASTNode contributor : root.contributorMap_Program_extractedClassDeclarations.get(this)) {
         contributor.contributeTo_Program_extractedClassDeclarations(_computedValue);
@@ -3211,16 +3339,16 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   protected ASTNode$State.Cycle Program_extractedClassDeclarations_computed = null;
 
   /** @apilevel internal */
-  protected java.util.Collection<ClassDecl> Program_extractedClassDeclarations_value;
+  protected java.util.Collection<String> Program_extractedClassDeclarations_value;
 
   /**
    * @attribute coll
-   * @aspect NodeCounter
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:29
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:39
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCounter", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:29")
-  public java.util.Collection<NumericLiteral> extractedNumericLiterals() {
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:39")
+  public java.util.Collection<String> extractedNumericLiterals() {
     ASTNode$State state = state();
     if (Program_extractedNumericLiterals_computed == ASTNode$State.NON_CYCLE || Program_extractedNumericLiterals_computed == state().cycle()) {
       return Program_extractedNumericLiterals_value;
@@ -3236,14 +3364,14 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     return Program_extractedNumericLiterals_value;
   }
   /** @apilevel internal */
-  private java.util.Collection<NumericLiteral> extractedNumericLiterals_compute() {
+  private java.util.Collection<String> extractedNumericLiterals_compute() {
     ASTNode node = this;
     while (node != null && !(node instanceof Program)) {
       node = node.getParent();
     }
     Program root = (Program) node;
     root.survey_Program_extractedNumericLiterals();
-    java.util.Collection<NumericLiteral> _computedValue = new java.util.ArrayList<NumericLiteral>();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
     if (root.contributorMap_Program_extractedNumericLiterals.containsKey(this)) {
       for (ASTNode contributor : root.contributorMap_Program_extractedNumericLiterals.get(this)) {
         contributor.contributeTo_Program_extractedNumericLiterals(_computedValue);
@@ -3255,16 +3383,16 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   protected ASTNode$State.Cycle Program_extractedNumericLiterals_computed = null;
 
   /** @apilevel internal */
-  protected java.util.Collection<NumericLiteral> Program_extractedNumericLiterals_value;
+  protected java.util.Collection<String> Program_extractedNumericLiterals_value;
 
   /**
    * @attribute coll
-   * @aspect NodeCounter
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:32
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:43
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCounter", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:32")
-  public java.util.Collection<InterfaceDecl> extractedInterfaceDeclarations() {
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:43")
+  public java.util.Collection<String> extractedInterfaceDeclarations() {
     ASTNode$State state = state();
     if (Program_extractedInterfaceDeclarations_computed == ASTNode$State.NON_CYCLE || Program_extractedInterfaceDeclarations_computed == state().cycle()) {
       return Program_extractedInterfaceDeclarations_value;
@@ -3280,14 +3408,14 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     return Program_extractedInterfaceDeclarations_value;
   }
   /** @apilevel internal */
-  private java.util.Collection<InterfaceDecl> extractedInterfaceDeclarations_compute() {
+  private java.util.Collection<String> extractedInterfaceDeclarations_compute() {
     ASTNode node = this;
     while (node != null && !(node instanceof Program)) {
       node = node.getParent();
     }
     Program root = (Program) node;
     root.survey_Program_extractedInterfaceDeclarations();
-    java.util.Collection<InterfaceDecl> _computedValue = new java.util.ArrayList<InterfaceDecl>();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
     if (root.contributorMap_Program_extractedInterfaceDeclarations.containsKey(this)) {
       for (ASTNode contributor : root.contributorMap_Program_extractedInterfaceDeclarations.get(this)) {
         contributor.contributeTo_Program_extractedInterfaceDeclarations(_computedValue);
@@ -3299,16 +3427,16 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   protected ASTNode$State.Cycle Program_extractedInterfaceDeclarations_computed = null;
 
   /** @apilevel internal */
-  protected java.util.Collection<InterfaceDecl> Program_extractedInterfaceDeclarations_value;
+  protected java.util.Collection<String> Program_extractedInterfaceDeclarations_value;
 
   /**
    * @attribute coll
-   * @aspect NodeCounter
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:35
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:47
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCounter", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:35")
-  public java.util.Collection<StringLiteral> extractedStringLiterals() {
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:47")
+  public java.util.Collection<String> extractedStringLiterals() {
     ASTNode$State state = state();
     if (Program_extractedStringLiterals_computed == ASTNode$State.NON_CYCLE || Program_extractedStringLiterals_computed == state().cycle()) {
       return Program_extractedStringLiterals_value;
@@ -3324,14 +3452,14 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     return Program_extractedStringLiterals_value;
   }
   /** @apilevel internal */
-  private java.util.Collection<StringLiteral> extractedStringLiterals_compute() {
+  private java.util.Collection<String> extractedStringLiterals_compute() {
     ASTNode node = this;
     while (node != null && !(node instanceof Program)) {
       node = node.getParent();
     }
     Program root = (Program) node;
     root.survey_Program_extractedStringLiterals();
-    java.util.Collection<StringLiteral> _computedValue = new java.util.ArrayList<StringLiteral>();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
     if (root.contributorMap_Program_extractedStringLiterals.containsKey(this)) {
       for (ASTNode contributor : root.contributorMap_Program_extractedStringLiterals.get(this)) {
         contributor.contributeTo_Program_extractedStringLiterals(_computedValue);
@@ -3343,16 +3471,16 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   protected ASTNode$State.Cycle Program_extractedStringLiterals_computed = null;
 
   /** @apilevel internal */
-  protected java.util.Collection<StringLiteral> Program_extractedStringLiterals_value;
+  protected java.util.Collection<String> Program_extractedStringLiterals_value;
 
   /**
    * @attribute coll
-   * @aspect NodeCounter
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:38
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:51
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCounter", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:38")
-  public java.util.Collection<ParameterDeclaration> extractedParameters() {
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:51")
+  public java.util.Collection<String> extractedParameters() {
     ASTNode$State state = state();
     if (Program_extractedParameters_computed == ASTNode$State.NON_CYCLE || Program_extractedParameters_computed == state().cycle()) {
       return Program_extractedParameters_value;
@@ -3368,14 +3496,14 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     return Program_extractedParameters_value;
   }
   /** @apilevel internal */
-  private java.util.Collection<ParameterDeclaration> extractedParameters_compute() {
+  private java.util.Collection<String> extractedParameters_compute() {
     ASTNode node = this;
     while (node != null && !(node instanceof Program)) {
       node = node.getParent();
     }
     Program root = (Program) node;
     root.survey_Program_extractedParameters();
-    java.util.Collection<ParameterDeclaration> _computedValue = new java.util.ArrayList<ParameterDeclaration>();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
     if (root.contributorMap_Program_extractedParameters.containsKey(this)) {
       for (ASTNode contributor : root.contributorMap_Program_extractedParameters.get(this)) {
         contributor.contributeTo_Program_extractedParameters(_computedValue);
@@ -3387,16 +3515,16 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   protected ASTNode$State.Cycle Program_extractedParameters_computed = null;
 
   /** @apilevel internal */
-  protected java.util.Collection<ParameterDeclaration> Program_extractedParameters_value;
+  protected java.util.Collection<String> Program_extractedParameters_value;
 
   /**
    * @attribute coll
-   * @aspect NodeCounter
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:41
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:55
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCounter", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:41")
-  public java.util.Collection<ReturnStmt> extractedReturnStatements() {
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:55")
+  public java.util.Collection<String> extractedReturnStatements() {
     ASTNode$State state = state();
     if (Program_extractedReturnStatements_computed == ASTNode$State.NON_CYCLE || Program_extractedReturnStatements_computed == state().cycle()) {
       return Program_extractedReturnStatements_value;
@@ -3412,14 +3540,14 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     return Program_extractedReturnStatements_value;
   }
   /** @apilevel internal */
-  private java.util.Collection<ReturnStmt> extractedReturnStatements_compute() {
+  private java.util.Collection<String> extractedReturnStatements_compute() {
     ASTNode node = this;
     while (node != null && !(node instanceof Program)) {
       node = node.getParent();
     }
     Program root = (Program) node;
     root.survey_Program_extractedReturnStatements();
-    java.util.Collection<ReturnStmt> _computedValue = new java.util.ArrayList<ReturnStmt>();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
     if (root.contributorMap_Program_extractedReturnStatements.containsKey(this)) {
       for (ASTNode contributor : root.contributorMap_Program_extractedReturnStatements.get(this)) {
         contributor.contributeTo_Program_extractedReturnStatements(_computedValue);
@@ -3431,16 +3559,16 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   protected ASTNode$State.Cycle Program_extractedReturnStatements_computed = null;
 
   /** @apilevel internal */
-  protected java.util.Collection<ReturnStmt> Program_extractedReturnStatements_value;
+  protected java.util.Collection<String> Program_extractedReturnStatements_value;
 
   /**
    * @attribute coll
-   * @aspect NodeCounter
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:44
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:59
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCounter", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:44")
-  public java.util.Collection<Stmt> extractedStatements() {
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:59")
+  public java.util.Collection<String> extractedStatements() {
     ASTNode$State state = state();
     if (Program_extractedStatements_computed == ASTNode$State.NON_CYCLE || Program_extractedStatements_computed == state().cycle()) {
       return Program_extractedStatements_value;
@@ -3456,14 +3584,14 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     return Program_extractedStatements_value;
   }
   /** @apilevel internal */
-  private java.util.Collection<Stmt> extractedStatements_compute() {
+  private java.util.Collection<String> extractedStatements_compute() {
     ASTNode node = this;
     while (node != null && !(node instanceof Program)) {
       node = node.getParent();
     }
     Program root = (Program) node;
     root.survey_Program_extractedStatements();
-    java.util.Collection<Stmt> _computedValue = new java.util.ArrayList<Stmt>();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
     if (root.contributorMap_Program_extractedStatements.containsKey(this)) {
       for (ASTNode contributor : root.contributorMap_Program_extractedStatements.get(this)) {
         contributor.contributeTo_Program_extractedStatements(_computedValue);
@@ -3475,16 +3603,16 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   protected ASTNode$State.Cycle Program_extractedStatements_computed = null;
 
   /** @apilevel internal */
-  protected java.util.Collection<Stmt> Program_extractedStatements_value;
+  protected java.util.Collection<String> Program_extractedStatements_value;
 
   /**
    * @attribute coll
-   * @aspect NodeCounter
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:47
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:63
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCounter", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:47")
-  public java.util.Collection<ASTNode> extractedImports() {
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:63")
+  public java.util.Collection<String> extractedImports() {
     ASTNode$State state = state();
     if (Program_extractedImports_computed == ASTNode$State.NON_CYCLE || Program_extractedImports_computed == state().cycle()) {
       return Program_extractedImports_value;
@@ -3500,14 +3628,14 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     return Program_extractedImports_value;
   }
   /** @apilevel internal */
-  private java.util.Collection<ASTNode> extractedImports_compute() {
+  private java.util.Collection<String> extractedImports_compute() {
     ASTNode node = this;
     while (node != null && !(node instanceof Program)) {
       node = node.getParent();
     }
     Program root = (Program) node;
     root.survey_Program_extractedImports();
-    java.util.Collection<ASTNode> _computedValue = new java.util.ArrayList<ASTNode>();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
     if (root.contributorMap_Program_extractedImports.containsKey(this)) {
       for (ASTNode contributor : root.contributorMap_Program_extractedImports.get(this)) {
         contributor.contributeTo_Program_extractedImports(_computedValue);
@@ -3519,6 +3647,358 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   protected ASTNode$State.Cycle Program_extractedImports_computed = null;
 
   /** @apilevel internal */
-  protected java.util.Collection<ASTNode> Program_extractedImports_value;
+  protected java.util.Collection<String> Program_extractedImports_value;
+
+  /**
+   * @attribute coll
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:68
+   */
+  @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:68")
+  public java.util.Collection<String> extractedBranches() {
+    ASTNode$State state = state();
+    if (Program_extractedBranches_computed == ASTNode$State.NON_CYCLE || Program_extractedBranches_computed == state().cycle()) {
+      return Program_extractedBranches_value;
+    }
+    Program_extractedBranches_value = extractedBranches_compute();
+    if (state().inCircle()) {
+      Program_extractedBranches_computed = state().cycle();
+    
+    } else {
+      Program_extractedBranches_computed = ASTNode$State.NON_CYCLE;
+    
+    }
+    return Program_extractedBranches_value;
+  }
+  /** @apilevel internal */
+  private java.util.Collection<String> extractedBranches_compute() {
+    ASTNode node = this;
+    while (node != null && !(node instanceof Program)) {
+      node = node.getParent();
+    }
+    Program root = (Program) node;
+    root.survey_Program_extractedBranches();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
+    if (root.contributorMap_Program_extractedBranches.containsKey(this)) {
+      for (ASTNode contributor : root.contributorMap_Program_extractedBranches.get(this)) {
+        contributor.contributeTo_Program_extractedBranches(_computedValue);
+      }
+    }
+    return _computedValue;
+  }
+  /** @apilevel internal */
+  protected ASTNode$State.Cycle Program_extractedBranches_computed = null;
+
+  /** @apilevel internal */
+  protected java.util.Collection<String> Program_extractedBranches_value;
+
+  /**
+   * @attribute coll
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:86
+   */
+  @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:86")
+  public java.util.Collection<String> extractedMethodCalls() {
+    ASTNode$State state = state();
+    if (Program_extractedMethodCalls_computed == ASTNode$State.NON_CYCLE || Program_extractedMethodCalls_computed == state().cycle()) {
+      return Program_extractedMethodCalls_value;
+    }
+    Program_extractedMethodCalls_value = extractedMethodCalls_compute();
+    if (state().inCircle()) {
+      Program_extractedMethodCalls_computed = state().cycle();
+    
+    } else {
+      Program_extractedMethodCalls_computed = ASTNode$State.NON_CYCLE;
+    
+    }
+    return Program_extractedMethodCalls_value;
+  }
+  /** @apilevel internal */
+  private java.util.Collection<String> extractedMethodCalls_compute() {
+    ASTNode node = this;
+    while (node != null && !(node instanceof Program)) {
+      node = node.getParent();
+    }
+    Program root = (Program) node;
+    root.survey_Program_extractedMethodCalls();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
+    if (root.contributorMap_Program_extractedMethodCalls.containsKey(this)) {
+      for (ASTNode contributor : root.contributorMap_Program_extractedMethodCalls.get(this)) {
+        contributor.contributeTo_Program_extractedMethodCalls(_computedValue);
+      }
+    }
+    return _computedValue;
+  }
+  /** @apilevel internal */
+  protected ASTNode$State.Cycle Program_extractedMethodCalls_computed = null;
+
+  /** @apilevel internal */
+  protected java.util.Collection<String> Program_extractedMethodCalls_value;
+
+  /**
+   * @attribute coll
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:90
+   */
+  @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:90")
+  public java.util.Collection<String> extractedForeignMethodCalls() {
+    ASTNode$State state = state();
+    if (Program_extractedForeignMethodCalls_computed == ASTNode$State.NON_CYCLE || Program_extractedForeignMethodCalls_computed == state().cycle()) {
+      return Program_extractedForeignMethodCalls_value;
+    }
+    Program_extractedForeignMethodCalls_value = extractedForeignMethodCalls_compute();
+    if (state().inCircle()) {
+      Program_extractedForeignMethodCalls_computed = state().cycle();
+    
+    } else {
+      Program_extractedForeignMethodCalls_computed = ASTNode$State.NON_CYCLE;
+    
+    }
+    return Program_extractedForeignMethodCalls_value;
+  }
+  /** @apilevel internal */
+  private java.util.Collection<String> extractedForeignMethodCalls_compute() {
+    ASTNode node = this;
+    while (node != null && !(node instanceof Program)) {
+      node = node.getParent();
+    }
+    Program root = (Program) node;
+    root.survey_Program_extractedForeignMethodCalls();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
+    if (root.contributorMap_Program_extractedForeignMethodCalls.containsKey(this)) {
+      for (ASTNode contributor : root.contributorMap_Program_extractedForeignMethodCalls.get(this)) {
+        contributor.contributeTo_Program_extractedForeignMethodCalls(_computedValue);
+      }
+    }
+    return _computedValue;
+  }
+  /** @apilevel internal */
+  protected ASTNode$State.Cycle Program_extractedForeignMethodCalls_computed = null;
+
+  /** @apilevel internal */
+  protected java.util.Collection<String> Program_extractedForeignMethodCalls_value;
+
+  /**
+   * @attribute coll
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:94
+   */
+  @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:94")
+  public java.util.Collection<String> extractedGlobalVariables() {
+    ASTNode$State state = state();
+    if (Program_extractedGlobalVariables_computed == ASTNode$State.NON_CYCLE || Program_extractedGlobalVariables_computed == state().cycle()) {
+      return Program_extractedGlobalVariables_value;
+    }
+    Program_extractedGlobalVariables_value = extractedGlobalVariables_compute();
+    if (state().inCircle()) {
+      Program_extractedGlobalVariables_computed = state().cycle();
+    
+    } else {
+      Program_extractedGlobalVariables_computed = ASTNode$State.NON_CYCLE;
+    
+    }
+    return Program_extractedGlobalVariables_value;
+  }
+  /** @apilevel internal */
+  private java.util.Collection<String> extractedGlobalVariables_compute() {
+    ASTNode node = this;
+    while (node != null && !(node instanceof Program)) {
+      node = node.getParent();
+    }
+    Program root = (Program) node;
+    root.survey_Program_extractedGlobalVariables();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
+    if (root.contributorMap_Program_extractedGlobalVariables.containsKey(this)) {
+      for (ASTNode contributor : root.contributorMap_Program_extractedGlobalVariables.get(this)) {
+        contributor.contributeTo_Program_extractedGlobalVariables(_computedValue);
+      }
+    }
+    return _computedValue;
+  }
+  /** @apilevel internal */
+  protected ASTNode$State.Cycle Program_extractedGlobalVariables_computed = null;
+
+  /** @apilevel internal */
+  protected java.util.Collection<String> Program_extractedGlobalVariables_value;
+
+  /**
+   * @attribute coll
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:98
+   */
+  @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:98")
+  public java.util.Collection<String> extractedVariables() {
+    ASTNode$State state = state();
+    if (Program_extractedVariables_computed == ASTNode$State.NON_CYCLE || Program_extractedVariables_computed == state().cycle()) {
+      return Program_extractedVariables_value;
+    }
+    Program_extractedVariables_value = extractedVariables_compute();
+    if (state().inCircle()) {
+      Program_extractedVariables_computed = state().cycle();
+    
+    } else {
+      Program_extractedVariables_computed = ASTNode$State.NON_CYCLE;
+    
+    }
+    return Program_extractedVariables_value;
+  }
+  /** @apilevel internal */
+  private java.util.Collection<String> extractedVariables_compute() {
+    ASTNode node = this;
+    while (node != null && !(node instanceof Program)) {
+      node = node.getParent();
+    }
+    Program root = (Program) node;
+    root.survey_Program_extractedVariables();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
+    if (root.contributorMap_Program_extractedVariables.containsKey(this)) {
+      for (ASTNode contributor : root.contributorMap_Program_extractedVariables.get(this)) {
+        contributor.contributeTo_Program_extractedVariables(_computedValue);
+      }
+    }
+    return _computedValue;
+  }
+  /** @apilevel internal */
+  protected ASTNode$State.Cycle Program_extractedVariables_computed = null;
+
+  /** @apilevel internal */
+  protected java.util.Collection<String> Program_extractedVariables_value;
+
+  /**
+   * @attribute coll
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:103
+   */
+  @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:103")
+  public java.util.Collection<String> extractedVariableReferences() {
+    ASTNode$State state = state();
+    if (Program_extractedVariableReferences_computed == ASTNode$State.NON_CYCLE || Program_extractedVariableReferences_computed == state().cycle()) {
+      return Program_extractedVariableReferences_value;
+    }
+    Program_extractedVariableReferences_value = extractedVariableReferences_compute();
+    if (state().inCircle()) {
+      Program_extractedVariableReferences_computed = state().cycle();
+    
+    } else {
+      Program_extractedVariableReferences_computed = ASTNode$State.NON_CYCLE;
+    
+    }
+    return Program_extractedVariableReferences_value;
+  }
+  /** @apilevel internal */
+  private java.util.Collection<String> extractedVariableReferences_compute() {
+    ASTNode node = this;
+    while (node != null && !(node instanceof Program)) {
+      node = node.getParent();
+    }
+    Program root = (Program) node;
+    root.survey_Program_extractedVariableReferences();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
+    if (root.contributorMap_Program_extractedVariableReferences.containsKey(this)) {
+      for (ASTNode contributor : root.contributorMap_Program_extractedVariableReferences.get(this)) {
+        contributor.contributeTo_Program_extractedVariableReferences(_computedValue);
+      }
+    }
+    return _computedValue;
+  }
+  /** @apilevel internal */
+  protected ASTNode$State.Cycle Program_extractedVariableReferences_computed = null;
+
+  /** @apilevel internal */
+  protected java.util.Collection<String> Program_extractedVariableReferences_value;
+
+  /**
+   * @attribute coll
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:113
+   */
+  @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:113")
+  public java.util.Collection<String> extractedDataTypes() {
+    ASTNode$State state = state();
+    if (Program_extractedDataTypes_computed == ASTNode$State.NON_CYCLE || Program_extractedDataTypes_computed == state().cycle()) {
+      return Program_extractedDataTypes_value;
+    }
+    Program_extractedDataTypes_value = extractedDataTypes_compute();
+    if (state().inCircle()) {
+      Program_extractedDataTypes_computed = state().cycle();
+    
+    } else {
+      Program_extractedDataTypes_computed = ASTNode$State.NON_CYCLE;
+    
+    }
+    return Program_extractedDataTypes_value;
+  }
+  /** @apilevel internal */
+  private java.util.Collection<String> extractedDataTypes_compute() {
+    ASTNode node = this;
+    while (node != null && !(node instanceof Program)) {
+      node = node.getParent();
+    }
+    Program root = (Program) node;
+    root.survey_Program_extractedDataTypes();
+    java.util.Collection<String> _computedValue = new java.util.HashSet<String>();
+    if (root.contributorMap_Program_extractedDataTypes.containsKey(this)) {
+      for (ASTNode contributor : root.contributorMap_Program_extractedDataTypes.get(this)) {
+        contributor.contributeTo_Program_extractedDataTypes(_computedValue);
+      }
+    }
+    return _computedValue;
+  }
+  /** @apilevel internal */
+  protected ASTNode$State.Cycle Program_extractedDataTypes_computed = null;
+
+  /** @apilevel internal */
+  protected java.util.Collection<String> Program_extractedDataTypes_value;
+
+  /**
+   * @attribute coll
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:117
+   */
+  @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:117")
+  public java.util.Collection<String> extractedStatementTypes() {
+    ASTNode$State state = state();
+    if (Program_extractedStatementTypes_computed == ASTNode$State.NON_CYCLE || Program_extractedStatementTypes_computed == state().cycle()) {
+      return Program_extractedStatementTypes_value;
+    }
+    Program_extractedStatementTypes_value = extractedStatementTypes_compute();
+    if (state().inCircle()) {
+      Program_extractedStatementTypes_computed = state().cycle();
+    
+    } else {
+      Program_extractedStatementTypes_computed = ASTNode$State.NON_CYCLE;
+    
+    }
+    return Program_extractedStatementTypes_value;
+  }
+  /** @apilevel internal */
+  private java.util.Collection<String> extractedStatementTypes_compute() {
+    ASTNode node = this;
+    while (node != null && !(node instanceof Program)) {
+      node = node.getParent();
+    }
+    Program root = (Program) node;
+    root.survey_Program_extractedStatementTypes();
+    java.util.Collection<String> _computedValue = new java.util.HashSet<String>();
+    if (root.contributorMap_Program_extractedStatementTypes.containsKey(this)) {
+      for (ASTNode contributor : root.contributorMap_Program_extractedStatementTypes.get(this)) {
+        contributor.contributeTo_Program_extractedStatementTypes(_computedValue);
+      }
+    }
+    return _computedValue;
+  }
+  /** @apilevel internal */
+  protected ASTNode$State.Cycle Program_extractedStatementTypes_computed = null;
+
+  /** @apilevel internal */
+  protected java.util.Collection<String> Program_extractedStatementTypes_value;
 
 }

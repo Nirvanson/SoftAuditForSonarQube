@@ -872,7 +872,7 @@ public class ReturnStmt extends Stmt implements Cloneable {
     super.collect_contributors_BlockLambdaBody_lambdaReturns(_root, _map);
   }
   protected void collect_contributors_Program_extractedReturnStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:42
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:56
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -882,6 +882,18 @@ public class ReturnStmt extends Stmt implements Cloneable {
       contributors.add(this);
     }
     super.collect_contributors_Program_extractedReturnStatements(_root, _map);
+  }
+  protected void collect_contributors_Program_extractedBranches(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:82
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_Program_extractedBranches(_root, _map);
   }
   protected void contributeTo_CompilationUnit_problems(LinkedList<Problem> collection) {
     super.contributeTo_CompilationUnit_problems(collection);
@@ -895,8 +907,12 @@ public class ReturnStmt extends Stmt implements Cloneable {
       collection.add(this);
     }
   }
-  protected void contributeTo_Program_extractedReturnStatements(java.util.Collection<ReturnStmt> collection) {
+  protected void contributeTo_Program_extractedReturnStatements(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedReturnStatements(collection);
-    collection.add(this);
+    collection.add(("RES" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
+  }
+  protected void contributeTo_Program_extractedBranches(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedBranches(collection);
+    collection.add(("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";Return-Branch"));
   }
 }

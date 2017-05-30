@@ -291,7 +291,7 @@ public class StringLiteral extends Literal implements Cloneable {
     return false;
   }
   protected void collect_contributors_Program_extractedStringLiterals(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:36
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:48
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -302,8 +302,8 @@ public class StringLiteral extends Literal implements Cloneable {
     }
     super.collect_contributors_Program_extractedStringLiterals(_root, _map);
   }
-  protected void contributeTo_Program_extractedStringLiterals(java.util.Collection<StringLiteral> collection) {
+  protected void contributeTo_Program_extractedStringLiterals(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedStringLiterals(collection);
-    collection.add(this);
+    collection.add(("STL" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
   }
 }

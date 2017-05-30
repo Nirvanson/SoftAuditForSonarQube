@@ -609,7 +609,7 @@ public abstract class Stmt extends ASTNode<ASTNode> implements Cloneable {
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
   protected void collect_contributors_Program_extractedStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCounter.jrag:45
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:60
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -626,8 +626,8 @@ public abstract class Stmt extends ASTNode<ASTNode> implements Cloneable {
       collection.add(error("statement is unreachable"));
     }
   }
-  protected void contributeTo_Program_extractedStatements(java.util.Collection<Stmt> collection) {
+  protected void contributeTo_Program_extractedStatements(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedStatements(collection);
-    collection.add(this);
+    collection.add(("STA" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
   }
 }
