@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.extendj.MeasureExtractor;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.api.measures.Metric;
 
@@ -26,6 +27,7 @@ public class SoftAuditSensorTest {
     public void testMeasureExtractor(){
     	List<File> input = new ArrayList<File>();
         listf("src/main/java", input);
+    	//input.add(new File("src/main/java/plugin/model/WordInFile.java"));
         System.out.println("files in input: " + input.size());
         String[] filenames = new String[input.size()];
         for (int i=0; i<input.size(); i++) {
@@ -33,6 +35,9 @@ public class SoftAuditSensorTest {
         }
         MeasureExtractor extractor = new MeasureExtractor();
         Map<String, Collection<String>> result = extractor.extractNodes(filenames);
+        for (String numlit : result.get("Statement-Types")) {
+        	System.out.println(numlit);
+        }
         System.out.println("resultset: " + result.keySet());
         for (String key : result.keySet()) {
         	System.out.println(key + ": " + result.get(key).size());
@@ -40,6 +45,7 @@ public class SoftAuditSensorTest {
     }
     
     @Test
+    @Ignore
     public void testSingleFileAnalyse(){
         String filename = "ParsingHorror";
         File input = new File("src/test/java/testdata/" + filename + ".java");

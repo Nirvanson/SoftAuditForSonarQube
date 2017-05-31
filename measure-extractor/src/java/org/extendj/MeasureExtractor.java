@@ -20,7 +20,7 @@ public class MeasureExtractor extends JavaChecker {
 	public Map<String, Collection<String>> extractNodes(String[] fileNames) {
   		this.run(fileNames);
   		Map<String, Collection<String>> resultMap = new HashMap<String, Collection<String>>();
-  		//TODO resultMap.put("Arguments", this.program.extracted);
+  		resultMap.put("Predicates", this.program.extractedPredicates());
   		resultMap.put("Branches", this.program.extractedBranches());
   		resultMap.put("Switch-Cases", this.program.extractedSwitchCases());
   		resultMap.put("Class-Declarations", this.program.extractedClassDeclarations());
@@ -32,7 +32,7 @@ public class MeasureExtractor extends JavaChecker {
   		resultMap.put("Public-Method-Declarations", this.program.extractedPublicMethodDeclarations());
   		resultMap.put("Private-Method-Declarations", this.program.extractedPrivateMethodDeclarations());
   		resultMap.put("Method-Parameters", this.program.extractedParameters());
-  		//TODO resultMap.put("Predicates", this.program.extracted);
+  		resultMap.put("Non-Predicate-References", this.program.extractedNonPredicates());
   		resultMap.put("Variable-References", this.program.extractedVariableReferences());
   		resultMap.put("Return-Statements", this.program.extractedReturnStatements());
   		resultMap.put("Statements", this.program.extractedStatements());
@@ -43,7 +43,7 @@ public class MeasureExtractor extends JavaChecker {
   		resultMap.put("Foreign-Method-Calls", this.program.extractedForeignMethodCalls());
   		resultMap.put("Method-Calls", this.program.extractedMethodCalls());
   		resultMap.put("Imports", this.program.extractedImports());
-  		//TODO resultMap.put("Reusable Methods", this.program.extracted);
+  		resultMap.put("Reusable-Methods", this.program.extractedReusableMethods());
   		resultMap.put("Source-Files", this.program.extractedSourceFiles());
   		resultMap.put("Statement-Types", this.program.extractedStatementTypes());
   		return resultMap;

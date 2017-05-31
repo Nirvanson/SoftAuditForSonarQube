@@ -2658,7 +2658,7 @@ protected ASTNode$State.Cycle isCircular_cycle = null;
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
   protected void collect_contributors_Program_extractedClassDeclarations(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:36
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:47
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -2686,6 +2686,6 @@ protected ASTNode$State.Cycle isCircular_cycle = null;
   }
   protected void contributeTo_Program_extractedClassDeclarations(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedClassDeclarations(collection);
-    collection.add(("CLA" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
+    collection.add(("CLA;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
   }
 }

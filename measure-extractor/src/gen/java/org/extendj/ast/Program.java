@@ -513,6 +513,12 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     Program_extractedVariables_value = null;
     Program_extractedVariableReferences_computed = null;
     Program_extractedVariableReferences_value = null;
+    Program_extractedPredicates_computed = null;
+    Program_extractedPredicates_value = null;
+    Program_extractedNonPredicates_computed = null;
+    Program_extractedNonPredicates_value = null;
+    Program_extractedReusableMethods_computed = null;
+    Program_extractedReusableMethods_value = null;
     Program_extractedDataTypes_computed = null;
     Program_extractedDataTypes_value = null;
     Program_extractedStatementTypes_computed = null;
@@ -538,19 +544,22 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     contributorMap_Program_extractedGlobalVariables = null;
     contributorMap_Program_extractedVariables = null;
     contributorMap_Program_extractedVariableReferences = null;
+    contributorMap_Program_extractedPredicates = null;
+    contributorMap_Program_extractedNonPredicates = null;
+    contributorMap_Program_extractedReusableMethods = null;
     contributorMap_Program_extractedDataTypes = null;
     contributorMap_Program_extractedStatementTypes = null;
     contributorMap_BlockLambdaBody_lambdaReturns = null;
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:129
+   * @declaredat ASTNode:138
    */
   public Program clone() throws CloneNotSupportedException {
     Program node = (Program) super.clone();
     return node;
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:134
+   * @declaredat ASTNode:143
    */
   public Program copy() {
     try {
@@ -570,7 +579,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
    * @deprecated Please use treeCopy or treeCopyNoTransform instead
-   * @declaredat ASTNode:153
+   * @declaredat ASTNode:162
    */
   @Deprecated
   public Program fullCopy() {
@@ -581,7 +590,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
    * The copy is dangling, i.e. has no parent.
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
-   * @declaredat ASTNode:163
+   * @declaredat ASTNode:172
    */
   public Program treeCopyNoTransform() {
     Program tree = (Program) copy();
@@ -602,7 +611,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
    * The copy is dangling, i.e. has no parent.
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
-   * @declaredat ASTNode:183
+   * @declaredat ASTNode:192
    */
   public Program treeCopy() {
     Program tree = (Program) copy();
@@ -618,7 +627,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     return tree;
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:197
+   * @declaredat ASTNode:206
    */
   protected boolean is$Equal(ASTNode node) {
     return super.is$Equal(node);    
@@ -735,7 +744,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   }
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:3
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:14
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedSourceFiles = null;
 
@@ -748,7 +757,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:7
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:18
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedPublicMethodDeclarations = null;
 
@@ -761,7 +770,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:11
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:22
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedPrivateMethodDeclarations = null;
 
@@ -774,7 +783,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:15
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:26
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedIfStatements = null;
 
@@ -787,7 +796,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:20
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:31
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedLoopStatements = null;
 
@@ -800,7 +809,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:27
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:38
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedSwitchStatements = null;
 
@@ -813,7 +822,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:31
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:42
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedSwitchCases = null;
 
@@ -826,7 +835,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:35
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:46
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedClassDeclarations = null;
 
@@ -839,7 +848,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:39
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:51
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedNumericLiterals = null;
 
@@ -852,7 +861,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:43
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:55
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedInterfaceDeclarations = null;
 
@@ -865,7 +874,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:47
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:59
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedStringLiterals = null;
 
@@ -878,7 +887,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:51
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:63
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedParameters = null;
 
@@ -891,7 +900,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:55
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:67
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedReturnStatements = null;
 
@@ -904,7 +913,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:59
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:71
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedStatements = null;
 
@@ -917,7 +926,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:63
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:75
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedImports = null;
 
@@ -930,7 +939,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:68
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:80
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedBranches = null;
 
@@ -943,7 +952,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:86
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:98
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedMethodCalls = null;
 
@@ -956,7 +965,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:90
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:102
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedForeignMethodCalls = null;
 
@@ -969,7 +978,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:94
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:106
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedGlobalVariables = null;
 
@@ -982,7 +991,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:98
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:110
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedVariables = null;
 
@@ -995,7 +1004,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:103
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:115
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedVariableReferences = null;
 
@@ -1008,7 +1017,46 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:113
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:119
+   */
+  protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedPredicates = null;
+
+  protected void survey_Program_extractedPredicates() {
+    if (contributorMap_Program_extractedPredicates == null) {
+      contributorMap_Program_extractedPredicates = new java.util.IdentityHashMap<ASTNode, java.util.Set<ASTNode>>();
+      collect_contributors_Program_extractedPredicates(this, contributorMap_Program_extractedPredicates);
+    }
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:123
+   */
+  protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedNonPredicates = null;
+
+  protected void survey_Program_extractedNonPredicates() {
+    if (contributorMap_Program_extractedNonPredicates == null) {
+      contributorMap_Program_extractedNonPredicates = new java.util.IdentityHashMap<ASTNode, java.util.Set<ASTNode>>();
+      collect_contributors_Program_extractedNonPredicates(this, contributorMap_Program_extractedNonPredicates);
+    }
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:127
+   */
+  protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedReusableMethods = null;
+
+  protected void survey_Program_extractedReusableMethods() {
+    if (contributorMap_Program_extractedReusableMethods == null) {
+      contributorMap_Program_extractedReusableMethods = new java.util.IdentityHashMap<ASTNode, java.util.Set<ASTNode>>();
+      collect_contributors_Program_extractedReusableMethods(this, contributorMap_Program_extractedReusableMethods);
+    }
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:131
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedDataTypes = null;
 
@@ -1021,7 +1069,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:117
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:136
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedStatementTypes = null;
 
@@ -2981,6 +3029,23 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   protected boolean canDefine_targetType(ASTNode _callerNode, ASTNode _childNode) {
     return true;
   }
+  /**
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:3
+   * @apilevel internal
+   */
+  public boolean Define_isPredicate(ASTNode _callerNode, ASTNode _childNode) {
+    if (_callerNode == getCompilationUnitListNoTransform()) {
+      // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:4
+      int i = _callerNode.getIndexOfChild(_childNode);
+      return false;
+    }
+    else {
+      return getParent().Define_isPredicate(this, _callerNode);
+    }
+  }
+  protected boolean canDefine_isPredicate(ASTNode _callerNode, ASTNode _childNode) {
+    return true;
+  }
   /** @apilevel internal */
   public ASTNode rewriteTo() {
     return super.rewriteTo();
@@ -2992,10 +3057,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:3
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:14
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:3")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:14")
   public java.util.Collection<String> extractedSourceFiles() {
     ASTNode$State state = state();
     if (Program_extractedSourceFiles_computed == ASTNode$State.NON_CYCLE || Program_extractedSourceFiles_computed == state().cycle()) {
@@ -3036,10 +3101,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:7
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:18
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:7")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:18")
   public java.util.Collection<String> extractedPublicMethodDeclarations() {
     ASTNode$State state = state();
     if (Program_extractedPublicMethodDeclarations_computed == ASTNode$State.NON_CYCLE || Program_extractedPublicMethodDeclarations_computed == state().cycle()) {
@@ -3080,10 +3145,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:11
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:22
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:11")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:22")
   public java.util.Collection<String> extractedPrivateMethodDeclarations() {
     ASTNode$State state = state();
     if (Program_extractedPrivateMethodDeclarations_computed == ASTNode$State.NON_CYCLE || Program_extractedPrivateMethodDeclarations_computed == state().cycle()) {
@@ -3124,10 +3189,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:15
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:26
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:15")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:26")
   public java.util.Collection<String> extractedIfStatements() {
     ASTNode$State state = state();
     if (Program_extractedIfStatements_computed == ASTNode$State.NON_CYCLE || Program_extractedIfStatements_computed == state().cycle()) {
@@ -3168,10 +3233,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:20
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:31
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:20")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:31")
   public java.util.Collection<String> extractedLoopStatements() {
     ASTNode$State state = state();
     if (Program_extractedLoopStatements_computed == ASTNode$State.NON_CYCLE || Program_extractedLoopStatements_computed == state().cycle()) {
@@ -3212,10 +3277,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:27
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:38
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:27")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:38")
   public java.util.Collection<String> extractedSwitchStatements() {
     ASTNode$State state = state();
     if (Program_extractedSwitchStatements_computed == ASTNode$State.NON_CYCLE || Program_extractedSwitchStatements_computed == state().cycle()) {
@@ -3256,10 +3321,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:31
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:42
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:31")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:42")
   public java.util.Collection<String> extractedSwitchCases() {
     ASTNode$State state = state();
     if (Program_extractedSwitchCases_computed == ASTNode$State.NON_CYCLE || Program_extractedSwitchCases_computed == state().cycle()) {
@@ -3300,10 +3365,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:35
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:46
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:35")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:46")
   public java.util.Collection<String> extractedClassDeclarations() {
     ASTNode$State state = state();
     if (Program_extractedClassDeclarations_computed == ASTNode$State.NON_CYCLE || Program_extractedClassDeclarations_computed == state().cycle()) {
@@ -3344,10 +3409,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:39
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:51
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:39")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:51")
   public java.util.Collection<String> extractedNumericLiterals() {
     ASTNode$State state = state();
     if (Program_extractedNumericLiterals_computed == ASTNode$State.NON_CYCLE || Program_extractedNumericLiterals_computed == state().cycle()) {
@@ -3388,10 +3453,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:43
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:55
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:43")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:55")
   public java.util.Collection<String> extractedInterfaceDeclarations() {
     ASTNode$State state = state();
     if (Program_extractedInterfaceDeclarations_computed == ASTNode$State.NON_CYCLE || Program_extractedInterfaceDeclarations_computed == state().cycle()) {
@@ -3432,10 +3497,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:47
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:59
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:47")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:59")
   public java.util.Collection<String> extractedStringLiterals() {
     ASTNode$State state = state();
     if (Program_extractedStringLiterals_computed == ASTNode$State.NON_CYCLE || Program_extractedStringLiterals_computed == state().cycle()) {
@@ -3476,10 +3541,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:51
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:63
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:51")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:63")
   public java.util.Collection<String> extractedParameters() {
     ASTNode$State state = state();
     if (Program_extractedParameters_computed == ASTNode$State.NON_CYCLE || Program_extractedParameters_computed == state().cycle()) {
@@ -3520,10 +3585,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:55
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:67
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:55")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:67")
   public java.util.Collection<String> extractedReturnStatements() {
     ASTNode$State state = state();
     if (Program_extractedReturnStatements_computed == ASTNode$State.NON_CYCLE || Program_extractedReturnStatements_computed == state().cycle()) {
@@ -3564,10 +3629,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:59
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:71
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:59")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:71")
   public java.util.Collection<String> extractedStatements() {
     ASTNode$State state = state();
     if (Program_extractedStatements_computed == ASTNode$State.NON_CYCLE || Program_extractedStatements_computed == state().cycle()) {
@@ -3608,10 +3673,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:63
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:75
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:63")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:75")
   public java.util.Collection<String> extractedImports() {
     ASTNode$State state = state();
     if (Program_extractedImports_computed == ASTNode$State.NON_CYCLE || Program_extractedImports_computed == state().cycle()) {
@@ -3652,10 +3717,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:68
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:80
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:68")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:80")
   public java.util.Collection<String> extractedBranches() {
     ASTNode$State state = state();
     if (Program_extractedBranches_computed == ASTNode$State.NON_CYCLE || Program_extractedBranches_computed == state().cycle()) {
@@ -3696,10 +3761,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:86
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:98
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:86")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:98")
   public java.util.Collection<String> extractedMethodCalls() {
     ASTNode$State state = state();
     if (Program_extractedMethodCalls_computed == ASTNode$State.NON_CYCLE || Program_extractedMethodCalls_computed == state().cycle()) {
@@ -3740,10 +3805,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:90
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:102
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:90")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:102")
   public java.util.Collection<String> extractedForeignMethodCalls() {
     ASTNode$State state = state();
     if (Program_extractedForeignMethodCalls_computed == ASTNode$State.NON_CYCLE || Program_extractedForeignMethodCalls_computed == state().cycle()) {
@@ -3784,10 +3849,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:94
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:106
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:94")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:106")
   public java.util.Collection<String> extractedGlobalVariables() {
     ASTNode$State state = state();
     if (Program_extractedGlobalVariables_computed == ASTNode$State.NON_CYCLE || Program_extractedGlobalVariables_computed == state().cycle()) {
@@ -3828,10 +3893,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:98
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:110
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:98")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:110")
   public java.util.Collection<String> extractedVariables() {
     ASTNode$State state = state();
     if (Program_extractedVariables_computed == ASTNode$State.NON_CYCLE || Program_extractedVariables_computed == state().cycle()) {
@@ -3872,10 +3937,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:103
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:115
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:103")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:115")
   public java.util.Collection<String> extractedVariableReferences() {
     ASTNode$State state = state();
     if (Program_extractedVariableReferences_computed == ASTNode$State.NON_CYCLE || Program_extractedVariableReferences_computed == state().cycle()) {
@@ -3916,10 +3981,142 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:113
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:119
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:113")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:119")
+  public java.util.Collection<String> extractedPredicates() {
+    ASTNode$State state = state();
+    if (Program_extractedPredicates_computed == ASTNode$State.NON_CYCLE || Program_extractedPredicates_computed == state().cycle()) {
+      return Program_extractedPredicates_value;
+    }
+    Program_extractedPredicates_value = extractedPredicates_compute();
+    if (state().inCircle()) {
+      Program_extractedPredicates_computed = state().cycle();
+    
+    } else {
+      Program_extractedPredicates_computed = ASTNode$State.NON_CYCLE;
+    
+    }
+    return Program_extractedPredicates_value;
+  }
+  /** @apilevel internal */
+  private java.util.Collection<String> extractedPredicates_compute() {
+    ASTNode node = this;
+    while (node != null && !(node instanceof Program)) {
+      node = node.getParent();
+    }
+    Program root = (Program) node;
+    root.survey_Program_extractedPredicates();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
+    if (root.contributorMap_Program_extractedPredicates.containsKey(this)) {
+      for (ASTNode contributor : root.contributorMap_Program_extractedPredicates.get(this)) {
+        contributor.contributeTo_Program_extractedPredicates(_computedValue);
+      }
+    }
+    return _computedValue;
+  }
+  /** @apilevel internal */
+  protected ASTNode$State.Cycle Program_extractedPredicates_computed = null;
+
+  /** @apilevel internal */
+  protected java.util.Collection<String> Program_extractedPredicates_value;
+
+  /**
+   * @attribute coll
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:123
+   */
+  @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:123")
+  public java.util.Collection<String> extractedNonPredicates() {
+    ASTNode$State state = state();
+    if (Program_extractedNonPredicates_computed == ASTNode$State.NON_CYCLE || Program_extractedNonPredicates_computed == state().cycle()) {
+      return Program_extractedNonPredicates_value;
+    }
+    Program_extractedNonPredicates_value = extractedNonPredicates_compute();
+    if (state().inCircle()) {
+      Program_extractedNonPredicates_computed = state().cycle();
+    
+    } else {
+      Program_extractedNonPredicates_computed = ASTNode$State.NON_CYCLE;
+    
+    }
+    return Program_extractedNonPredicates_value;
+  }
+  /** @apilevel internal */
+  private java.util.Collection<String> extractedNonPredicates_compute() {
+    ASTNode node = this;
+    while (node != null && !(node instanceof Program)) {
+      node = node.getParent();
+    }
+    Program root = (Program) node;
+    root.survey_Program_extractedNonPredicates();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
+    if (root.contributorMap_Program_extractedNonPredicates.containsKey(this)) {
+      for (ASTNode contributor : root.contributorMap_Program_extractedNonPredicates.get(this)) {
+        contributor.contributeTo_Program_extractedNonPredicates(_computedValue);
+      }
+    }
+    return _computedValue;
+  }
+  /** @apilevel internal */
+  protected ASTNode$State.Cycle Program_extractedNonPredicates_computed = null;
+
+  /** @apilevel internal */
+  protected java.util.Collection<String> Program_extractedNonPredicates_value;
+
+  /**
+   * @attribute coll
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:127
+   */
+  @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:127")
+  public java.util.Collection<String> extractedReusableMethods() {
+    ASTNode$State state = state();
+    if (Program_extractedReusableMethods_computed == ASTNode$State.NON_CYCLE || Program_extractedReusableMethods_computed == state().cycle()) {
+      return Program_extractedReusableMethods_value;
+    }
+    Program_extractedReusableMethods_value = extractedReusableMethods_compute();
+    if (state().inCircle()) {
+      Program_extractedReusableMethods_computed = state().cycle();
+    
+    } else {
+      Program_extractedReusableMethods_computed = ASTNode$State.NON_CYCLE;
+    
+    }
+    return Program_extractedReusableMethods_value;
+  }
+  /** @apilevel internal */
+  private java.util.Collection<String> extractedReusableMethods_compute() {
+    ASTNode node = this;
+    while (node != null && !(node instanceof Program)) {
+      node = node.getParent();
+    }
+    Program root = (Program) node;
+    root.survey_Program_extractedReusableMethods();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
+    if (root.contributorMap_Program_extractedReusableMethods.containsKey(this)) {
+      for (ASTNode contributor : root.contributorMap_Program_extractedReusableMethods.get(this)) {
+        contributor.contributeTo_Program_extractedReusableMethods(_computedValue);
+      }
+    }
+    return _computedValue;
+  }
+  /** @apilevel internal */
+  protected ASTNode$State.Cycle Program_extractedReusableMethods_computed = null;
+
+  /** @apilevel internal */
+  protected java.util.Collection<String> Program_extractedReusableMethods_value;
+
+  /**
+   * @attribute coll
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:131
+   */
+  @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:131")
   public java.util.Collection<String> extractedDataTypes() {
     ASTNode$State state = state();
     if (Program_extractedDataTypes_computed == ASTNode$State.NON_CYCLE || Program_extractedDataTypes_computed == state().cycle()) {
@@ -3960,10 +4157,10 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @attribute coll
    * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:117
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:136
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:117")
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:136")
   public java.util.Collection<String> extractedStatementTypes() {
     ASTNode$State state = state();
     if (Program_extractedStatementTypes_computed == ASTNode$State.NON_CYCLE || Program_extractedStatementTypes_computed == state().cycle()) {

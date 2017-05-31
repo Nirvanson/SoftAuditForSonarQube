@@ -1412,7 +1412,7 @@ public class CompilationUnit extends ASTNode<ASTNode> implements Cloneable {
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
   protected void collect_contributors_Program_extractedSourceFiles(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:4
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:15
     if ((this.fromSource())) {
       {
         java.util.Set<ASTNode> contributors = _map.get(_root);
@@ -1426,7 +1426,7 @@ public class CompilationUnit extends ASTNode<ASTNode> implements Cloneable {
     super.collect_contributors_Program_extractedSourceFiles(_root, _map);
   }
   protected void collect_contributors_Program_extractedImports(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:65
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:77
     if ((this.hasPackageDecl())) {
       {
         java.util.Set<ASTNode> contributors = _map.get(_root);
@@ -1454,7 +1454,7 @@ public class CompilationUnit extends ASTNode<ASTNode> implements Cloneable {
   protected void contributeTo_Program_extractedImports(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedImports(collection);
     if ((this.hasPackageDecl())) {
-      collection.add(("IMP" + this.pathName() + ";;Package"));
+      collection.add(("IMP;" + this.pathName() + ";;Package"));
     }
   }
 }

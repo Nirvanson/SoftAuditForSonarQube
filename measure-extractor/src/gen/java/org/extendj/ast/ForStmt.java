@@ -1322,7 +1322,7 @@ public class ForStmt extends BranchTargetStmt implements Cloneable, VariableScop
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
   protected void collect_contributors_Program_extractedLoopStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:23
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:34
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -1334,7 +1334,7 @@ public class ForStmt extends BranchTargetStmt implements Cloneable, VariableScop
     super.collect_contributors_Program_extractedLoopStatements(_root, _map);
   }
   protected void collect_contributors_Program_extractedBranches(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:73
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:85
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -1343,7 +1343,7 @@ public class ForStmt extends BranchTargetStmt implements Cloneable, VariableScop
       }
       contributors.add(this);
     }
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:77
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:89
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -1354,6 +1354,18 @@ public class ForStmt extends BranchTargetStmt implements Cloneable, VariableScop
     }
     super.collect_contributors_Program_extractedBranches(_root, _map);
   }
+  protected void collect_contributors_Program_extractedStatementTypes(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:144
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_Program_extractedStatementTypes(_root, _map);
+  }
   protected void contributeTo_CompilationUnit_problems(LinkedList<Problem> collection) {
     super.contributeTo_CompilationUnit_problems(collection);
     if (hasCondition() && !getCondition().type().isBoolean()) {
@@ -1363,11 +1375,15 @@ public class ForStmt extends BranchTargetStmt implements Cloneable, VariableScop
   }
   protected void contributeTo_Program_extractedLoopStatements(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedLoopStatements(collection);
-    collection.add(("LOS" + this.compilationUnit().pathName() + ";" + this.location() + ";For"));
+    collection.add(("LOS;" + this.compilationUnit().pathName() + ";" + this.location() + ";For"));
   }
   protected void contributeTo_Program_extractedBranches(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedBranches(collection);
-    collection.add(("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";For-True-Branch"));
-    collection.add(("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";For-False-Branch"));
+    collection.add(("BRA;" + this.compilationUnit().pathName() + ";" + this.location() + ";For-True-Branch"));
+    collection.add(("BRA;" + this.compilationUnit().pathName() + ";" + this.location() + ";For-False-Branch"));
+  }
+  protected void contributeTo_Program_extractedStatementTypes(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedStatementTypes(collection);
+    collection.add(("STY;For-Statement"));
   }
 }

@@ -387,11 +387,43 @@ public class LocalClassDeclStmt extends Stmt implements Cloneable {
     }
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
+  protected void collect_contributors_Program_extractedClassDeclarations(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:48
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_Program_extractedClassDeclarations(_root, _map);
+  }
+  protected void collect_contributors_Program_extractedStatementTypes(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:155
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_Program_extractedStatementTypes(_root, _map);
+  }
   protected void contributeTo_CompilationUnit_problems(LinkedList<Problem> collection) {
     super.contributeTo_CompilationUnit_problems(collection);
     if (!otherLocalClassDecls(getClassDecl().name()).isEmpty()) {
       collection.add(errorf("another local class %s has already been declared in this scope",
                 getClassDecl().name()));
     }
+  }
+  protected void contributeTo_Program_extractedClassDeclarations(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedClassDeclarations(collection);
+    collection.add(("CLA;" + this.compilationUnit().pathName() + ";" + this.location() + ";Local"));
+  }
+  protected void contributeTo_Program_extractedStatementTypes(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedStatementTypes(collection);
+    collection.add(("STY;Local-Class-Declaration-Statement"));
   }
 }

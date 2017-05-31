@@ -451,4 +451,24 @@ public abstract class BranchTargetStmt extends Stmt implements Cloneable {
   public boolean canRewrite() {
     return false;
   }
+  protected void collect_contributors_Program_extractedStatementTypes(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:148
+    if ((!(this instanceof DoStmt || this instanceof EnhancedForStmt || this instanceof ForStmt || this instanceof LabeledStmt || this instanceof SwitchStmt || this instanceof WhileStmt))) {
+      {
+        java.util.Set<ASTNode> contributors = _map.get(_root);
+        if (contributors == null) {
+          contributors = new java.util.LinkedHashSet<ASTNode>();
+          _map.put((ASTNode) _root, contributors);
+        }
+        contributors.add(this);
+      }
+    }
+    super.collect_contributors_Program_extractedStatementTypes(_root, _map);
+  }
+  protected void contributeTo_Program_extractedStatementTypes(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedStatementTypes(collection);
+    if ((!(this instanceof DoStmt || this instanceof EnhancedForStmt || this instanceof ForStmt || this instanceof LabeledStmt || this instanceof SwitchStmt || this instanceof WhileStmt))) {
+      collection.add(("STY;Branch-Target-Statement"));
+    }
+  }
 }

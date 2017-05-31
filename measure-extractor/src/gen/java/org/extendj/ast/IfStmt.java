@@ -579,6 +579,22 @@ public class IfStmt extends Stmt implements Cloneable {
   protected boolean canDefine_inhModifiedInScope(ASTNode _callerNode, ASTNode _childNode, Variable var) {
     return true;
   }
+  /**
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:3
+   * @apilevel internal
+   */
+  public boolean Define_isPredicate(ASTNode _callerNode, ASTNode _childNode) {
+    if (getConditionNoTransform() != null && _callerNode == getCondition()) {
+      // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:5
+      return true;
+    }
+    else {
+      return getParent().Define_isPredicate(this, _callerNode);
+    }
+  }
+  protected boolean canDefine_isPredicate(ASTNode _callerNode, ASTNode _childNode) {
+    return true;
+  }
   /** @apilevel internal */
   public ASTNode rewriteTo() {
     return super.rewriteTo();
@@ -602,7 +618,7 @@ public class IfStmt extends Stmt implements Cloneable {
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
   protected void collect_contributors_Program_extractedIfStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:16
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:27
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -614,7 +630,7 @@ public class IfStmt extends Stmt implements Cloneable {
     super.collect_contributors_Program_extractedIfStatements(_root, _map);
   }
   protected void collect_contributors_Program_extractedBranches(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:69
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:81
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -623,7 +639,7 @@ public class IfStmt extends Stmt implements Cloneable {
       }
       contributors.add(this);
     }
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:70
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:82
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -635,7 +651,7 @@ public class IfStmt extends Stmt implements Cloneable {
     super.collect_contributors_Program_extractedBranches(_root, _map);
   }
   protected void collect_contributors_Program_extractedStatementTypes(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:118
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:137
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -655,12 +671,12 @@ public class IfStmt extends Stmt implements Cloneable {
   }
   protected void contributeTo_Program_extractedIfStatements(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedIfStatements(collection);
-    collection.add(("IFS" + this.compilationUnit().pathName() + ";" + this.location() + ";If"));
+    collection.add(("IFS;" + this.compilationUnit().pathName() + ";" + this.location() + ";If"));
   }
   protected void contributeTo_Program_extractedBranches(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedBranches(collection);
-    collection.add(("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";If-True-Branch"));
-    collection.add(("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";If-False-Branch"));
+    collection.add(("BRA;" + this.compilationUnit().pathName() + ";" + this.location() + ";If-True-Branch"));
+    collection.add(("BRA;" + this.compilationUnit().pathName() + ";" + this.location() + ";If-False-Branch"));
   }
   protected void contributeTo_Program_extractedStatementTypes(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedStatementTypes(collection);

@@ -609,7 +609,7 @@ public abstract class Stmt extends ASTNode<ASTNode> implements Cloneable {
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
   protected void collect_contributors_Program_extractedStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:60
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:72
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -620,6 +620,20 @@ public abstract class Stmt extends ASTNode<ASTNode> implements Cloneable {
     }
     super.collect_contributors_Program_extractedStatements(_root, _map);
   }
+  protected void collect_contributors_Program_extractedStatementTypes(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:163
+    if ((!(this instanceof BreakStmt || this instanceof IfStmt || this instanceof AssertStmt || this instanceof MonitorExit || this instanceof NTAFinallyBlock || this instanceof Block || this instanceof DoStmt || this instanceof EnhancedForStmt || this instanceof ForStmt || this instanceof LabeledStmt || this instanceof SwitchStmt || this instanceof WhileStmt || this instanceof BranchTargetStmt || this instanceof ConstCase || this instanceof DefaultCase || this instanceof Case || this instanceof ContinueStmt || this instanceof EmptyStmt || this instanceof ExprStmt || this instanceof LocalClassDeclStmt || this instanceof ReturnStmt || this instanceof SynchronizedStmt || this instanceof ThrowStmt || this instanceof TryWithResources || this instanceof TryStmt || this instanceof VarDeclStmt))) {
+      {
+        java.util.Set<ASTNode> contributors = _map.get(_root);
+        if (contributors == null) {
+          contributors = new java.util.LinkedHashSet<ASTNode>();
+          _map.put((ASTNode) _root, contributors);
+        }
+        contributors.add(this);
+      }
+    }
+    super.collect_contributors_Program_extractedStatementTypes(_root, _map);
+  }
   protected void contributeTo_CompilationUnit_problems(LinkedList<Problem> collection) {
     super.contributeTo_CompilationUnit_problems(collection);
     if (!reachable() && reportUnreachable()) {
@@ -628,6 +642,12 @@ public abstract class Stmt extends ASTNode<ASTNode> implements Cloneable {
   }
   protected void contributeTo_Program_extractedStatements(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedStatements(collection);
-    collection.add(("STA" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
+    collection.add(("STA;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
+  }
+  protected void contributeTo_Program_extractedStatementTypes(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedStatementTypes(collection);
+    if ((!(this instanceof BreakStmt || this instanceof IfStmt || this instanceof AssertStmt || this instanceof MonitorExit || this instanceof NTAFinallyBlock || this instanceof Block || this instanceof DoStmt || this instanceof EnhancedForStmt || this instanceof ForStmt || this instanceof LabeledStmt || this instanceof SwitchStmt || this instanceof WhileStmt || this instanceof BranchTargetStmt || this instanceof ConstCase || this instanceof DefaultCase || this instanceof Case || this instanceof ContinueStmt || this instanceof EmptyStmt || this instanceof ExprStmt || this instanceof LocalClassDeclStmt || this instanceof ReturnStmt || this instanceof SynchronizedStmt || this instanceof ThrowStmt || this instanceof TryWithResources || this instanceof TryStmt || this instanceof VarDeclStmt))) {
+      collection.add(("STY;Statement in " + this.compilationUnit().pathName() + " on line " + this.location()));
+    }
   }
 }

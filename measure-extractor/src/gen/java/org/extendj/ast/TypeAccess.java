@@ -635,6 +635,18 @@ public class TypeAccess extends Access implements Cloneable {
     }
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
+  protected void collect_contributors_Program_extractedDataTypes(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:133
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_Program_extractedDataTypes(_root, _map);
+  }
   protected void contributeTo_CompilationUnit_problems(LinkedList<Problem> collection) {
     super.contributeTo_CompilationUnit_problems(collection);
     for (Problem value : accessControlProblems()) {
@@ -654,5 +666,9 @@ public class TypeAccess extends Access implements Cloneable {
               && !type().enclosingType().isRawType()) {
       collection.add(error("Can not access a member type of a paramterized type as a raw type"));
     }
+  }
+  protected void contributeTo_Program_extractedDataTypes(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedDataTypes(collection);
+    collection.add(("DTY;" + this.name()));
   }
 }

@@ -376,7 +376,7 @@ public abstract class Case extends Stmt implements Cloneable {
     return false;
   }
   protected void collect_contributors_Program_extractedSwitchCases(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:32
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:43
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -388,7 +388,7 @@ public abstract class Case extends Stmt implements Cloneable {
     super.collect_contributors_Program_extractedSwitchCases(_root, _map);
   }
   protected void collect_contributors_Program_extractedBranches(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:83
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:95
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -399,12 +399,32 @@ public abstract class Case extends Stmt implements Cloneable {
     }
     super.collect_contributors_Program_extractedBranches(_root, _map);
   }
+  protected void collect_contributors_Program_extractedStatementTypes(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:151
+    if ((!(this instanceof ConstCase || this instanceof DefaultCase))) {
+      {
+        java.util.Set<ASTNode> contributors = _map.get(_root);
+        if (contributors == null) {
+          contributors = new java.util.LinkedHashSet<ASTNode>();
+          _map.put((ASTNode) _root, contributors);
+        }
+        contributors.add(this);
+      }
+    }
+    super.collect_contributors_Program_extractedStatementTypes(_root, _map);
+  }
   protected void contributeTo_Program_extractedSwitchCases(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedSwitchCases(collection);
-    collection.add(("SWC" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
+    collection.add(("SWC;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
   }
   protected void contributeTo_Program_extractedBranches(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedBranches(collection);
-    collection.add(("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";Case-Branch"));
+    collection.add(("BRA;" + this.compilationUnit().pathName() + ";" + this.location() + ";Case-Branch"));
+  }
+  protected void contributeTo_Program_extractedStatementTypes(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedStatementTypes(collection);
+    if ((!(this instanceof ConstCase || this instanceof DefaultCase))) {
+      collection.add(("STY;Case-Statement"));
+    }
   }
 }

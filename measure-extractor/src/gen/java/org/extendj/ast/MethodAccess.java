@@ -2078,8 +2078,22 @@ public class MethodAccess extends Access implements Cloneable {
     }
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
+  protected void collect_contributors_MethodDecl_containingForeignMethodCalls(MethodDecl _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:11
+    if ((this.decl().name().equals("unknown"))) {
+      {
+        java.util.Set<ASTNode> contributors = _map.get(_root);
+        if (contributors == null) {
+          contributors = new java.util.LinkedHashSet<ASTNode>();
+          _map.put((ASTNode) _root, contributors);
+        }
+        contributors.add(this);
+      }
+    }
+    super.collect_contributors_MethodDecl_containingForeignMethodCalls(_root, _map);
+  }
   protected void collect_contributors_Program_extractedMethodCalls(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:87
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:99
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -2091,7 +2105,7 @@ public class MethodAccess extends Access implements Cloneable {
     super.collect_contributors_Program_extractedMethodCalls(_root, _map);
   }
   protected void collect_contributors_Program_extractedForeignMethodCalls(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:91
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:103
     if ((this.decl().name().equals("unknown"))) {
       {
         java.util.Set<ASTNode> contributors = _map.get(_root);
@@ -2125,14 +2139,20 @@ public class MethodAccess extends Access implements Cloneable {
       collection.add(value);
     }
   }
+  protected void contributeTo_MethodDecl_containingForeignMethodCalls(java.util.Collection<String> collection) {
+    super.contributeTo_MethodDecl_containingForeignMethodCalls(collection);
+    if ((this.decl().name().equals("unknown"))) {
+      collection.add(("Foreign method call at " + this.location()));
+    }
+  }
   protected void contributeTo_Program_extractedMethodCalls(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedMethodCalls(collection);
-    collection.add(("MEC" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
+    collection.add(("MEC;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
   }
   protected void contributeTo_Program_extractedForeignMethodCalls(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedForeignMethodCalls(collection);
     if ((this.decl().name().equals("unknown"))) {
-      collection.add(("FMC" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
+      collection.add(("FMC;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
     }
   }
 }

@@ -611,6 +611,22 @@ public class WhileStmt extends BranchTargetStmt implements Cloneable {
   protected boolean canDefine_inhModifiedInScope(ASTNode _callerNode, ASTNode _childNode, Variable var) {
     return true;
   }
+  /**
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:3
+   * @apilevel internal
+   */
+  public boolean Define_isPredicate(ASTNode _callerNode, ASTNode _childNode) {
+    if (getConditionNoTransform() != null && _callerNode == getCondition()) {
+      // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:7
+      return true;
+    }
+    else {
+      return getParent().Define_isPredicate(this, _callerNode);
+    }
+  }
+  protected boolean canDefine_isPredicate(ASTNode _callerNode, ASTNode _childNode) {
+    return true;
+  }
   /** @apilevel internal */
   public ASTNode rewriteTo() {
     return super.rewriteTo();
@@ -634,7 +650,7 @@ public class WhileStmt extends BranchTargetStmt implements Cloneable {
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
   protected void collect_contributors_Program_extractedLoopStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:22
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:33
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -646,7 +662,7 @@ public class WhileStmt extends BranchTargetStmt implements Cloneable {
     super.collect_contributors_Program_extractedLoopStatements(_root, _map);
   }
   protected void collect_contributors_Program_extractedBranches(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:72
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:84
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -655,7 +671,7 @@ public class WhileStmt extends BranchTargetStmt implements Cloneable {
       }
       contributors.add(this);
     }
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:76
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:88
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -666,6 +682,18 @@ public class WhileStmt extends BranchTargetStmt implements Cloneable {
     }
     super.collect_contributors_Program_extractedBranches(_root, _map);
   }
+  protected void collect_contributors_Program_extractedStatementTypes(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:147
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_Program_extractedStatementTypes(_root, _map);
+  }
   protected void contributeTo_CompilationUnit_problems(LinkedList<Problem> collection) {
     super.contributeTo_CompilationUnit_problems(collection);
     if (!getCondition().type().isBoolean()) {
@@ -675,11 +703,15 @@ public class WhileStmt extends BranchTargetStmt implements Cloneable {
   }
   protected void contributeTo_Program_extractedLoopStatements(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedLoopStatements(collection);
-    collection.add(("LOS" + this.compilationUnit().pathName() + ";" + this.location() + ";While"));
+    collection.add(("LOS;" + this.compilationUnit().pathName() + ";" + this.location() + ";While"));
   }
   protected void contributeTo_Program_extractedBranches(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedBranches(collection);
-    collection.add(("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";While-True-Branch"));
-    collection.add(("BRA" + this.compilationUnit().pathName() + ";" + this.location() + ";While-False-Branch"));
+    collection.add(("BRA;" + this.compilationUnit().pathName() + ";" + this.location() + ";While-True-Branch"));
+    collection.add(("BRA;" + this.compilationUnit().pathName() + ";" + this.location() + ";While-False-Branch"));
+  }
+  protected void contributeTo_Program_extractedStatementTypes(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedStatementTypes(collection);
+    collection.add(("STY;While-Statement"));
   }
 }

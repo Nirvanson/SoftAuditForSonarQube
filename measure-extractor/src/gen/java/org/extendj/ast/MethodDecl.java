@@ -302,16 +302,19 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
    */
   public void flushCollectionCache() {
     super.flushCollectionCache();
+    MethodDecl_containingForeignMethodCalls_computed = null;
+    MethodDecl_containingForeignMethodCalls_value = null;
+    contributorMap_MethodDecl_containingForeignMethodCalls = null;
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:65
+   * @declaredat ASTNode:68
    */
   public MethodDecl clone() throws CloneNotSupportedException {
     MethodDecl node = (MethodDecl) super.clone();
     return node;
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:70
+   * @declaredat ASTNode:73
    */
   public MethodDecl copy() {
     try {
@@ -331,7 +334,7 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
    * @deprecated Please use treeCopy or treeCopyNoTransform instead
-   * @declaredat ASTNode:89
+   * @declaredat ASTNode:92
    */
   @Deprecated
   public MethodDecl fullCopy() {
@@ -342,7 +345,7 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
    * The copy is dangling, i.e. has no parent.
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
-   * @declaredat ASTNode:99
+   * @declaredat ASTNode:102
    */
   public MethodDecl treeCopyNoTransform() {
     MethodDecl tree = (MethodDecl) copy();
@@ -363,7 +366,7 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
    * The copy is dangling, i.e. has no parent.
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
-   * @declaredat ASTNode:119
+   * @declaredat ASTNode:122
    */
   public MethodDecl treeCopy() {
     MethodDecl tree = (MethodDecl) copy();
@@ -379,7 +382,7 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
     return tree;
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:133
+   * @declaredat ASTNode:136
    */
   protected boolean is$Equal(ASTNode node) {
     return super.is$Equal(node) && (tokenString_ID == ((MethodDecl) node).tokenString_ID);    
@@ -751,6 +754,19 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
    */
   private boolean refined_MethodDecl_MethodDecl_sameSignature_MethodDecl(MethodDecl other)
 { return signature().equals(other.signature()); }
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:10
+   */
+  protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_MethodDecl_containingForeignMethodCalls = null;
+
+  protected void survey_MethodDecl_containingForeignMethodCalls() {
+    if (contributorMap_MethodDecl_containingForeignMethodCalls == null) {
+      contributorMap_MethodDecl_containingForeignMethodCalls = new java.util.IdentityHashMap<ASTNode, java.util.Set<ASTNode>>();
+      collect_contributors_MethodDecl_containingForeignMethodCalls(this, contributorMap_MethodDecl_containingForeignMethodCalls);
+    }
+  }
+
   /** @apilevel internal */
   private void accessibleFrom_TypeDecl_reset() {
     accessibleFrom_TypeDecl_computed = new java.util.HashMap(4);
@@ -2419,6 +2435,50 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
   public boolean canRewrite() {
     return false;
   }
+  /**
+   * @attribute coll
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:10
+   */
+  @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:10")
+  public java.util.Collection<String> containingForeignMethodCalls() {
+    ASTNode$State state = state();
+    if (MethodDecl_containingForeignMethodCalls_computed == ASTNode$State.NON_CYCLE || MethodDecl_containingForeignMethodCalls_computed == state().cycle()) {
+      return MethodDecl_containingForeignMethodCalls_value;
+    }
+    MethodDecl_containingForeignMethodCalls_value = containingForeignMethodCalls_compute();
+    if (state().inCircle()) {
+      MethodDecl_containingForeignMethodCalls_computed = state().cycle();
+    
+    } else {
+      MethodDecl_containingForeignMethodCalls_computed = ASTNode$State.NON_CYCLE;
+    
+    }
+    return MethodDecl_containingForeignMethodCalls_value;
+  }
+  /** @apilevel internal */
+  private java.util.Collection<String> containingForeignMethodCalls_compute() {
+    ASTNode node = this;
+    while (node != null && !(node instanceof MethodDecl)) {
+      node = node.getParent();
+    }
+    MethodDecl root = (MethodDecl) node;
+    root.survey_MethodDecl_containingForeignMethodCalls();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
+    if (root.contributorMap_MethodDecl_containingForeignMethodCalls.containsKey(this)) {
+      for (ASTNode contributor : root.contributorMap_MethodDecl_containingForeignMethodCalls.get(this)) {
+        contributor.contributeTo_MethodDecl_containingForeignMethodCalls(_computedValue);
+      }
+    }
+    return _computedValue;
+  }
+  /** @apilevel internal */
+  protected ASTNode$State.Cycle MethodDecl_containingForeignMethodCalls_computed = null;
+
+  /** @apilevel internal */
+  protected java.util.Collection<String> MethodDecl_containingForeignMethodCalls_value;
+
   protected void collect_contributors_CompilationUnit_problems(CompilationUnit _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
     // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\extendj\\java4\\frontend\\Modifiers.jrag:150
     {
@@ -2464,7 +2524,7 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
   protected void collect_contributors_Program_extractedPublicMethodDeclarations(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:8
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:19
     if ((!this.isPrivate())) {
       {
         java.util.Set<ASTNode> contributors = _map.get(_root);
@@ -2478,7 +2538,7 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
     super.collect_contributors_Program_extractedPublicMethodDeclarations(_root, _map);
   }
   protected void collect_contributors_Program_extractedPrivateMethodDeclarations(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:12
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:23
     if ((this.isPrivate())) {
       {
         java.util.Set<ASTNode> contributors = _map.get(_root);
@@ -2490,6 +2550,20 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
       }
     }
     super.collect_contributors_Program_extractedPrivateMethodDeclarations(_root, _map);
+  }
+  protected void collect_contributors_Program_extractedReusableMethods(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:128
+    if ((this.containingForeignMethodCalls().isEmpty())) {
+      {
+        java.util.Set<ASTNode> contributors = _map.get(_root);
+        if (contributors == null) {
+          contributors = new java.util.LinkedHashSet<ASTNode>();
+          _map.put((ASTNode) _root, contributors);
+        }
+        contributors.add(this);
+      }
+    }
+    super.collect_contributors_Program_extractedReusableMethods(_root, _map);
   }
   protected void contributeTo_CompilationUnit_problems(LinkedList<Problem> collection) {
     super.contributeTo_CompilationUnit_problems(collection);
@@ -2519,6 +2593,12 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
     super.contributeTo_Program_extractedPrivateMethodDeclarations(collection);
     if ((this.isPrivate())) {
       collection.add(("PRM;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
+    }
+  }
+  protected void contributeTo_Program_extractedReusableMethods(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedReusableMethods(collection);
+    if ((this.containingForeignMethodCalls().isEmpty())) {
+      collection.add(("RUM;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
     }
   }
 }

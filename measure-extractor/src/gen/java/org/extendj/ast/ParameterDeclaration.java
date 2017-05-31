@@ -1033,7 +1033,7 @@ public class ParameterDeclaration extends ASTNode<ASTNode> implements Cloneable,
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
   protected void collect_contributors_Program_extractedParameters(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:52
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:64
     if ((!this.isExceptionHandlerParameter())) {
       {
         java.util.Set<ASTNode> contributors = _map.get(_root);
@@ -1055,7 +1055,7 @@ public class ParameterDeclaration extends ASTNode<ASTNode> implements Cloneable,
   protected void contributeTo_Program_extractedParameters(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedParameters(collection);
     if ((!this.isExceptionHandlerParameter())) {
-      collection.add(("MPA" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
+      collection.add(("MPA;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
     }
   }
 }
