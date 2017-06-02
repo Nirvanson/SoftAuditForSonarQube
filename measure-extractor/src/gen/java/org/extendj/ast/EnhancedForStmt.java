@@ -865,20 +865,8 @@ public class EnhancedForStmt extends BranchTargetStmt implements Cloneable, Vari
     }
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
-  protected void collect_contributors_Program_extractedLoopStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:35
-    {
-      java.util.Set<ASTNode> contributors = _map.get(_root);
-      if (contributors == null) {
-        contributors = new java.util.LinkedHashSet<ASTNode>();
-        _map.put((ASTNode) _root, contributors);
-      }
-      contributors.add(this);
-    }
-    super.collect_contributors_Program_extractedLoopStatements(_root, _map);
-  }
   protected void collect_contributors_Program_extractedBranches(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:86
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:9
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -887,7 +875,7 @@ public class EnhancedForStmt extends BranchTargetStmt implements Cloneable, Vari
       }
       contributors.add(this);
     }
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:90
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:13
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -898,8 +886,20 @@ public class EnhancedForStmt extends BranchTargetStmt implements Cloneable, Vari
     }
     super.collect_contributors_Program_extractedBranches(_root, _map);
   }
+  protected void collect_contributors_Program_extractedLoopStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:57
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_Program_extractedLoopStatements(_root, _map);
+  }
   protected void collect_contributors_Program_extractedStatementTypes(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:143
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:115
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -916,14 +916,14 @@ public class EnhancedForStmt extends BranchTargetStmt implements Cloneable, Vari
       collection.add(value);
     }
   }
-  protected void contributeTo_Program_extractedLoopStatements(java.util.Collection<String> collection) {
-    super.contributeTo_Program_extractedLoopStatements(collection);
-    collection.add(("LOS;" + this.compilationUnit().pathName() + ";" + this.location() + ";EnhancedFor"));
-  }
   protected void contributeTo_Program_extractedBranches(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedBranches(collection);
     collection.add(("BRA;" + this.compilationUnit().pathName() + ";" + this.location() + ";EnhancedFor-True-Branch"));
     collection.add(("BRA;" + this.compilationUnit().pathName() + ";" + this.location() + ";EnhancedFor-False-Branch"));
+  }
+  protected void contributeTo_Program_extractedLoopStatements(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedLoopStatements(collection);
+    collection.add(("LOS;" + this.compilationUnit().pathName() + ";" + this.location() + ";EnhancedFor"));
   }
   protected void contributeTo_Program_extractedStatementTypes(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedStatementTypes(collection);

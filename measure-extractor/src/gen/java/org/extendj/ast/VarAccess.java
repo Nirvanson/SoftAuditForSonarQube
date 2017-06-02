@@ -915,11 +915,11 @@ protected ASTNode$State.Cycle isConstant_cycle = null;
 
   /**
    * @attribute inh
-   * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:3
+   * @aspect AdditionalNodeCharacteristics
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\AdditionalNodeCharacteristics.jrag:3
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.INH)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:3")
+  @ASTNodeAnnotation.Source(aspect="AdditionalNodeCharacteristics", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\AdditionalNodeCharacteristics.jrag:3")
   public boolean isPredicate() {
     boolean isPredicate_value = getParent().Define_isPredicate(this, null);
     return isPredicate_value;
@@ -982,20 +982,22 @@ protected ASTNode$State.Cycle isConstant_cycle = null;
     }
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
-  protected void collect_contributors_Program_extractedVariableReferences(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:116
-    {
-      java.util.Set<ASTNode> contributors = _map.get(_root);
-      if (contributors == null) {
-        contributors = new java.util.LinkedHashSet<ASTNode>();
-        _map.put((ASTNode) _root, contributors);
+  protected void collect_contributors_Program_extractedNonPredicates(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:69
+    if ((!this.isPredicate())) {
+      {
+        java.util.Set<ASTNode> contributors = _map.get(_root);
+        if (contributors == null) {
+          contributors = new java.util.LinkedHashSet<ASTNode>();
+          _map.put((ASTNode) _root, contributors);
+        }
+        contributors.add(this);
       }
-      contributors.add(this);
     }
-    super.collect_contributors_Program_extractedVariableReferences(_root, _map);
+    super.collect_contributors_Program_extractedNonPredicates(_root, _map);
   }
   protected void collect_contributors_Program_extractedPredicates(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:120
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:77
     if ((this.isPredicate())) {
       {
         java.util.Set<ASTNode> contributors = _map.get(_root);
@@ -1008,19 +1010,17 @@ protected ASTNode$State.Cycle isConstant_cycle = null;
     }
     super.collect_contributors_Program_extractedPredicates(_root, _map);
   }
-  protected void collect_contributors_Program_extractedNonPredicates(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:124
-    if ((!this.isPredicate())) {
-      {
-        java.util.Set<ASTNode> contributors = _map.get(_root);
-        if (contributors == null) {
-          contributors = new java.util.LinkedHashSet<ASTNode>();
-          _map.put((ASTNode) _root, contributors);
-        }
-        contributors.add(this);
+  protected void collect_contributors_Program_extractedVariableReferences(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:152
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
       }
+      contributors.add(this);
     }
-    super.collect_contributors_Program_extractedNonPredicates(_root, _map);
+    super.collect_contributors_Program_extractedVariableReferences(_root, _map);
   }
   protected void contributeTo_CompilationUnit_problems(LinkedList<Problem> collection) {
     super.contributeTo_CompilationUnit_problems(collection);
@@ -1044,9 +1044,11 @@ protected ASTNode$State.Cycle isConstant_cycle = null;
       collection.add(error("may not reference a static field of an enum type from here"));
     }
   }
-  protected void contributeTo_Program_extractedVariableReferences(java.util.Collection<String> collection) {
-    super.contributeTo_Program_extractedVariableReferences(collection);
-    collection.add(("VRE;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
+  protected void contributeTo_Program_extractedNonPredicates(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedNonPredicates(collection);
+    if ((!this.isPredicate())) {
+      collection.add(("NPR;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
+    }
   }
   protected void contributeTo_Program_extractedPredicates(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedPredicates(collection);
@@ -1054,10 +1056,8 @@ protected ASTNode$State.Cycle isConstant_cycle = null;
       collection.add(("PRE;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
     }
   }
-  protected void contributeTo_Program_extractedNonPredicates(java.util.Collection<String> collection) {
-    super.contributeTo_Program_extractedNonPredicates(collection);
-    if ((!this.isPredicate())) {
-      collection.add(("NPR;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
-    }
+  protected void contributeTo_Program_extractedVariableReferences(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedVariableReferences(collection);
+    collection.add(("VRE;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
   }
 }

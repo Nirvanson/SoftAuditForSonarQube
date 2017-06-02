@@ -380,7 +380,7 @@ public class ExprStmt extends Stmt implements Cloneable {
     return false;
   }
   protected void collect_contributors_Program_extractedStatementTypes(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:154
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:126
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {

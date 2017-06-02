@@ -756,7 +756,7 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
 { return signature().equals(other.signature()); }
   /**
    * @aspect <NoAspect>
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:10
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\AdditionalNodeCharacteristics.jrag:11
    */
   protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_MethodDecl_containingForeignMethodCalls = null;
 
@@ -2437,11 +2437,11 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
   }
   /**
    * @attribute coll
-   * @aspect NodeCollector
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:10
+   * @aspect AdditionalNodeCharacteristics
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\AdditionalNodeCharacteristics.jrag:11
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
-  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:10")
+  @ASTNodeAnnotation.Source(aspect="AdditionalNodeCharacteristics", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\AdditionalNodeCharacteristics.jrag:11")
   public java.util.Collection<String> containingForeignMethodCalls() {
     ASTNode$State state = state();
     if (MethodDecl_containingForeignMethodCalls_computed == ASTNode$State.NON_CYCLE || MethodDecl_containingForeignMethodCalls_computed == state().cycle()) {
@@ -2523,22 +2523,8 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
     }
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
-  protected void collect_contributors_Program_extractedPublicMethodDeclarations(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:19
-    if ((!this.isPrivate())) {
-      {
-        java.util.Set<ASTNode> contributors = _map.get(_root);
-        if (contributors == null) {
-          contributors = new java.util.LinkedHashSet<ASTNode>();
-          _map.put((ASTNode) _root, contributors);
-        }
-        contributors.add(this);
-      }
-    }
-    super.collect_contributors_Program_extractedPublicMethodDeclarations(_root, _map);
-  }
   protected void collect_contributors_Program_extractedPrivateMethodDeclarations(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:23
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:81
     if ((this.isPrivate())) {
       {
         java.util.Set<ASTNode> contributors = _map.get(_root);
@@ -2551,8 +2537,22 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
     }
     super.collect_contributors_Program_extractedPrivateMethodDeclarations(_root, _map);
   }
+  protected void collect_contributors_Program_extractedPublicMethodDeclarations(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:85
+    if ((!this.isPrivate())) {
+      {
+        java.util.Set<ASTNode> contributors = _map.get(_root);
+        if (contributors == null) {
+          contributors = new java.util.LinkedHashSet<ASTNode>();
+          _map.put((ASTNode) _root, contributors);
+        }
+        contributors.add(this);
+      }
+    }
+    super.collect_contributors_Program_extractedPublicMethodDeclarations(_root, _map);
+  }
   protected void collect_contributors_Program_extractedReusableMethods(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:128
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:93
     if ((this.containingForeignMethodCalls().isEmpty())) {
       {
         java.util.Set<ASTNode> contributors = _map.get(_root);
@@ -2583,16 +2583,16 @@ public class MethodDecl extends MemberDecl implements Cloneable, SimpleSet<Metho
       collection.add(warning("possible heap pollution for variable arity parameter"));
     }
   }
-  protected void contributeTo_Program_extractedPublicMethodDeclarations(java.util.Collection<String> collection) {
-    super.contributeTo_Program_extractedPublicMethodDeclarations(collection);
-    if ((!this.isPrivate())) {
-      collection.add(("PUM;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
-    }
-  }
   protected void contributeTo_Program_extractedPrivateMethodDeclarations(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedPrivateMethodDeclarations(collection);
     if ((this.isPrivate())) {
       collection.add(("PRM;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
+    }
+  }
+  protected void contributeTo_Program_extractedPublicMethodDeclarations(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedPublicMethodDeclarations(collection);
+    if ((!this.isPrivate())) {
+      collection.add(("PUM;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
     }
   }
   protected void contributeTo_Program_extractedReusableMethods(java.util.Collection<String> collection) {

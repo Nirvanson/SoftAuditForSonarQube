@@ -782,12 +782,12 @@ public class SwitchStmt extends BranchTargetStmt implements Cloneable {
     return true;
   }
   /**
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:3
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\AdditionalNodeCharacteristics.jrag:3
    * @apilevel internal
    */
   public boolean Define_isPredicate(ASTNode _callerNode, ASTNode _childNode) {
     if (getExprNoTransform() != null && _callerNode == getExpr()) {
-      // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:8
+      // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\AdditionalNodeCharacteristics.jrag:8
       return true;
     }
     else {
@@ -817,20 +817,8 @@ public class SwitchStmt extends BranchTargetStmt implements Cloneable {
     }
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
-  protected void collect_contributors_Program_extractedSwitchStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:39
-    {
-      java.util.Set<ASTNode> contributors = _map.get(_root);
-      if (contributors == null) {
-        contributors = new java.util.LinkedHashSet<ASTNode>();
-        _map.put((ASTNode) _root, contributors);
-      }
-      contributors.add(this);
-    }
-    super.collect_contributors_Program_extractedSwitchStatements(_root, _map);
-  }
   protected void collect_contributors_Program_extractedStatementTypes(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:146
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:118
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -841,18 +829,30 @@ public class SwitchStmt extends BranchTargetStmt implements Cloneable {
     }
     super.collect_contributors_Program_extractedStatementTypes(_root, _map);
   }
+  protected void collect_contributors_Program_extractedSwitchStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:143
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_Program_extractedSwitchStatements(_root, _map);
+  }
   protected void contributeTo_CompilationUnit_problems(LinkedList<Problem> collection) {
     super.contributeTo_CompilationUnit_problems(collection);
     for (Problem value : typeProblems()) {
       collection.add(value);
     }
   }
-  protected void contributeTo_Program_extractedSwitchStatements(java.util.Collection<String> collection) {
-    super.contributeTo_Program_extractedSwitchStatements(collection);
-    collection.add(("SWS;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
-  }
   protected void contributeTo_Program_extractedStatementTypes(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedStatementTypes(collection);
     collection.add(("STY;Switch-Statement"));
+  }
+  protected void contributeTo_Program_extractedSwitchStatements(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedSwitchStatements(collection);
+    collection.add(("SWS;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
   }
 }

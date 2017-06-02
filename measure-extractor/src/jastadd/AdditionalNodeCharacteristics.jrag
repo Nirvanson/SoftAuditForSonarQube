@@ -1,0 +1,13 @@
+aspect AdditionalNodeCharacteristics {
+	// All variable accesses inside loop, switch and if-conditions are predicates
+	inh boolean VarAccess.isPredicate();
+	eq Program.getCompilationUnit(int i).isPredicate() = false;
+	eq IfStmt.getCondition().isPredicate() = true;
+	eq DoStmt.getCondition().isPredicate() = true;
+	eq WhileStmt.getCondition().isPredicate() = true;
+	eq SwitchStmt.getExpr().isPredicate() = true;
+	
+	// Collect foreign method accesses inside method declarations
+	coll java.util.Collection<String> MethodDecl.containingForeignMethodCalls() [new java.util.ArrayList<String>()] with add root MethodDecl;
+	MethodAccess contributes ("Foreign method call at " + this.location()) when (this.decl().name().equals("unknown")) to MethodDecl.containingForeignMethodCalls();
+}

@@ -443,7 +443,7 @@ public abstract class ImportDecl extends ASTNode<ASTNode> implements Cloneable {
     return false;
   }
   protected void collect_contributors_Program_extractedImports(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:76
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:45
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {

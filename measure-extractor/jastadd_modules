@@ -1,6 +1,6 @@
 include("extendj/jastadd_modules")
 
-module "measure-extractor", {
+module "measure-extractor-1.0", {
 
 	imports "java8 frontend"
 

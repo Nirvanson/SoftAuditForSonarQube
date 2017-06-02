@@ -1068,7 +1068,7 @@ public class FieldDeclarator extends Declarator implements Cloneable {
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
   protected void collect_contributors_Program_extractedGlobalVariables(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:107
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:36
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -1080,7 +1080,7 @@ public class FieldDeclarator extends Declarator implements Cloneable {
     super.collect_contributors_Program_extractedGlobalVariables(_root, _map);
   }
   protected void collect_contributors_Program_extractedVariables(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:112
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:148
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {

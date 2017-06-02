@@ -16,7 +16,7 @@ jastadd {
 
 	modules 'jastadd_modules'
 
-	module = 'measure-extractor'
+	module = 'measure-extractor-1.0'
 
 	astPackage = 'org.extendj.ast'
 	genDir = 'src/gen/java'

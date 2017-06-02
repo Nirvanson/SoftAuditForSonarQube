@@ -613,12 +613,12 @@ public class DoStmt extends BranchTargetStmt implements Cloneable {
     return true;
   }
   /**
-   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:3
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\AdditionalNodeCharacteristics.jrag:3
    * @apilevel internal
    */
   public boolean Define_isPredicate(ASTNode _callerNode, ASTNode _childNode) {
     if (getConditionNoTransform() != null && _callerNode == getCondition()) {
-      // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:6
+      // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\AdditionalNodeCharacteristics.jrag:6
       return true;
     }
     else {
@@ -650,20 +650,8 @@ public class DoStmt extends BranchTargetStmt implements Cloneable {
     }
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
-  protected void collect_contributors_Program_extractedLoopStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:32
-    {
-      java.util.Set<ASTNode> contributors = _map.get(_root);
-      if (contributors == null) {
-        contributors = new java.util.LinkedHashSet<ASTNode>();
-        _map.put((ASTNode) _root, contributors);
-      }
-      contributors.add(this);
-    }
-    super.collect_contributors_Program_extractedLoopStatements(_root, _map);
-  }
   protected void collect_contributors_Program_extractedBranches(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:83
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:6
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -672,7 +660,7 @@ public class DoStmt extends BranchTargetStmt implements Cloneable {
       }
       contributors.add(this);
     }
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:87
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:10
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -683,8 +671,20 @@ public class DoStmt extends BranchTargetStmt implements Cloneable {
     }
     super.collect_contributors_Program_extractedBranches(_root, _map);
   }
+  protected void collect_contributors_Program_extractedLoopStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:54
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_Program_extractedLoopStatements(_root, _map);
+  }
   protected void collect_contributors_Program_extractedStatementTypes(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:142
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:114
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -702,14 +702,14 @@ public class DoStmt extends BranchTargetStmt implements Cloneable {
                 getCondition().prettyPrint(), getCondition().type().name()));
     }
   }
-  protected void contributeTo_Program_extractedLoopStatements(java.util.Collection<String> collection) {
-    super.contributeTo_Program_extractedLoopStatements(collection);
-    collection.add(("LOS;" + this.compilationUnit().pathName() + ";" + this.location() + ";DoWhile"));
-  }
   protected void contributeTo_Program_extractedBranches(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedBranches(collection);
     collection.add(("BRA;" + this.compilationUnit().pathName() + ";" + this.location() + ";Do-True-Branch"));
     collection.add(("BRA;" + this.compilationUnit().pathName() + ";" + this.location() + ";Do-False-Branch"));
+  }
+  protected void contributeTo_Program_extractedLoopStatements(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedLoopStatements(collection);
+    collection.add(("LOS;" + this.compilationUnit().pathName() + ";" + this.location() + ";DoWhile"));
   }
   protected void contributeTo_Program_extractedStatementTypes(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedStatementTypes(collection);

@@ -1361,20 +1361,8 @@ public class TryStmt extends Stmt implements Cloneable, FinallyHost {
   public boolean canRewrite() {
     return false;
   }
-  protected void collect_contributors_Program_extractedIfStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:28
-    {
-      java.util.Set<ASTNode> contributors = _map.get(_root);
-      if (contributors == null) {
-        contributors = new java.util.LinkedHashSet<ASTNode>();
-        _map.put((ASTNode) _root, contributors);
-      }
-      contributors.add(this);
-    }
-    super.collect_contributors_Program_extractedIfStatements(_root, _map);
-  }
   protected void collect_contributors_Program_extractedBranches(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:91
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:14
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -1383,7 +1371,7 @@ public class TryStmt extends Stmt implements Cloneable, FinallyHost {
       }
       contributors.add(this);
     }
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:92
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:15
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -1394,8 +1382,20 @@ public class TryStmt extends Stmt implements Cloneable, FinallyHost {
     }
     super.collect_contributors_Program_extractedBranches(_root, _map);
   }
+  protected void collect_contributors_Program_extractedIfStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:41
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_Program_extractedIfStatements(_root, _map);
+  }
   protected void collect_contributors_Program_extractedStatementTypes(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:160
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:132
     if ((!(this instanceof TryWithResources))) {
       {
         java.util.Set<ASTNode> contributors = _map.get(_root);
@@ -1408,14 +1408,14 @@ public class TryStmt extends Stmt implements Cloneable, FinallyHost {
     }
     super.collect_contributors_Program_extractedStatementTypes(_root, _map);
   }
-  protected void contributeTo_Program_extractedIfStatements(java.util.Collection<String> collection) {
-    super.contributeTo_Program_extractedIfStatements(collection);
-    collection.add(("IFS;" + this.compilationUnit().pathName() + ";" + this.location() + ";Try"));
-  }
   protected void contributeTo_Program_extractedBranches(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedBranches(collection);
     collection.add(("BRA;" + this.compilationUnit().pathName() + ";" + this.location() + ";Try-Success-Branch"));
     collection.add(("BRA;" + this.compilationUnit().pathName() + ";" + this.location() + ";Try-Failed-Branch"));
+  }
+  protected void contributeTo_Program_extractedIfStatements(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedIfStatements(collection);
+    collection.add(("IFS;" + this.compilationUnit().pathName() + ";" + this.location() + ";Try"));
   }
   protected void contributeTo_Program_extractedStatementTypes(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedStatementTypes(collection);

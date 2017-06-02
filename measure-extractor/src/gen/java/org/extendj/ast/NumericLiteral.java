@@ -593,7 +593,7 @@ public class NumericLiteral extends Literal implements Cloneable {
     return false;
   }
   protected void collect_contributors_Program_extractedNumericLiterals(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:52
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:73
     if ((this.getLITERAL().length()>5 || !(Double.valueOf(this.getLITERAL()).equals(0.0D) || Double.valueOf(this.getLITERAL()).equals(1.0D) || Double.valueOf(this.getLITERAL()).equals(-1.0D)))) {
       {
         java.util.Set<ASTNode> contributors = _map.get(_root);

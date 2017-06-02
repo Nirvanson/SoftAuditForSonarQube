@@ -375,20 +375,8 @@ public abstract class Case extends Stmt implements Cloneable {
   public boolean canRewrite() {
     return false;
   }
-  protected void collect_contributors_Program_extractedSwitchCases(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:43
-    {
-      java.util.Set<ASTNode> contributors = _map.get(_root);
-      if (contributors == null) {
-        contributors = new java.util.LinkedHashSet<ASTNode>();
-        _map.put((ASTNode) _root, contributors);
-      }
-      contributors.add(this);
-    }
-    super.collect_contributors_Program_extractedSwitchCases(_root, _map);
-  }
   protected void collect_contributors_Program_extractedBranches(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:95
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:18
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -400,7 +388,7 @@ public abstract class Case extends Stmt implements Cloneable {
     super.collect_contributors_Program_extractedBranches(_root, _map);
   }
   protected void collect_contributors_Program_extractedStatementTypes(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:151
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:123
     if ((!(this instanceof ConstCase || this instanceof DefaultCase))) {
       {
         java.util.Set<ASTNode> contributors = _map.get(_root);
@@ -413,9 +401,17 @@ public abstract class Case extends Stmt implements Cloneable {
     }
     super.collect_contributors_Program_extractedStatementTypes(_root, _map);
   }
-  protected void contributeTo_Program_extractedSwitchCases(java.util.Collection<String> collection) {
-    super.contributeTo_Program_extractedSwitchCases(collection);
-    collection.add(("SWC;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
+  protected void collect_contributors_Program_extractedSwitchCases(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:139
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_Program_extractedSwitchCases(_root, _map);
   }
   protected void contributeTo_Program_extractedBranches(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedBranches(collection);
@@ -426,5 +422,9 @@ public abstract class Case extends Stmt implements Cloneable {
     if ((!(this instanceof ConstCase || this instanceof DefaultCase))) {
       collection.add(("STY;Case-Statement"));
     }
+  }
+  protected void contributeTo_Program_extractedSwitchCases(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedSwitchCases(collection);
+    collection.add(("SWC;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
   }
 }

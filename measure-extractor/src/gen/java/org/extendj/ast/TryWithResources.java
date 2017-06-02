@@ -1230,7 +1230,7 @@ public class TryWithResources extends TryStmt implements Cloneable, VariableScop
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
   protected void collect_contributors_Program_extractedStatementTypes(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:159
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:131
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {

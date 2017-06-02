@@ -871,20 +871,8 @@ public class ReturnStmt extends Stmt implements Cloneable {
     }
     super.collect_contributors_BlockLambdaBody_lambdaReturns(_root, _map);
   }
-  protected void collect_contributors_Program_extractedReturnStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:68
-    {
-      java.util.Set<ASTNode> contributors = _map.get(_root);
-      if (contributors == null) {
-        contributors = new java.util.LinkedHashSet<ASTNode>();
-        _map.put((ASTNode) _root, contributors);
-      }
-      contributors.add(this);
-    }
-    super.collect_contributors_Program_extractedReturnStatements(_root, _map);
-  }
   protected void collect_contributors_Program_extractedBranches(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:94
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:17
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -895,8 +883,20 @@ public class ReturnStmt extends Stmt implements Cloneable {
     }
     super.collect_contributors_Program_extractedBranches(_root, _map);
   }
+  protected void collect_contributors_Program_extractedReturnStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:89
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_Program_extractedReturnStatements(_root, _map);
+  }
   protected void collect_contributors_Program_extractedStatementTypes(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
-    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:156
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:128
     {
       java.util.Set<ASTNode> contributors = _map.get(_root);
       if (contributors == null) {
@@ -919,13 +919,13 @@ public class ReturnStmt extends Stmt implements Cloneable {
       collection.add(this);
     }
   }
-  protected void contributeTo_Program_extractedReturnStatements(java.util.Collection<String> collection) {
-    super.contributeTo_Program_extractedReturnStatements(collection);
-    collection.add(("RES;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
-  }
   protected void contributeTo_Program_extractedBranches(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedBranches(collection);
     collection.add(("BRA;" + this.compilationUnit().pathName() + ";" + this.location() + ";Return-Branch"));
+  }
+  protected void contributeTo_Program_extractedReturnStatements(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedReturnStatements(collection);
+    collection.add(("RES;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
   }
   protected void contributeTo_Program_extractedStatementTypes(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedStatementTypes(collection);
