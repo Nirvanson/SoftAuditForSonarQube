@@ -6,9 +6,9 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <name>sonar-softaudit-plugin</name>
+    <name>sonar-student-grading-plugin</name>
     <groupId>plugin</groupId>
-    <artifactId>sonar-softaudit-plugin</artifactId>
+    <artifactId>sonar-stugraplu</artifactId>
     <version>1.0</version>
     <packaging>sonar-plugin</packaging>
 
@@ -41,10 +41,10 @@
                 <version>1.13</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <pluginKey>softaudit</pluginKey>
-                    <pluginClass>plugin.SoftAuditPlugin</pluginClass>
-                    <pluginName>SoftAudit Plugin for SonarQube</pluginName>
-                    <pluginDescription>Offers the SoftAudit Metrics as SonarQube-Plugin</pluginDescription>
+                    <pluginKey>stugraplu</pluginKey>
+                    <pluginClass>plugin.definition.StudentGradingPlugin</pluginClass>
+                    <pluginName>Student-Grading-Plugin</pluginName>
+                    <pluginDescription>Offers Quality / Complexity Metrics and other values for grading student-projects.</pluginDescription>
                 </configuration>
             </plugin>
         </plugins>
@@ -54,7 +54,7 @@
     	<dependency>
   			<groupId>org.extendj</groupId>
   			<artifactId>measure-extractor</artifactId>
-  			<version>0.1</version>
+  			<version>1.0</version>
 		</dependency>
         <dependency>
             <groupId>org.codehaus.sonar</groupId>
