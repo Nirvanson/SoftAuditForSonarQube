@@ -1,4 +1,4 @@
-package plugin.worker;
+package plugin.extensions;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,6 +10,9 @@ import java.util.Map;
 
 import org.junit.Test;
 import org.sonar.api.measures.Metric;
+
+import plugin.extensions.StuGraPluMeasureSensor;
+import plugin.services.LogFileWriter;
 
 public class StuGraPluSensorTest {
 
@@ -25,7 +28,7 @@ public class StuGraPluSensorTest {
         if (logfile.exists()) {
             logfile.delete();
         }
-        StuGraPluSensor sensor = new StuGraPluSensor("./target/logs/" + filename + ".log");
+        StuGraPluMeasureSensor sensor = new StuGraPluMeasureSensor("./target/logs/" + filename + ".log");
 
         Map<Metric<?>, Double> measures = sensor
                 .extractMeasures(new String[] { "src/test/java/testdata/" + filename + ".java" });
@@ -47,7 +50,7 @@ public class StuGraPluSensorTest {
         if (logfile.exists()) {
             logfile.delete();
         }
-        StuGraPluSensor sensor = new StuGraPluSensor("./target/logs/SelfScan.log");
+        StuGraPluMeasureSensor sensor = new StuGraPluMeasureSensor("./target/logs/SelfScan.log");
 
         Map<Metric<?>, Double> measures = sensor.extractMeasures(fileNames);
 

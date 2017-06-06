@@ -42,7 +42,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <pluginKey>stugraplu</pluginKey>
-                    <pluginClass>plugin.definition.StudentGradingPlugin</pluginClass>
+                    <pluginClass>plugin.definitions.StudentGradingPlugin</pluginClass>
                     <pluginName>Student-Grading-Plugin</pluginName>
                     <pluginDescription>Offers Quality / Complexity Metrics and other values for grading student-projects.</pluginDescription>
                 </configuration>

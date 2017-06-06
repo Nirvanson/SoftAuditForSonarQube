@@ -1,4 +1,4 @@
-package plugin.worker;
+package plugin.extensions;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,8 +21,9 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
-import plugin.definition.StuGraPluConfigurableValues;
-import plugin.definition.StuGraPluMeasures;
+import plugin.definitions.StuGraPluConfigurableValues;
+import plugin.definitions.StuGraPluMeasures;
+import plugin.services.LogFileWriter;
 
 /**
  * Analyzing source-files for retrieving measures needed for metric-calculation.
@@ -30,10 +31,10 @@ import plugin.definition.StuGraPluMeasures;
  * @author Jan Rucks
  * @version 1.0
  */
-public class StuGraPluSensor implements Sensor {
+public class StuGraPluMeasureSensor implements Sensor {
 
     /** Console-logger. */
-    private static final Logger LOGGER = Loggers.get(StuGraPluSensor.class);
+    private static final Logger LOGGER = Loggers.get(StuGraPluMeasureSensor.class);
     /** The file system object for the project being analyzed. */
     private final FileSystem fileSystem;
 
@@ -43,7 +44,7 @@ public class StuGraPluSensor implements Sensor {
      * @param filename - for the log-file-writer
      * @throws IOException
      */
-    protected StuGraPluSensor(String logFileName) throws IOException {
+    protected StuGraPluMeasureSensor(String logFileName) throws IOException {
         this.fileSystem = null;
         LogFileWriter.getLogger(logFileName, LogFileWriter.FULL_LOG);
     }
@@ -53,7 +54,7 @@ public class StuGraPluSensor implements Sensor {
      *
      * @param fileSystem - the project file system
      */
-    public StuGraPluSensor(FileSystem fileSystem) {
+    public StuGraPluMeasureSensor(FileSystem fileSystem) {
         this.fileSystem = fileSystem;
     }
 

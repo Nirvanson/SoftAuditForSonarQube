@@ -1,4 +1,4 @@
-package plugin.worker;
+package plugin.services;
 
 import java.io.FileWriter;
 import java.io.IOException;

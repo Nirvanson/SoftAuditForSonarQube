@@ -1,4 +1,4 @@
-package plugin.worker;
+package plugin.extensions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +19,10 @@ import org.sonar.api.utils.log.Loggers;
  * @version 1.0
  */
 @Phase(name = Phase.Name.POST)
-public class QualityIndexCalculator implements PostJob {
+public class StuGraPluQualityIndexPostJob implements PostJob {
 
     /** Console-logger. */
-    private static final Logger LOGGER = Loggers.get(QualityIndexCalculator.class);
+    private static final Logger LOGGER = Loggers.get(StuGraPluQualityIndexPostJob.class);
     /** Issues found by SonarQube. */
     private ProjectIssues issues;
 
@@ -31,7 +31,7 @@ public class QualityIndexCalculator implements PostJob {
      * 
      * @param issues
      */
-    public QualityIndexCalculator(ProjectIssues issues) {
+    public StuGraPluQualityIndexPostJob(ProjectIssues issues) {
         this.issues = issues;
     }
 

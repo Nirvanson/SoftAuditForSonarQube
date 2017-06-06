@@ -1,4 +1,4 @@
-package plugin.definition;
+package plugin.definitions;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,13 +6,13 @@ import java.util.List;
 import org.sonar.api.Extension;
 import org.sonar.api.SonarPlugin;
 
+import plugin.extensions.StuGraPluMetricDecorator;
+import plugin.extensions.StuGraPluQualityIndexPostJob;
+import plugin.extensions.StuGraPluMeasureSensor;
 import plugin.widgets.IndexWidget;
 import plugin.widgets.MeasureWidget;
 import plugin.widgets.MetricsWidget;
 import plugin.widgets.OverviewWidget;
-import plugin.worker.MetricCalculator;
-import plugin.worker.QualityIndexCalculator;
-import plugin.worker.StuGraPluSensor;
 
 /**
  * Plugin definition.
@@ -39,9 +39,9 @@ public class StudentGradingPlugin extends SonarPlugin {
                 StuGraPluMeasures.class,
                 StuGraPluConfigurableValues.class,
                 StuGraPluMetrics.class,
-                StuGraPluSensor.class,
-                MetricCalculator.class,
-                QualityIndexCalculator.class,
+                StuGraPluMeasureSensor.class,
+                StuGraPluMetricDecorator.class,
+                StuGraPluQualityIndexPostJob.class,
                 OverviewWidget.class,
                 MeasureWidget.class,
                 MetricsWidget.class,
