@@ -1,5 +1,8 @@
 package plugin.worker;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.sonar.api.batch.Phase;
 import org.sonar.api.batch.PostJob;
 import org.sonar.api.batch.SensorContext;
@@ -19,7 +22,7 @@ import org.sonar.api.utils.log.Loggers;
 public class QualityIndexCalculator implements PostJob {
 
     /** Console-logger. */
-    private final Logger LOGGER = Loggers.get(QualityIndexCalculator.class);
+    private static final Logger LOGGER = Loggers.get(QualityIndexCalculator.class);
     /** Issues found by SonarQube. */
     private ProjectIssues issues;
 
@@ -36,17 +39,16 @@ public class QualityIndexCalculator implements PostJob {
      * Run PostJob to calculate the code-quality-index from detected issues.
      *
      * @param project - the project being analyzed
-     * @param sensor - SensorContext
+     * @param context - SensorContext
      */
     @Override
-    public void executeOn(Project project, SensorContext sensor) {
-        LOGGER.info("--- QualityIndexCalculator started for " + project.getName() + " / " + sensor.toString());
+    public void executeOn(Project project, SensorContext context) {
+        LOGGER.info("--- QualityIndexCalculator started for " + project.getName() + " / " + context.toString());
+        List<String> issueKeys = new ArrayList<String>();
         for (Issue issue : issues.issues()) {
-            LOGGER.info("--- new issue:");
-            LOGGER.info("key: " + issue.key());
-            LOGGER.info("message: " + issue.message());
-            LOGGER.info("severity: " + issue.severity());
-            LOGGER.info("status: " + issue.status());
+            issueKeys.add(issue.key());
         }
+        LOGGER.info(issueKeys.size() + " issues in context.");
+        LOGGER.info("--- QualityIndexCalculator finished.");
     }
 }

@@ -1,9 +1,10 @@
 package plugin.worker;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -20,46 +21,53 @@ public class StuGraPluSensorTest {
     @Test
     public void singleFileMeasureExtractionTest() throws IOException {
         String filename = "ParsingHorror";
-        File input = new File("src/test/java/testdata/" + filename + ".java");
         File logfile = new File("./target/logs/" + filename + ".log");
         if (logfile.exists()) {
             logfile.delete();
         }
         StuGraPluSensor sensor = new StuGraPluSensor("./target/logs/" + filename + ".log");
 
-        Map<Metric<?>, Double> measures = sensor.extractMeasures(Arrays.asList(input));
+        Map<Metric<?>, Double> measures = sensor
+                .extractMeasures(new String[] { "src/test/java/testdata/" + filename + ".java" });
 
         LogFileWriter.getLogger().printMeasures(measures);
         LogFileWriter.getLogger().close();
+
+        assertEquals("Unexpected measurelist", 26, measures.size());
     }
 
     @Test
     public void testSelfScan() throws IOException {
-        List<File> input = new ArrayList<File>();
-        listf("src/main/java", input);
+        List<File> input = listFiles("src/main/java");
+        String[] fileNames = new String[input.size()];
+        for (int i = 0; i < input.size(); i++) {
+            fileNames[i] = input.get(i).getAbsolutePath();
+        }
         File logfile = new File("./target/logs/SelfScan.log");
         if (logfile.exists()) {
             logfile.delete();
         }
         StuGraPluSensor sensor = new StuGraPluSensor("./target/logs/SelfScan.log");
 
-        Map<Metric<?>, Double> measures = sensor.extractMeasures(input);
+        Map<Metric<?>, Double> measures = sensor.extractMeasures(fileNames);
 
         LogFileWriter.getLogger().printMeasures(measures);
         LogFileWriter.getLogger().close();
+
+        assertEquals("Unexpected measurelist", 26, measures.size());
     }
 
-    public void listf(String directoryName, List<File> files) {
-        File directory = new File(directoryName);
-
-        // get all the files from a directory
-        File[] fList = directory.listFiles();
-        for (File file : fList) {
+    public List<File> listFiles(String directoryName) throws IOException {
+        List<File> files = new ArrayList<File>();
+        for (File file : (new File(directoryName)).listFiles()) {
             if (file.isFile()) {
                 files.add(file);
             } else if (file.isDirectory()) {
-                listf(file.getAbsolutePath(), files);
+                files.addAll(listFiles(file.getAbsolutePath()));
+            } else {
+                throw new IOException("Unexpected file " + file.getName() + " in directory");
             }
         }
+        return files;
     }
 }

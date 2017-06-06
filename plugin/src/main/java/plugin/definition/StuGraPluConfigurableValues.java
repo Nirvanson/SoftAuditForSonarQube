@@ -14,8 +14,12 @@ import org.sonar.api.measures.Metrics;
  * @version 1.0
  */
 public class StuGraPluConfigurableValues implements Metrics {
+
+    /** Default for OMS */
+    public static final Double OMS_DEFAULT = 200.0D;
+
     /**
-     * Optimal Module Size, default 200.
+     * Optimal Module Size.
      */
     public static final Metric<Integer> OMS = new Metric.Builder("oms", "Optimal-Module-Size",
             Metric.ValueType.INT).setDescription("Optimal module size.").setDirection(Metric.DIRECTION_NONE)

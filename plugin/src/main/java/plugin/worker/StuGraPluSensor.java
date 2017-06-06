@@ -41,14 +41,11 @@ public class StuGraPluSensor implements Sensor {
      * Constructor for test-runs.
      *
      * @param filename - for the log-file-writer
+     * @throws IOException
      */
-    protected StuGraPluSensor(String filename) {
+    protected StuGraPluSensor(String logFileName) throws IOException {
         this.fileSystem = null;
-        try {
-            LogFileWriter.getLogger(filename, 5);
-        } catch (IOException e) {
-            LOGGER.error("Initializing LogFileWriter failed!", e);
-        }
+        LogFileWriter.getLogger(logFileName, LogFileWriter.FULL_LOG);
     }
 
     /**
@@ -67,6 +64,7 @@ public class StuGraPluSensor implements Sensor {
      * @param project - the project being analyzed
      * @return true if java used in project
      */
+    @Override
     public boolean shouldExecuteOnProject(Project project) {
         if (fileSystem.languages().contains("java")) {
             return true;
@@ -75,15 +73,40 @@ public class StuGraPluSensor implements Sensor {
     }
 
     /**
-     * Start analyzing.
+     * Do project analysis.
      *
      * @param project - the project being analyzed
      * @param sensorContext - the sensor context
      */
+    @Override
     public void analyse(Project project, SensorContext sensorContext) {
         LOGGER.info("--- StuGraPlu-Sensor started");
-        // initialization with properties values
-        Double optimalModuleSize = null;
+        Map<Metric<?>, Double> configurableValues = initializeWithProperties(sensorContext);
+        String[] fileNames = getFileList();
+        Map<Metric<?>, Double> measures = extractMeasures(fileNames);
+        measures.putAll(configurableValues);
+
+        try {
+            LogFileWriter.getLogger().printMeasures(measures);
+            LogFileWriter.getLogger().close();
+        } catch (IOException ex) {
+            LOGGER.warn("Logging measures failed!");
+        }
+
+        for (Metric<?> measure : measures.keySet()) {
+            sensorContext.saveMeasure(new Measure<Integer>(measure, measures.get(measure), 0));
+        }
+        LOGGER.info("--- StuGraPlu-Sensor finished");
+    }
+
+    /**
+     * Initializes log-file-writer and configurable values from properties file.
+     * 
+     * @param sensorContext
+     * @return map of configurable values
+     */
+    private Map<Metric<?>, Double> initializeWithProperties(SensorContext sensorContext) {
+        Map<Metric<?>, Double> configurableValues = new HashMap<Metric<?>, Double>();
         try {
             Settings properties = sensorContext.settings();
             String timestamp = (new SimpleDateFormat(properties.getString("logfiletimestampformat")))
@@ -91,33 +114,38 @@ public class StuGraPluSensor implements Sensor {
             String filename = properties.getString("logfilepath") + timestamp + properties.getString("logfilename");
             LogFileWriter.getLogger(filename, Integer.valueOf(properties.getInt("loglevel")));
             properties.appendProperty("currentlogfile", filename);
-            optimalModuleSize = Double.valueOf(properties.getDouble("optimalModuleSize"));
-        } catch (Exception e) {
-            // initialization failed. Use default for optimalModuleSize and skip file-logging
-            LOGGER.warn(
-                    "Initializing with properties-file failed! - Default values will be used and no logfiles can be written.");
-            optimalModuleSize = 200.0;
+            configurableValues.put(StuGraPluConfigurableValues.OMS,
+                    Double.valueOf(properties.getDouble("optimalModuleSize")));
+            LOGGER.info("Adding configurable values finished");
+        } catch (Exception ex) {
+            LOGGER.warn("Initializing with properties-file failed!");
+            LOGGER.warn("Default values will be used and no logfiles can be written.");
+            configurableValues.put(StuGraPluConfigurableValues.OMS, StuGraPluConfigurableValues.OMS_DEFAULT);
         }
+        return configurableValues;
+    }
 
-        // parse and measure source files with extendJ
-        Map<Metric<?>, Double> measures = extractMeasures(
-                fileSystem.files(fileSystem.predicates().hasLanguage("java")));
-
-        // Add configurable values
-        measures.put(StuGraPluConfigurableValues.OMS, optimalModuleSize);
+    /**
+     * Extracts filename-array from project.
+     * 
+     * @param project - to analyze
+     * @return list of filenames
+     */
+    private String[] getFileList() {
+        Iterable<File> files = fileSystem.files(fileSystem.predicates().hasLanguage("java"));
+        List<String> fileNames = new ArrayList<String>();
+        for (File file : files) {
+            fileNames.add(file.getAbsolutePath());
+        }
+        String[] nameArray = new String[fileNames.size()];
+        nameArray = fileNames.toArray(nameArray);
 
         try {
-            LogFileWriter.getLogger().printMeasures(measures);
-            LogFileWriter.getLogger().close();
-        } catch (IOException e) {
-            LOGGER.warn("Logging measures failed!");
+            LogFileWriter.getLogger().printFileList(nameArray);
+        } catch (IOException ex) {
+            LOGGER.warn("Logging filenames failed!");
         }
-
-        // save measures
-        for (Metric<?> measure : measures.keySet()) {
-            sensorContext.saveMeasure(new Measure<Integer>(measure, measures.get(measure), 0));
-        }
-        LOGGER.info("--- StuGraPlu-Sensor finished");
+        return nameArray;
     }
 
     /**
@@ -127,42 +155,22 @@ public class StuGraPluSensor implements Sensor {
      * @return map with results
      */
     @SuppressWarnings("rawtypes")
-    protected Map<Metric<?>, Double> extractMeasures(Iterable<File> files) {
-        // list file names in array
-        List<File> input = new ArrayList<File>();
-        for (File file : files) {
-            input.add(file);
-        }
-        String[] filenames = new String[input.size()];
-        for (int i = 0; i < input.size(); i++) {
-            filenames[i] = input.get(i).getAbsolutePath();
-        }
-        try {
-            LogFileWriter.getLogger().printFileList(input);
-        } catch (IOException e) {
-            LOGGER.warn("Logging filenames failed!");
-        }
-
-        // initialize resultMap
+    protected Map<Metric<?>, Double> extractMeasures(String[] fileNames) {
         Map<Metric<?>, Double> result = new HashMap<Metric<?>, Double>();
         List<Metric> measures = (new StuGraPluMeasures()).getMetrics();
 
-        // run extendJ-measure-extractor
-        long startTime = System.currentTimeMillis();
-        Map<String, Collection<String>> collectedNodes = new MeasureExtractor().extractNodes(filenames);
-        long extendJRunningTime = startTime - System.currentTimeMillis();
-        LOGGER.info("Running ExtendJ-Node-Collector took " + extendJRunningTime + " milliseconds");
+        Map<String, Collection<String>> collectedNodes = new MeasureExtractor().extractNodes(fileNames);
         try {
             LogFileWriter.getLogger().printCollectedNodes(collectedNodes);
-        } catch (IOException e) {
+        } catch (IOException ex) {
             LOGGER.warn("Logging collected nodes failed!");
         }
 
-        // count collected elements
         for (Metric measure : measures) {
             result.put(measure, (double) collectedNodes.get(measure.getName()).size());
         }
 
+        LOGGER.info("Extracting measures with ExtendJ finished");
         return result;
     }
 

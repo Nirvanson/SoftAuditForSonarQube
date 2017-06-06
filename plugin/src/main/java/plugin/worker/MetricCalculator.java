@@ -34,7 +34,7 @@ import plugin.definition.StuGraPluMetrics;
 public class MetricCalculator implements Decorator {
 
     /** Console-logger. */
-    private final Logger LOGGER = Loggers.get(MetricCalculator.class);
+    private static final Logger LOGGER = Loggers.get(MetricCalculator.class);
     /** Context of the decorator. */
     private DecoratorContext context;
 
