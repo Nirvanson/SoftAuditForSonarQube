@@ -1,5 +1,5 @@
 <div class="dashbox">
-    <span class="big">Soft-Audit-Metrics-Plugin</span>
+    <span class="big">Student-Grading-Plugin</span>
     <hr />
     <br />
     <h2><b>Measured values (subset):</b></h2>
@@ -13,40 +13,36 @@
             <td colspan="2"><hr /></td>
         </tr>
         <tr>
-            <td>Scanned source files from extendJ</td>
-            <td><%= format_measure('sonar_test') %></td>
-        </tr>
-        <tr>
             <td>Scanned source files</td>
-            <td><%= format_measure('base_src') %></td>
+            <td><%= format_measure('sof') %></td>
         </tr>
         <tr>
             <td>Number of specified classes</td>
-            <td><%= format_measure('base_cla') %></td>
+            <td><%= format_measure('cla') %></td>
         </tr>
         <tr>
             <td>Number of specified interfaces and enumerations</td>
-            <td><%= format_measure('base_int') %></td>
+            <td><%= format_measure('int') %></td>
         </tr>
         <tr>
             <td>Number of declared non-private methods</td>
-            <td><%= format_measure('base_met') %></td>
+            <td><%= format_measure('pum') %></td>
         </tr>
         <tr>
             <td>Number of declared private methods</td>
-            <td><%= format_measure('base_pme') %></td>
+            <td><%= format_measure('prm') %></td>
         </tr>
         <tr>
             <td>Number of declared class variables</td>
-            <td><%= format_measure('base_var') %></td>
+            <td><%= format_measure('var') %></td>
         </tr>
         <tr>
             <td>Number of method calls</td>
-            <td><%= format_measure('base_fuc') %></td>
+            <td><%= format_measure('mec') %></td>
         </tr>
         <tr>
             <td>Number of foreign method calls</td>
-            <td><%= format_measure('base_ffc') %></td>
+            <td><%= format_measure('fmc') %></td>
         </tr>
         <tr>
             <td>Number of imports</td>
@@ -54,7 +50,7 @@
         </tr>
         <tr>
             <td>Number of statements</td>
-            <td><%= format_measure('base_stm') %></td>
+            <td><%= format_measure('sta') %></td>
         </tr>
     </table>
     <br />
@@ -63,15 +59,15 @@
     <table width="100%">
         <tr>
             <td width="250px"><h2>Object Points:</h2></td>
-            <td><h2><%= format_measure('size_obp') %></h2></td>
+            <td><h2><%= format_measure('obp') %></h2></td>
         </tr>
         <tr>
             <td width="250px"><h2>Average Complexity:</h2></td>
-            <td><h2><%= format_measure('complexity_acm') %></h2></td>
+            <td><h2><%= format_measure('acm') %></h2></td>
         </tr>
         <tr>
             <td width="250px"><h2>Average Quality:</h2></td>
-            <td><h2><%= format_measure('quality_aqm') %></h2></td>
+            <td><h2><%= format_measure('aqm') %></h2></td>
         </tr>
     </table>
     <br />
@@ -87,31 +83,31 @@
                 </tr>
                 <tr>
                     <td>Data Complexity</td> 
-                    <td><%= format_measure('complexity_dco') %></td>
+                    <td><%= format_measure('dco') %></td>
                 </tr>
                 <tr>
                     <td>Data Flow Complexity</td> 
-                    <td><%= format_measure('complexity_dfc') %></td>
+                    <td><%= format_measure('dfc') %></td>
                 </tr>
                 <tr>
                     <td>Interface Complexity</td> 
-                    <td><%= format_measure('complexity_ico') %></td>
+                    <td><%= format_measure('ico') %></td>
                 </tr>
                 <tr>
                     <td>Control Flow Complexity</td> 
-                    <td><%= format_measure('complexity_cfc') %></td>
+                    <td><%= format_measure('cfc') %></td>
                 </tr>
                 <tr>
                     <td>Conditional Complexity</td> 
-                    <td><%= format_measure('complexity_coc') %></td>
+                    <td><%= format_measure('coc') %></td>
                 </tr>
                 <tr>
                     <td>Branching Complexity</td> 
-                    <td><%= format_measure('complexity_brc') %></td>
+                    <td><%= format_measure('brc') %></td>
                 </tr>
                 <tr>
                     <td>Language Complexity</td> 
-                    <td><%= format_measure('complexity_lcm') %></td>
+                    <td><%= format_measure('lcm') %></td>
                 </tr>
             </table></td>
             <td width="20px"> </td>
@@ -125,31 +121,31 @@
                 </tr>
                 <tr>
                     <td>Modularity</td> 
-                    <td><%= format_measure('quality_mod') %></td>
+                    <td><%= format_measure('mod') %></td>
                 </tr>
                 <tr>
                     <td>Testability</td> 
-                    <td><%= format_measure('quality_tst') %></td>
+                    <td><%= format_measure('tst') %></td>
                 </tr>
                 <tr>
                     <td>Reusability</td> 
-                    <td><%= format_measure('quality_reu') %></td>
+                    <td><%= format_measure('reu') %></td>
                 </tr>
                 <tr>
                     <td>Security</td> 
-                    <td><%= format_measure('quality_sec') %></td>
+                    <td><%= format_measure('sec') %></td>
                 </tr>
                 <tr>
                     <td>Flexibility</td> 
-                    <td><%= format_measure('quality_fle') %></td>
+                    <td><%= format_measure('fle') %></td>
                 </tr>
                 <tr>
                     <td>Conformity</td> 
-                    <td><%= format_measure('quality_cof') %></td>
+                    <td><%= format_measure('cof') %></td>
                 </tr>
                 <tr>
                     <td>Maintainability</td> 
-                    <td><%= format_measure('quality_mam') %></td>
+                    <td><%= format_measure('mam') %></td>
                 </tr>
             </table></td>
         </tr>

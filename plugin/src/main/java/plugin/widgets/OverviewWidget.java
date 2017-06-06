@@ -1,4 +1,4 @@
-package plugin.definition;
+package plugin.widgets;
 
 import org.sonar.api.web.AbstractRubyTemplate;
 import org.sonar.api.web.Description;
@@ -12,13 +12,13 @@ import org.sonar.api.web.UserRole;
  * @version 1.0
  */
 @UserRole(UserRole.USER)
-@Description("Offers Quality / Complexity Metrics and other values for grading student-projects.")
-public class StuGraPluWidget extends AbstractRubyTemplate implements RubyRailsWidget {
+@Description("Shows overview of StuGraPlu features.")
+public class OverviewWidget extends AbstractRubyTemplate implements RubyRailsWidget {
 
     /**
      * Default constructor.
      */
-    public StuGraPluWidget() {
+    public OverviewWidget() {
         super();
     }
 
@@ -28,7 +28,7 @@ public class StuGraPluWidget extends AbstractRubyTemplate implements RubyRailsWi
      * @return the widget id
      */
     public String getId() {
-        return "stugraplu";
+        return "stugraplu-overview";
     }
 
     /**
@@ -37,7 +37,7 @@ public class StuGraPluWidget extends AbstractRubyTemplate implements RubyRailsWi
      * @return the widget title
      */
     public String getTitle() {
-        return "Student-Grading-PlugIn";
+        return "Student-Grading-PlugIn-Overview";
     }
 
     /**
@@ -47,6 +47,6 @@ public class StuGraPluWidget extends AbstractRubyTemplate implements RubyRailsWi
      */
     @Override
     protected String getTemplatePath() {
-        return "/plugin/stugraplu_widget.html.erb";
+        return "/overview_widget.html.erb";
     }
 }

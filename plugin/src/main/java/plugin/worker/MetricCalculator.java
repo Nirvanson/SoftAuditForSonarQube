@@ -25,16 +25,16 @@ import plugin.definition.StuGraPluMeasures;
 import plugin.definition.StuGraPluMetrics;
 
 /**
- * Calculating metrics out of measured values from SoftAuditSensor and some CoreMetrics.
+ * Calculating metrics out of measured values from StuGraPluSensor and some CoreMetrics.
  *
  * @author Jan Rucks
  * @version 1.0
  */
 @DependsUpon(DecoratorBarriers.ISSUES_TRACKED)
-public class StuGraPluDecorator implements Decorator {
+public class MetricCalculator implements Decorator {
 
     /** Console-logger. */
-    private final Logger LOGGER = Loggers.get(StuGraPluDecorator.class);
+    private final Logger LOGGER = Loggers.get(MetricCalculator.class);
     /** Context of the decorator. */
     private DecoratorContext context;
 
@@ -61,8 +61,10 @@ public class StuGraPluDecorator implements Decorator {
         if (!Scopes.isProject(resource)) {
             return;
         }
-        LOGGER.info("--- SoftAuditDecorator started");
+        LOGGER.info("--- MetricCalculator started");
         this.context = context;
+
+        // TODO: rework
         // safe deficiency-measures from CoreMetrics
         LOGGER.info("Retrieve SonarQube-provided measures");
         Map<Metric<?>, Double> sonarQubeProvidedMeasures = new HashMap<Metric<?>, Double>();
