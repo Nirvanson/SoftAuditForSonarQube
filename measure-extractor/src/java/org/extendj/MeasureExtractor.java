@@ -87,7 +87,8 @@ public class MeasureExtractor extends JavaChecker {
   		resultMap.put("Variables", this.program.extractedVariables());
   		// VRE - Variable references
   		resultMap.put("Variable-References", this.program.extractedVariableReferences());
-  		
+  		// VUS - Vulnerable Statements
+  		resultMap.put("Vulnerable-Statements", this.program.extractedVulnerableStatements());
   		return resultMap;
   	}
 

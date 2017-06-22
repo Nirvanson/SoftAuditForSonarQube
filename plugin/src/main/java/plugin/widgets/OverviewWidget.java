@@ -47,6 +47,6 @@ public class OverviewWidget extends AbstractRubyTemplate implements RubyRailsWid
      */
     @Override
     protected String getTemplatePath() {
-        return "/overview_widget.html.erb";
+        return "/widgets/overview_widget.html.erb";
     }
 }

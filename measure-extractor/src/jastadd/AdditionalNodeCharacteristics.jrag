@@ -10,4 +10,8 @@ aspect AdditionalNodeCharacteristics {
 	// Collect foreign method accesses inside method declarations
 	coll java.util.Collection<String> MethodDecl.containingForeignMethodCalls() [new java.util.ArrayList<String>()] with add root MethodDecl;
 	MethodAccess contributes ("Foreign method call at " + this.location()) when (this.decl().name().equals("unknown")) to MethodDecl.containingForeignMethodCalls();
+	
+	// Collect constructors in compilationUnit
+	coll java.util.Collection<String> CompilationUnit.containingConstructors() [new java.util.ArrayList<String>()] with add root CompilationUnit;
+	ConstructorDecl contributes (this.name()) to CompilationUnit.containingConstructors();
 }

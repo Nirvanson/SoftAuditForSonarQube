@@ -1091,6 +1091,20 @@ public class FieldDeclarator extends Declarator implements Cloneable {
     }
     super.collect_contributors_Program_extractedVariables(_root, _map);
   }
+  protected void collect_contributors_Program_extractedVulnerableStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:157
+    if ((this.isPublic() && this.isClassVariable()  && !this.isFinal())) {
+      {
+        java.util.Set<ASTNode> contributors = _map.get(_root);
+        if (contributors == null) {
+          contributors = new java.util.LinkedHashSet<ASTNode>();
+          _map.put((ASTNode) _root, contributors);
+        }
+        contributors.add(this);
+      }
+    }
+    super.collect_contributors_Program_extractedVulnerableStatements(_root, _map);
+  }
   protected void contributeTo_CompilationUnit_problems(LinkedList<Problem> collection) {
     super.contributeTo_CompilationUnit_problems(collection);
     for (Problem value : definiteAssignmentProblems()) {
@@ -1115,5 +1129,11 @@ public class FieldDeclarator extends Declarator implements Cloneable {
   protected void contributeTo_Program_extractedVariables(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedVariables(collection);
     collection.add(("VAR;" + this.compilationUnit().pathName() + ";" + this.location() + ";Field"));
+  }
+  protected void contributeTo_Program_extractedVulnerableStatements(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedVulnerableStatements(collection);
+    if ((this.isPublic() && this.isClassVariable()  && !this.isFinal())) {
+      collection.add(("VUS;" + this.compilationUnit().pathName() + ";" + this.location() + ";Public class variable"));
+    }
   }
 }

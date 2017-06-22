@@ -168,17 +168,20 @@ public class CompilationUnit extends ASTNode<ASTNode> implements Cloneable {
     super.flushCollectionCache();
     CompilationUnit_problems_computed = null;
     CompilationUnit_problems_value = null;
+    CompilationUnit_containingConstructors_computed = null;
+    CompilationUnit_containingConstructors_value = null;
     contributorMap_CompilationUnit_problems = null;
+    contributorMap_CompilationUnit_containingConstructors = null;
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:49
+   * @declaredat ASTNode:52
    */
   public CompilationUnit clone() throws CloneNotSupportedException {
     CompilationUnit node = (CompilationUnit) super.clone();
     return node;
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:54
+   * @declaredat ASTNode:57
    */
   public CompilationUnit copy() {
     try {
@@ -198,7 +201,7 @@ public class CompilationUnit extends ASTNode<ASTNode> implements Cloneable {
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
    * @deprecated Please use treeCopy or treeCopyNoTransform instead
-   * @declaredat ASTNode:73
+   * @declaredat ASTNode:76
    */
   @Deprecated
   public CompilationUnit fullCopy() {
@@ -209,7 +212,7 @@ public class CompilationUnit extends ASTNode<ASTNode> implements Cloneable {
    * The copy is dangling, i.e. has no parent.
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
-   * @declaredat ASTNode:83
+   * @declaredat ASTNode:86
    */
   public CompilationUnit treeCopyNoTransform() {
     CompilationUnit tree = (CompilationUnit) copy();
@@ -230,7 +233,7 @@ public class CompilationUnit extends ASTNode<ASTNode> implements Cloneable {
    * The copy is dangling, i.e. has no parent.
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
-   * @declaredat ASTNode:103
+   * @declaredat ASTNode:106
    */
   public CompilationUnit treeCopy() {
     CompilationUnit tree = (CompilationUnit) copy();
@@ -246,7 +249,7 @@ public class CompilationUnit extends ASTNode<ASTNode> implements Cloneable {
     return tree;
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:117
+   * @declaredat ASTNode:120
    */
   protected boolean is$Equal(ASTNode node) {
     return super.is$Equal(node) && (tokenString_PackageDecl == ((CompilationUnit) node).tokenString_PackageDecl);    
@@ -583,6 +586,19 @@ public class CompilationUnit extends ASTNode<ASTNode> implements Cloneable {
     if (contributorMap_CompilationUnit_problems == null) {
       contributorMap_CompilationUnit_problems = new java.util.IdentityHashMap<ASTNode, java.util.Set<ASTNode>>();
       collect_contributors_CompilationUnit_problems(this, contributorMap_CompilationUnit_problems);
+    }
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\AdditionalNodeCharacteristics.jrag:15
+   */
+  protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_CompilationUnit_containingConstructors = null;
+
+  protected void survey_CompilationUnit_containingConstructors() {
+    if (contributorMap_CompilationUnit_containingConstructors == null) {
+      contributorMap_CompilationUnit_containingConstructors = new java.util.IdentityHashMap<ASTNode, java.util.Set<ASTNode>>();
+      collect_contributors_CompilationUnit_containingConstructors(this, contributorMap_CompilationUnit_containingConstructors);
     }
   }
 
@@ -1398,6 +1414,50 @@ public class CompilationUnit extends ASTNode<ASTNode> implements Cloneable {
 
   /** @apilevel internal */
   protected LinkedList<Problem> CompilationUnit_problems_value;
+
+  /**
+   * @attribute coll
+   * @aspect AdditionalNodeCharacteristics
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\AdditionalNodeCharacteristics.jrag:15
+   */
+  @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
+  @ASTNodeAnnotation.Source(aspect="AdditionalNodeCharacteristics", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\AdditionalNodeCharacteristics.jrag:15")
+  public java.util.Collection<String> containingConstructors() {
+    ASTNode$State state = state();
+    if (CompilationUnit_containingConstructors_computed == ASTNode$State.NON_CYCLE || CompilationUnit_containingConstructors_computed == state().cycle()) {
+      return CompilationUnit_containingConstructors_value;
+    }
+    CompilationUnit_containingConstructors_value = containingConstructors_compute();
+    if (state().inCircle()) {
+      CompilationUnit_containingConstructors_computed = state().cycle();
+    
+    } else {
+      CompilationUnit_containingConstructors_computed = ASTNode$State.NON_CYCLE;
+    
+    }
+    return CompilationUnit_containingConstructors_value;
+  }
+  /** @apilevel internal */
+  private java.util.Collection<String> containingConstructors_compute() {
+    ASTNode node = this;
+    while (node != null && !(node instanceof CompilationUnit)) {
+      node = node.getParent();
+    }
+    CompilationUnit root = (CompilationUnit) node;
+    root.survey_CompilationUnit_containingConstructors();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
+    if (root.contributorMap_CompilationUnit_containingConstructors.containsKey(this)) {
+      for (ASTNode contributor : root.contributorMap_CompilationUnit_containingConstructors.get(this)) {
+        contributor.contributeTo_CompilationUnit_containingConstructors(_computedValue);
+      }
+    }
+    return _computedValue;
+  }
+  /** @apilevel internal */
+  protected ASTNode$State.Cycle CompilationUnit_containingConstructors_computed = null;
+
+  /** @apilevel internal */
+  protected java.util.Collection<String> CompilationUnit_containingConstructors_value;
 
   protected void collect_contributors_CompilationUnit_problems(CompilationUnit _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
     // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\extendj\\java4\\frontend\\NameCheck.jrag:66

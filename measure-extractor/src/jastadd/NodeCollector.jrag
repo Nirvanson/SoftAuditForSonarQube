@@ -150,4 +150,11 @@ aspect NodeCollector {
 	// VRE - Variable references
 	coll java.util.Collection<String> Program.extractedVariableReferences() [new java.util.ArrayList<String>()] with add root Program;
 	VarAccess contributes ("VRE;" + this.compilationUnit().pathName() + ";" + this.location() + ";") to Program.extractedVariableReferences();
+	
+	// VUS - Vulnerable Statements
+	coll java.util.Collection<String> Program.extractedVulnerableStatements() [new java.util.ArrayList<String>()] with add root Program;
+	ConstructorDecl contributes ("VUS;" + this.compilationUnit().pathName() + ";" + this.location() + ";Duplicated Constructor") when (this.compilationUnit().containingConstructors().size() > 1) to Program.extractedVulnerableStatements();
+	FieldDeclarator contributes ("VUS;" + this.compilationUnit().pathName() + ";" + this.location() + ";Public class variable") when (this.isPublic() && this.isClassVariable()  && !this.isFinal()) to Program.extractedVulnerableStatements();
+	ClassDecl contributes ("VUS;" + this.compilationUnit().pathName() + ";" + this.location() + ";Non final derived class") when (this.hasSuperClass() && !this.isFinal()) to Program.extractedVulnerableStatements();
+	CastExpr contributes ("VUS;" + this.compilationUnit().pathName() + ";" + this.location() + ";A Cast") to Program.extractedVulnerableStatements();
 }

@@ -47,6 +47,6 @@ public class MeasureWidget extends AbstractRubyTemplate implements RubyRailsWidg
      */
     @Override
     protected String getTemplatePath() {
-        return "/measure_widget.html.erb";
+        return "/widgets/measure_widget.html.erb";
     }
 }

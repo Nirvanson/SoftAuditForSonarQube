@@ -6,9 +6,9 @@ import java.util.List;
 import org.sonar.api.Extension;
 import org.sonar.api.SonarPlugin;
 
-import plugin.extensions.StuGraPluMetricDecorator;
-import plugin.extensions.StuGraPluQualityIndexPostJob;
+import plugin.extensions.StuGraPluIndexDecorator;
 import plugin.extensions.StuGraPluMeasureSensor;
+import plugin.extensions.StuGraPluMetricDecorator;
 import plugin.widgets.IndexWidget;
 import plugin.widgets.MeasureWidget;
 import plugin.widgets.MetricsWidget;
@@ -39,9 +39,10 @@ public class StudentGradingPlugin extends SonarPlugin {
                 StuGraPluMeasures.class,
                 StuGraPluConfigurableValues.class,
                 StuGraPluMetrics.class,
+                StuGraPluIndexValues.class,
                 StuGraPluMeasureSensor.class,
                 StuGraPluMetricDecorator.class,
-                StuGraPluQualityIndexPostJob.class,
+                StuGraPluIndexDecorator.class,
                 OverviewWidget.class,
                 MeasureWidget.class,
                 MetricsWidget.class,

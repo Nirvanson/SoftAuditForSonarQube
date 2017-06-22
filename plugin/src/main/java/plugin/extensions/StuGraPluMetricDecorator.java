@@ -20,6 +20,7 @@ import org.sonar.api.resources.Scopes;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
+import plugin.definitions.StuGraPluConfigurableValues;
 import plugin.definitions.StuGraPluMeasures;
 import plugin.definitions.StuGraPluMetrics;
 import plugin.services.LogFileWriter;
@@ -68,10 +69,6 @@ public class StuGraPluMetricDecorator implements Decorator {
         LOGGER.info("Retrieve StuGraPlu-provided measures");
         Map<Metric<?>, Double> measures = getStuGraPluMeasures();
         measures.putAll(sonarQubeMeasures);
-        // compute number of secure statements determined by security deficiencies TODO as
-        // ExtendJattribute in measure extractor
-        sonarQubeMeasures.put(StuGraPluMetrics.SST,
-                getValue(StuGraPluMeasures.STA) - getValue(CoreMetrics.BLOCKER_VIOLATIONS));
         LOGGER.info("Calculate metrics");
         MetricCalculator calculator = new MetricCalculator(measures);
         calculator.calculateMetrics();
@@ -87,6 +84,9 @@ public class StuGraPluMetricDecorator implements Decorator {
         Map<Metric<?>, Double> measures = new HashMap<Metric<?>, Double>();
         for (Metric measure : (new StuGraPluMeasures()).getMetrics()) {
             measures.put(measure, getValue(measure));
+        }
+        for (Metric configValue : (new StuGraPluConfigurableValues()).getMetrics()) {
+            measures.put(configValue, getValue(configValue));
         }
         return measures;
     }

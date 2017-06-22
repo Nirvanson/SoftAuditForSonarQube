@@ -119,7 +119,8 @@ public class MetricCalculator {
     }
 
     private Double calculateSecurity() {
-        return (measures.get(StuGraPluMetrics.SST) / 1.2) / measures.get(StuGraPluMeasures.STA);
+        return ((measures.get(StuGraPluMeasures.STA) - measures.get(StuGraPluMeasures.VUS)) / 1.2)
+                / measures.get(StuGraPluMeasures.STA);
     }
 
     private Double calculateReusability() {

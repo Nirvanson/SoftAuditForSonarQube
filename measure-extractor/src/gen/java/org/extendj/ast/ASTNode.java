@@ -1216,6 +1216,18 @@ public class ASTNode<T extends ASTNode> extends beaver.Symbol implements Cloneab
 
   /**
    * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:155
+   */
+    protected void collect_contributors_Program_extractedVulnerableStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    for (int i = 0; i < getNumChild(); i++) {
+      getChild(i).collect_contributors_Program_extractedVulnerableStatements(_root, _map);
+    }
+  }
+  protected void contributeTo_Program_extractedVulnerableStatements(java.util.Collection<String> collection) {
+  }
+
+  /**
+   * @aspect <NoAspect>
    * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\extendj\\java4\\frontend\\ErrorCheck.jrag:278
    */
     protected void collect_contributors_CompilationUnit_problems(CompilationUnit _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
@@ -1224,6 +1236,18 @@ public class ASTNode<T extends ASTNode> extends beaver.Symbol implements Cloneab
     }
   }
   protected void contributeTo_CompilationUnit_problems(LinkedList<Problem> collection) {
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\AdditionalNodeCharacteristics.jrag:15
+   */
+    protected void collect_contributors_CompilationUnit_containingConstructors(CompilationUnit _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    for (int i = 0; i < getNumChild(); i++) {
+      getChild(i).collect_contributors_CompilationUnit_containingConstructors(_root, _map);
+    }
+  }
+  protected void contributeTo_CompilationUnit_containingConstructors(java.util.Collection<String> collection) {
   }
 
   /**

@@ -523,6 +523,8 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     Program_extractedVariables_value = null;
     Program_extractedVariableReferences_computed = null;
     Program_extractedVariableReferences_value = null;
+    Program_extractedVulnerableStatements_computed = null;
+    Program_extractedVulnerableStatements_value = null;
     contributorMap_Program_extractedBranches = null;
     contributorMap_Program_extractedClassDeclarations = null;
     contributorMap_Program_extractedDataTypes = null;
@@ -549,17 +551,18 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     contributorMap_Program_extractedSwitchStatements = null;
     contributorMap_Program_extractedVariables = null;
     contributorMap_Program_extractedVariableReferences = null;
+    contributorMap_Program_extractedVulnerableStatements = null;
     contributorMap_BlockLambdaBody_lambdaReturns = null;
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:138
+   * @declaredat ASTNode:141
    */
   public Program clone() throws CloneNotSupportedException {
     Program node = (Program) super.clone();
     return node;
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:143
+   * @declaredat ASTNode:146
    */
   public Program copy() {
     try {
@@ -579,7 +582,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
    * @deprecated Please use treeCopy or treeCopyNoTransform instead
-   * @declaredat ASTNode:162
+   * @declaredat ASTNode:165
    */
   @Deprecated
   public Program fullCopy() {
@@ -590,7 +593,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
    * The copy is dangling, i.e. has no parent.
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
-   * @declaredat ASTNode:172
+   * @declaredat ASTNode:175
    */
   public Program treeCopyNoTransform() {
     Program tree = (Program) copy();
@@ -611,7 +614,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
    * The copy is dangling, i.e. has no parent.
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
-   * @declaredat ASTNode:192
+   * @declaredat ASTNode:195
    */
   public Program treeCopy() {
     Program tree = (Program) copy();
@@ -627,7 +630,7 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     return tree;
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:206
+   * @declaredat ASTNode:209
    */
   protected boolean is$Equal(ASTNode node) {
     return super.is$Equal(node);    
@@ -1077,6 +1080,19 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
     if (contributorMap_Program_extractedVariableReferences == null) {
       contributorMap_Program_extractedVariableReferences = new java.util.IdentityHashMap<ASTNode, java.util.Set<ASTNode>>();
       collect_contributors_Program_extractedVariableReferences(this, contributorMap_Program_extractedVariableReferences);
+    }
+  }
+
+  /**
+   * @aspect <NoAspect>
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:155
+   */
+  protected java.util.Map<ASTNode, java.util.Set<ASTNode>> contributorMap_Program_extractedVulnerableStatements = null;
+
+  protected void survey_Program_extractedVulnerableStatements() {
+    if (contributorMap_Program_extractedVulnerableStatements == null) {
+      contributorMap_Program_extractedVulnerableStatements = new java.util.IdentityHashMap<ASTNode, java.util.Set<ASTNode>>();
+      collect_contributors_Program_extractedVulnerableStatements(this, contributorMap_Program_extractedVulnerableStatements);
     }
   }
 
@@ -4197,5 +4213,49 @@ public class Program extends ASTNode<ASTNode> implements Cloneable {
 
   /** @apilevel internal */
   protected java.util.Collection<String> Program_extractedVariableReferences_value;
+
+  /**
+   * @attribute coll
+   * @aspect NodeCollector
+   * @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:155
+   */
+  @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.COLL)
+  @ASTNodeAnnotation.Source(aspect="NodeCollector", declaredAt="C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:155")
+  public java.util.Collection<String> extractedVulnerableStatements() {
+    ASTNode$State state = state();
+    if (Program_extractedVulnerableStatements_computed == ASTNode$State.NON_CYCLE || Program_extractedVulnerableStatements_computed == state().cycle()) {
+      return Program_extractedVulnerableStatements_value;
+    }
+    Program_extractedVulnerableStatements_value = extractedVulnerableStatements_compute();
+    if (state().inCircle()) {
+      Program_extractedVulnerableStatements_computed = state().cycle();
+    
+    } else {
+      Program_extractedVulnerableStatements_computed = ASTNode$State.NON_CYCLE;
+    
+    }
+    return Program_extractedVulnerableStatements_value;
+  }
+  /** @apilevel internal */
+  private java.util.Collection<String> extractedVulnerableStatements_compute() {
+    ASTNode node = this;
+    while (node != null && !(node instanceof Program)) {
+      node = node.getParent();
+    }
+    Program root = (Program) node;
+    root.survey_Program_extractedVulnerableStatements();
+    java.util.Collection<String> _computedValue = new java.util.ArrayList<String>();
+    if (root.contributorMap_Program_extractedVulnerableStatements.containsKey(this)) {
+      for (ASTNode contributor : root.contributorMap_Program_extractedVulnerableStatements.get(this)) {
+        contributor.contributeTo_Program_extractedVulnerableStatements(_computedValue);
+      }
+    }
+    return _computedValue;
+  }
+  /** @apilevel internal */
+  protected ASTNode$State.Cycle Program_extractedVulnerableStatements_computed = null;
+
+  /** @apilevel internal */
+  protected java.util.Collection<String> Program_extractedVulnerableStatements_value;
 
 }

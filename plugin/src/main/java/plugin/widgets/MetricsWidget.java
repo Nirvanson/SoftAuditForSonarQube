@@ -47,6 +47,6 @@ public class MetricsWidget extends AbstractRubyTemplate implements RubyRailsWidg
      */
     @Override
     protected String getTemplatePath() {
-        return "metrics_widget.html.erb";
+        return "/widgets/metrics_widget.html.erb";
     }
 }

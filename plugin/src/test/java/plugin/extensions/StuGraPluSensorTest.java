@@ -11,7 +11,6 @@ import java.util.Map;
 import org.junit.Test;
 import org.sonar.api.measures.Metric;
 
-import plugin.extensions.StuGraPluMeasureSensor;
 import plugin.services.LogFileWriter;
 
 public class StuGraPluSensorTest {
@@ -36,7 +35,7 @@ public class StuGraPluSensorTest {
         LogFileWriter.getLogger().printMeasures(measures);
         LogFileWriter.getLogger().close();
 
-        assertEquals("Unexpected measurelist", 26, measures.size());
+        assertEquals("Unexpected measurelist", 27, measures.size());
     }
 
     @Test
@@ -57,7 +56,7 @@ public class StuGraPluSensorTest {
         LogFileWriter.getLogger().printMeasures(measures);
         LogFileWriter.getLogger().close();
 
-        assertEquals("Unexpected measurelist", 26, measures.size());
+        assertEquals("Unexpected measurelist", 27, measures.size());
     }
 
     public List<File> listFiles(String directoryName) throws IOException {

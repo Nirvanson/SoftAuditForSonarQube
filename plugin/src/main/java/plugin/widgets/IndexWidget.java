@@ -47,6 +47,6 @@ public class IndexWidget extends AbstractRubyTemplate implements RubyRailsWidget
      */
     @Override
     protected String getTemplatePath() {
-        return "/index_widget.html.erb";
+        return "/widgets/index_widget.html.erb";
     }
 }

@@ -15,12 +15,6 @@ import org.sonar.api.measures.Metrics;
  */
 public class StuGraPluMetrics implements Metrics {
     /**
-     * Number of Secure Statements = STM - SED.
-     */
-    public static final Metric<Integer> SST = new Metric.Builder("sst", "Secure Statements", Metric.ValueType.INT)
-            .setDescription("Number of secure statements.").setDirection(Metric.DIRECTION_NONE).setQualitative(false)
-            .setDomain(CoreMetrics.DOMAIN_GENERAL).create();
-    /**
      * Object Points = (CLA * 4) + (MET * 3) + (INT * 2) + GVA
      */
     public static final Metric<Integer> OBP = new Metric.Builder("obp", "Object Points", Metric.ValueType.INT)
@@ -145,6 +139,6 @@ public class StuGraPluMetrics implements Metrics {
      */
     @SuppressWarnings("rawtypes")
     public List<Metric> getMetrics() {
-        return Arrays.asList(SST, OBP, DCO, DFC, CFC, COC, TST, FLE, COF, ICO, BRC, LCM, ACM, MOD, REU, SEC, MAM, AQM);
+        return Arrays.asList(OBP, DCO, DFC, CFC, COC, TST, FLE, COF, ICO, BRC, LCM, ACM, MOD, REU, SEC, MAM, AQM);
     }
 }

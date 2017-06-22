@@ -2532,6 +2532,32 @@ public class ConstructorDecl extends BodyDecl implements Cloneable {
     super.collect_contributors_CompilationUnit_problems(_root, _map);
   }
   }
+  protected void collect_contributors_CompilationUnit_containingConstructors(CompilationUnit _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\AdditionalNodeCharacteristics.jrag:16
+    {
+      java.util.Set<ASTNode> contributors = _map.get(_root);
+      if (contributors == null) {
+        contributors = new java.util.LinkedHashSet<ASTNode>();
+        _map.put((ASTNode) _root, contributors);
+      }
+      contributors.add(this);
+    }
+    super.collect_contributors_CompilationUnit_containingConstructors(_root, _map);
+  }
+  protected void collect_contributors_Program_extractedVulnerableStatements(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
+    // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:156
+    if ((this.compilationUnit().containingConstructors().size() > 1)) {
+      {
+        java.util.Set<ASTNode> contributors = _map.get(_root);
+        if (contributors == null) {
+          contributors = new java.util.LinkedHashSet<ASTNode>();
+          _map.put((ASTNode) _root, contributors);
+        }
+        contributors.add(this);
+      }
+    }
+    super.collect_contributors_Program_extractedVulnerableStatements(_root, _map);
+  }
   protected void contributeTo_CompilationUnit_problems(LinkedList<Problem> collection) {
     super.contributeTo_CompilationUnit_problems(collection);
     for (Problem value : nameProblems()) {
@@ -2542,6 +2568,16 @@ public class ConstructorDecl extends BodyDecl implements Cloneable {
     }
     for (Problem value : enumProblems()) {
       collection.add(value);
+    }
+  }
+  protected void contributeTo_CompilationUnit_containingConstructors(java.util.Collection<String> collection) {
+    super.contributeTo_CompilationUnit_containingConstructors(collection);
+    collection.add((this.name()));
+  }
+  protected void contributeTo_Program_extractedVulnerableStatements(java.util.Collection<String> collection) {
+    super.contributeTo_Program_extractedVulnerableStatements(collection);
+    if ((this.compilationUnit().containingConstructors().size() > 1)) {
+      collection.add(("VUS;" + this.compilationUnit().pathName() + ";" + this.location() + ";Duplicated Constructor"));
     }
   }
 }

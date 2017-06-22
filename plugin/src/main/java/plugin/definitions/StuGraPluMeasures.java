@@ -174,6 +174,13 @@ public class StuGraPluMeasures implements Metrics {
     public static final Metric<Integer> VRE = new Metric.Builder("vre", "Variable-References", Metric.ValueType.INT)
             .setDescription("Number of references.").setDirection(Metric.DIRECTION_NONE).setQualitative(false)
             .setDomain(CoreMetrics.DOMAIN_GENERAL).create();
+    /**
+     * Sum vulnerable statements (duplicated constructors, Casts, non final derived classes, public
+     * class variables).
+     */
+    public static final Metric<Integer> VUS = new Metric.Builder("vus", "Vulnerable-Statements", Metric.ValueType.INT)
+            .setDescription("Vulnerable statements.").setDirection(Metric.DIRECTION_NONE).setQualitative(false)
+            .setDomain(CoreMetrics.DOMAIN_GENERAL).create();
 
     /**
      * Default constructor.
@@ -190,6 +197,6 @@ public class StuGraPluMeasures implements Metrics {
     @SuppressWarnings("rawtypes")
     public List<Metric> getMetrics() {
         return Arrays.asList(BRA, CLA, DTY, FMC, GVA, IFS, IMP, INT, LOS, MEC, MPA, NPR, NUL, PRE, PRM, PUM, RES, RUM,
-                SOF, STA, STL, STY, SWC, SWS, VAR, VRE);
+                SOF, STA, STL, STY, SWC, SWS, VAR, VRE, VUS);
     }
 }
