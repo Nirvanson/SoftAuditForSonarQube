@@ -2080,7 +2080,7 @@ public class MethodAccess extends Access implements Cloneable {
   }
   protected void collect_contributors_MethodDecl_containingForeignMethodCalls(MethodDecl _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
     // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\AdditionalNodeCharacteristics.jrag:12
-    if ((this.decl().name().equals("unknown"))) {
+    if ((this.decl()==null || this.decl().name()==null || this.decl().name().equals("unknown"))) {
       {
         java.util.Set<ASTNode> contributors = _map.get(_root);
         if (contributors == null) {
@@ -2094,7 +2094,7 @@ public class MethodAccess extends Access implements Cloneable {
   }
   protected void collect_contributors_Program_extractedForeignMethodCalls(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
     // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:32
-    if ((this.decl().name().equals("unknown"))) {
+    if ((this.decl()==null || this.decl().name()==null || this.decl().name().equals("unknown"))) {
       {
         java.util.Set<ASTNode> contributors = _map.get(_root);
         if (contributors == null) {
@@ -2141,13 +2141,13 @@ public class MethodAccess extends Access implements Cloneable {
   }
   protected void contributeTo_MethodDecl_containingForeignMethodCalls(java.util.Collection<String> collection) {
     super.contributeTo_MethodDecl_containingForeignMethodCalls(collection);
-    if ((this.decl().name().equals("unknown"))) {
+    if ((this.decl()==null || this.decl().name()==null || this.decl().name().equals("unknown"))) {
       collection.add(("Foreign method call at " + this.location()));
     }
   }
   protected void contributeTo_Program_extractedForeignMethodCalls(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedForeignMethodCalls(collection);
-    if ((this.decl().name().equals("unknown"))) {
+    if ((this.decl()==null || this.decl().name()==null || this.decl().name().equals("unknown"))) {
       collection.add(("FMC;" + this.compilationUnit().pathName() + ";" + this.location() + ";"));
     }
   }

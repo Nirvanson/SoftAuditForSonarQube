@@ -83,14 +83,14 @@ public class StuGraPluMetrics implements Metrics {
     /**
      * Language Complexity (Based on Halstead) = ((STY / STM) + (DTY / (VAR + CON))) / * 2
      */
-    public static final Metric<String> LCM = new Metric.Builder("lcm", "Language Complexity",
+    public static final Metric<String> LCO = new Metric.Builder("lco", "Language Complexity",
             Metric.ValueType.STRING).setDescription("Computed language complexity (Halstead).")
                     .setDirection(Metric.DIRECTION_WORST).setQualitative(false).setDomain(CoreMetrics.DOMAIN_GENERAL)
                     .create();
     /**
-     * Average Complexity Medium Level = (DCO + DFC + CFC + COC + ICO + BRC + LCM) / 7
+     * Average Complexity = (DCO + DFC + CFC + COC + ICO + BRC + LCM) / 7
      */
-    public static final Metric<String> ACM = new Metric.Builder("acm", "Average Complexity",
+    public static final Metric<String> ACO = new Metric.Builder("aco", "Average Complexity",
             Metric.ValueType.STRING).setDescription("Computed average complexity.").setDirection(Metric.DIRECTION_WORST)
                     .setQualitative(false).setDomain(CoreMetrics.DOMAIN_GENERAL).create();
     /**
@@ -115,13 +115,13 @@ public class StuGraPluMetrics implements Metrics {
     /**
      * Maintainability = ((1 – ACM) + ((MOD + TST + REU + SEC + FLE + (COF / 2)) / 6)) / 2
      */
-    public static final Metric<String> MAM = new Metric.Builder("mam", "Maintainability",
+    public static final Metric<String> MAI = new Metric.Builder("mai", "Maintainability",
             Metric.ValueType.STRING).setDescription("Computed maintainability.").setDirection(Metric.DIRECTION_BETTER)
                     .setQualitative(false).setDomain(CoreMetrics.DOMAIN_GENERAL).create();
     /**
      * Average Quality = (MOD + TST + REU + SEC + FLE + COF + MAB) / 7
      */
-    public static final Metric<String> AQM = new Metric.Builder("aqm", "Average Quality",
+    public static final Metric<String> AQU = new Metric.Builder("aqu", "Average Quality",
             Metric.ValueType.STRING).setDescription("Computed average quality.").setDirection(Metric.DIRECTION_BETTER)
                     .setQualitative(false).setDomain(CoreMetrics.DOMAIN_GENERAL).create();
 
@@ -139,6 +139,6 @@ public class StuGraPluMetrics implements Metrics {
      */
     @SuppressWarnings("rawtypes")
     public List<Metric> getMetrics() {
-        return Arrays.asList(OBP, DCO, DFC, CFC, COC, TST, FLE, COF, ICO, BRC, LCM, ACM, MOD, REU, SEC, MAM, AQM);
+        return Arrays.asList(OBP, DCO, DFC, CFC, COC, TST, FLE, COF, ICO, BRC, LCO, ACO, MOD, REU, SEC, MAI, AQU);
     }
 }

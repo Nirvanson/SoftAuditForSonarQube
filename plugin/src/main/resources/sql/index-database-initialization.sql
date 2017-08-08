@@ -42,6 +42,7 @@ CREATE TABLE `projects` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   `year` int(8) DEFAULT NULL,
+  `calculated_index` int(8) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 

@@ -72,7 +72,7 @@ public class MetricCalculator {
         calculations.put(StuGraPluMetrics.CFC, calculateControlFlowComplexity());
         calculations.put(StuGraPluMetrics.COC, calculateConditionalComplexity());
         calculations.put(StuGraPluMetrics.BRC, calculateBranchingComplexity());
-        calculations.put(StuGraPluMetrics.LCM, calculateLanguageComplexity());
+        calculations.put(StuGraPluMetrics.LCO, calculateLanguageComplexity());
         calculations.put(StuGraPluMetrics.MOD, calculateModularity());
         calculations.put(StuGraPluMetrics.TST, calculateTestability());
         calculations.put(StuGraPluMetrics.REU, calculateReusability());
@@ -83,14 +83,14 @@ public class MetricCalculator {
 
     private void calculateMetricDependingMetrics() {
         Double acmCalculation = calculateAverageComplexity(normalizedResult);
-        calculations.put(StuGraPluMetrics.ACM, acmCalculation);
-        normalizedResult.put(StuGraPluMetrics.ACM, acmCalculation);
+        calculations.put(StuGraPluMetrics.ACO, acmCalculation);
+        normalizedResult.put(StuGraPluMetrics.ACO, acmCalculation);
         Double mamCalculation = calculateMaintainability(normalizedResult);
-        calculations.put(StuGraPluMetrics.MAM, mamCalculation);
-        normalizedResult.put(StuGraPluMetrics.MAM, mamCalculation);
+        calculations.put(StuGraPluMetrics.MAI, mamCalculation);
+        normalizedResult.put(StuGraPluMetrics.MAI, mamCalculation);
         Double aqmCalculation = calculateAverageQuality(normalizedResult);
-        calculations.put(StuGraPluMetrics.AQM, aqmCalculation);
-        normalizedResult.put(StuGraPluMetrics.AQM, aqmCalculation);
+        calculations.put(StuGraPluMetrics.AQU, aqmCalculation);
+        normalizedResult.put(StuGraPluMetrics.AQU, aqmCalculation);
         Double obpCalculation = calculateObjectPoints(measures);
         calculations.put(StuGraPluMetrics.OBP, obpCalculation);
     }
@@ -186,11 +186,11 @@ public class MetricCalculator {
         return (previousMetrics.get(StuGraPluMetrics.DCO) + previousMetrics.get(StuGraPluMetrics.DFC)
                 + previousMetrics.get(StuGraPluMetrics.ICO) + previousMetrics.get(StuGraPluMetrics.CFC)
                 + previousMetrics.get(StuGraPluMetrics.COC) + previousMetrics.get(StuGraPluMetrics.BRC)
-                + previousMetrics.get(StuGraPluMetrics.LCM)) / 7;
+                + previousMetrics.get(StuGraPluMetrics.LCO)) / 7;
     }
 
     private Double calculateMaintainability(Map<Metric<?>, Double> previousMetrics) {
-        return ((1 - previousMetrics.get(StuGraPluMetrics.ACM))
+        return ((1 - previousMetrics.get(StuGraPluMetrics.ACO))
                 + ((previousMetrics.get(StuGraPluMetrics.MOD) + previousMetrics.get(StuGraPluMetrics.SEC)
                         + previousMetrics.get(StuGraPluMetrics.TST) + previousMetrics.get(StuGraPluMetrics.REU)
                         + previousMetrics.get(StuGraPluMetrics.FLE) + (previousMetrics.get(StuGraPluMetrics.COF) / 2))
@@ -202,7 +202,7 @@ public class MetricCalculator {
         return (previousMetrics.get(StuGraPluMetrics.MOD) + previousMetrics.get(StuGraPluMetrics.TST)
                 + previousMetrics.get(StuGraPluMetrics.REU) + previousMetrics.get(StuGraPluMetrics.SEC)
                 + previousMetrics.get(StuGraPluMetrics.FLE) + previousMetrics.get(StuGraPluMetrics.COF)
-                + previousMetrics.get(StuGraPluMetrics.MAM)) / 7;
+                + previousMetrics.get(StuGraPluMetrics.MAI)) / 7;
     }
 
     private Double calculateObjectPoints(Map<Metric<?>, Double> measures) {

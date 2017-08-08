@@ -29,7 +29,7 @@ aspect NodeCollector {
 		
 	// FMC - Foreign method calls (not standard java and not in measured program)
 	coll java.util.Collection<String> Program.extractedForeignMethodCalls() [new java.util.ArrayList<String>()] with add root Program;
-	MethodAccess contributes ("FMC;" + this.compilationUnit().pathName() + ";" + this.location() + ";") when (this.decl().name().equals("unknown")) to Program.extractedForeignMethodCalls();
+	MethodAccess contributes ("FMC;" + this.compilationUnit().pathName() + ";" + this.location() + ";") when (this.decl()==null || this.decl().name()==null || this.decl().name().equals("unknown")) to Program.extractedForeignMethodCalls();
 			
 	// GVA - Global variable declarations (fields)
 	coll java.util.Collection<String> Program.extractedGlobalVariables() [new java.util.ArrayList<String>()] with add root Program;
@@ -70,7 +70,7 @@ aspect NodeCollector {
 		
 	// NUL - Numeric literals
 	coll java.util.Collection<String> Program.extractedNumericLiterals() [new java.util.ArrayList<String>()] with add root Program;
-	NumericLiteral contributes ("NUL;" + this.compilationUnit().pathName() + ";" + this.location() + ";" + this.getLITERAL()) when (this.getLITERAL().length()>5 || !(Double.valueOf(this.getLITERAL()).equals(0.0D) || Double.valueOf(this.getLITERAL()).equals(1.0D) || Double.valueOf(this.getLITERAL()).equals(-1.0D))) to Program.extractedNumericLiterals();
+	NumericLiteral contributes ("NUL;" + this.compilationUnit().pathName() + ";" + this.location() + ";" + this.getLITERAL()) when (!Arrays.asList("0", "1", "-1").contains(this.getLITERAL())) to Program.extractedNumericLiterals();
 		
 	// PRE - Predicates (variable references in loop/if/switch-conditions)
 	coll java.util.Collection<String> Program.extractedPredicates() [new java.util.ArrayList<String>()] with add root Program;

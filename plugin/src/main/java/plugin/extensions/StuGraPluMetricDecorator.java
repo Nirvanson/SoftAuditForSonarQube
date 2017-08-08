@@ -1,5 +1,7 @@
 package plugin.extensions;
 
+import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Locale;
@@ -25,6 +27,7 @@ import plugin.definitions.StuGraPluMeasures;
 import plugin.definitions.StuGraPluMetrics;
 import plugin.services.LogFileWriter;
 import plugin.services.MetricCalculator;
+import plugin.services.MetricDataCollector;
 
 /**
  * Calculating metrics out of measured values from StuGraPluSensor and some CoreMetrics.
@@ -32,7 +35,7 @@ import plugin.services.MetricCalculator;
  * @author Jan Rucks
  * @version 1.0
  */
-@DependsUpon(DecoratorBarriers.ISSUES_TRACKED)
+@DependsUpon(DecoratorBarriers.END_OF_TIME_MACHINE)
 public class StuGraPluMetricDecorator implements Decorator {
 
     /** Console-logger. */
@@ -74,8 +77,13 @@ public class StuGraPluMetricDecorator implements Decorator {
         calculator.calculateMetrics();
         LOGGER.info("Save metrics");
         saveMetricResults(calculator);
-        LOGGER.info("Log results to file");
+        LOGGER.info("Log results");
         appendLogFile(sonarQubeMeasures, calculator.getCalculations());
+        Map<Metric<?>, Double> allValues = new HashMap<Metric<?>, Double>();
+        allValues.putAll(measures);
+        allValues.putAll(calculator.getCalculations());
+        allValues.put(CoreMetrics.NCLOC, MeasureUtils.getValue(context.getMeasure(CoreMetrics.NCLOC), 0.0));
+        saveValuesForStatistics(allValues);
         LOGGER.info("--- StuGraPluMetricDecorator finished");
     }
 
@@ -122,6 +130,21 @@ public class StuGraPluMetricDecorator implements Decorator {
             LogFileWriter.getLogger().close();
         } catch (Exception e) {
             LOGGER.warn("Initializing SoftAudit-Logger with log from sensor failed!");
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void saveValuesForStatistics(Map<Metric<?>, Double> values) {
+        Settings properties = context.getProject().getSettings();
+        if (properties.getBoolean("collectmetricdata")) {
+            try {
+                MetricDataCollector dataCollector = new MetricDataCollector(properties);
+                dataCollector.saveValues(context.getProject().getName(), properties.getString("collectmetrictag"),
+                        values);
+                dataCollector.closeConnection();
+            } catch (ClassNotFoundException | FileNotFoundException | SQLException e) {
+                LOGGER.warn("Data collection failed! Maybe parsing failed in Sensor");
+            }
         }
     }
 

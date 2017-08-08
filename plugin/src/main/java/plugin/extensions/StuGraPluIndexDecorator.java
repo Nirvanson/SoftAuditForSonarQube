@@ -69,23 +69,24 @@ public class StuGraPluIndexDecorator implements Decorator {
         Project project = context.getProject();
         LOGGER.info("--- QualityIndexCalculator");
         Settings properties = project.getSettings();
-        double linesOfCode = MeasureUtils.getValue(context.getMeasure(CoreMetrics.LINES), 0.0);
+        double linesOfCode = MeasureUtils.getValue(context.getMeasure(CoreMetrics.NCLOC), 0.0);
         if (properties.getString("indexmode") == null || properties.getString("indexmode").equals("calculate")) {
             LOGGER.info("Calculate SWP-Code-Quality-Index based on former data");
-            calculateIndex(properties, linesOfCode, context);
+            calculateIndex(properties, linesOfCode, context, project.getName());
         } else if (properties.getString("indexmode").equals("datacollect")) {
             LOGGER.info("Collect data for later Index-Calculation");
-            performDataCollection(properties, project.getName(), linesOfCode);
+            performDataCollection(properties, project.getName(), linesOfCode, context);
         } else {
             LOGGER.warn("Unknown Index-Mode in properties. No action will be performed!");
         }
         LOGGER.info("--- QualityIndexCalculator finished.");
     }
 
-    private void performDataCollection(Settings properties, String projectName, double linesOfCode) {
+    private void performDataCollection(Settings properties, String projectName, double linesOfCode,
+            DecoratorContext context) {
         IndexDataCollector dataCollector = null;
         try {
-            dataCollector = new IndexDataCollector(properties);
+            dataCollector = new IndexDataCollector(properties, context);
         } catch (ClassNotFoundException ex) {
             LOGGER.error("JDBC-Driver not found. No Data collection possible!");
         } catch (SQLException ex) {
@@ -95,9 +96,13 @@ public class StuGraPluIndexDecorator implements Decorator {
         }
         if (dataCollector != null) {
             try {
-                dataCollector.collectRuleViolationsForIndex(issues, projectName, linesOfCode);
+                dataCollector.collectRuleViolationsForIndex(issues, projectName, linesOfCode,
+                        properties.getInt("projectyear"));
             } catch (SQLException ex) {
-                LOGGER.error("Collecting Rule-Violations for Index database failed!");
+                LOGGER.error("Collecting Rule-Violations for Index database failed! (SQL)");
+                ex.printStackTrace();
+            } catch (NullPointerException ex) {
+                LOGGER.error("Collecting Rule-Violations for Index database failed! (Wrong Quality-Profile?)");
                 ex.printStackTrace();
             }
             try {
@@ -109,10 +114,10 @@ public class StuGraPluIndexDecorator implements Decorator {
     }
 
     @SuppressWarnings("rawtypes")
-    private void calculateIndex(Settings properties, double linesOfCode, DecoratorContext context) {
+    private void calculateIndex(Settings properties, double linesOfCode, DecoratorContext context, String projectName) {
         IndexDataCollector dataCollector = null;
         try {
-            dataCollector = new IndexDataCollector(properties);
+            dataCollector = new IndexDataCollector(properties, context);
         } catch (ClassNotFoundException ex) {
             LOGGER.error("JDBC-Driver not found. No Index calculation possible!");
         } catch (SQLException ex) {
@@ -129,7 +134,10 @@ public class StuGraPluIndexDecorator implements Decorator {
                 violations = dataCollector.countViolationsGroupedByIndicator(issues, linesOfCode);
                 thresholds = dataCollector.getIndicatorThresholds();
             } catch (SQLException ex) {
-                LOGGER.error("Collecting Rule-Violations or Thresholds for project failed!");
+                LOGGER.error("Collecting Rule-Violations or Thresholds for project failed! (SQL)");
+                ex.printStackTrace();
+            } catch (NullPointerException ex) {
+                LOGGER.error("Collecting Rule-Violations failed! (Wrong Quality-Profile?)");
                 ex.printStackTrace();
             }
             for (IndicatorThreshold indicator : thresholds) {
@@ -140,6 +148,12 @@ public class StuGraPluIndexDecorator implements Decorator {
                 saveIndicatorValue(indicator.getName(), metricText, indicatorValues, context);
             }
             context.saveMeasure(new Measure<Integer>(StuGraPluIndexValues.CQI, reachedLevel, 1));
+            try {
+                dataCollector.saveIndicatorValueForProject(projectName, properties.getInt("projectyear"),
+                        reachedLevel.intValue());
+            } catch (SQLException e) {
+                LOGGER.error("Saving index in db failed!");
+            }
         }
     }
 

@@ -594,7 +594,7 @@ public class NumericLiteral extends Literal implements Cloneable {
   }
   protected void collect_contributors_Program_extractedNumericLiterals(Program _root, java.util.Map<ASTNode, java.util.Set<ASTNode>> _map) {
     // @declaredat C:\\Develop\\Diplom\\git_repo\\measure-extractor\\src\\jastadd\\NodeCollector.jrag:73
-    if ((this.getLITERAL().length()>5 || !(Double.valueOf(this.getLITERAL()).equals(0.0D) || Double.valueOf(this.getLITERAL()).equals(1.0D) || Double.valueOf(this.getLITERAL()).equals(-1.0D)))) {
+    if ((!Arrays.asList("0", "1", "-1").contains(this.getLITERAL()))) {
       {
         java.util.Set<ASTNode> contributors = _map.get(_root);
         if (contributors == null) {
@@ -608,7 +608,7 @@ public class NumericLiteral extends Literal implements Cloneable {
   }
   protected void contributeTo_Program_extractedNumericLiterals(java.util.Collection<String> collection) {
     super.contributeTo_Program_extractedNumericLiterals(collection);
-    if ((this.getLITERAL().length()>5 || !(Double.valueOf(this.getLITERAL()).equals(0.0D) || Double.valueOf(this.getLITERAL()).equals(1.0D) || Double.valueOf(this.getLITERAL()).equals(-1.0D)))) {
+    if ((!Arrays.asList("0", "1", "-1").contains(this.getLITERAL()))) {
       collection.add(("NUL;" + this.compilationUnit().pathName() + ";" + this.location() + ";" + this.getLITERAL()));
     }
   }

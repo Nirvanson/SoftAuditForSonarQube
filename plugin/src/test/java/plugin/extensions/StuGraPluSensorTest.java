@@ -22,7 +22,7 @@ public class StuGraPluSensorTest {
 
     @Test
     public void singleFileMeasureExtractionTest() throws IOException {
-        String filename = "ParsingHorror";
+        String filename = "TestDaten";
         File logfile = new File("./target/logs/" + filename + ".log");
         if (logfile.exists()) {
             logfile.delete();
@@ -30,7 +30,7 @@ public class StuGraPluSensorTest {
         StuGraPluMeasureSensor sensor = new StuGraPluMeasureSensor("./target/logs/" + filename + ".log");
 
         Map<Metric<?>, Double> measures = sensor
-                .extractMeasures(new String[] { "src/test/java/testdata/" + filename + ".java" });
+                .extractMeasures(new String[] { "src/main/resources/testdata/" + filename + ".java" });
 
         LogFileWriter.getLogger().printMeasures(measures);
         LogFileWriter.getLogger().close();

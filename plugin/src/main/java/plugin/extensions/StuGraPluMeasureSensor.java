@@ -160,18 +160,27 @@ public class StuGraPluMeasureSensor implements Sensor {
         Map<Metric<?>, Double> result = new HashMap<Metric<?>, Double>();
         List<Metric> measures = (new StuGraPluMeasures()).getMetrics();
 
-        Map<String, Collection<String>> collectedNodes = new MeasureExtractor().extractNodes(fileNames);
+        Map<String, Collection<String>> collectedNodes = null;
         try {
-            LogFileWriter.getLogger().printCollectedNodes(collectedNodes);
-        } catch (IOException ex) {
-            LOGGER.warn("Logging collected nodes failed!");
-        }
+            MeasureExtractor extractor = new MeasureExtractor();
+            collectedNodes = extractor.extractNodes(fileNames);
 
-        for (Metric measure : measures) {
-            result.put(measure, (double) collectedNodes.get(measure.getName()).size());
-        }
+            try {
+                LogFileWriter.getLogger().printCollectedNodes(collectedNodes);
+            } catch (IOException ex) {
+                LOGGER.warn("Logging collected nodes failed!");
+            }
 
-        LOGGER.info("Extracting measures with ExtendJ finished");
+            for (Metric measure : measures) {
+                result.put(measure, (double) collectedNodes.get(measure.getName()).size());
+            }
+
+            LOGGER.info("Extracting measures with ExtendJ finished");
+        } catch (StackOverflowError ex) {
+            LOGGER.warn("StackOverflow thanks to ExtendJ / Jastadd... ");
+        } catch (NullPointerException ex) {
+            LOGGER.warn("Nullpointer thanks to ExtendJ / Jastadd...");
+        }
         return result;
     }
 

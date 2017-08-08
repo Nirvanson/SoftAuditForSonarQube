@@ -19,9 +19,12 @@ import java.util.Set;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.jdbc.ScriptRunner;
+import org.sonar.api.batch.DecoratorContext;
 import org.sonar.api.config.Settings;
 import org.sonar.api.issue.Issue;
 import org.sonar.api.issue.ProjectIssues;
+import org.sonar.api.measures.CoreMetrics;
+import org.sonar.api.measures.MeasureUtils;
 
 import plugin.model.IndicatorThreshold;
 
@@ -33,6 +36,7 @@ import plugin.model.IndicatorThreshold;
  */
 public class IndexDataCollector {
     private Connection connection;
+    private final DecoratorContext context;
 
     /**
      * Constructor, initializes db.
@@ -42,10 +46,12 @@ public class IndexDataCollector {
      * @throws ClassNotFoundException
      * @throws FileNotFoundException
      */
-    public IndexDataCollector(Settings properties) throws ClassNotFoundException, SQLException, FileNotFoundException {
+    public IndexDataCollector(Settings properties, DecoratorContext context)
+            throws ClassNotFoundException, SQLException, FileNotFoundException {
+        this.context = context;
         Class.forName("com.mysql.jdbc.Driver");
         connection = DriverManager.getConnection(properties.getString("indexdburl"),
-                properties.getString("indexdbuser"), properties.getString("indexdbpw"));
+                properties.getString("dbuser"), properties.getString("dbpw"));
         DatabaseMetaData meta = connection.getMetaData();
         ResultSet res = meta.getTables(null, null, "indicators", new String[] { "TABLE" });
         if (!res.next()) {
@@ -74,9 +80,10 @@ public class IndexDataCollector {
      * @param projectName
      * @throws SQLException
      */
-    public void collectRuleViolationsForIndex(ProjectIssues issues, String projectName, double linesOfCode)
-            throws SQLException {
-        int projectId = prepareProjectTableEntries(projectName);
+    public void collectRuleViolationsForIndex(ProjectIssues issues, String projectName, double linesOfCode,
+            int projectYear)
+            throws SQLException, NullPointerException {
+        int projectId = prepareProjectTableEntries(projectName, projectYear);
         Map<Integer, Double> collectedViolations = countViolationsGroupedByIndicator(issues, linesOfCode);
         for (Integer key : collectedViolations.keySet()) {
             Statement statement = connection.createStatement();
@@ -98,14 +105,25 @@ public class IndexDataCollector {
      * @throws SQLException
      */
     public Map<Integer, Double> countViolationsGroupedByIndicator(ProjectIssues issues, double linesOfCode)
-            throws SQLException {
+            throws SQLException, NullPointerException {
         Map<Integer, Integer> collectedViolations = initializeIndicatorMap();
         Map<String, Integer> activeRules = initializeRulesMap();
         Iterator<Issue> issueIterator = issues.issues().iterator();
         while (issueIterator.hasNext()) {
             Issue currentIssue = issueIterator.next();
-            Integer count = collectedViolations.get(activeRules.get(currentIssue.ruleKey().toString())) + 1;
-            collectedViolations.put(activeRules.get(currentIssue.ruleKey().toString()), count);
+            // Ignore magic numbers in TestDataInitializer
+            if (!(currentIssue.ruleKey().toString().equals("squid:S109")
+                    && (currentIssue.componentKey().contains("Initialize")
+                            || currentIssue.componentKey().contains("TestData")))) {
+                Integer count = collectedViolations.get(activeRules.get(currentIssue.ruleKey().toString())) + 1;
+                collectedViolations.put(activeRules.get(currentIssue.ruleKey().toString()), count);
+            }
+        }
+        // If no test coverage data available assume that all files are not sufficient covered
+        if (collectedViolations.get(activeRules.get("common-java:InsufficientLineCoverage")) == 0
+                && MeasureUtils.getValue(context.getMeasure(CoreMetrics.OVERALL_UNCOVERED_LINES), -1D) == -1D) {
+            collectedViolations.put(activeRules.get("common-java:InsufficientLineCoverage"),
+                    MeasureUtils.getValue(context.getMeasure(CoreMetrics.FILES), -1D).intValue());
         }
         Map<Integer, Double> normedViolations = new HashMap<Integer, Double>();
         for (Integer key : collectedViolations.keySet()) {
@@ -134,7 +152,34 @@ public class IndexDataCollector {
         return thresholds;
     }
 
-    private int prepareProjectTableEntries(String projectName) throws SQLException {
+    public void saveIndicatorValueForProject(String projectName, int projectYear, int calculatedIndex)
+            throws SQLException {
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(
+                new SQL().SELECT("id")
+                        .FROM("`projects`")
+                        .WHERE("`name` = \"" + projectName + "\"")
+                        .toString());
+        if (!resultSet.next()) {
+            // create project-entry in data base
+            Statement update = connection.createStatement();
+            update.executeUpdate(
+                    new SQL().INSERT_INTO("`projects`")
+                            .VALUES("`name`, `year`, `calculated_index`",
+                                    "\"" + projectName + "\", " + projectYear + ", " + calculatedIndex)
+                            .toString());
+        } else {
+            // add / update index value
+            Statement update = connection.createStatement();
+            update.executeUpdate(
+                    new SQL().UPDATE("`projects`")
+                            .SET("`calculated_index` = " + calculatedIndex)
+                            .WHERE("`name` = \"" + projectName + "\"")
+                            .toString());
+        }
+    }
+
+    private int prepareProjectTableEntries(String projectName, int projectYear) throws SQLException {
         int projectId = 0;
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(
@@ -153,7 +198,7 @@ public class IndexDataCollector {
             // create project-entry in data base
             statement.executeUpdate(
                     new SQL().INSERT_INTO("`projects`")
-                            .VALUES("`name`, `year`", "\"" + projectName + "\", 2017")
+                            .VALUES("`name`, `year`", "\"" + projectName + "\", " + projectYear)
                             .toString());
             ResultSet res = statement.executeQuery(
                     new SQL().SELECT("id")
