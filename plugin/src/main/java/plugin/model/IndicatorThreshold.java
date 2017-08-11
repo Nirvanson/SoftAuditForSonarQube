@@ -1,11 +1,19 @@
 package plugin.model;
 
+import java.util.List;
+import java.util.Map;
+
 public class IndicatorThreshold {
-    public final static int THRESHOLD_25 = 0;
-    public final static int THRESHOLD_50 = 1;
-    public final static int THRESHOLD_75 = 2;
-    public final static int THRESHOLD_90 = 3;
-    public final static int THRESHOLD_100 = 4;
+    public final static int THRESHOLD_10 = 0;
+    public final static int THRESHOLD_20 = 1;
+    public final static int THRESHOLD_30 = 2;
+    public final static int THRESHOLD_40 = 3;
+    public final static int THRESHOLD_50 = 4;
+    public final static int THRESHOLD_60 = 5;
+    public final static int THRESHOLD_70 = 6;
+    public final static int THRESHOLD_80 = 7;
+    public final static int THRESHOLD_90 = 8;
+    public final static int THRESHOLD_100 = 9;
 
     private final Integer id;
     private final String severity;
@@ -16,7 +24,7 @@ public class IndicatorThreshold {
         this.id = id;
         this.severity = severity;
         this.name = name;
-        this.thresholds = new Double[5];
+        this.thresholds = new Double[10];
     }
 
     public Integer getId() {
@@ -35,22 +43,21 @@ public class IndicatorThreshold {
         this.thresholds[position] = threshold;
     }
 
-    public Integer calculateLevel(Double value) {
-        if (value == 0) {
+    public Integer calculateLevel(Double value, Map<String, List<Integer>> borders) {
+        List<Integer> bordersToUse = borders.get(severity);
+        if (value == 0 || bordersToUse.get(0) < 0 || value <= thresholds[bordersToUse.get(0)]) {
             return 5;
         }
-        switch (severity) {
-            case "Blocker":
-                return calculateLevelForBlocker(value);
-            case "Critical":
-                return calculateLevelForCritical(value);
-            case "Major":
-                return calculateLevelForMajor(value);
-            case "Minor":
-                return calculateLevelForMinor(value);
-            default:
-                return calculateLevelForInfo(value);
+        if (bordersToUse.get(1) < 0 || value <= thresholds[bordersToUse.get(1)]) {
+            return 4;
         }
+        if (bordersToUse.get(2) < 0 || value <= thresholds[bordersToUse.get(2)]) {
+            return 3;
+        }
+        if (bordersToUse.get(3) < 0 || value <= thresholds[bordersToUse.get(3)]) {
+            return 2;
+        }
+        return 1;
     }
 
     public String getPositioning(Double value) {
@@ -60,83 +67,30 @@ public class IndicatorThreshold {
         if (value <= thresholds[THRESHOLD_90]) {
             return "Better than 90% of the projects";
         }
-        if (value <= thresholds[THRESHOLD_75]) {
-            return "Better than 75% of the projects";
+        if (value <= thresholds[THRESHOLD_80]) {
+            return "Better than 80% of the projects";
+        }
+        if (value <= thresholds[THRESHOLD_70]) {
+            return "Better than 70% of the projects";
+        }
+        if (value <= thresholds[THRESHOLD_60]) {
+            return "Better than 60% of the projects";
         }
         if (value <= thresholds[THRESHOLD_50]) {
             return "Better than 50% of the projects";
         }
-        if (value <= thresholds[THRESHOLD_25]) {
-            return "Better than 25% of the projects";
+        if (value <= thresholds[THRESHOLD_40]) {
+            return "Better than 40% of the projects";
         }
-        return "Worse than 75% of the projects";
-    }
-
-    private Integer calculateLevelForBlocker(Double value) {
-        if (value <= thresholds[THRESHOLD_100]) {
-            return 5;
+        if (value <= thresholds[THRESHOLD_30]) {
+            return "Better than 30% of the projects";
         }
-        if (value <= thresholds[THRESHOLD_90]) {
-            return 4;
+        if (value <= thresholds[THRESHOLD_20]) {
+            return "Better than 20% of the projects";
         }
-        if (value <= thresholds[THRESHOLD_75]) {
-            return 3;
+        if (value <= thresholds[THRESHOLD_10]) {
+            return "Better than 10% of the projects";
         }
-        if (value <= thresholds[THRESHOLD_50]) {
-            return 2;
-        }
-        return 1;
-    }
-
-    private Integer calculateLevelForCritical(Double value) {
-        if (value <= thresholds[THRESHOLD_100]) {
-            return 5;
-        }
-        if (value <= thresholds[THRESHOLD_75]) {
-            return 4;
-        }
-        if (value <= thresholds[THRESHOLD_50]) {
-            return 3;
-        }
-        if (value <= thresholds[THRESHOLD_25]) {
-            return 2;
-        }
-        return 1;
-    }
-
-    private Integer calculateLevelForMajor(Double value) {
-        if (value <= thresholds[THRESHOLD_90]) {
-            return 5;
-        }
-        if (value <= thresholds[THRESHOLD_75]) {
-            return 4;
-        }
-        if (value <= thresholds[THRESHOLD_50]) {
-            return 3;
-        }
-        return 2;
-    }
-
-    private Integer calculateLevelForMinor(Double value) {
-        if (value <= thresholds[THRESHOLD_90]) {
-            return 5;
-        }
-        if (value <= thresholds[THRESHOLD_50]) {
-            return 4;
-        }
-        if (value <= thresholds[THRESHOLD_25]) {
-            return 3;
-        }
-        return 2;
-    }
-
-    private Integer calculateLevelForInfo(Double value) {
-        if (value <= thresholds[THRESHOLD_90]) {
-            return 5;
-        }
-        if (value <= thresholds[THRESHOLD_50]) {
-            return 4;
-        }
-        return 3;
+        return "Worse than 10% of the projects";
     }
 }

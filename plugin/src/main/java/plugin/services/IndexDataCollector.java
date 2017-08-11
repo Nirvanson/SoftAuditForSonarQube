@@ -142,14 +142,36 @@ public class IndexDataCollector {
         while (resultSet.next()) {
             IndicatorThreshold entry = new IndicatorThreshold(resultSet.getInt(1), resultSet.getString(3),
                     resultSet.getString(2));
-            entry.setThreshold(IndicatorThreshold.THRESHOLD_25, resultSet.getDouble(4));
-            entry.setThreshold(IndicatorThreshold.THRESHOLD_50, resultSet.getDouble(5));
-            entry.setThreshold(IndicatorThreshold.THRESHOLD_75, resultSet.getDouble(6));
-            entry.setThreshold(IndicatorThreshold.THRESHOLD_90, resultSet.getDouble(7));
-            entry.setThreshold(IndicatorThreshold.THRESHOLD_100, resultSet.getDouble(8));
+            entry.setThreshold(IndicatorThreshold.THRESHOLD_10, resultSet.getDouble(4));
+            entry.setThreshold(IndicatorThreshold.THRESHOLD_20, resultSet.getDouble(5));
+            entry.setThreshold(IndicatorThreshold.THRESHOLD_30, resultSet.getDouble(6));
+            entry.setThreshold(IndicatorThreshold.THRESHOLD_40, resultSet.getDouble(7));
+            entry.setThreshold(IndicatorThreshold.THRESHOLD_50, resultSet.getDouble(8));
+            entry.setThreshold(IndicatorThreshold.THRESHOLD_60, resultSet.getDouble(9));
+            entry.setThreshold(IndicatorThreshold.THRESHOLD_70, resultSet.getDouble(10));
+            entry.setThreshold(IndicatorThreshold.THRESHOLD_80, resultSet.getDouble(11));
+            entry.setThreshold(IndicatorThreshold.THRESHOLD_90, resultSet.getDouble(12));
+            entry.setThreshold(IndicatorThreshold.THRESHOLD_100, resultSet.getDouble(13));
             thresholds.add(entry);
         }
         return thresholds;
+    }
+
+    public Map<String, List<Integer>> getBorders() throws SQLException {
+        Map<String, List<Integer>> borders = new HashMap<String, List<Integer>>();
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(
+                new SQL().SELECT("*")
+                        .FROM("`borders`")
+                        .toString());
+        while (resultSet.next()) {
+            List<Integer> borderlist = new ArrayList<Integer>();
+            for (int i = 2; i < 6; i++) {
+                borderlist.add(resultSet.getInt(i));
+            }
+            borders.put(resultSet.getString(1), borderlist);
+        }
+        return borders;
     }
 
     public void saveIndicatorValueForProject(String projectName, int projectYear, int calculatedIndex)
@@ -249,9 +271,14 @@ public class IndexDataCollector {
     private List<Integer> calculateBorderElements() throws SQLException {
         List<Integer> borderElements = new ArrayList<Integer>();
         Integer total = countProjectsInDatabase();
-        borderElements.add((int) Math.ceil((double) total / 4));
-        borderElements.add((int) Math.ceil((double) total / 2));
-        borderElements.add((int) Math.ceil((double) (total * 3) / 4));
+        borderElements.add((int) Math.ceil((double) (total * 1) / 10));
+        borderElements.add((int) Math.ceil((double) (total * 2) / 10));
+        borderElements.add((int) Math.ceil((double) (total * 3) / 10));
+        borderElements.add((int) Math.ceil((double) (total * 4) / 10));
+        borderElements.add((int) Math.ceil((double) (total * 5) / 10));
+        borderElements.add((int) Math.ceil((double) (total * 6) / 10));
+        borderElements.add((int) Math.ceil((double) (total * 7) / 10));
+        borderElements.add((int) Math.ceil((double) (total * 8) / 10));
         borderElements.add((int) Math.ceil((double) (total * 9) / 10));
         borderElements.add(total);
         return borderElements;
@@ -278,47 +305,18 @@ public class IndexDataCollector {
                         .WHERE("`indicator` = " + indicatorId)
                         .ORDER_BY("`count` DESC")
                         .toString());
-        for (int i = 1; i <= borderElements.get(4); i++) {
+        for (int i = 1; i <= borderElements.get(9); i++) {
             resultSet.next();
-            if (i == borderElements.get(0)) {
-                Statement update1 = connection.createStatement();
-                update1.executeUpdate(
-                        new SQL().UPDATE("`indicators`")
-                                .SET("`threshold_25` = " + resultSet.getDouble(1))
-                                .WHERE("`id` = " + indicatorId)
-                                .toString());
-            }
-            if (i == borderElements.get(1)) {
-                Statement update2 = connection.createStatement();
-                update2.executeUpdate(
-                        new SQL().UPDATE("`indicators`")
-                                .SET("`threshold_50` = " + resultSet.getDouble(1))
-                                .WHERE("`id` = " + indicatorId)
-                                .toString());
-            }
-            if (i == borderElements.get(2)) {
-                Statement update3 = connection.createStatement();
-                update3.executeUpdate(
-                        new SQL().UPDATE("`indicators`")
-                                .SET("`threshold_75` = " + resultSet.getDouble(1))
-                                .WHERE("`id` = " + indicatorId)
-                                .toString());
-            }
-            if (i == borderElements.get(3)) {
-                Statement update3 = connection.createStatement();
-                update3.executeUpdate(
-                        new SQL().UPDATE("`indicators`")
-                                .SET("`threshold_90` = " + resultSet.getDouble(1))
-                                .WHERE("`id` = " + indicatorId)
-                                .toString());
-            }
-            if (i == borderElements.get(4)) {
-                Statement update4 = connection.createStatement();
-                update4.executeUpdate(
-                        new SQL().UPDATE("`indicators`")
-                                .SET("`threshold_100` = " + resultSet.getDouble(1))
-                                .WHERE("`id` = " + indicatorId)
-                                .toString());
+            for (int j = 0; j < 10; j++) {
+                if (i == borderElements.get(j)) {
+                    int border = j * 10 + 10;
+                    Statement update1 = connection.createStatement();
+                    update1.executeUpdate(
+                            new SQL().UPDATE("`indicators`")
+                                    .SET("`threshold_" + border + "` = " + resultSet.getDouble(1))
+                                    .WHERE("`id` = " + indicatorId)
+                                    .toString());
+                }
             }
         }
     }

@@ -129,10 +129,12 @@ public class StuGraPluIndexDecorator implements Decorator {
             Double reachedLevel = 5D;
             Map<Integer, Double> violations = null;
             List<IndicatorThreshold> thresholds = null;
+            Map<String, List<Integer>> borders = null;
             List<Metric> indicatorValues = (new StuGraPluIndexValues()).getMetrics();
             try {
                 violations = dataCollector.countViolationsGroupedByIndicator(issues, linesOfCode);
                 thresholds = dataCollector.getIndicatorThresholds();
+                borders = dataCollector.getBorders();
             } catch (SQLException ex) {
                 LOGGER.error("Collecting Rule-Violations or Thresholds for project failed! (SQL)");
                 ex.printStackTrace();
@@ -141,7 +143,7 @@ public class StuGraPluIndexDecorator implements Decorator {
                 ex.printStackTrace();
             }
             for (IndicatorThreshold indicator : thresholds) {
-                Integer indicatorLevel = indicator.calculateLevel(violations.get(indicator.getId()));
+                Integer indicatorLevel = indicator.calculateLevel(violations.get(indicator.getId()), borders);
                 reachedLevel = Math.min(reachedLevel, indicatorLevel);
                 String metricText = "Level " + indicatorLevel + " - "
                         + indicator.getPositioning(violations.get(indicator.getId()));
