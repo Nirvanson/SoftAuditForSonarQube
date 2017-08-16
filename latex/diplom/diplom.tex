@@ -919,6 +919,7 @@ Projekte im Softwarepraktikum}
   					\end{longtabu}   
   				\end{center}
   				Das Ergebnis-Regelwerk wurde mit dem Lehrstuhl abgestimmt und soll den am Softwarepraktikum teilnehmenden Studenten im Vorfeld innerhalb einer Lehrveranstaltung vermittelt werden. Auch innerhalb des Softwarepraktikums erscheint eine weiterführende Erwähnung und im Bedarfsfall auch Erklärung der Regeln durch die Gruppenbetreuer sinnvoll um die Studenten zur Einhaltung anzuhalten. Über die 19 Kategorien erfolgte darüber hinaus eine Neudefinition des "`Code-Quality-Index"' die im folgenden Kapitel~\ref{indexchapter} beschrieben wird und die Regeln aus Tabelle~\ref{ruleset} inhaltlich ausführlicher beleuchtet.
+  				
 	\chapter{Der Code-Quality-Index} \label{indexchapter}
 		Trotz der Erwähnung in Abschnitt~\ref{cqirules} und der oberflächlichen Beleuchtung des "`Code-Quality-Index"' im vorangegangenen Großen Beleg \cite{grosserBeleg} soll zur besseren Verständlichkeit im folgenden die grundsätzliche Funktionsweise nochmals erläutert und beispielhaft verdeutlicht werden. Darüber hinaus soll eine Bewertung des Index hinsichtlich seiner praktischen Verwendung in Industrie und Forschung erfolgen und die Anpassung und Umsetzung für das Softwarepraktikum dargelegt werden. 
 		\section{Funktionsweise}
@@ -1351,7 +1352,50 @@ Projekte im Softwarepraktikum}
 			\begin{itemize}
 				\item Im Verlaufe des Praktikums wird lediglich die Einstufung der vermessenen Programme gegen die konstante Datenbasis vorgenommen. Es werden keine Messwerte in der Datenbank abgelegt, sodass die Schwellwerte sich mit besser oder schlechter werdenden Programmen nicht verschieben.
 				\item Nach Abschluss eines Praktikumsjahrgangs sollten alle fertiggestellten Programme im zweiten Modus erneut vermessen werden, in dem statt der Einstufung des Programms eine Ablage der gemessenen Regelverletzungen in der Datenbasis und eine Neuberechnung der Schwellwerte erfolgt. Diese ergänzte Datenbasis soll dann der Vergleichswert für den kommenden Jahrgang sein und muss gegebenenfalls durch eine Anpassung der Benchmark-Level-Grenzen ergänzt werden, um eine sinnvolle Einstufung der Programme zu erhalten.	
-			\end{itemize}		
+			\end{itemize}	
+			
+	\chapter{Erweiterung des SonarQube-PlugIns}
+		\section{Integration des Regelwerks}
+			ToDo: frontend zusammenklickern (auswahl, severity, konfig), xml export/import, eclipse/intellij-plugins, bezug des plugins auf regelwerk
+		\section{Ersatz des Eigenbau-Parsers durch ExtendJ}
+			ToDo: Spart viel code, Hoffnung auf Stabilität, erweiterbarkeit, vollständigkeit, anpassbarkeit (neue Java-Versionen, Änderungen an Metriken, Benötigung anderer Messwerte), Probleme Nullpointer und Stackoverflow, Abweichungen
+		\section{Überarbeitung der Metrik-Berechnung}
+			ToDo: Keine Grundsätzlichen Änderungen, allgemeine Restrukturierung um wartbarkeit zu erhöhen, properties
+		\section{Einbau des Code-Quality-Index}
+			ToDo: siehe vorhergegangenes Kapitel, eigene Datenbank, Abhängigkeit vom Regelwerk, unabhängig von Metriken, properties
+		\section{Hinzufügen eines Datensammlers}
+  			ToDo: Eigene Datenbank da SQ-DB unübersichtlich und voll, nur für messung / analyse. für swp keine bedeutung, properties
+  		\section{Konzeption der Darstellung}
+  			ToDo: Mehrere Widgets: Endergebniss, Messwerte, Metriken, Index
+  		
+  	\chapter{Die Vermessung}
+  		\section{Das Messsystem}
+  			ToDo: Lokale SQ-Installation mit plugin und scanner und Mysql-DB, Batch-scripte für schnellere durchführung. lokale Kopie der SWP-Projekte / mvn anpassung für Testabdeckung, build, scan / sq-properties
+  		\section{Vergleichswerte für die Analyse}
+  			ToDo: Tutorenbewertung + Selbsteinschätzung, Excel-Tapete, in Frage stellen der Konsistenz und "korrekten" Bewertung
+  		\section{Aufbereitung der Messwerte}
+  			ToDo: die Excel-Tapete csv-export aus db -> import in excel
+  		
+  	\chapter{Analyse der Messergebnisse}
+  		\section{Das Analysekonzept}
+  			ToDo: Korrelationsermittlung nach Pearson-Formel + Signifikanzermittlung mittels p-Wert
+  		\section{Verwendete Analysewerkzeuge}
+  			ToDo: Excel + Online-Rechner
+  		\section{Durchführung}
+  			ToDo: Korrelation / p-Wert / Identifikation von Signifikanzen / Suche nach Verwendbaren Metriken und Zusammenhängen von interesse
+  		\section{Ergebnisse und Einschränkungen}
+  			ToDo: Conformity is gut, andere Metriken, insbesondere durchschnittswerte nicht aussakekräftig. große Programme sind besser, interessante einzelkorrelationen. Einschränkung tutorenbewertung, Messreihengröße, Parserfehler, nicht auf andere Programme übertragbar 
+  		\section{Zusätzliche Analysen}
+  			ToDo: Häschengruppen + evtl. verschiedene Konfigurationen der Conformity-Metrik in abgespecktem PlugIn
+  		
+  	\chapter{Zusammenfassung und Ausblick}	
+		\section{Erkenntnisse für zukünftige Softwarepraktika}
+			ToDo: Regelwerk schritt in richtige Richtung -> conformity, Meiste Metriken und Index "uninteressant", Teilautomatisierung so nicht durchführbar
+		\section{Verwendungsmöglichkeiten der Implementierung}
+			ToDo: Regelwerk + Conformity-Metrik als Grundlage für Bewertung der Code-Qualität, abgewandelte ObjectPoints
+		\section{Weiterführende Fragestellungen}
+			ToDo: Andere Metriken? Angepasste Metriken? SoftAudit-Messung besser? Optimierbarkeit der Conformity? Regelwerkoptimierung? 		
+  		
   	\backmatter
   
   	\appendix

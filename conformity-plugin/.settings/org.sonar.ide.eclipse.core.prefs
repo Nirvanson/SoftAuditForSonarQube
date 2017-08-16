@@ -1,0 +1,5 @@
+eclipse.preferences.version=1
+extraProperties=sonar.squid.analyse.property.accessors\=false\r\nsonar.findbugs.excludesFilters\=C\:\\Develop\\Diplom\\git_repo\\conformity-plugin/findbugs-filter.xml
+projectKey=plugin\:sonar-conformity
+serverUrl=http\://localhost\:9000
+version=2
