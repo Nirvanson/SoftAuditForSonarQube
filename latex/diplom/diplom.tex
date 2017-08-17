@@ -47,7 +47,44 @@ Projekte im Softwarepraktikum}
 	\tableofcontents
   
 	\chapter{Einleitung}
-  		schreib es auf
+  		Das in der Aufgabenstellung festgesetzte Ziel eines (teil-)automatisierten Bewertungssystems für das Softwarepraktikum ist bewusst recht hoch gegriffen und allgemein gehalten. Zunächst steht die Frage nach der Machbarkeit dieses Ziels mit den angedachten Möglichkeiten im Raum, die in dieser Arbeit geklärt werden soll. Von der Antwort auf diese Frage ist abhängig wie das System aussehen soll und ob es überhaupt ein solches geben kann. \newline
+  		Grundlage dafür soll das im vorhergegangenen Großen Beleg entwickelte SonarQube-PlugIn sein, in dem einige der von Harry Sneed vorgeschlagenen und in SoftAudit umgesetzten Metriken zur Bewertung der Softwarequalität und -komplexität adaptiert wurden \cite{grosserBeleg}. Darüber hinaus sollen weitere Konzepte und Ansätze einbezogen, umgesetzt und bewertet werden. In erster Linie ist hierbei der Code-Quality-Index nach Simon et Al. und ein fundiertes Regelwerk für die Java-Programmierung zu nennen. \newline
+  		Da die Einordnung des Projekts in das Forschungsfeld der Softwarevermessung und Bewertung bereits im Großen Beleg erfolgte soll an dieser Stelle darauf verzichtet werden. Auch eine erneute Beleuchtung der Softwaretools SoftAudit und SonarQube wird nicht erfolgen. \newline
+  		\section{Motivation}
+  			Die Motivation für diese Arbeit liegt in der Verbesserung der Durchführung des Softwarepraktikums begründet. Die Bewertung der von den Studenten erstellten Programmen und das Heranführen der Studenten an die Thematik Softwarequalität spielen dabei eine große Rolle. Die Automatisierung von Teilaspekten kann hier in zweierlei Hinsicht helfen:
+  			\begin{itemize}
+  				\item Zum einen dient die Automatisierung von Abläufen immer der Effizienzsteigerung. Wenn die Bewertung der Softwarequalität auf automatisch ermittelten Kennzahlen beruht kann der Aufwand für manuelle Code-Reviews deutlich reduziert werden. Es ist allerdings davon auszugehen, dass die Kennzahlen die manuelle Begutachtung des Codes nicht vollständig ersetzen können, selbst wenn die Metriken sehr Aussagekräftig und Zuverlässig sein sollten.
+  				\item Sollten die Metriken die erhoffte Aussagekraft besitzen könnte dieses System darüber hinaus zu einer konsistenteren und damit gerechteren Bewertung der Softwarequalität führen. Die Bewertung durch die Tutoren ist ohne solche Grundlagen zwangsläufig sehr subjektiv, da es keine klare und erschöpfende Definition dafür gibt was gute Softwarequalität eigentlich ausmacht und wie sie zu Bewerten ist.
+  			\end{itemize}
+  			Letztlich soll im Kontext des Softwarepraktikums ein Weg gefunden werden die Bewertung der Softwarequalität objektiver und besser vorzunehmen als bisher. Abbildung~\ref{wtfsm} zeigt die nicht ganz ernst gemeinte aber leider auch immer noch nicht gänzlich widerlegte Ansicht zu diesem Thema mit der Robert Martin sein Buch "`Clean Code"' einleitet, auf das später noch Bezug genommen wird \cite{CleanCode}.
+  			\begin{figure} [h]
+				\centering
+				\includegraphics [width=0.45\textwidth] {wtfsm.png}
+				\caption{Bewertung der Code-Qualität nach Thom Holwerda \cite{WTFsm}}
+				\label{wtfsm}
+			\end{figure}
+  		\section{Fragestellungen und Vorgehen}
+  			Im Folgenden sollen die einzelnen Schritte der konkreten Interpretation der Aufgabenstellung kurz vorgestellt, und daraus resultierende Forschungsfragen abgeleitet werden. In Abbildung~\ref{planning} ist das Vorgehen zur Verdeutlichung des Ablaufs grafisch dargestellt.
+  			\begin{figure} [h]
+				\centering
+				\includegraphics [width=\textwidth] {planning.png}
+				\caption{Planung des Vorgehens}
+				\label{planning}
+			\end{figure}
+  			\begin{enumerate}
+				\item Die Grundlage für die Implementierung und Vermessung soll ein in SonarQube zu konfigurierendes Regelwerk darstellen. \newline \newline
+				\textbf{Nach welchen Programmierregeln sollte die Bewertung hinsichtlich Code-Qualität im Kontext des Softwarepraktikums erfolgen?}
+				\item Zusätzlich zu den Metriken soll der Code-Quality-Index als alternative Bewertungsmethode umgesetzt werden. \newline \newline
+				\textbf{Inwiefern ist eine Umsetzung des Code-Quality-Index in SonarQube möglich und welche Anpassungen sind notwendig oder sinnvoll?}
+				\item Das PlugIn aus dem Großen Beleg soll insbesondere hinsichtlich des Parsers überarbeitet werden. Angedacht ist die Ersetzung des unvollständigen und nur schlecht Erweiterbaren "`Eigenbau-Parsers"' durch ExtendJ/Jastadd um eine langfristige Nutzung des PlugIns zu ermöglichen. \newline \newline
+				\textbf{Lässt sich die Stabilität und Wartbarkeit des PlugIns durch die Verwendung von ExtendJ/Jastadd verbessern?}
+				\item Mit dem so geschaffenen Messsystem sollen die Programme der letzten zwei Jahrgänge des Softwarepraktikums vermessen werden um die Metrikergebnisse den Bewertungen der Gruppen und deren Selbsteinschätzung gegenüberzustellen. \newline \newline
+				\textbf{Welche Methoden eignen sich um die Aussagekraft der Metriken zu evaluieren?}
+				\item Die Analyse der Messergebnisse im Vergleich zur Bewertung der Gruppen soll Aufschluss über die Machbarkeit und den konkreten Inhalt des gewünschten (teil-)automatisierten Bewertungssystems geben. \newline \newline
+				\textbf{Welche der umgesetzten Metriken und Bewertungssysteme eignen sich zur teilautomatisierten Bewertung zukünftiger Softwarepraktika?}
+				\item Abschließend soll, abhängig von den Antworten auf diese fünf Fragen, das entstandene PlugIn zu einem verwendbaren Bewertungssystem geformt und in die Lehrstuhlinstallation von SonarQube integriert werden.
+			\end{enumerate}
+  			
     
 	\chapter{Das Regelwerk}
 		Eine der Säulen für ein (teil-)automatisiertes Bewertungssystem für das Softwarepraktikum ist zwangsläufig die Festlegung eines geeigneten Regelwerks, dass in SonarQube konfiguriert werden muss und als Basis für diverse Berechnungen zur Beurteilung der abgelieferten Softwarequalität dient. Zum einen fließt die Zahl der Regelverletzungen in mehrere Metriken ein und zum anderen sind diese Regeln, oder Kombinationen mehrerer Regeln gleichzeitig Qualitätsindikatoren des für das Softwarepraktikum angepassten Code-Quality-Index. In diesem Kapitel soll zunächst auf die Notwendigkeit eines Regelwerks eingegangen, einige in der Industrie und Literatur vorgeschlagene Regelwerke vorgestellt und letztlich die getroffene Auswahl begründet und erklärt werden.
