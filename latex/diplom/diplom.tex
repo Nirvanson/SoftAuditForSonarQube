@@ -104,7 +104,7 @@ Projekte im Softwarepraktikum}
 				  \item [\textbf{Ziel}] Neben dem Ziel, ein praktikables Regelwerk für ein konkretes Projekt zu entwerfen, kann das Ziel eines Regelwerks auch sein, einen groben Rahmen für alle Projekte in einem Unternehmen zu schaffen, wodurch die Regelauswahl sehr viel allgemeiner ausfallen wird. Ähnlich ist es, wenn möglichst allgemeingültige Regeln für eine Veröffentlichung in Form eines Buches zusammen getragen werden, oder Studenten die Grundbegriffe von Softwarequalität vermittelt werden sollen.
 			\end{labeling}
 			Zusammenfassend lässt sich also feststellen, dass für eine hohe Softwarequalität ein für den konkreten Fall zusammengestelltes und angepasstes Regelwerk erforderlich ist, dass darüber hinaus gut und vollständig kommuniziert werden muss, damit es auch Anwendung findet und die gewünschten Effekte bringt \cite{ImproveCodeQuality}.
-		\section{Regelwerke}
+		\section{Regelwerke} \label{regelwerke}
 			Im Rahmen der vorliegenden Arbeit wurde eine Reihe von Regelwerken ausgewertet, um für die Anwendung im Softwarepraktikum eine Schnittmenge zu finden, die möglichst wichtige und weit verbreitete Regeln beinhaltet. Im Folgenden sollen diese kurz vorgestellt und in Bezug auf die Relevanz für das Softwarepraktikum eingeordnet werden. Die Regelbezeichnungen sind den jeweiligen Quellen entnommen und daher zum Teil in englischer Sprache.
 			\subsection{Clean Code von Robert Martin} \label{cleancodechapter}
 				Robert Martin legt den Fokus seines Buches "`Clean Code"' auf das Erstellen von gut lesbarem Code \cite{CleanCode}. Dies ist im Kontext dieser Arbeit nur ein Teilaspekt von Code-Qualität, aber speziell für die Lehre eine gute Grundlage, um ein Bewusstsein für guten Code zu vermitteln. Dies wird darüber hinaus noch dadurch vereinfacht, dass es in mehreren Sprachen, darunter auch Deutsch, erschienen ist. \newline
@@ -973,7 +973,7 @@ Projekte im Softwarepraktikum}
 				\label{qualitymodel}
 			\end{figure}
 			\subsection{Qualitätsindikatoren}
-				Die 52 Qualitätsindikatoren aus denen sich der Index zusammensetzt enthalten also jeweils ein zugeordnetes Problemmuster als Definition, und die gewichtete Abbildung auf die Qualitätseigenschaften von null bis einhundert Prozent, wobei die Abstufung jeweils in 25 Prozent Schritten erfolgt. Darüber hinaus wurde für alle Indikatoren analysiert wie hoch der Aufwand zur Behebung des Problemmusters ist ("`Kostenzuwachs"') und wie unmittelbar sich eine Behebung positiv auswirkt. Beides wurde analog zur Skala für die Qualitätseigenschaften eingestuft. Abschließend wurden über 120 Industrieprojekte hinsichtlich der Problemmuster vermessen und die Ergebnisse in einer Datenbank abgelegt. Dabei wurden die Fehlerhäufigkeiten jeweils mittels der Anzahl der Codezeilen des vermessenen Systems normiert um vergleichbare Werte zu erhalten und so aufbereitet, dass sich ein neu zu untersuchendes System im Vergleich zu dieser Datenbasis einordnen lässt. Dafür wurde erneut auf die Abstufung in 25 Prozent Schritten zurückgegriffen, sodass sich bezüglich jedes Indikators aussagen lässt, ob das vermessene Programm besser als 25, 50, 75 oder 100 Prozent der Programme in der Datenbasis ist. Diese Grenzen werden als "`Schwellwerte"' bezeichnet. \newline
+				Die 52 Qualitätsindikatoren aus denen sich der Index zusammensetzt enthalten also jeweils ein zugeordnetes Problemmuster als Definition, und die gewichtete Abbildung auf die Qualitätseigenschaften von null bis einhundert Prozent, wobei die Abstufung jeweils in 25 Prozent Schritten erfolgt. Darüber hinaus wurde für alle Indikatoren analysiert wie hoch der Aufwand zur Behebung des Problemmusters ist ("`Kostenzuwachs"') und wie unmittelbar sich eine Behebung positiv auswirkt. Beides wurde analog zur Skala für die Qualitätseigenschaften eingestuft. Abschließend wurden über 120 Industrieprojekte hinsichtlich der Problemmuster vermessen und die Ergebnisse in einer Datenbank abgelegt. Dabei wurden die Fehlerhäufigkeiten jeweils mittels der Anzahl der Codezeilen des vermessenen Systems normiert, um vergleichbare Werte zu erhalten und so aufbereitet, dass sich ein neu zu untersuchendes System im Vergleich zu dieser Datenbasis einordnen lässt. Dafür wurde erneut auf die Abstufung in 25 Prozent Schritten zurückgegriffen, sodass sich bezüglich jedes Indikators aussagen lässt, ob das vermessene Programm besser als 25, 50, 75 oder 100 Prozent der Programme in der Datenbasis ist. Diese Grenzen werden als "`Schwellwerte"' bezeichnet. \newline
 			Als Beispiel sei hier der Qualitätsindikator "`duplizierter Code"' aufgeführt, der folgendermaßen definiert ist \cite{CodeQualityManagement}:
 				\begin{quote}
   					"`Duplizierter Code liegt vor, wenn mindestens 40 aufeinander folgende Codezeilen (inkl. Leerzeilen und Kommentarzeilen) innerhalb des Quellcodes in identischer Form mehrmals auftreten."'
@@ -992,7 +992,7 @@ Projekte im Softwarepraktikum}
 					\label{indexschwell}
 				\end{figure}
 			\subsection{Index-Definition}
-				Um anhand der Messergebnisse für die Indikatoren eine Gesamteinstufung in Form eines einfachen Indexes zu ermöglichen wurden fünf Quality-Benchmark-Level (QBL) definiert (siehe Tabelle~\ref{indexlevel}) deren Erreichbarkeit über zwei Mechanismen gesteuert wird:
+				Um anhand der Messergebnisse für die Indikatoren eine Gesamteinstufung in Form eines einfachen Indexes zu ermöglichen, wurden fünf Quality-Benchmark-Level (QBL) definiert (siehe Tabelle~\ref{indexlevel}) deren Erreichbarkeit über zwei Mechanismen gesteuert wird:
 				\begin{itemize}
 					\item \textbf{Indikatorzuwachs} Mit jedem Level kommen weitere Indikatoren hinzu, abhängig davon welche Qualitätseigenschaften sie beeinflussen. Je nach Kostenzuwachs und Unmittelbarkeit können Indikatoren darüber hinaus vorgezogen oder in höhere Level verschoben werden (unmittelbar wirkende, schnell zu korrigierende Indikatoren werden bevorzugt).
 					\item \textbf{Schwellwerttunnel} Je höher der zu erreichende Level, desto besser muss das vermessene Programm im Vergleich zur Datenbasis für die relevanten Indikatoren abschneiden (25\% für QBL 2 bis 100\% für QBL 5). 
@@ -1021,14 +1021,14 @@ Projekte im Softwarepraktikum}
 		\section{Verwendung und Bewertung in der Praxis}
 			Vorab lässt sich sagen, dass der Code-Quality-Index in dieser Form weder zu einem weitreichend akzeptiertem Standard geworden ist, noch vielfältige Anwendung in der Wirtschaft gefunden hat. Auch die von den Autoren angestrebte Fortführung der angefangenen Datenbasis ist anscheinend nicht langfristig durchgeführt worden. Der im Buch genannte Webauftritt ist nicht mehr erreichbar. \newline
 			Allerdings gab es mindestens eine Umsetzung für ein produktives System. Für die IT-Infrastruktur der Dresdener Bank, also die Bereitstellung von Online-Funktionen und Informationen für Endkunden und Mitarbeiter innerhalb einer J2EE-Architektur wurde Code-Quality-Management in Form des beschriebenen Indexes durch die SQS AG etabliert und damit zufriedenstellende Ergebnisse erreicht \cite{DresdnerBank}. Allerdings wurde hierbei festgestellt, dass die Auswahl und konkrete Ausprägung der Indikatoren für den Kontext angepasst werden müssen. Die 52 Indikatoren von Frank Simon et Al. können nicht als allgemeingültig betrachtet werden. \newline
-			Eine weniger praxisnahe aber vollständige Umsetzung des Code-Quality-Index erfolgte im Rahmen der Diplomarbeit von Torsten Möllenbeck an der Universität Bremen \cite{DAIndexUmsetzung}. Diese zeigt, dass es auf jeden Fall möglich ist, den Index vollständig automatisiert zu ermitteln, auch wenn leider nur Ergebnisse von C++ Programmen ausgewertet wurden. Allerdings werden einige Kritikpunkte an der Konzeption des Indexes angebracht, die ihre Berechtigung haben:
+			Eine weniger praxisnahe, aber vollständige Umsetzung des Code-Quality-Index erfolgte im Rahmen der Diplomarbeit von Torsten Möllenbeck an der Universität Bremen \cite{DAIndexUmsetzung}. Diese zeigt, dass es auf jeden Fall möglich ist, den Index vollständig automatisiert zu ermitteln, auch wenn leider nur Ergebnisse von C++ Programmen ausgewertet wurden. Allerdings werden einige Kritikpunkte an der Konzeption des Indexes angebracht, die ihre Berechtigung haben:
 			\begin{itemize}
 				\item Die dynamischen Schwellwerte abhängig von der Datenbasis können dazu führen, dass Systeme nachträglich anders eingestuft würden, wenn weitere besonders gute oder besonders schlechte Programme hinzugefügt werden. Mit Blick auf das Softwarepraktikum bedeutet dies, dass die Datenbasis zumindest über den Verlauf eines Softwarepraktikums konstant gehalten werden muss um eine gerechte und stabile Bewertung vorzunehmen und darüber hinaus die Entwicklung der Qualität im Verlauf des Praktikums zu untersuchen.
-				\item Der Aufbau des Indexes kann dazu führen, dass ein System das bezüglich fast aller Indikatoren eine hervorragende Qualität aufweist aber in einem einzigen Indikator sehr schlecht ist, beziehungsweise bewusst von einer Regel abweicht auf dem untersten Level eingestuft wird. Es erscheint daher sinnvoll den Index Kontextspezifisch anzupassen wenn die Notwendigkeit besteht.
-				\item Auch wenn die Problemmuster durch die Autoren gut belegt sind erscheinen einige der gewählten Grenzwerte recht willkürlich und damit auch fragwürdig. Als Beispiel sei hier der Indikator "`falsche Namenslänge"' genannt, bei dem es sicher verschiedene Meinungen zu der Frage gibt ob 50 Zeichen wirklich eine sinnvolle Grenze sind. Auch hier bietet sich eine spezifische Anpassung für das zu bewertende System an.
+				\item Der Aufbau des Indexes kann dazu führen, dass ein System das bezüglich fast aller Indikatoren eine hervorragende Qualität aufweist aber in einem einzigen Indikator sehr schlecht ist, beziehungsweise bewusst von einer Regel abweicht auf dem untersten Level eingestuft wird. Es erscheint daher sinnvoll, den Index kontextspezifisch anzupassen wenn die Notwendigkeit besteht.
+				\item Auch wenn die Problemmuster durch die Autoren gut belegt sind, erscheinen einige der gewählten Grenzwerte recht willkürlich und damit auch fragwürdig. Als Beispiel sei hier der Indikator "`falsche Namenslänge"' genannt, bei dem es sicher verschiedene Meinungen zu der Frage gibt ob 50 Zeichen wirklich eine sinnvolle Grenze sind. Auch hier bietet sich eine spezifische Anpassung für das zu bewertende System an.
 			\end{itemize}
 			Trotz dieser Schwächen und dem nicht erfüllten Universalitätsanspruch finden sich einige Umsetzungen ähnlicher Bewertungssysteme. So wurde durch Ana Dragomir und Horst Lichter an der Universität Aachen ein Index für die Beurteilung von Softwarearchitekturen vorgeschlagen \cite{ArchitectureIndex}. \newline
-			Ein sehr ähnliches vorgehen wie beim Code-Quality-Index verfolgen Baggen et Al. mit ihrem Code-Benchmark \cite{CodeBenchmark}. Es werden ebenso Indikatoren gebildet und auf beeinflusste Qualitätseigenschaften abgebildet, allerdings werden hier sehr viel weniger und allgemeinere Indikatoren verwendet. Ein etwas neuerer Ansatz aus der Wirtschaft stammt von der Firma TIOBE die mit ihrem TIOBE Quality Indicator ebenfalls weniger Indikatoren definieren als im Code-Quality-Index \cite{TIOBEIndex}. Allerdings werden für die erreichbaren Stufen keine Indikatoren ausgewählt sondern es werden immer alle vermessen. Unterschiedlich ist dabei dann lediglich der zu erreichende Schwellwert. Für die Gesamtbewertung wurde darüber hinaus noch eine Wichtung der Indikatoren vorgenommen. Als hervorstechendes Merkmal sei hier die ansprechende Präsentation des Ergebnisses genannt, dass an die Energieeffizienz-Plaketten von elektrischen Geräten erinnert (Siehe Abbildung~\ref{TIOBElabel}). \newline
+			Ein sehr ähnliches Vorgehen wie beim Code-Quality-Index verfolgen Baggen et Al. mit ihrem Code-Benchmark \cite{CodeBenchmark}. Es werden ebenso Indikatoren gebildet und auf beeinflusste Qualitätseigenschaften abgebildet, allerdings werden hier sehr viel weniger und allgemeinere Indikatoren verwendet. Ein etwas neuerer Ansatz aus der Wirtschaft stammt von der Firma TIOBE die mit ihrem TIOBE Quality Indicator ebenfalls weniger Indikatoren definieren als im Code-Quality-Index \cite{TIOBEIndex}. Allerdings werden für die erreichbaren Stufen keine Indikatoren ausgewählt sondern es werden immer alle vermessen. Unterschiedlich ist dabei dann lediglich der zu erreichende Schwellwert. Für die Gesamtbewertung wurde darüber hinaus noch eine Wichtung der Indikatoren vorgenommen. Als hervorstechendes Merkmal sei hier die ansprechende Präsentation des Ergebnisses genannt, dass an die Energieeffizienz-Plaketten von elektrischen Geräten erinnert (Siehe Abbildung~\ref{TIOBElabel}). \newline
 			\begin{figure} [h]
 				\centering
 				\includegraphics [width=0.4\textwidth] {tiobe.png}
@@ -1038,7 +1038,7 @@ Projekte im Softwarepraktikum}
 		\section{Anpassung für das Softwarepraktikum}
 			Die Anwendung des Code-Quality-Index in anderen Projekten und vergleichbare Ansätze machen ebenso deutlich wie die vom Indikatorkatalog abweichende Regelwerkdefinition, dass für das Softwarepraktikum der Code-Quality-Index nicht einfach übernommen werden kann, sondern entsprechend den speziellen Anforderungen und Möglichkeiten in diesem Rahmen angepasst werden muss. \newline
 			Zunächst fällt auf, dass sich die gewählten Regeln nicht ohne weiteres auf das bidirektionale Qualitätsmodell von Simon et Al. abbilden lassen. Es müsste für die im Original nicht verwendeten Regeln aufwendig neu erforscht werden. Außerdem ist dieses Modell für die einführende Lehrveranstaltung zu komplex um es den Studenten erschöpfend zu vermitteln. Die Zuordnung der Regeln beziehungsweise Indikatoren als Mengen von Regeln zu einem Benchmark-Level muss daher über einen anderen Mechanismus erfolgen. Die einfachste und naheliegende Möglichkeit dafür bilden die Einstufungen der Regeln nach Schweregrad, sodass "`Blocker"'-Regeln bereits für den Level zwei und "`Info"'-Regeln erst für den Level vier relevant sind. Die Verschiebung der Regeln je nach Unmittelbarkeit und Kostenzuwachs entfällt in diesem Kontext vollständig, da dies ebenso neu ermittelt werden müsste und im Kontext des Softwarepraktikums mit dem gewählten Regelwerk ohnehin keine große Rolle spielt. \newline
-			Eine weitere Anpassung betrifft die Schwellwerte. Da es in der Lehre nicht üblich ist für die beste Note 100 Prozent zu verlangen erscheint dies auch für den Code-Quality-Index als zu strenge Forderung. Daher wurde zusätzlich der Schwellwert "`Besser als 90\%"' eingeführt um eine adäquate Bewertung vorzunehmen. Tabelle~\ref{indexdef} enthält die mit dem Lehrstuhl abgestimmte Neudefinition der Benchmark-Level für das Softwarepraktikum. Da sich bei der Vermessung der Praktikumsprojekte der letzten 2 Jahrgänge herausstellte, dass diese Schwellwerte dazu führen, dass bis auf eine Gruppe alle nur Level eins erreichen und die Index-Einstufung so keine Aussagekraft haben kann wurden die Schwellwerte stattdessen in 10-Prozent-Schritten ermittelt und die Zuordnung zu den Benchmark-Level über die angelegte Datenbank konfigurierbar gemacht. Mit der in Tabelle~\ref{indexdefnew} festgelegten Zuordnung erreichen die Gruppen Einstufungen zwischen Level eins und Level vier. \newline 
+			Eine weitere Anpassung betrifft die Schwellwerte. Da es in der Lehre nicht üblich ist, für die beste Note 100 Prozent zu verlangen, erscheint dies auch für den Code-Quality-Index als zu strenge Forderung. Daher wurde zusätzlich der Schwellwert "`Besser als 90\%"' eingeführt um eine adäquate Bewertung vorzunehmen. Tabelle~\ref{indexdef} enthält die mit dem Lehrstuhl abgestimmte Neudefinition der Benchmark-Level für das Softwarepraktikum. Da sich bei der Vermessung der Praktikumsprojekte der letzten 2 Jahrgänge herausstellte, dass diese Schwellwerte dazu führen, dass bis auf eine Gruppe alle nur Level eins erreichen und die Index-Einstufung so keine Aussagekraft haben kann wurden die Schwellwerte stattdessen in 10-Prozent-Schritten ermittelt und die Zuordnung zu den Benchmark-Level über die angelegte Datenbank konfigurierbar gemacht. Mit der in Tabelle~\ref{indexdefnew} festgelegten Zuordnung erreichen die Gruppen Einstufungen zwischen Level eins und Level vier. \newline 
 			\begin{center}
 				\tabulinesep=1.5mm
 				\begin{longtabu}{|c|c|c|c|}
@@ -1073,42 +1073,51 @@ Projekte im Softwarepraktikum}
   					\hline
   					QBL 5 & Sehr Gut & 50\% Blocker, 40\% Critical, 30\% Major, 20\% Minor, 10\% Info \\
   					\hline
-  					\caption{Für die Vermessung verwendete Definition der Benchmark-Level, die eine Annehmbare Verteilung der Bewertungen erzeugt}
+  					\caption{Für die Vermessung verwendete Definition der Benchmark-Level, die eine annehmbare Verteilung der Bewertungen erzeugt}
 					\label{indexdefnew}
   				\end{longtabu}   
   			\end{center}
-  			Dieses starke Herabsetzen der Grenzen zum Erreichen eines höheren Benchmark-Level ist notwendig, da in den vermessenen Projekten keine Gruppe dabei war, die bezüglich aller Indikatoren im oberen Bereich liegt. Die meisten Gruppen sind bezüglich einiger weniger Indikatoren sehr gut, dafür aber bezüglich der meisten anderen nur Mittelfeld. Interessanterweise sind die gut erfüllten Indikatoren nicht immer die Gleichen, sondern sehr unterschiedlich. Dadurch entstehen im Aufbau der Datenbank Anspruchsvolle Zielwerte für alle Indikatoren, die dann von keiner Gruppe bezüglich aller Indikatoren eingehalten werden. Wenn das neue Regelwerk in Zukunft kommuniziert und von den Studenten angewendet wird ist es möglich, dass eine nachträgliche Anpassung der Zuordnungen sinnvoll wird. \newline
-  			Im Folgenden werden die definierten Indikatoren kurz vorgestellt. Die genannten SonarQube-Regeln finden sich in der Dokumentation des Java-Plugins \cite{JavaPlugin}. \newline
-  			\subsection{Indikator Duplizierter Code}
-  				Klasse: "`Blocker"' \newline
-  				Entspricht der SonarQube-Regel "`Source files should not have any duplicated blocks"' wobei im Gegensatz zum Original-Index die Anzahl der duplizierten Code-Blöcke gezählt wird und nicht die Anzahl der darin enthaltenen Zeilen. 
-  				\begin{center}
-					\tabulinesep=1.5mm
-					\begin{longtabu}{|c|c||c|c||c|c||c|c|}
-						\hline
-  						\textbf{Besser als} & \textbf{Häufigkeit je 1000 LOC} & 20\% & 2,230 & 50\% & 1,446 & 80\% & 0,717 \\
-  						\hline 
-						0\% & 3,454 & 30\% & 1,891 & 60\% & 1,181 & 90\% & 0,259 \\
-  						\hline 
-						10\% & 2,965 & 40\% & 1,605 & 70\% & 0,935 & 100\% & 0,000 \\
-						\hline
-  						\caption{Ermittelter Schwellwerttunnel für Indikator Duplizierter Code}
-  					\end{longtabu}   
-  				\end{center}
+  			Dieses starke Herabsetzen der Grenzen zum Erreichen eines höheren Benchmark-Level ist notwendig, da in den vermessenen Projekten keine Gruppe dabei war, die bezüglich aller Indikatoren im oberen Bereich liegt. Die meisten Gruppen sind bezüglich einiger weniger Indikatoren sehr gut, dafür aber bezüglich der meisten anderen nur Mittelfeld. Interessanterweise sind die gut erfüllten Indikatoren nicht immer die Gleichen, sondern sehr unterschiedlich. Dadurch entstehen im Aufbau der Datenbank anspruchsvolle Zielwerte für alle Indikatoren, die dann von keiner Gruppe bezüglich aller Indikatoren eingehalten werden. Wenn das neue Regelwerk in Zukunft kommuniziert und von den Studenten angewendet wird, ist es möglich, dass eine nachträgliche Anpassung der Zuordnungen sinnvoll wird. \newline
+  			Im Folgenden werden die definierten Indikatoren kurz vorgestellt. Die genannten SonarQube-Regeln finden sich in der Dokumentation des Java-Plugins \cite{JavaPlugin}. Die angegebenen Tabellen sind dabei so zu lesen, dass ein Programm besser als die in der oberen Zeile angegeben Prozent der Programme in der Datenbasis ist, wenn die Häufigkeit des Problemmusters je 1000 Netto-Code-Zeilen geringer als der in der unteren Zeile angegebene Wert ist. Der Wert für null Prozent ist also das in Bezug auf diesen Indikator schlechteste vermessene Programm, und der Wert für einhundert Prozent das Beste in der Datenbasis. Für Indikatoren bei denen mehrere Schwellwerte identisch sind wurden die entsprechenden Tabelleneinträge zusammengefasst.\newline
   			\subsection{Indikator Magic Numbers}
   				Klasse: "`Blocker"' \newline
   				Entspricht der SonarQube-Regel "`Magic numbers should not be used"' und hat im Original-Index keine Entsprechung. Aufgrund der im Softwarepraktikum verwendeten Daten-Initialisierung durch eine Klasse mit dem Prefix "`DataInitializer"' in der sehr viele Zahlen im Code stehen ohne das dies ein Problem darstellt werden die Regelverletzungen in diesen Klassen für den Index ignoriert.
   				\begin{center}
 					\tabulinesep=1.5mm
-					\begin{longtabu}{|c|c||c|c||c|c||c|c|}
+					\begin{longtabu}{c|c|c|c|c|c|c}
 						\hline
-  						\textbf{Besser als} & \textbf{Häufigkeit je 1000 LOC} & 20\% & 16,248 & 50\% & 8,922 & 80\% & 2,677 \\
-  						\hline 
-						0\% & 79,771 & 30\% & 13,127 & 60\% & 6,890 & 90\% & 1,054 \\
-  						\hline 
-						10\% & 25,179 & 40\% & 11,275 & 70\% & 3,968 & 100\% & 0,000 \\
-						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 0\% & 10\% & 20\% & 30\% & 40\% & \multicolumn1{c|}{50\%} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 79,771 & 25,179 & 16,248 & 13,127 & 11,275 & \multicolumn1{c|}{8,922} \\
+  						\hline
+  						\multicolumn{7}{c}{} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 60\% & 70\% & 80\% & 90\% & 100\% & \multicolumn1{c|}{}\\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 6,890 & 3,968 & 2,677 & 1,054 & 0,000 & \multicolumn1{c|}{}\\
+  						\hline
   						\caption{Ermittelter Schwellwerttunnel für Indikator Magic Numbers}
+  					\end{longtabu}   
+  				\end{center}
+  				\newpage
+  			\subsection{Indikator Duplizierter Code}
+  				Klasse: "`Blocker"' \newline
+  				Entspricht der SonarQube-Regel "`Source files should not have any duplicated blocks"' wobei im Gegensatz zum Original-Index die Anzahl der duplizierten Code-Blöcke gezählt wird und nicht die Anzahl der darin enthaltenen Zeilen. 
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{c|c|c|c|c|c|c}
+						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 0\% & 10\% & 20\% & 30\% & 40\% & \multicolumn1{c|}{50\%} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 3,454 & 2,965 & 2,230 & 1,891 & 1,605 & \multicolumn1{c|}{1,446} \\
+  						\hline
+  						\multicolumn{7}{c}{} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 60\% & 70\% & 80\% & 90\% & 100\% & \multicolumn1{c|}{}\\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 1,181 & 0,935 & 0,717 & 0,259 & 0,000 & \multicolumn1{c|}{}\\
+  						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Duplizierter Code}
   					\end{longtabu}   
   				\end{center}
   			\subsection{Indikator Datenkapselaufbruch}
@@ -1116,14 +1125,12 @@ Projekte im Softwarepraktikum}
   				Entspricht der SonarQube-Regel "`Class variable fields should not have public accessibility"' und ist in seiner Bedeutung identisch zum Original.
   				\begin{center}
 					\tabulinesep=1.5mm
-					\begin{longtabu}{|c|c||c|c||c|c||c|c|}
+					\begin{longtabu}{c|c|c|c|c|c|c}
 						\hline
-  						\textbf{Besser als} & \textbf{Häufigkeit je 1000 LOC} & 20\% & 0,836 & 50\% & 0,000 & 80\% & 0,000 \\
-  						\hline 
-						0\% & 6,430 & 30\% & 0,590 & 60\% & 0,000 & 90\% & 0,000 \\
-  						\hline 
-						10\% & 1,613 & 40\% & 0,178 & 70\% & 0,000 & 100\% & 0,000 \\
-						\hline	
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 0\% & 10\% & 20\% & 30\% & 40\% & \multicolumn1{c|}{50\% - 100\%} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 6,430 & 1,613 & 0,836 & 0,590 & 0,178 & \multicolumn1{c|}{0,000} \\
+  						\hline
   						\caption{Ermittelter Schwellwerttunnel für Indikator Datenkapselaufbruch}
   					\end{longtabu}   
   				\end{center}
@@ -1132,14 +1139,12 @@ Projekte im Softwarepraktikum}
   				Entspricht der SonarQube-Regel "`Files should contain only one top-level class or interface each"' und ist in seiner Bedeutung identisch zum Original.
   				\begin{center}
 					\tabulinesep=1.5mm
-					\begin{longtabu}{|c|c||c|c||c|c||c|c|}
+					\begin{longtabu}{c|c}
 						\hline
-  						\textbf{Besser als} & \textbf{Häufigkeit je 1000 LOC} & 20\% & 0,000 & 50\% & 0,000 & 80\% & 0,000 \\
-  						\hline 
-						0\% & 0,000 & 30\% & 0,000 & 60\% & 0,000 & 90\% & 0,000 \\
-  						\hline 
-						10\% & 0,000 & 40\% & 0,000 & 70\% & 0,000 & 100\% & 0,000 \\					
-						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} &  \multicolumn1{c|}{0\% - 100\%} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & \multicolumn1{c|}{0,000} \\
+  						\hline
   						\caption{Ermittelter Schwellwerttunnel für Indikator Überbuchte Datei}
   					\end{longtabu}   
   				\end{center}
@@ -1148,47 +1153,80 @@ Projekte im Softwarepraktikum}
   				Entspricht der SonarQube-Regel "`Lines should have sufficient coverage by unit tests"' und hat im Original-Index keine Entsprechung. Als ausreichende Testabdeckung wird im Kontext des Softwarepraktikums 80\% festgelegt. Dieser Grenzwert bewegt sich im Mittelfeld der in der Literatur genannten Werte und wurde vom Lehrstuhl so festgelegt. 
   				\begin{center}
 					\tabulinesep=1.5mm
-					\begin{longtabu}{|c|c||c|c||c|c||c|c|}
+					\begin{longtabu}{c|c|c|c|c|c|c}
 						\hline
-  						\textbf{Besser als} & \textbf{Häufigkeit je 1000 LOC} & 20\% & 10,375 & 50\% & 7,976 & 80\% & 4,748 \\
-  						\hline 
-						0\% & 14,970 & 30\% & 9,708 & 60\% & 6,815 & 90\% & 2,893 \\
-  						\hline 
-						10\% & 13,109 & 40\% & 8,322 & 70\% & 6,217 & 100\% & 0,000 \\ 						
-						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 0\% & 10\% & 20\% & 30\% & 40\% & \multicolumn1{c|}{50\%} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 14,970 & 13,109 & 10,375 & 9,708 & 8,322 & \multicolumn1{c|}{7,976} \\
+  						\hline
+  						\multicolumn{7}{c}{} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 60\% & 70\% & 80\% & 90\% & 100\% & \multicolumn1{c|}{}\\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 6,815 & 6,217 & 4,748 & 2,893 & 0,000 & \multicolumn1{c|}{}\\
+  						\hline
   						\caption{Ermittelter Schwellwerttunnel für Indikator Unzureichende Tests}
   					\end{longtabu}   
   				\end{center}
   			\subsection{Indikator Zu enge Kopplung}
   				Klasse: "`Critical"' \newline
-  				Enthält die beiden SonarQube-Regeln "`Classes should not be coupled to too many other classes (Single Responsibility Principle)"' und "`Cycles between packages should be removed"', wobei letztere dem Indikator "`Verbotene Paketliebe"' entspricht. Die enge thematische Zusammengehörigkeit führte zur Zusammenlegung. 
+  				Enthält die beiden SonarQube-Regeln "`Classes should not be coupled to too many other classes (Single Responsibility Principle)"' und "`Cycles between packages should be removed"', wobei letztere dem Indikator "`Verbotene Paketliebe"' entspricht. Die enge thematische Zusammengehörigkeit führte zur Zusammenlegung.
   				\begin{center}
 					\tabulinesep=1.5mm
-					\begin{longtabu}{|c|c||c|c||c|c||c|c|}
+					\begin{longtabu}{c|c|c|c|c|c|c}
 						\hline
-  						\textbf{Besser als} & \textbf{Häufigkeit je 1000 LOC} & 20\% & 8,740 & 50\% & 6,554 & 80\% & 4,835 \\
-  						\hline 
-						0\% & 16,750 & 30\% & 7,133 & 60\% & 6,117 & 90\% & 3,978 \\
-  						\hline 
-						10\% & 10,256 & 40\% & 6,810 & 70\% & 5,606 & 100\% & 3,310 \\ 						
-						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 0\% & 10\% & 20\% & 30\% & 40\% & \multicolumn1{c|}{50\%} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 16,750 & 10,256 & 8,740 & 7,133 & 6,810 & \multicolumn1{c|}{6,554} \\
+  						\hline
+  						\multicolumn{7}{c}{} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 60\% & 70\% & 80\% & 90\% & 100\% & \multicolumn1{c|}{}\\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 6,117 & 5,606 & 4,835 & 3,978 & 3,310 & \multicolumn1{c|}{}\\
+  						\hline
   						\caption{Ermittelter Schwellwerttunnel für Indikator Zu enge Kopplung}
   					\end{longtabu}   
   				\end{center}
+  				\newpage
   			\subsection{Indikator Gottkonstrukt}
   				Klasse: "`Critical"' \newline
   				Enthält vier SonarQube-Regeln, die die Größe von Dateien, Klassen, Methoden und Inneren Klassen betreffen. Bis auf die Größe von inneren Klassen finden sich für alle Regeln entsprechende Qualitätsindikatoren. Da das übergeordnete Prinzip Code-Elemente klein und übersichtlich zu halten adressiert werden soll wurden diese zusammengelegt. Die Grenzwerte orientieren sich am Softwarepraktikum in Dortmund \cite{CleanCodeImPraktikum}.
   				\begin{center}
 					\tabulinesep=1.5mm
-					\begin{longtabu}{|c|c||c|c||c|c||c|c|}
+					\begin{longtabu}{c|c|c|c|c|c|c}
 						\hline
-  						\textbf{Besser als} & \textbf{Häufigkeit je 1000 LOC} & 20\% & 8,326 & 50\% & 6,815 & 80\% & 5,615 \\
-  						\hline 
-						0\% & 9,422 & 30\% & 7,565 & 60\% & 6,591 & 90\% & 4,937 \\
-  						\hline 
-						10\% & 8,936 & 40\% & 7,253 & 70\% & 6,065 & 100\% & 3,960 \\						
-						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 0\% & 10\% & 20\% & 30\% & 40\% & \multicolumn1{c|}{50\%} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 9,422 & 8,936 & 8,326 & 7,565 & 7,253 & \multicolumn1{c|}{6,815} \\
+  						\hline
+  						\multicolumn{7}{c}{} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 60\% & 70\% & 80\% & 90\% & 100\% & \multicolumn1{c|}{}\\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 6,591 & 6,065 & 5,615 & 4,937 & 3,960 & \multicolumn1{c|}{}\\
+  						\hline
   						\caption{Ermittelter Schwellwerttunnel für Indikator Gottkonstrukt}
+  					\end{longtabu}   
+  				\end{center}
+  				\subsection{Indikator Namensfehler} 
+  				Klasse: "`Critical"' \newline
+  				Enthält alle SonarQube-Regeln bezüglich Namenskonventionen und entspricht im wesentlichen dem Original. Die Standard-Java-Pattern wurden um die Größenbeschränkung gemäß dem Original-Indikator "`Falsche Namenslänge"' erweitert. Eine separate Messung dieses Indikators ist mit den vordefinierten Java-Regeln in SonarQube nicht möglich. 
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{c|c|c|c|c|c|c}
+						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 0\% & 10\% & 20\% & 30\% & 40\% & \multicolumn1{c|}{50\%} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 57,931 & 38,099 & 27,724 & 21,749 & 14,811 & \multicolumn1{c|}{13,559} \\
+  						\hline
+  						\multicolumn{7}{c}{} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 60\% & 70\% & 80\% & 90\% & 100\% & \multicolumn1{c|}{}\\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 11,245 & 9,592 & 6,969 & 5,347 & 1,123 & \multicolumn1{c|}{}\\
+  						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Namensfehler}
   					\end{longtabu}   
   				\end{center}
   				\newpage
@@ -1197,47 +1235,19 @@ Projekte im Softwarepraktikum}
   				Entspricht der SonarQube-Regel "`Public types, methods and fields (API) should be documented with Javadoc"' und ist in seiner Bedeutung identisch zum Original.
   				\begin{center}
 					\tabulinesep=1.5mm
-					\begin{longtabu}{|c|c||c|c||c|c||c|c|}
+					\begin{longtabu}{c|c|c|c|c|c|c}
 						\hline
-  						\textbf{Besser als} & \textbf{Häufigkeit je 1000 LOC} & 20\% & 44,137 & 50\% & 23,948 & 80\% & 8,854 \\
-  						\hline 
-						0\% & 63,249 & 30\% & 32,258 & 60\% & 21,304 & 90\% & 3,954 \\
-  						\hline 
-						10\% & 51,517 & 40\% & 25,868 & 70\% & 12,335 & 100\% & 0,000 \\  						
-						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 0\% & 10\% & 20\% & 30\% & 40\% & \multicolumn1{c|}{50\%} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 63,249 & 51,517 & 44,137 & 32,258 & 25,868 & \multicolumn1{c|}{23,948} \\
+  						\hline
+  						\multicolumn{7}{c}{} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 60\% & 70\% & 80\% & 90\% & 100\% & \multicolumn1{c|}{}\\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 21,304 & 12,335 & 8,854 & 3,954  & 0,000 & \multicolumn1{c|}{}\\
+  						\hline
   						\caption{Ermittelter Schwellwerttunnel für Indikator Informelle Dokumentation}
-  					\end{longtabu}   
-  				\end{center}
-  			\subsection{Indikator Namensfehler} 
-  				Klasse: "`Critical"' \newline
-  				Enthält alle SonarQube-Regeln bezüglich Namenskonventionen und entspricht im wesentlichen dem Original. Die Standard-Java-Pattern wurden um die Größenbeschränkung gemäß dem Original-Indikator "`Falsche Namenslänge"' erweitert. Eine separate Messung dieses Indikators ist mit den vordefinierten Java-Regeln in SonarQube nicht möglich. 
-  				\begin{center}
-					\tabulinesep=1.5mm
-					\begin{longtabu}{|c|c||c|c||c|c||c|c|}
-						\hline
-  						\textbf{Besser als} & \textbf{Häufigkeit je 1000 LOC} & 20\% & 27,724 & 50\% & 13,559 & 80\% & 6,969 \\
-  						\hline 
-						0\% & 57,931 & 30\% & 21,749 & 60\% & 11,245 & 90\% & 5,347 \\
-  						\hline 
-						10\% & 38,099 & 40\% & 14,811 & 70\% & 9,592 & 100\% & 1,123 \\					
-						\hline
-  						\caption{Ermittelter Schwellwerttunnel für Indikator Namensfehler}
-  					\end{longtabu}   
-  				\end{center}
-  			\subsection{Indikator Zu Komplex}
-  				Klasse: "`Major"' \newline
-  				Enthält SonarQube-Regeln zur Verschachtelungstiefe von Kontrollflussanweisungen, Parameteranzahl von Methoden sowie die McCabe-Komplexität für Methoden und Klassen. Die Original-Indikatoren "`Labyrinthmethode"' und "`Lange Parameterliste"' sind Teil dieses Indikators.
-  				\begin{center}
-					\tabulinesep=1.5mm
-					\begin{longtabu}{|c|c||c|c||c|c||c|c|}
-						\hline
-  						\textbf{Besser als} & \textbf{Häufigkeit je 1000 LOC} & 20\% & 9,251 & 50\% & 6,890 & 80\% & 3,881 \\
-  						\hline 
-						0\% & 20,474 & 30\% & 8,276 & 60\% & 6,054 & 90\% & 3,208 \\
-  						\hline 
-						10\% & 11,787 & 40\% & 7,376 & 70\% & 5,039 & 100\% & 2,109 \\						
-						\hline
-  						\caption{Ermittelter Schwellwerttunnel für Indikator Zu Komplex}
   					\end{longtabu}   
   				\end{center}
   			\subsection{Indikator Verwechslungsgefahr}
@@ -1245,14 +1255,12 @@ Projekte im Softwarepraktikum}
   				Enthält alle SonarQube-Regeln, die die Überdeckung von Bezeichnern in untergeordneten Geltungsbereichen verbieten, sowie die Forderung, dass sich Bezeichner nicht nur in Groß- und Kleinschreibung unterscheiden dürfen und dass ein Datentyp-Suffix wie "`L"' für Long groß geschrieben werden soll. All diese Regeln haben zum Ziel Verwechslungen zu vermeiden. 
   				\begin{center}
 					\tabulinesep=1.5mm
-					\begin{longtabu}{|c|c||c|c||c|c||c|c|}
+					\begin{longtabu}{c|c|c|c|c|c|c|c|c}
 						\hline
-  						\textbf{Besser als} & \textbf{Häufigkeit je 1000 LOC} & 20\% & 1,497 & 50\% & 0,356 & 80\% & 0,000 \\
-  						\hline 
-						0\% & 17,839 & 30\% & 0,554 & 60\% & 0,278 & 90\% & 0,000 \\
-  						\hline 
-						10\% & 2,687 & 40\% & 0,494 & 70\% & 0,000 & 100\% & 0,000 \\					
-						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 0\% & 10\% & 20\% & 30\% & 40\% & 50\% & 60\% & \multicolumn1{c|}{70\% - 100\%} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 17,839 & 2,687 & 1,497 & 0,554 & 0,494 & 0,356 & 0,278 & \multicolumn1{c|}{0,000} \\
+  						\hline
   						\caption{Ermittelter Schwellwerttunnel für Indikator Verwechslungsgefahr}
   					\end{longtabu}   
   				\end{center}
@@ -1261,29 +1269,52 @@ Projekte im Softwarepraktikum}
   				Enthält SonarQube-Regeln bezüglich der Setzung von geschweiften Klammern, Einrückung und Zeilenlänge. Keine der ausgewählten Regeln hat eine Entsprechung im Original Index.
   				\begin{center}
 					\tabulinesep=1.5mm
-					\begin{longtabu}{|c|c||c|c||c|c||c|c|}
+					\begin{longtabu}{c|c|c|c|c|c|c}
 						\hline
-  						\textbf{Besser als} & \textbf{Häufigkeit je 1000 LOC} & 20\% & 232,493 & 50\% & 200,345 & 80\% & 149,972 \\
-  						\hline 
-						0\% & 288,193 & 30\% & 222,187 & 60\% & 183,627 & 90\% & 51,639 \\
-  						\hline 
-						10\% & 243,131 & 40\% & 209,668 & 70\% & 173,311 & 100\% & 0,000 \\						
-						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 0\% & 10\% & 20\% & 30\% & 40\% & \multicolumn1{c|}{50\%} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 288,193 & 243,131 & 232,493 & 222,187 & 209,668 & \multicolumn1{c|}{200,345} \\
+  						\hline
+  						\multicolumn{7}{c}{} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 60\% & 70\% & 80\% & 90\% & 100\% & \multicolumn1{c|}{}\\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 183,627 & 173,311 & 149,972 & 51,639 & 0,000 & \multicolumn1{c|}{}\\
+  						\hline
   						\caption{Ermittelter Schwellwerttunnel für Indikator Formatierungsfehler}
+  					\end{longtabu}   
+  				\end{center}
+  			\subsection{Indikator Zu Komplex}
+  				Klasse: "`Major"' \newline
+  				Enthält SonarQube-Regeln zur Verschachtelungstiefe von Kontrollflussanweisungen, Parameteranzahl von Methoden sowie die McCabe-Komplexität für Methoden und Klassen. Die Original-Indikatoren "`Labyrinthmethode"' und "`Lange Parameterliste"' sind Teil dieses Indikators.
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{c|c|c|c|c|c|c}
+						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 0\% & 10\% & 20\% & 30\% & 40\% & \multicolumn1{c|}{50\%} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 20,474 & 11,787 & 9,251 & 8,276 & 7,376 & \multicolumn1{c|}{6,890} \\
+  						\hline
+  						\multicolumn{7}{c}{} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 60\% & 70\% & 80\% & 90\% & 100\% & \multicolumn1{c|}{}\\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 6,054 & 5,039 & 3,881 & 3,208 & 2,109 & \multicolumn1{c|}{}\\
+  						\hline
+  						\caption{Ermittelter Schwellwerttunnel für Indikator Zu Komplex}
   					\end{longtabu}   
   				\end{center}
   			\subsection{Indikator Objektplacebo}
   				Klasse: "`Minor"' \newline
-  				Entspricht der SonarQube-Regel "`"static" members should be accessed statically"' und ist in seiner Bedeutung identisch zum Original.\begin{center}
+  				Entspricht der SonarQube-Regel "`"static" members should be accessed statically"' und ist in seiner Bedeutung identisch zum Original.
+  				\begin{center}
 					\tabulinesep=1.5mm
-					\begin{longtabu}{|c|c||c|c||c|c||c|c|}
+					\begin{longtabu}{c|c|c|c}
 						\hline
-  						\textbf{Besser als} & \textbf{Häufigkeit je 1000 LOC} & 20\% & 0,000 & 50\% & 0,000 & 80\% & 0,000 \\
-  						\hline 
-						0\% & 6,366 & 30\% & 0,000 & 60\% & 0,000 & 90\% & 0,000 \\
-  						\hline 
-						10\% & 0,277 & 40\% & 0,000 & 70\% & 0,000 & 100\% & 0,000 \\						
-						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 0\% & 10\% & \multicolumn1{c|}{20\% - 100\%} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 6,366 & 0,277 & \multicolumn1{c|}{0,000} \\
+  						\hline
   						\caption{Ermittelter Schwellwerttunnel für Indikator Objektplacebo}
   					\end{longtabu}   
   				\end{center}
@@ -1292,14 +1323,12 @@ Projekte im Softwarepraktikum}
   				Entspricht der SonarQube-Regel "`Objects should be compared with equals()"' und hat im Original-Index keine Entsprechung.
   				\begin{center}
 					\tabulinesep=1.5mm
-					\begin{longtabu}{|c|c||c|c||c|c||c|c|}
+					\begin{longtabu}{c|c|c|c|c|c|c|c}
 						\hline
-  						\textbf{Besser als} & \textbf{Häufigkeit je 1000 LOC} & 20\% & 1,248 & 50\% & 0,216 & 80\% & 0,000 \\
-  						\hline 
-						0\% & 4,970 & 30\% & 0,777 & 60\% & 0,000 & 90\% & 0,000 \\
-  						\hline 
-						10\% & 2,673 & 40\% & 0,503 & 70\% & 0,000 & 100\% & 0,000 \\						
-						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 0\% & 10\% & 20\% & 30\% & 40\% & 50\% & \multicolumn1{c|}{60\% - 100\%} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 4,970 & 2,673 & 1,248 & 0,777 & 0,503 & 0,216 & \multicolumn1{c|}{0,000} \\
+  						\hline
   						\caption{Ermittelter Schwellwerttunnel für Indikator Objektvergleich}
   					\end{longtabu}   
   				\end{center}
@@ -1308,14 +1337,12 @@ Projekte im Softwarepraktikum}
   				Enthält die beiden SonarQube-Regeln "`switch statements should end with default clauses"' und "`Switch cases should end with an unconditional break statement"'. Damit werden zwei drittel des Original-Indikators abgedeckt.
   				\begin{center}
 					\tabulinesep=1.5mm
-					\begin{longtabu}{|c|c||c|c||c|c||c|c|}
+					\begin{longtabu}{c|c|c|c|c|c}
 						\hline
-  						\textbf{Besser als} & \textbf{Häufigkeit je 1000 LOC} & 20\% & 0,433 & 50\% & 0,000 & 80\% & 0,000 \\
-  						\hline 
-						0\% & 6,609 & 30\% & 0,182 & 60\% & 0,000 & 90\% & 0,000 \\
-  						\hline 
-						10\% & 0,948 & 40\% & 0,000 & 70\% & 0,000 & 100\% & 0,000 \\				
-						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 0\% & 10\% & 20\% & 30\% & \multicolumn1{c|}{40\% - 100\%} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 6,609 & 0,948 & 0,433 & 0,182 & \multicolumn1{c|}{0,000} \\
+  						\hline
   						\caption{Ermittelter Schwellwerttunnel für Indikator Risikocode}
   					\end{longtabu}   
   				\end{center}
@@ -1324,14 +1351,12 @@ Projekte im Softwarepraktikum}
   				Enthält die beiden SonarQube-Regeln "`Useless imports should be removed"' und "`Wildcard imports should not be used"'. Damit stellt dieser Indikator eine Mischung, aber nicht vollständige Abdeckung der Original-Indikatoren "`Importlüge"' und "`Importchaos"' dar.
   				\begin{center}
 					\tabulinesep=1.5mm
-					\begin{longtabu}{|c|c||c|c||c|c||c|c|}
+					\begin{longtabu}{c|c|c|c|c|c|c|c|c|c}
 						\hline
-  						\textbf{Besser als} & \textbf{Häufigkeit je 1000 LOC} & 20\% & 13,312 & 50\% & 3,559 & 80\% & 0,000 \\
-  						\hline 
-						0\% & 40,994 & 30\% & 9,169 & 60\% & 1,593 & 90\% & 0,000 \\
-  						\hline 
-						10\% & 20,185 & 40\% & 4,853 & 70\% & 0,665 & 100\% & 0,000 \\
-						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 0\% & 10\% & 20\% & 30\% & 40\% & 50\% & 60\% & 70\% &\multicolumn1{c|}{80\% - 100\%} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 40,994 & 20,185 & 13,312 & 9,169 & 4,853 & 3,559 & 1,593 & 0,665 & \multicolumn1{c|}{0,000} \\
+  						\hline
   						\caption{Ermittelter Schwellwerttunnel für Indikator Importfehler}
   					\end{longtabu}   
   				\end{center}
@@ -1340,14 +1365,18 @@ Projekte im Softwarepraktikum}
 				Enthält die Forderungen nach expliziter Deklaration der Sichtbarkeit, Deklaration so spät wie möglich und nur einer Variablendeklaration pro Anweisung. Es gibt keine Entsprechung im Original-Index.
 				\begin{center}
 					\tabulinesep=1.5mm
-					\begin{longtabu}{|c|c||c|c||c|c||c|c|}
+					\begin{longtabu}{c|c|c|c|c|c}
 						\hline
-  						\textbf{Besser als} & \textbf{Häufigkeit je 1000 LOC} & 20\% & 4,812 & 50\% & 2,494 & 80\% & 1,038 \\
-  						\hline 
-						0\% & 15,164 & 30\% & 3,924 & 60\% & 1,783 & 90\% & 0,000 \\
-  						\hline 
-						10\% & 8,603 & 40\% & 3,029 & 70\% & 1,386 & 100\% & 0,000 \\	
-						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 0\% & 10\% & 20\% & 30\% & \multicolumn1{c|}{40\%} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 15,164 & 8,603 & 4,812 & 3,924 & \multicolumn1{c|}{3,029} \\
+  						\hline
+  						\multicolumn{6}{c}{} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 50\% & 60\% & 70\% & 80\% & \multicolumn1{c|}{90\% - 100\%}\\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 2,494 & 1,783 & 1,386 & 1,038 & \multicolumn1{c|}{0,000}\\
+  						\hline
   						\caption{Ermittelter Schwellwerttunnel für Indikator Deklarationsfehler}
   					\end{longtabu}   
   				\end{center}
@@ -1356,14 +1385,18 @@ Projekte im Softwarepraktikum}
 				Enthält alle SonarQube-Regeln die das entfernen von ungenutzten Code-Elementen fordern und schließt damit die Original-Indikatoren "`Tote Attribute"', "`Tote Implementierung"' und "`Tote Methoden"' mit ein.
 				\begin{center}
 					\tabulinesep=1.5mm
-					\begin{longtabu}{|c|c||c|c||c|c||c|c|}
+					\begin{longtabu}{c|c|c|c|c|c|c}
 						\hline
-  						\textbf{Besser als} & \textbf{Häufigkeit je 1000 LOC} & 20\% & 7,560 & 50\% & 3,427 & 80\% & 1,262 \\
-  						\hline 
-						0\% & 36,247 & 30\% & 5,810 & 60\% & 2,941 & 90\% & 0,499 \\
-  						\hline 
-						10\% & 8,897 & 40\% & 3,978 & 70\% & 2,495 & 100\% & 0,178 \\	
-						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 0\% & 10\% & 20\% & 30\% & 40\% & \multicolumn1{c|}{50\%} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 36,247 & 8,897 & 7,560 & 5,810 & 3,978 & \multicolumn1{c|}{3,427} \\
+  						\hline
+  						\multicolumn{7}{c}{} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 60\% & 70\% & 80\% & 90\% & 100\% & \multicolumn1{c|}{}\\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 2,941 & 2,495 & 1,262 & 0,499 & 0,178 & \multicolumn1{c|}{}\\
+  						\hline
   						\caption{Ermittelter Schwellwerttunnel für Indikator Toter Code}
   					\end{longtabu}   
   				\end{center}
@@ -1372,14 +1405,18 @@ Projekte im Softwarepraktikum}
 				Enthält neben der Forderung des Original-Indikators "`TODO"'-Tags zu entfernen zusätzlich die SonarQube-Regel "`Sections of code should not be commented out"'.
 				\begin{center}
 					\tabulinesep=1.5mm
-					\begin{longtabu}{|c|c||c|c||c|c||c|c|}
+					\begin{longtabu}{c|c|c|c|c|c|c}
 						\hline
-  						\textbf{Besser als} & \textbf{Häufigkeit je 1000 LOC} & 20\% & 10,456 & 50\% & 4,701 & 80\% & 1,386 \\
-  						\hline 
-						0\% & 62,675 & 30\% & 6,581 & 60\% & 2,900 & 90\% & 0,527 \\
-  						\hline 
-						10\% & 18,413 & 40\% & 5,992 & 70\% & 1,841 & 100\% & 0,000 \\	
-						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 0\% & 10\% & 20\% & 30\% & 40\% & \multicolumn1{c|}{50\%} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 62,675 & 18,413 & 10,456 & 6,581 & 5,992 & \multicolumn1{c|}{4,701} \\
+  						\hline
+  						\multicolumn{7}{c}{} \\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Besser als}} & 60\% & 70\% & 80\% & 90\% & 100\% & \multicolumn1{c|}{}\\
+  						\hline
+  						\multicolumn1{|l|}{\textbf{Häufigkeit}} & 2,900 & 1,841 & 1,386 & 0,527 & 0,000 & \multicolumn1{c|}{}\\
+  						\hline
   						\caption{Ermittelter Schwellwerttunnel für Indikator Unfertiger Code}
   					\end{longtabu}   
   				\end{center}			
@@ -1404,7 +1441,7 @@ Projekte im Softwarepraktikum}
 			\end{lstlisting} 
 			Hierbei handelt es sich um die Regel, dass keine "`Magic Numbers"' verwendet werden sollen. Die Einstufung ist als "`Blocker"' definiert und als zusätzliche Konfigurationsparameter sind die Ausnahmen -1, 0 und 1 angegeben. \newline
 			Auch wenn die Regelwerkdefinition keinen direkten Zusammenhang zum PlugIn besitzt ist die Verwendung dieses Regelwerks Grundvoraussetzung für die korrekte Funktionsweise einiger Bestandteile. Der umgesetzte Code-Quality-Index bezieht sich konkret auf diese Regeln und prüft vor der Berechnung ob das richtige Regelwerk aktiv ist. Andernfalls wird die Berechnung abgebrochen. Die Messung der Code-Merkmale und die Berechnung der Metriken nach Sneed bleibt auch mit einem anderen Regelwerk funktionsfähig, führt allerdings zu abweichenden Ergebnissen, da sich einige Metriken auch auf die Zahl der Regelverletzungen beziehen. Das Regelwerk ist daher als fester Bestandteil des PlugIns zu betrachten.
-		\section{Ersatz des Eigenbau-Parsers durch ExtendJ}
+		\section{Ersatz des Eigenbau-Parsers durch ExtendJ} \label{extendjeinbau}
 			Der mit Abstand größte Teil des im vorangegangenen Großen Beleg entstandenen SonarQube-PlugIns ist der Parser, der den zu vermessenden Code in ein hierarchisches Modell überführt in dem alle benötigten Messwerte ermittelt werden können. Da dies als Eigenbau realisiert wurde ist es zugleich auch die größte Schwäche des Systems. 
 			\begin{itemize}
 				\item Der Eigenbau-Parser ist aufgrund der zeitlichen Begrenzung einer solchen Arbeit unvollständig. Java bietet eine derartige Vielzahl von Code-Konstrukten, dass es unmöglich war alle Abzudecken. Bei Verwendung nicht bedachter Konstrukte durch die Studenten ist daher eine Vermessung unmöglich.
@@ -1427,13 +1464,13 @@ LocalClassDeclStmt contributes ("SomeLocalClass") to
 		\section{Überarbeitung der Metrik-Berechnung}
 			Im Vergleich zur Messwertermittlung ist die Metrikberechnung relativ trivial. Es werden innerhalb eines SonarQube-Decorators die benötigten Messwerte eingesammelt, in die entsprechenden Formeln eingesetzt und das Metrikergebnis als neue Metrik in der SonarQube-Datenbank abgelegt. Hier wurde daher nur ein allgemeines Refactoring vorgenommen um die Wartbarkeit des PlugIns zu verbessern mit Blick auf die Möglichkeit, dass in späteren Arbeiten am Lehrstuhl weitere oder angepasste Metriken umgesetzt werden sollten.
 		\section{Einbau des Code-Quality-Index}
-			Die ursprüngliche Idee, den Index mittels der in der SonarQube-Web-Oberfläche definierbaren Quality-Gates abzubilden lies sich leider nicht umsetzen. Die Quality-Gates bieten zwar die Möglichkeit die Projekte hinsichtlich eines Maximalwertes für die Verletzung von Regeln der verschiedenen Stufen separat zu überprüfen \cite{QualityGates}, allerdings ist die Umsetzung des Indexes damit trotzdem nicht sinnvoll:
+			Die ursprüngliche Idee, den Index mittels der in der SonarQube-Web-Oberfläche definierbaren Quality-Gates abzubilden, ließ sich leider nicht umsetzen. Die Quality-Gates bieten zwar die Möglichkeit die Projekte hinsichtlich eines Maximalwertes für die Verletzung von Regeln der verschiedenen Stufen separat zu überprüfen \cite{QualityGates}, allerdings ist die Umsetzung des Indexes damit trotzdem nicht sinnvoll:
 			\begin{itemize}
 				\item Die Grenzwerte müssten fest angegeben werden und können nicht dynamisch aus einer Datenbasis generiert oder übernommen werden. Damit müsste die ermittelte Datenbasis manuell übertragen, und für die folgenden Jahre auch manuell angepasst werden.
-				\item Ein Projekt lässt sich nur hinsichtlich eines Quality-Gates vermessen. Es müsste also pro Benchmark-Level jedes Projekt mit dem dazu passenden Quality-Gate vermessen werden um die erreichte Stufe manuell daraus abzuleiten.
+				\item Ein Projekt lässt sich nur hinsichtlich eines Quality-Gates vermessen. Es müsste also pro Benchmark-Level jedes Projekt mit dem dazu passenden Quality-Gate vermessen werden, um die erreichte Stufe manuell daraus abzuleiten.
 			\end{itemize}
 			Beide Umstände führen zu einer deutlichen Reduktion der angestrebten Automatisierung, sodass von dieser Idee abgerückt wurde und eine Umsetzung innerhalb des zu erweiternden Plugins erfolgte. Dafür wurde eine weitere Implementierung der SonarQube-Schnittstelle "`Decorator"' genutzt, in der Zugriff auf die ermittelten Fehlerzahlen besteht. \newline
-			Da die Ermittlung des Indexes im Vergleich zu den zuvor vermessenen Projekten, also der Datenbasis erfolgt wurde zusätzlich zur von SonarQube genutzten Datenbank ein weiteres Datenbankschema angelegt, in dem die gemessenen Regelverletzungen nach Indikator gruppiert und mittels Netto-Code-Zeilen normiert abgelegt werden. Da es um eine konstante Bewertung der Gruppen im Verlaufe des Softwarepraktikums zu gewährleisten sinnvoll erscheint die Datenbasis konstant zu halten kann das Plugin bezüglich des Code-Quality-Index in zwei Modi betrieben werden. 
+			Da die Ermittlung des Indexes im Vergleich zu den zuvor vermessenen Projekten, also der Datenbasis erfolgt, wurde zusätzlich zur von SonarQube genutzten Datenbank ein weiteres Datenbankschema angelegt, in dem die gemessenen Regelverletzungen nach Indikator gruppiert und mittels Netto-Code-Zeilen normiert abgelegt werden. Da es, um eine konstante Bewertung der Gruppen im Verlaufe des Softwarepraktikums zu gewährleisten, sinnvoll erscheint, die Datenbasis konstant zu halten, kann das Plugin bezüglich des Code-Quality-Index in zwei Modi betrieben werden. 
 			\begin{itemize}
 				\item Im Verlaufe des Praktikums wird lediglich die Einstufung der vermessenen Programme gegen die konstante Datenbasis vorgenommen. Es werden keine Messwerte in der Datenbank abgelegt, sodass die Schwellwerte sich mit besser oder schlechter werdenden Programmen nicht verschieben.
 				\item Nach Abschluss eines Praktikumsjahrgangs sollten alle fertiggestellten Programme im zweiten Modus erneut vermessen werden, in dem statt der Einstufung des Programms eine Ablage der gemessenen Regelverletzungen in der Datenbasis und eine Neuberechnung der Schwellwerte erfolgt. Diese ergänzte Datenbasis soll dann der Vergleichswert für den kommenden Jahrgang sein und muss gegebenenfalls durch eine Anpassung der Benchmark-Level-Grenzen ergänzt werden, um eine sinnvolle Einstufung der Programme zu erhalten.	
@@ -1445,37 +1482,361 @@ LocalClassDeclStmt contributes ("SomeLocalClass") to
   			\begin{labeling}{\textbf{Messwerte}}
 				\item [\textbf{Übersicht}] Als eigentliches Werkzeug zur Beurteilung der Programme durch die Tutoren soll ein "`Übersichts-Widget"' dienen. Hier sollen die Endergebnisse der Berechnungen ihren Platz finden. Im Einzelnen also die Durchschnittliche Qualität und Komplexität nach Sneed, die Größenbeurteilung in "`Object-Points"', sowie der erreichte "`Benchmark-Level"' des Code-Quality-Index.
 				\item [\textbf{Metriken}] Um nach Schwächen in einzelnen Aspekten der Programme zu suchen sollen alle Einzelmetriken zur Beurteilung der Qualität und Komplexität in einem separaten Widget dargestellt werden.
-				\item [\textbf{Messwerte}] Falls bei den Metriken Extremwerte entstehen sollen zur Fahndung nach den Ursachen auch sämtliche vom Parser ermittelten Messwerte als einfache Liste in einem Widget zur Anzeige kommen.
-				\item [\textbf{Index}] Um den ermittelten Benchmark-Level nach Code-Quality-Index nachhvollziehbar zu machen sollen auch die Einstufungen gemäß der einzelnen Indikatoren angezeigt werden, sodass die Verletzungen von Programmierregeln identifiziert werden können, die eine bessere Bewertung verhindern
+				\item [\textbf{Messwerte}] Falls bei den Metriken Extremwerte entstehen, sollen zur Fahndung nach den Ursachen auch sämtliche vom Parser ermittelten Messwerte als einfache Liste in einem Widget zur Anzeige kommen.
+				\item [\textbf{Index}] Um den ermittelten Benchmark-Level nach Code-Quality-Index nachhvollziehbar zu machen, sollen auch die Einstufungen gemäß der einzelnen Indikatoren angezeigt werden, sodass die Verletzungen von Programmierregeln identifiziert werden können, die eine bessere Bewertung verhindern
 			\end{labeling}
   			Aufgrund der Ergebnisse der Analyse wurde auf eine tatsächliche Umsetzung dieses Konzepts allerdings verzichtet (siehe Kapitel~\ref{Analyseergebnis}).
   	\chapter{Die Vermessung}
-  		\section{Das Messsystem}
-  			ToDo: Lokale SQ-Installation mit plugin und scanner und Mysql-DB, Batch-scripte für schnellere durchführung. lokale Kopie der SWP-Projekte / mvn anpassung für Testabdeckung, build, scan / sq-properties
+  		\section{Vorbereitung}
+  			Nach Abschluss der Erweiterung und Überarbeitung des PlugIns, mit Ausnahme der Widgets zur Darstellung in der SonarQube-Weboberfläche, galt es möglichst viele abgeschlossene Softwarepraktikumsprojekte mit dem entstandenen System zu vermessen und die Daten für die anschließende Analyse aufzubereiten. Zu diesem Zweck wurden sämtliche Git-Repositories der letzten zwei Jahrgänge auf ein lokales Testsystem kopiert. Vorab wurden in Absprache mit dem Lehrstuhl allerdings einige Gruppen aussortiert um die Ergebnisse möglichst homogen und damit vergleichbar zu machen. Dies betraf zum Einen alle Gruppen die "`externe"' Projekte durchgeführt haben, da bei diesen Gruppen nicht zwangsläufig mit dem Salespoint-Framework gearbeitet wird und zum Teil auch andere Programmiersprachen verwendet werden, sodass eine gleichartige Vermessung nicht möglich ist. Zum Zweiten wurden alle Gruppen aus der Messung ausgeschlossen, die das Softwarepraktikum nicht abgeschlossen haben, da bei diesen Gruppen zumeist kein vermessbares Programm erstellt wurde, sondern der Abbruch bereits zuvor stattfand. Damit verblieben 32 Programme aus dem Wintersemester 2015 und 27 aus dem Wintersemester 2016 zur Vermessung übrig. Im Verlauf der Vermessung konnte Aufgrund der in Kapitel~\ref{extendjeinbau} genannten Fehler in JastAdd allerdings für weitere elf Gruppen keine Messwerte ermittelt werden, sodass sich sämtliche Aussagen der Analyse für die Metriken nach Sneed auf 48 vollständig vermessene Projekte beziehen wohingegen der Code-Quality-Index, da unabhängig vom PlugIn-Parser, für 59 Programme erstellt wurde. \newline
+  			Um die Programme vermessen zu können wurde für alle der Maven-Build insofern angepasst, dass beim lokalen bauen die Testabdeckung durch "`JaCoCo"' ermittelt wird. Nach Durchführung des Builds war außerdem das Einfügen einer SonarQube-Properties-Datei notwendig die neben allgemeinen Angaben für SonarQube auch Konfigurationen für das erstellte PlugIn enthalten. Dazu zählen die Login-Informationen für die erstellten Datenbankschemata, die Angabe dass der Datensammmler aktiv werden soll, der Modus für den Code-Quality-Index und einige Angaben für die Erstellung einer separaten Log-Datei. \newline
+  			Zur Vermessung der so vorbereiteten studentischen Programme wurde eine lokale SonarQube-Installation in Version 5.1.2 verwendet. Die Wahl der Version liegt darin begründet, dass diese Version am Lehrstuhl verwendet wird. Langfristig wäre allerdings zu einer aktuelleren Version zu raten, da bereits mit der Veröffentlichung 5.2 grundlegende Änderungen und Verbesserungen eingeführt wurden. Insbesondere die Schnittstellen für die PlugIn-Entwicklung wurden dabei angepasst, sodass das im Rahmen dieser Arbeit entstandene PlugIn in diesem Fall entsprechend überarbeitet werden müsste \cite{APIChanges}. \newline
+  			Zum Scannen der Programme wurde, da die Vermessung lokal durchgeführt wurde, der Sonar-Qube-Scanner in Version 2.6.1 verwendet. Neben dem entwickelten PlugIn war für die Vermessung zusätzlich das Sonar-Java-PlugIn 3.7.1 notwendig, dass in der Lehrstuhlinstallation ebenfalls installiert ist und die auswählbaren Programmierregeln zur Verfügung stellt. Für SonarQube wurde eine MySQL-Datenbank (Community-Version 5.5) konfiguriert die außerdem die Schemata für den Code-Quality-Index und den Datensammler enthält. \newline
+  		\section{Durchführung} \label{messungchapter}
+  			Die Gesamte Vermessung wurde auf einem Windows 7 Desktopsystem mit 32 GB Arbeitsspeicher durchgeführt. Die Messung selbst wurde wie auch schon die Aufbereitung der der studentischen Programme über Batch-Skripte teilautomatisch durchgeführt, und nahm sobald alle Fehler behoben waren zwei mal ungefähr eine Stunde Rechenzeit in Anspruch. Die zweifache Durchführung liegt darin begründet, dass für den Code-Quality-Index zunächst die Datenbasis aufgebaut werden musste, um im zweiten Lauf den Benchmark-Level anhand dieser Referenzdaten zu bestimmen. \newline
+  			Als Ergebnis der Vermessung lagen folgende Datenreihen in den angelegten Datenbankschemata vor:
+  			\begin{itemize}
+  				\item Für alle 59 vermessenen Programme die Einstufung gemäß des angepassten Code-Quality-Index.
+  				\item Für 48 Programme jeweils 34 vom ExtendJ-Parser und SonarQube selbst extrahierte Messwerte wie beispielsweise die Anzahl deklarierter Methoden und Variablen oder die Anzahl verwendeter If-Anweisungen. Die vollständige Liste ist in Tabelle~\ref{messwerte} aufgeführt.
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|p{0.23\textwidth}|c|p{0.63\textwidth}|}
+						\hline
+  						\textbf{Messwert} & \textbf{ID} & \textbf{Beschreibung} \\
+  						\hline
+    					Branches & BRA & Zweige im Programmfluss\\
+    					\hline
+    					Classes & CLA & Deklarierte Klassen\\
+    					\hline
+    					Data-Types & DTY & Verwendete Datentypen\\
+    					\hline
+    					Foreign-Method-Calls & FMC & Aufrufe von Nicht-Standard-Java-Methoden die nicht im Programm deklariert sind (Drittbibliotheken / Framework)\\
+    					\hline
+    					Global-Variables & GVA & Deklarierte Instanzvariablen ("`Fields"')\\
+    					\hline
+    					IF-Statements & IFS & If- und Try-Anweisungen\\
+    					\hline
+    					Imports & IMP & Import- und Package-Anweisungen\\
+    					\hline
+    					Interfaces & INT & Deklarierte Interfaces\\
+    					\hline
+    					Loop-Statements & LOS & Schleifen (For / While / Do-While)\\
+    					\hline
+    					Method-Calls & MEC & Methodenaufrufe\\
+    					\hline
+    					Method-Parameters & MPA & Parameter in Methodendeklaration\\
+    					\hline
+    					Non-Predicate-Refs. & NPR & Variablenreferenzen die nicht Prädikat sind (siehe PRE)\\
+    					\hline
+    					Numeric-Literals & NUL & Numerische Literale außer -1 / 0 / 1 ("`Magic Numbers"')\\
+    					\hline
+    					Predicates & PRE & Variablenreferenzen in Bedingungen von If-, Switch-, For- und While-Anweisungen\\
+    					\hline
+    					Private-Methods & PRM & Als "`private"' deklarierte Methoden\\
+    					\hline
+    					Public-Methods & PUM & Nicht als "`private"' deklarierte Methoden\\
+    					\hline
+    					Return-Statements & RES & Return-Anweisungen\\
+    					\hline
+    					Reusable-Methods & RUM & Methoden die keinen Fremdmethodenaufruf enthalten und damit besonders gut wiederverwendbar sind\\
+    					\hline
+    					Source-Files & SOF & Java-Quelldateien im Programm\\
+    					\hline
+    					Statements & STA & Anweisungen (gemäß ExtendJ-Definition \cite{ExtendJDoku})\\
+    					\hline
+    					String-Literals & STL & String-Literale, also Text im Code\\
+    					\hline
+    					Statement-Types & STY & Anweisungstypen gemäß ExtendJ-Definition \cite{ExtendJDoku}, wobei alle "`Expression-Statements"' als eigener Typ gezählt werden\\
+    					\hline
+    					Switch-Cases & SWC & "`Cases"' in Switch-Anweisungen inklusive "`Default-Case"'\\
+    					\hline
+    					Switch-Statements & SWS & Switch-Anweisungen\\
+    					\hline
+    					Variables & VAR & Variablendeklarationen\\
+    					\hline
+    					Variable-References & VRE & Variablen-Referenzen (-Verwendungen)\\
+    					\hline
+    					Vulnerable-Stmts. & VUS & Unsichere Anweisungen (doppelte Konstruktoren, "`Casts"', Nicht finale erbende Klassen, "`public"' Instanzvariablen)\\
+    					\hline
+    					Netto-Lines-Of-Code & LOC & Netto-Code-Zeilen (ohne Kommentare und Leerzeilen)\\
+    					\hline
+    					Blocker-Violations & BLV & Verletzungen von "`Blocker"'-Regeln\\
+    					\hline
+    					Critical-Violations & CRV & Verletzungen von "`Critical"'-Regeln\\
+    					\hline
+    					Major-Violations & MAV & Verletzungen von "`Major"'-Regeln\\
+    					\hline
+    					Minor-Violations & MIV & Verletzungen von "`Minor"'-Regeln\\
+    					\hline
+    					Info-Violations & INV & Verletzungen von "`Info"'-Regeln\\
+    					\hline
+    					Optimal-Module-Size & OMS & Optimale Modulgröße: konstante Größe = 200\\
+    					\hline
+    					\caption{Übersicht der vom PlugIn und SonarQube ermittelten Messwerte, die für die Berechnung der Metriken und die Analyse verwendet wurden}
+						\label{messwerte} \\
+  					\end{longtabu}  
+  				\end{center}
+  				\item Ebenfalls für 48 Programme, die aus den Messwerten errechneten 17 Metriken nach Sneed \cite{SoftAuditDoku}. Darunter jeweils sieben Komplexitäts- und Qualitätsmetriken sowie die entsprechenden Durchschnittswerte und die Object-Points als Quantitäsmetrik (siehe Tabelle~\ref{metriken}). 
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|p{0.18\textwidth}|c|p{0.68\textwidth}|}
+						\hline
+  						\textbf{Metrik} & \textbf{ID} & \textbf{Berechnung} \\
+  						\hline
+    					Language-Complexity & LCO & $(\dfrac{STY}{STA} + \dfrac{DTY}{VAR + NUL}) * 0,5$\\
+    					\hline
+    					Branching-Complexity & BRC & $\dfrac{(FMC * 2) + (RES * 2) + (MEC - FMC)}{STA * 2}$\\
+    					\hline
+    					Conditional-Complexity & COC & $\dfrac{IFS + SWS + SWC + LOS + 1}{PUM * 4}$\\
+    					\hline
+    					Control-Flow-Complexity & CFC & $\dfrac{BRA - (IFS + SWS + LOS + RES)}{BRA}$\\
+    					\hline
+    					Interface-Complexity & ICO & $\dfrac{FMC}{MEC}$\\
+    					\hline
+    					Data-Flow-Complexity & DFC & $1 - \dfrac{VAR * 2}{VRE}$\\
+    					\hline
+    					Data-Complexity & DCO & $\dfrac{(PRE * 2) + (NPR * 1,25) + (MPA * 0,5)}{STA + VRE}$\\
+    					\hline
+    					Average-Complexity & ACO & $\dfrac{LCO + BRC + COC + CFC + ICO + DFC + DCO}{7}$\\
+  						\hline
+    					Conformity & CON & $1 - \dfrac{(BLV * 2) + (CRV * 1,5) + MAV + (MIV * 0,5)}{STA}$\\
+    					\hline
+    					Flexibility & FLE & $1 - \dfrac{STL + NUL}{STA}$\\
+    					\hline
+    					Security & SEC & $\dfrac{STA - VUS}{1,2 * STA}$\\
+    					\hline
+    					Reusability & REU & $\dfrac{RUM}{PUM}$\\
+    					\hline
+    					Testability & TST & $((1 - \dfrac{BRA * 2}{STA}) + (1 - \dfrac{PRE * 2}{VRE})) * 0,5$\\
+    					\hline
+    					Modularity & MOD & $\dfrac{1 + \dfrac{(CLA * 4) + (PUM * 2)}{(IMP * 4) + GVA} - \dfrac{FMC}{MEC + PUM} + \dfrac{STA}{SOF * OMS}}{3}$\\
+    					\hline
+    					Maintainability & MAI & $\dfrac{(1 - ACO) + \dfrac{CON + FLE + SEC + REU + TST + MOD}{6}}{2}$\\
+    					\hline
+    					Average-Quality & AQU & $\dfrac{CON + FLE + SEC + REU + TST + MOD + MAI}{7}$\\
+    					\hline
+    					Object-Points & OBP & $(CLA * 4) + (PUM * 3) + (INT * 2) + GVA$\\
+    					\hline
+    					\caption{Übersicht der vom PlugIn berechneten Metriken, deren Validitätsprüfung Hauptgegenstand der Analyse ist}
+						\label{metriken} \\
+  					\end{longtabu}  
+  				\end{center}
+  			\end{itemize}
+  			Abschließend wurden die Daten über CSV-Export der Datenbank und anschließenden CSV-Import in eine Excel-Tabelle überführt in der die Analyse durchgeführt wurde. Auf eine Auflistung der erhaltenen Daten sei hier aufgrund der Menge an Daten, und damit verbundenen Unübersichtlichkeit der resultierenden Tabelle verzichtet.
   		\section{Vergleichswerte für die Analyse}
-  			ToDo: Tutorenbewertung + Selbsteinschätzung, Excel-Tapete, in Frage stellen der Konsistenz und "korrekten" Bewertung
-  		\section{Aufbereitung der Messwerte}
-  			ToDo: die Excel-Tapete csv-export aus db -> import in excel
-  		
+  			Um die Aussagekraft der gemessenen Größen und berechneten Metriken hinsichtlich der Code-Qualität zu validieren wird eine Vergleichsgröße benötigt, mit der die ermittelten Werte verglichen werden. Da dafür keine objektive Beurteilung in Form einer Kennzahl existiert kann dafür nur die zwangsläufig subjektive Beurteilung der Gruppenarbeit verwendet werden. Beim Softwarepraktikum gibt es dafür zwei Bewertungen die in Frage kommen. Zum einen die Benotung der Gruppen durch die Tutoren und zum zweiten die Selbsteinschätzung der Teilnehmer, die in Form eines Fragebogens abgegeben wird. Beide Beurteilungen beziehen sich nicht direkt oder nur zum Teil auf die Code-Qualität. Trotzdem sollen möglichst viele der Teilnoten hinsichtlich ihres Zusammenhangs mit den ermittelten Ergebnissen untersucht werden, da die Frage beantwortet werden soll, welche Ergebnisse zur Bewertung welcher Teilaspekte der Programme geeignet ist.
+  			\subsection{Bewertung durch die Tutoren}
+  				Die Bewertung der Gruppen durch die Tutoren erfolgt nach einem vorgegebenem Bewertungsschema, in welches 41 Einzelnoten eingetragen werden, die zum Teil noch durch Mittelwertbildung zusammengefasst werden. Daraus ergeben sich, ebenfalls durch Mittelwertbildung, die Teilnoten für die Anwendung, den Entwicklungsprozess, das Projektmanagement, die Teamarbeit und die Präsentation. Die Gesamtnote ergibt sich als Mittelwert der fünf Teilnoten. Abbildung~\ref{bewertung} zeigt beispielhaft einen Abschnitt einer ausgefüllten Bewertungstabelle aus dem Wintersemester 2015. Die Mittelwerte und Teilnoten sind jeweils markiert. Insgesamt gibt es für jede der Gruppen 52 Noten die den Metrikergebnissen gegenübergestellt werden können. Die darüber hinaus in der Bewertungstabelle vorgenommene Zuordnung zu Meilensteinen (MS), also den Projektphasen, ist für die im Rahmen dieser Arbeit durchzuführende Analyse nicht von Bedeutung. Sämtliche Noten der Gruppen, deren Programm vermessenen wurde, wurden für die Analyse der Zusammenhänge in die Excel-Tabelle mit den Messwerten und Metrikberechnungen eingefügt.
+  				\begin{figure} [h]
+					\centering
+					\includegraphics [width=\textwidth] {bewertung.png}
+					\caption{Abschnitt der Bewertungstabelle für die Softwarepraktikumsgruppen}
+					\label{bewertung}
+				\end{figure}
+  			\subsection{Selbsteinschätzung der Gruppen}
+  				Die Selbsteinschätzung der Gruppen liegt in Form ausgefüllter Fragebögen vor, die die Gruppen nach erfolgreichem Abschluss des Softwarepraktikums ausfüllen. Im Gegensatz zu den Teilnoten der Tutorenbewertung sind hierbei allerdings nicht alle Angaben zur Verwendung in der angestrebten Analyse geeignet. In erster Linie fallen alle textuellen Beurteilungen und Kommentare heraus, da hier keine standardisierte Ermittlung der Zusammenhänge erfolgen kann. Darüber hinaus wurden auch die meisten Ja-Nein-Fragen nicht betrachtet, da diese keine aufschlussreichen Ergebnisse erwarten lassen und die zu analysierenden Daten nur unnötig erweitern würden. In Tabelle~\ref{survey} sind die ausgewählten Fragen aus den Fragebögen und die Art der jeweiligen Daten aufgelistet. Die textuell beschriebenen Skalen bei einem Teil der Fragen wurden in einfache numerische Skalen übertragen. Durch die vorgenommenen Einschränkungen wurden lediglich weitere 13 Vergleichsdatenreihen der Excel-Tabelle hinzugefügt.
+  				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|p{0.4\textwidth}|p{0.5\textwidth}|}
+						\hline
+  						\textbf{Fragestellung} & \textbf{Datenbereich} \\
+  						\hline
+    					Anteil des Einarbeitungsaufwands am Gesamtaufwand & 0 bis 100 Prozent\\
+    					\hline
+    					Durchschnittlicher Arbeitsaufwand pro Woche und Student & Numerisch, in Stunden\\
+    					\hline
+    					Gleichverteilung des Aufwands & Ja (1) / Nein (0)\\
+    					\hline
+    					Bewertung Praktikumsergebnisses & "`Gerade so erfüllt"' (1) bis "`Übererfüllt"' (5)\\
+    					\hline
+    					Qualität der Analyse & "`Gerade so erfüllt"' (1) bis "`Übererfüllt"' (5)\\
+    					\hline
+    					Qualität des Entwurfs & "`Gerade so erfüllt"' (1) bis "`Übererfüllt"' (5)\\
+    					\hline
+    					Qualität von Implementation und Test & "`Gerade so erfüllt"' (1) bis "`Übererfüllt"' (5)\\
+    					\hline
+    					Qualität der Dokumentation & "`Gerade so erfüllt"' (1) bis "`Übererfüllt"' (5)\\
+    					\hline
+    					Anwendung der CRC-Methode & Hilfreich (1) / Nicht Hilfreich (0)\\
+    					\hline
+    					Das SalesPoint-Framework war eine Hile bei der Lösung der Aufgabe & Ja (1) / Nein (0)\\
+    					\hline
+    					Konsistenz zwischen Modellen und Code hergestellt & Gar Nicht (0) bis Sehr Stark (10)\\
+    					\hline
+    					Auf Konsistenz zwischen Modellen und Code geachtet & Gar Nicht (0) bis Sehr Stark (10)\\
+    					\hline
+    					Testfälle aus Modellen abgeleitet & Gar Nicht (0) bis Sehr Stark (10)\\
+    					\hline
+    					\caption{Für die Analyse ausgewählte Fragen der Selbsteinschätzung durch die Praktikumsgruppen. Die Werte in Klammern entsprechen der abgeleiteten numerischen Skala}
+						\label{survey} \\
+  					\end{longtabu}  
+  				\end{center}
+
   	\chapter{Analyse der Messergebnisse}
-  		\section{Das Analysekonzept}
-  			ToDo: Korrelationsermittlung nach Pearson-Formel + Signifikanzermittlung mittels p-Wert
-  		\section{Verwendete Analysewerkzeuge}
-  			ToDo: Excel + Online-Rechner
-  		\section{Durchführung}
-  			ToDo: Korrelation / p-Wert / Identifikation von Signifikanzen / Suche nach Verwendbaren Metriken und Zusammenhängen von interesse
-  		\section{Ergebnisse und Einschränkungen} \label{Analyseergebnis}
-  			ToDo: Conformity is gut, andere Metriken, insbesondere durchschnittswerte nicht aussakekräftig. große Programme sind besser, interessante einzelkorrelationen. Einschränkung tutorenbewertung, Messreihengröße, Parserfehler, nicht auf andere Programme übertragbar 
-  		\section{Zusätzliche Analysen}
-  			ToDo: Häschengruppen + evtl. verschiedene Konfigurationen der Conformity-Metrik in abgespecktem PlugIn
-  		
-  	\chapter{Zusammenfassung und Ausblick}	
-		\section{Erkenntnisse für zukünftige Softwarepraktika}
-			ToDo: Regelwerk schritt in richtige Richtung -> conformity, Meiste Metriken und Index "uninteressant", Teilautomatisierung so nicht durchführbar
+  		Nach erfolgter Vermessung aller zur Verfügung stehender Programme, sowie der Aufbereitung der Messergebnisse und Vergleichswerte in Form einer Excel-Tabelle, galt es nun, die Datenreihen zu Vergleichen und Zusammenhänge zu identifizieren. Im Folgenden soll das Konzept und die Durchführung für diese Analyse kurz vorgestellt werden, bevor auf die abgeleiteten Ergebnisse näher eingegangen wird.
+  		\section{Konzept und Durchführung}
+  			\subsection{Berechnung der Korrelation}
+  				Zusammenhänge zwischen Datenreihen werden üblicherweise mittels der Berechnung des Korrelationskoeffizienten nach Bravais-Pearson ($r$) ermittelt \cite{Korrelation}. Dieser gibt den Grad der linearen Abhängigkeit an. Die Berechnungsvorschrift dazu sieht folgendermaßen aus:
+  				\begin{equation}
+					\Large{r = \dfrac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n}(x_i - \bar{x})^2} * \sqrt{\sum_{i=1}^{n}(y_i - \bar{y})^2}}}
+				\end{equation}
+				Dabei gilt 
+				\begin{itemize}
+					\item $n =$ Anzahl der Elemente je Datenreihe
+					\item $x_1,... ,x_n =$ Die Elemente der ersten Datenreihe
+					\item $y_1,... ,y_n =$ Die Elemente der zweiten Datenreihe
+					\item $\bar{x} = \dfrac{1}{n} * \sum_{i=1}^{n}x^i$ (arithmetisches Mittel der ersten Datenreihe)
+					\item $\bar{y} = \dfrac{1}{n} * \sum_{i=1}^{n}y^i$ (arithmetisches Mittel der zweiten Datenreihe)
+				\end{itemize}
+				Das Resultat der Berechnung ist ein Wert zwischen $-1$ und $1$. Bei $r=0$ gilt, dass die Datenreihen stochastisch unabhängig voneinander sind, es also keinen Zusammenhang gibt. Bei $r=1$ liegt ein positiver linearer Zusammenhang vor und bei $r=-1$ ein negativer linearer Zusammenhang. Die Zusammenhänge werden sichtbar, wenn man die Datenreihen in einem zweidimensionalen Koordinatensystem einträgt (siehe Abbildung~\ref{sample}). \newline
+				\begin{figure} [h]
+					\centering
+					\includegraphics [width=0.7\textwidth] {sample.jpg}
+					\caption{Beispielhafte Darstellung verschiedener Korrelationen im zweidimensionalen Koordinatensystem \cite{WasKorrel}}
+					\label{sample}
+				\end{figure}
+				Die Berechnung der Korrelation übernimmt Excel mit der Formel $KORREL(Matrix1;Matrix2)$ \cite{ExcelKorrel}. Ohne diese automatische Berechnung wäre eine Gegenüberstellung dieser Datenmengen nicht möglich gewesen. Auf diese Art wurden also den 51 Messwerten und Metrikergebnissen 65 Bewertungen und Selbsteinschätzungen für jeweils 48 Gruppen ( $=$ Datenreihengröße $n$) gegenübergestellt und somit 3315 Korrelationskoeffizienten ermittelt. Die Ergebnisse erstrecken sich (unabhängig vom Vorzeichen) von 0,0000128, was sehr nah an stochastischer Zufallsverteilung liegt, bis hin zu 0,5533, was einen Zusammenhang vermuten lässt. Um aus den ermittelten Korrelationskoeffizienten Aussagen abzuleiten sind allerdings weitere Berechnungen notwendig.
+			\subsection{Signifikanzermittlung}
+				Um zu Entscheiden, ob eine ermittelte Korrelation Aussagekräftig ist bietet sich die Berechnung des p-Werts, also der Signifikanz an \cite{Signifikanz}. Dieser gibt an, wie wahrscheinlich eine ermittelte Korrelation zufällig zustande gekommen ist, und hängt von der Größe der Datenreihen ab. Je geringer diese Wahrscheinlichkeit ist, desto signifikanter ist die Korrelation. Üblicherweise werden folgende Signifikanzniveaus verwendet:
+				\begin{itemize}
+					\item Bei $p < 0,05$: signifikantes Ergebnis
+					\item Bei $p < 0,01$: sehr signifikantes Ergebnis
+					\item Bei $p < 0,001$: hoch signifikantes Ergebnis
+				\end{itemize}
+				Zur Berechnung der p-Werte wurde ein Online-Rechner verwendet \cite{PValue}. Für die verwendete Datenreihengröße von 48 Elementen ergeben sich damit folgende Grenzwerte für die ermittelten Korrelationskoeffizienten:
+				\begin{itemize}
+					\item Signifikant bei $r>=0,29$
+					\item Sehr Signifikant bei $r>=0,37$
+					\item Hoch Signifikant bei $r>=0,47$
+				\end{itemize}
+				In der Tabelle mit den ermittelten Korrelationen wurden daher alle Ergebnisse farblich markiert die diese Niveaus überschreiten. Alle anderen Gegenüberstellungen von Bewertung und Metrik werden als nicht zusammenhängend betrachtet. Das Niveau "`Hoch Signifikant"' wurde dabei nur bei zwei Metriken und sechs Messwerten überhaupt erreicht. \newline
+				Die damit entstandene Korrelationstabelle, mit den Markierungen für als signifikant erkannte Einträge, bildet die Grundlage für die Ableitung von Aussagen bezüglich der Aussagekraft von Metriken und der damit verbundenen Verwendbarkeit des entstandenen PlugIns als teilautomatisiertes Bewertungssystem. 
+				\newpage
+  		\section{Ergebnisse} \label{Analyseergebnisse}
+  			\subsection{Durchschnittsmetriken}
+  				Die erste Auffälligkeit besteht darin, dass die ermittelten Durchschnittswerte für Qualität und Komplexität der Programme keine einzige, zumindest sehr signifikante Korrelation zu einer Bewertung aufweisen. Lediglich vereinzelte signifikante Werte bei wenigen Teilnoten und Selbsteinschätzungen treten auf. Auf diese sollte aber Aufgrund der im Endprodukt berechneten Werte keine Rückschlüsse getroffen werden können. Dies sind im einzelnen:
+  				\begin{itemize}
+  					\item Wie sehr wurde auf die Konsistenz der UML-Modelle geachtet?
+  					\item Wie schätzen sie die Qualität des Entwurfs ein?
+  					\item Bewertung Pflichtenheft
+  					\item Bewertung Qualität der UML-Modelle im Entwurf 
+				\end{itemize}  
+				Hinzu kommt, dass der Zusammenhang entgegen der Erwartung verläuft. Je besser die Bewertung beziehungsweise Selbsteinschätzung ausfiel, desto komplexer und qualitativ schlechter wurden die Programme von den Metriken bewertet.	\newline
+				Diese als Endergebnisse der Vermessung und Berechnung geplanten Metriken eignen sich also definitiv nicht zur Bewertung der Gruppen.			  
+  			\subsection{Code-Quality-Index}
+  				Ebenso ungeeignet zur teilautomatisierten Bewertung ist die umgesetzte Variante des Code-Quality-Index. Die einzige, gerade so signifikante Korrelation besteht zur Teilnote "`Erfüllung des Kundenwunsches"' der Projektphase III. Ob das Konzept grundsätzlich falsch ist, die vorgenommenen Anpassungen das Problem sind oder die Auswahl der Regeln für die Indikatoren die Ursache hierfür sind lässt sich aus den durchgeführten Messungen nicht ableiten. Dafür wäre eine variable Umsetzung mit verschiedenen Stellschrauben notwendig, um Vergleichsmessungen diverser Varianten durchzuführen.
+  			\subsection{Zusammenhang zur Bewertung der Code-Qualität}
+  				Aus Sicht der Teilnoten wäre besonders interessant, ob es einige Metriken gibt, die eine hohe Korrelation zur Bewertung der Code-Qualität aufweisen. Allerdings hat sich auch diese Erwartung nicht bestätigt. Lediglich die Qualitätsmetrik "`Conformity"' weißt einen signifikanten Zusammenhang zu dieser Teilnote auf. Die von den Tutoren wahrgenommene Code-Qualität spiegelt sich also im wesentlichen nicht in den von Harry Sneed vorgeschlagenen Metriken wieder. Auch dies bedeutet nicht zwangsläufig, dass die Metriken vom Konzept her ungeeignet sind, um Codequalität zu bewerten. Durch die Adaption in SonarQube, die abweichende Messwerte erzeugt und damit zum Teil auch Anpassungen der Metriken erforderte, wäre es durchaus möglich, dass das Ergebnis lediglich verfälscht wurde. Außerdem besteht die Möglichkeit, dass die Metriken lediglich für den Kontext des Softwarepraktikums ungeeignet sind. Herr Sneed setzt diese Metriken schließlich seit vielen Jahren erfolgreich in seiner Arbeit mit deutlich größeren Projekten in der Wirtschaft ein.
+			\subsection{Konformität}  	
+				Die bezüglich der Bewertung der Code-Qualität signifikant korrelierende Metrik "`Conformity"' ist generell die einzige Metrik die in diesem Kontext, mit dieser Umsetzung gute Ergebnisse erzielt. Die Metrik berechnet sich als, gemäß der Einstufung der Regeln, gewichtete Summe der Regelverletzungen, normiert durch die Anzahl der Anweisungen als Maß für die Größe des Programms (siehe Kapitel~\ref{messungchapter}).	Aufgrund der Masse an 	signifikanten Korrelationen, die zum Teil auch als "`sehr"' oder "`hoch"' signifikant eingestuft werden (siehe Tabelle~\ref{conformitykorrel}), lassen sich einige Erkenntnisse ableiten:
+				\begin{itemize}
+					\item Das zusammengestellte Regelwerk ist zumindest ein Schritt in die richtige Richtung und eignet sich für den Einsatz im Softwarepraktikum. Gruppen die weniger Regelverletzungen im Code haben, gemessen an der Größe des Programms, wurden hinsichtlich des Programms in vielen Teilnoten tendenziell besser bewertet. Dies gilt sogar, obwohl das Regelwerk weder den Gruppen, noch den Tutoren vorlag. 
+					\item Je weniger Regelverletzungen im Programm enthalten sind, desto besser fällt auch die Selbsteinschätzung der Gruppen bezüglich der Qualität von Implementation und Test aus. An dieser stelle stimmen also alle drei Sichten auf die Qualität des Programms tendenziell überein.
+					\item Da auch diverse Teilnoten bezüglich des Entwicklungsprozesses signifikant korrelieren lässt sich darüber hinaus sagen, dass bei denjenigen Gruppen die diese Regeln vermehrt einhalten auch der Test und die Projektphase III tendenziell besser ausfallen.
+					\item Da im Gegensatz zur Metrik die reine Menge der verschiedenen Regelverletzungen deutlich weniger Korrelationen aufweisen, ist die Art der Aggregation sinnvoll gewählt und eine echte Bereicherung zu den Standard-SonarQube-Funktionen.
+				\end{itemize}
+				\begin{center}
+					\tabulinesep=1.5mm
+					\begin{longtabu}{|p{0.5\textwidth}|c|p{0.25\textwidth}|}
+						\hline
+  						\textbf{Bewertungspunkt / Einschätzung} & \textbf{Korrelation} & \textbf{Signifikanzniveau}\\
+  						\hline
+    					Anwendung / Endprodukt & -0,54063517 & hoch signifikant \\
+    					\hline
+						Erfüllung des Pflichtenheftes & -0,326289193 & signifikant \\
+						\hline
+						Musskriterien (OOP II) & -0,314500712 & signifikant \\
+						\hline
+						Komplexität (Funktionsumfang) & -0,472332933 & hoch signifikant \\
+						\hline
+						Zuverlässigkeit (Robustheit, Fehlertoleranz) & -0,417102682 & sehr signifikant \\
+						\hline
+						Wartbarkeit (Qualität der Erfüllung zusätzlicher Kundenwunsch) & -0,369214466 & signifikant \\
+						\hline
+						Codequalität (statische Codeanalyse (Sonarqube)) & -0,354376765 & signifikant \\
+						\hline
+						Qualität javadoc & -0,532658836 & hoch signifikant \\
+						\hline
+						Softwareentwicklungsprozess & -0,38982858 & sehr signifikant \\
+						\hline
+						Wiederverwendung von Frameworks und Klassenbibliotheken & -0,297004078 & signifikant \\
+						\hline
+						Qualität des Testens & -0,457170403 & sehr signifikant \\
+						\hline
+						junit-Tests durch die einzelnen Entwickler & -0,410540573 & sehr signifikant \\
+						\hline
+						Testabdeckung & -0,522114216 & hoch signifikant \\
+						\hline
+						OOP III & -0,385356884 & sehr signifikant \\
+						\hline
+						Stabilisierung der Anwendung & -0,298514637 & signifikant \\
+						\hline
+						Erfüllung des Kundenwunsches & -0,372836725 & sehr signifikant \\
+						\hline
+						AP Diskussion/Reaktion auf Fragen & -0,303573323 & signifikant \\
+						\hline
+						Note & -0,355579568 & signifikant \\
+						\hline
+						 Wie schätzen Sie die Qualität folgender Teilergebnisse ein? Implementation und Test & 0,344601363 & signifikant \\
+    					\hline
+    					\caption{Signifikante Korrelationen der Conformity-Metrik zu Tutorenbewertungen und Selbsteinschätzungen der Gruppen}
+						\label{conformitykorrel} \\
+  					\end{longtabu}  
+  				\end{center}
+  			\subsection{Datenflusskomplexität}
+  				Neben der Conformity-Metrik gibt es noch eine Weitere, die auffällig viele signifikante Korrelationen zu Teilnoten aufweist. Dabei handelt es sich um die "`Data-Flow-Complexity"' die letztlich das Verhältnis zwischen Variablendeklarationen und Variablenreferenzen darstellt (siehe Kapitel~\ref{messungchapter}). Werden wenige Variablen oft referenziert, spricht dies laut Sneed für eine hohe Komplexität im Programm \cite{SoftwareInZahlen}, was wiederum eine schlechtere Bewertung zur Folge haben sollte. Der ermittelte Zusammenhang verhält sich allerdings genau anders herum. Nach dieser Metrik komplexere Programme werden tendenziell besser bewertet. In diesem Kontext, mit dieser Umsetzung ist die Metrik also vom Ansatz her vollkommen falsch und damit unverwendbar. Warum gerade diejenigen Programme besser bewertet wurden, die im Verhältnis zu den Variablendeklarationen besonders viele Variablenreferenzen enthalten, müsste separat untersucht werden.
+  			\subsection{Größe der Projekte}
+  				Es gibt eine ganze Reihe signifikanter Korrelationen diverser Messwerte zu einigen der Teilnoten. Da die Messwerte im wesentlichen nur ein Spiegel der Größe des vermessenen Programms sind und die Werte für Netto-Code-Zeilen und Object-Points ebenfalls einige solcher Korrelationen aufweisen, lässt sich daraus ableiten, dass die umfangreicheren der abgelieferten Programme tendenziell auch die besseren sind. Dieser Zusammenhang eignet sich aber nicht zur teilautomatisierten Bewertung, da ein größeres Programm eben gerade nicht automatisch gut ist. Aufgrund der geringen Bedeutung dieses Zusammenhangs wird daher auf eine Auflistung der konkreten Korrelationen verzichtet. Besonders Gehäuft treten signifikante Zusammenhänge bei den Teilnoten für das Programm, die UML-Dokumente, den Test, die Projektphase III sowie die Abschlusspräsentation auf.
+  			\subsection{Projektmanagement und Teamarbeit}
+  				Auffällig Aufgrund beinahe nicht vorhandener signifikanter Korrelationen ist darüber hinaus die Bewertung des Projektmanagements und der Teamarbeit. Sämtliche Teilnoten dieser Bereiche weisen nahezu keine signifikanten Korrelationen zu Messwerten und als relevant eingestuften Metriken auf. Die Organisation der Teams untereinander scheint also einen recht geringen Einfluss auf das zu entwickelnde Programm und den Entwicklungsprozess zu haben.
+  			\subsection{Vereinzelte signifikante Korrelationen}
+  				Neben den genannten Auffälligkeiten aus denen sich Rückschlüsse ableiten lassen tauchen vereinzelt signifikante bis hoch signifikante Korrelationen in den Daten auf, die sich nicht sinnvoll begründen lassen. Dazu zählt beispielsweise, dass Gruppen die angeben, dass der Arbeitsaufwand nicht gleich verteilt war, tendenziell mehr numerische Literale im Code verwenden (Korrelation -0,484926924). Ähnlich signifikant ist der Umstand, dass Gruppen die angeben wenig auf die Konsistenz der UML-Modelle zu achten besonders viele Regeln der Kategorie "`minor"' verletzen (Korrelation -0,496352551). Für sich allein gestellt ist auch die höchste ermittelte Korrelation von -0,553331812 wenig aufschlussreich. Gruppen, die bezüglich der Diskussionsrunde bei der Abschlusspräsentation gut bewertet wurden, haben in ihren Programmen tendenziell mehr private Methoden deklariert. Diesen möglicherweise zufälligen, vielleicht aber auch systematischen Zusammenhängen wird im Rahmen dieser Arbeit keine weitere Aufmerksamkeit geschenkt, da es unwahrscheinlich ist, dass sich daraus eine praktische Verwendbarkeit für das Softwarepraktikum ergibt.
+  		\section{Einschränkungen}
+  			Die abgeleiteten Erkenntnisse unterliegen einer ganzen Reihe von Beschränkungen und sind damit weit entfernt von Allgemeingültigkeit oder Unanfechtbarkeit. Im Folgenden sollen die Bedeutendsten kurz genannt und erläutert werden.
+  			\begin{labeling}{\textbf{Stichprobengröße}}
+				\item [\textbf{Vergleichswerte}] Die Analyse geht davon aus, dass die zum Vergleich herangezogene Bewertung der Gruppen objektiv, korrekt und einheitlich ist. Da die Teilnehmer allerdings von vielen verschiedenen Tutoren mit ganz unterschiedlichen Erfahrungen und Wissensständen bewertet werden kann dies offensichtlich nicht vollständig zutreffen. Allein die persönliche Auswahl der Programmierregeln die als notwendig für gute Code-Qualität erachtet wird kann stark variieren. Dies zeigt sich in der Auswertung der untersuchten Regelwerke eindrucksvoll (siehe Kapitel~\ref{regelwerke}). Diese sind ebenfalls sehr unterschiedlich und zum Teil widersprechen sich die enthaltenen Regeln sogar. Es ist daher davon auszugehen, dass die Maßstäbe zur Bewertung die von den einzelnen Tutoren angesetzt werden, trotz entsprechender Richtlinien vom Lehrstuhl, voneinander abweichen können. Eine bessere Beurteilung der Metrikergebnisse könnte erreicht werden, wenn als Vergleichsgröße eine einheitliche Bewertung aller Gruppen durch einen Experten, beziehungsweise eine kleine Gruppe von Experten herangezogen würde.
+				\item [\textbf{Stichprobengröße}] Trotz der Vermessung von zwei kompletten Jahrgängen ist die resultierende Stichprobe mit 48 untersuchten Gruppen noch relativ klein. Mit einer noch umfangreicheren Vermessung ließen sich die Ergebnisse verbessern. Dies würde auch durch subjektive Bewertung entstandene Verzerrung abmildern.
+				\item [\textbf{Methodik}] Die bei der Analyse verwendete Methode der Korrelationsberechnung und Signifikanzbeurteilung mittels p-Wert lässt nur bedingt Rückschlüsse zu. Im Grunde liefert sie nur Hinweise auf scheinbar linear zusammenhängende Sachverhalte. Ob dieser Zusammenhang tatsächlich besteht oder doch ein Zufall vorliegt lässt sich nicht belegen. Auch die Möglichkeit nicht-linearer Zusammenhänge wurde nicht betrachtet. Insbesondere lassen sich aber aus signifikanten Korrelationen keine Kausalitäten ableiten. Es bleibt also für zukünftige Arbeiten zu prüfen, ob die Einführung des erstellten Regelwerks und eine vermehrte Einhaltung dieser Regeln tatsächlich zu besserer Code-Qualität führen.
+				\item [\textbf{Kontext}] Die getroffenen Aussagen sind wie bereits erwähnt ausschließlich im Kontext des Softwarepraktikums zu sehen. Sie gelten also nur für kleine Java-Programme mit dem SalesPoint-Framework, die von kleinen Gruppen relativ unerfahrener Studenten im Rahmen dieser Lehrveranstaltung implementiert werden. Eine Übertragung auf größere Projekte, erfahrene Entwickler, andere Programmiersprachen oder auch private studentische Projekte ist nicht möglich.
+			\end{labeling}
+  	\chapter{Zusammenfassung und Ausblick}
+  		Seit den ersten Ideen für Metriken zur Bewertung der Qualität und Komplexität einer Software stehen diese auch in der Kritik. Es konnte nie erschöpfend nachgewiesen werden, dass es eine Metrik gibt, die sich dafür wirklich gut eignet. So beschreibt Martin Shepperd bereits 1988 in seiner Kritik an McCabes zyklomatischer Komplexität, dass deren Zusammenhang mit der Wartbarkeit und Testbarkeit einer Software nicht größer ist, als der Zusammenhang zwischen diesen Merkmalen und der simplen Softwaregröße in Codezeilen \cite{McCabeCritique}. \newline
+  		Auch spätere umfangreichere Untersuchungen verschiedenster Metriken konnten keine Metrik identifizieren, deren Korrelation zu einer Qualitätseigenschaft des Codes signifikant größer ist als die Korrelation zwischen dieser Eigenschaft und der Größe des Codes. Yossi Gil and Gal Lalouche kommen daher zu dem Schluss, dass die Größe einer Software die einzige valide Codemetrik ist \cite{SizeOnlyMetric}. \newline
+  		Es ist daher wenig überraschend, dass es auch im Rahmen dieser Arbeit nicht gelungen ist eine Menge von Codemetriken zu finden mit denen sich die Codequalität automatisiert bewerten lässt. Mit dem Regelwerk und der darauf aufbauenden Conformity-Metrik ließ sich trotzdem ein verwendbarer Gewinn für zukünftige Softwarepraktika erreichen. Der Satz von Horst Zuse mit dem der vorangegangene Große Beleg eingeleitet wurde bleibt aber bestehen \cite{FrameworkSoftwareMeasurement}:
+  		\begin{quote}
+  			"`One number can not express softwarequality!"'
+  		\end{quote} 
+  		\section{Beantwortung der Forschungsfragen}
+			Abschließend lässt sich also feststellen, dass das Ziel eines teilautomatisierten Bewertungssystems nicht erreicht wurde. Keine der umgesetzten Metriken oder Kennzahlen bietet genug Aussagekraft um dies umzusetzen. Trotzdem sollen die Anfangs formulierten Forschungsfragen an dieser Stelle kurz zusammenfassend beantwortet werden.
+			\begin{itemize}
+				\item \textbf{Nach welchen Programmierregeln sollte die Bewertung hinsichtlich Codequalität im Kontext des Softwarepraktikums erfolgen?} \newline \newline
+				Das Regelwerk wurde auf Basis vielfältiger Recherche zusammengestellt und hat sich in der Analyse als gute Basis für zukünftige Softwarepraktika herausgestellt (siehe Tabelle~\ref{ruleset}). Trotzdem sollte es nicht als feste Größe betrachtet werden. Im Verlauf der nächsten Jahrgänge sollte kontinuierlich überprüft werden ob die Regeln noch sinnvoll sind, oder ob es notwendig ist Regeln zu streichen, ersetzen, ändern oder hinzuzufügen. Auch zukünftige Neuerungen in Java oder dem SalesPoint-Framework könnten Änderungen notwendig machen.
+				\item \textbf{Inwiefern ist eine Umsetzung des Code-Quality-Index in SonarQube möglich und welche Anpassungen sind notwendig oder sinnvoll?} \newline \newline
+				Während der Konzeption des Code-Quality-Index ergaben sich diverse Anpassungen, die zum Teil auch notwendig waren um den Index überhaupt umsetzen zu können. In der abschließenden Analyse hat sich allerdings herausgestellt, dass der Index in dieser Form nicht funktioniert. Es erscheint wahrscheinlich, dass der Code-Quality-Index sich zurecht nicht als Werkzeug zur Beurteilung von Code-Qualität durchgesetzt hat und als gescheitert zu betrachten ist. Es ist aber ebenso vorstellbar, dass mit geeigneteren Anpassungen eine praktikable Variante gefunden werden kann. Um dies zu evaluieren wäre allerdings eine Implementierung notwendig, die es erlaubt viele Parameter zu konfigurieren um so diverse Messreihen zu erzeugen die miteinander verglichen werden können.
+				\item \textbf{Lässt sich die Stabilität und Wartbarkeit des PlugIns durch die Verwendung von ExtendJ/Jastadd verbessern?} \newline \newline
+				Die Wartbarkeit des PlugIns lies sich durch den Einsatz von ExtendJ massiv verbessern und auch der Entwicklungsaufwand wurde deutlich reduziert. Die Einarbeitung in die Attributdefinition ist ohne weiteres im Rahmen einer Diplomarbeit möglich. Allerdings führen einige Fehler in JastAdd dazu, dass ein Teil der Praktikumsprojekte nicht vermessen werden kann. Da sich das PlugIn als nicht einsetzbar erwiesen hat wurde allerdings auch keine weiterführende Fehleranalyse und Korrektur versucht. Dies wäre notwendig um ein PlugIn auf der Basis des ExtendJ-Parsers für das Softwarepraktikum einzusetzen.
+				\item \textbf{Welche Methoden eignen sich, um die Aussagekraft der Metriken zu evaluieren?} \newline \newline
+				Mit der angewendeten Methode der Korrelationsermittlung und Signifikanzbeurteilung mittels p-Wert ließen sich einige Erkenntnisse über die umgesetzten Metriken gewinnen. Eventuell wären weiterführende Analysen sinnvoll um die Resultate zu untermauern.
+				\item \textbf{Welche der umgesetzten Metriken und Bewertungssysteme eignen sich zur teilautomatisierten Bewertung zukünftiger Softwarepraktika?} \newline \newline
+				Keine der untersuchten Metriken eignet sich dafür hinreichend. Allerdings scheint das erstellte Regelwerk in Verbindung mit der "`Conformity"'-Metrik ein guter Indikator für Code-Qualität zu sein, die insgesamt zu einem besseren Programm führt.
+			\end{itemize}
 		\section{Verwendungsmöglichkeiten der Implementierung}
-			ToDo: Regelwerk + Conformity-Metrik als Grundlage für Bewertung der Code-Qualität, abgewandelte ObjectPoints
+			Die Implementierung, die zur Vermessung der letzten beiden Jahrgänge verwendet wurde ist nicht für den produktiven Einsatz bei zukünftigen Softwarepraktika geeignet. Dies hat folgende Ursachen:
+			\begin{itemize}
+				\item Fehler im Parser: Manche Programme können nicht vermessen werden.
+				\item Viele Zahlen ohne Bedeutung: Die Metriken würden mehr Verwirrung stiften, als helfen, da sie zumeist keinen Hinweis auf die tatsächliche Qualität liefern.
+				\item Fehlende GUI: Aufgrund der Analyseergebnisse wurde auf eine Umsetzung verzichtet.
+			\end{itemize}
+			Sie könnte allerdings für zukünftige Arbeiten als Basis dienen. Das PlugIn enthält eine große Anzahl von Messwerten die zur Evaluierung anderer Metriken wiederverwendet werden könnten. Auch eine Überarbeitung der Indeximplementation ist denkbar. \newline
+			Für den produktiven Einsatz im Softwarepraktikum wurde stattdessen ein Mini-PlugIn erstellt, dass lediglich die "`Conformity"'-Metrik und eine Abwandlung der Object-Points berechnet. Dieses PlugIn kommt ohne den Parser aus, da nur Standard-SonarQube-Messwerte verwendet werden. Somit entfällt die Fehleranfälligkeit. Auch die zusätzlichen Datenbankschemata sind für dieses PlugIn nicht notwendig. Damit reduziert sich auch die Ausführungszeit deutlich. Die zwei berechneten Metriken werden in einem simplen Widget angezeigt und können so die Tutoren bei der Bewertung der Code-Qualität unterstützen. Auf eine manuelle Analyse der Regelverletzungen im Detail kann weitestgehend verzichtet werden. Das Regelwerk ist ohnehin PlugIn-Unabhängig und kann über die Web-Oberfläche integriert werden. Darüber hinaus kann es den Studenten zur Verfügung gestellt werden und über entsprechende Erweiterungen auch in gängige IDEs wie Eclipse und IntelliJ eingebunden werden.
 		\section{Weiterführende Fragestellungen}
-			ToDo: Andere Metriken? Angepasste Metriken? SoftAudit-Messung besser? Optimierbarkeit der Conformity? Regelwerkoptimierung? 		
+			Wie teilweise bereits erwähnt bleiben viele Fragen und Möglichkeiten zur teilautomatisierten Bewertung der Codequalität offen. Im Folgenden einige Fragen, die man in weiterführenden Arbeiten untersuchen könnte:
+			\begin{itemize}
+				\item Inwiefern unterscheiden sich die Metrikergebnisse wenn die Berechnung mit SoftAudit vorgenommen wird? Möglicherweise liefert diese Umsetzung bessere Ergebnisse und kann auf anderem Wege ohne Anpassung in SonarQube oder einem anderen System integriert werden.
+				\item Gibt es andere Metriken zur Beurteilung der Codequalität die aussagekräftiger sind?
+				\item Sind die hier vorgestellten Erkenntnisse für zukünftige Softwarepraktika ebenso gültig, oder wurden Fehler gemacht?
+				\item Lässt sich das Regelwerk weiter optimieren? Welche Regeln sind überflüssig oder kontraproduktiv? Welche sollten hinzugefügt werden? Ist die Conformity-Metrik noch zu verbessern?
+			\end{itemize}			 		
   		
   	\backmatter
   
